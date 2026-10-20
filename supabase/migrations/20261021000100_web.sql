@@ -181,3 +181,25 @@ begin
 end $$;
 grant execute on function catat_sisa_bayar_sopir(uuid, bigint) to authenticated;
 grant execute on function kedaluwarsakan_booking() to authenticated;
+
+-- CS mencatat hasil cek GetContact. Hasil "waspada" diteruskan ke kepala cabang lewat WhatsApp.
+create or replace function catat_getcontact(p_booking uuid, p_hasil text, p_alasan text default null) returns cek_getcontact
+language plpgsql security definer set search_path = public as $$
+declare b booking; r cek_getcontact;
+begin
+  perform wajib_peran('cs', 'kepala_cabang');
+  select * into b from booking where id = p_booking;
+  if b.id is null or not boleh_cabang(b.cabang_id) then raise exception 'Booking tidak ditemukan' using errcode = '42501'; end if;
+  if b.status <> 'menunggu_verifikasi' then raise exception 'Booking tidak sedang diverifikasi' using errcode = 'P0001'; end if;
+  if p_hasil not in ('aman', 'waspada') then raise exception 'Hasil harus aman atau waspada' using errcode = 'P0001'; end if;
+  insert into cek_getcontact (booking_id, pelanggan_id, hasil, alasan, oleh)
+  values (b.id, b.pelanggan_id, p_hasil, case when p_hasil = 'waspada' then coalesce(nullif(trim(p_alasan), ''), 'lainnya') end, auth.uid())
+  returning * into r;
+  if p_hasil = 'waspada' then
+    insert into notifikasi (kanal, tujuan, template, data, booking_id)
+    select 'whatsapp', k.nomor_wa, 'getcontact_waspada', jsonb_build_object('kode', b.kode, 'alasan', r.alasan), b.id
+    from pengguna k where k.peran = 'kepala_cabang' and k.cabang_id = b.cabang_id and k.aktif and k.nomor_wa is not null;
+  end if;
+  return r;
+end $$;
+grant execute on function catat_getcontact(uuid, text, text) to authenticated;

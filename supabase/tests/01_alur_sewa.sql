@@ -83,7 +83,14 @@ select cek((select count(*) from booking where kode like 'RA-UJI-%') = 0, 'CS Ba
 select harus_gagal($$select ubah_status_booking('20000000-0000-0000-0000-000000000001', 'menunggu_bayar')$$, 'CS cabang lain menyetujui');
 select keluar();
 select sebagai('00000000-0000-0000-0000-000000000002');
+select harus_gagal($$select ubah_status_booking('20000000-0000-0000-0000-000000000001', 'menunggu_bayar')$$, 'menyetujui pelanggan baru tanpa cek GetContact');
+select catat_getcontact('20000000-0000-0000-0000-000000000001', 'waspada', 'utang');
+select harus_gagal($$select ubah_status_booking('20000000-0000-0000-0000-000000000001', 'menunggu_bayar')$$, 'CS menyetujui padahal GetContact waspada');
+select catat_getcontact('20000000-0000-0000-0000-000000000001', 'aman');
 select ubah_status_booking('20000000-0000-0000-0000-000000000001', 'menunggu_bayar');
+select keluar();
+select cek((select count(*) from cek_getcontact where booking_id = '20000000-0000-0000-0000-000000000001') = 2, 'riwayat cek GetContact tersimpan, tanpa tangkapan layar');
+select sebagai('00000000-0000-0000-0000-000000000002');
 select cek((select batas_bayar between now() + interval '19 minutes' and now() + interval '21 minutes' from booking where kode = 'RA-UJI-0001'), 'batas bayar 20 menit');
 select harus_gagal($$select ubah_status_booking('20000000-0000-0000-0000-000000000001', 'selesai')$$, 'lompat status dari menunggu bayar ke selesai');
 select keluar();

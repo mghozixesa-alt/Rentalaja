@@ -66,7 +66,7 @@ src/app/(toko)/      halaman pelanggan
 src/app/cabang/      panel cabang (perlu peran cs, kasir, kepala_cabang, petugas_qc, atau owner)
 src/app/api/         webhook Xendit
 src/lib/             klien Supabase, format rupiah/WIB, keranjang, Xendit
-supabase/migrations  skema 61 tabel, RLS, fungsi aturan bisnis
+supabase/migrations  skema 62 tabel, RLS, fungsi aturan bisnis
 supabase/tests       uji alur sewa, Jeep, Experience, web
 ```
 

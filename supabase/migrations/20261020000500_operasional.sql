@@ -152,6 +152,18 @@ create table hasil_qc (
 );
 alter table foto_unit add constraint foto_unit_qc_fk foreign key (hasil_qc_id) references hasil_qc(id);
 
+-- Cek GetContact oleh CS untuk pelanggan baru sebelum booking disetujui. Hanya hasil yang disimpan, bukan tangkapan layar.
+create table cek_getcontact (
+  id uuid primary key default gen_random_uuid(),
+  booking_id uuid not null references booking(id) on delete cascade,
+  pelanggan_id uuid not null references pelanggan(id) on delete cascade,
+  hasil text not null check (hasil in ('aman', 'waspada')),
+  alasan text,                                      -- penipu, utang, kasar, lainnya
+  oleh uuid references pengguna(id),
+  dibuat_pada timestamptz not null default now()
+);
+create index on cek_getcontact (pelanggan_id);
+
 create table housekeeping (
   id uuid primary key default gen_random_uuid(),
   unit_id uuid not null references unit(id),        -- kamar penginapan

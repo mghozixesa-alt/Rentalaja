@@ -1,4 +1,4 @@
--- Rentalaja Web v2 · 09 · Aturan akses (Row Level Security) untuk semua 61 tabel
+-- Rentalaja Web v2 · 09 · Aturan akses (Row Level Security) untuk semua 62 tabel
 -- Prinsip: pelanggan hanya datanya sendiri, staf hanya cabangnya, mitra hanya unitnya, pusat semua.
 -- Perubahan status dan uang lewat fungsi di file 08 (security definer), bukan tulis langsung.
 
@@ -124,6 +124,7 @@ create policy cabang on work_order_item for select using (exists (select 1 from 
 create policy teknisi on work_order_item for insert with check (exists (select 1 from work_order w where w.id = work_order_id and w.status in ('dikerjakan', 'tunggu_part') and (w.teknisi_id = auth.uid() or peran_saya() = 'kepala_cabang')));
 create policy cabang on hasil_qc for select using (exists (select 1 from unit u where u.id = unit_id and boleh_cabang(u.cabang_id)));
 create policy cabang on housekeeping for select using (exists (select 1 from unit u where u.id = unit_id and boleh_cabang(u.cabang_id)));
+create policy cabang on cek_getcontact for select using (exists (select 1 from booking b where b.id = booking_id and boleh_cabang(b.cabang_id)));
 
 -- 9. Keuangan: pusat; mitra hanya miliknya
 do $$

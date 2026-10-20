@@ -42,6 +42,17 @@ export async function tolakVerifikasi(form: FormData) {
   balik("/cabang/verifikasi", q);
 }
 
+/** Hasil cek GetContact untuk pelanggan baru. "waspada" diteruskan ke kepala cabang. */
+export async function catatGetContact(form: FormData) {
+  await wajibPeran("cs", "kepala_cabang");
+  const id = Id.parse(form.get("booking"));
+  const q = String(form.get("q") ?? "");
+  const hasil = form.get("hasil") === "waspada" ? "waspada" : "aman";
+  const r = await createClient().rpc("catat_getcontact", { p_booking: id, p_hasil: hasil, p_alasan: hasil === "waspada" ? String(form.get("alasan") ?? "lainnya").slice(0, 80) : null });
+  if (r.error) balik("/cabang/verifikasi", q, r.error);
+  balik("/cabang/verifikasi", q);
+}
+
 /** DP atau pelunasan tunai di kasir: tercatat atas nama staf, lalu booking dikonfirmasi. */
 export async function terimaTunai(form: FormData) {
   await wajibPeran("kasir", "kepala_cabang", "cs");

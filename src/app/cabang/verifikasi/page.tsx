@@ -1,6 +1,7 @@
-import { setujuiVerifikasi, tolakVerifikasi } from "../actions";
+import { catatGetContact, setujuiVerifikasi, tolakVerifikasi } from "../actions";
+import { SalinNomor } from "@/components/SalinNomor";
 import { Bingkai, type SPCabang } from "../Bingkai";
-import { Kartu, Kosong, input, tombol, tombolBahaya } from "@/components/ui";
+import { Chip, Kartu, Kosong, Pesan, input, tombol, tombolBahaya, tombolGaris } from "@/components/ui";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { rupiah, tanggalJam } from "@/lib/format";
 
@@ -12,7 +13,7 @@ type B = { id: string; kode: string; mulai: string; selesai: string; total: numb
 export default function Verifikasi({ searchParams }: { searchParams: SPCabang }) {
   return (
     <Bingkai sp={searchParams} aktif="/cabang/verifikasi" judul="Verifikasi dokumen" sub="Unit sudah dipegang untuk pelanggan. Setujui atau tolak dalam 15 menit.">
-      {async ({ cabang, supabase, q }) => {
+      {async ({ cabang, supabase, q, staf }) => {
         const { data } = await supabase.from("booking")
           .select("id, kode, mulai, selesai, total, dp_wajib, dibuat_pada, pelanggan:pelanggan_id(id, nama, nomor_wa, terverifikasi), booking_item(produk:produk_id(nama))")
           .eq("cabang_id", cabang.id).eq("status", "menunggu_verifikasi").order("dibuat_pada");
@@ -21,6 +22,8 @@ export default function Verifikasi({ searchParams }: { searchParams: SPCabang })
         const admin = createAdminClient();
         const ids = rows.map((r) => r.pelanggan?.id).filter(Boolean) as string[];
         const { data: dok } = await admin.from("dokumen").select("pelanggan_id, jenis, status, path_storage").in("pelanggan_id", ids).order("diunggah_pada", { ascending: false });
+        const { data: gcData } = await supabase.from("cek_getcontact").select("booking_id, hasil, alasan, dibuat_pada").in("booking_id", rows.map((r) => r.id)).order("dibuat_pada", { ascending: false });
+        const gcTerakhir = (id: string) => (gcData ?? []).find((g) => g.booking_id === id) as { hasil: "aman" | "waspada"; alasan: string | null } | undefined;
         const link = async (path: string) => (await admin.storage.from("dokumen").createSignedUrl(path, 300)).data?.signedUrl ?? null;
         const kartu = await Promise.all(rows.map(async (b) => {
           const milik = (dok ?? []).filter((d) => d.pelanggan_id === b.pelanggan?.id);
@@ -43,6 +46,32 @@ export default function Verifikasi({ searchParams }: { searchParams: SPCabang })
                 </a>
               ))}
             </div>
+            {!b.pelanggan?.terverifikasi ? (() => {
+              const gc = gcTerakhir(b.id);
+              return (
+                <div className="flex flex-col gap-3 rounded-xl border border-abu-garis p-3">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div>
+                      <div className="flex items-center gap-2"><b>Cek GetContact</b><Chip nada="waspada">Wajib · pelanggan baru</Chip></div>
+                      <p className="text-xs text-abu">Buka GetContact di HP cabang, cari nomor ini, lalu catat hasilnya. Tangkapan layar tidak disimpan.</p>
+                    </div>
+                    <div className="flex items-center gap-2"><b className="tabular-nums">{b.pelanggan?.nomor_wa}</b><SalinNomor nomor={b.pelanggan?.nomor_wa ?? ""} /></div>
+                  </div>
+                  {gc ? (
+                    gc.hasil === "aman" ? <Pesan nada="baik">Hasil: aman, tidak ada label buruk.</Pesan> : <Pesan nada="waspada">Hasil: ada tanda bahaya ({gc.alasan}). Keputusan di kepala cabang.</Pesan>
+                  ) : (
+                    <form action={catatGetContact} className="flex flex-wrap items-end gap-2">
+                      <input type="hidden" name="booking" value={b.id} /><input type="hidden" name="q" value={q} />
+                      <button name="hasil" value="aman" className={tombolGaris}>Aman, tidak ada label buruk</button>
+                      <select name="alasan" aria-label="Label yang terlihat" className={`${input} h-11 max-w-[220px]`}>
+                        <option value="penipu">Penipu / tidak mengembalikan</option><option value="utang">Utang / tidak membayar</option><option value="kasar">Kasar / mengancam</option><option value="lainnya">Lainnya</option>
+                      </select>
+                      <button name="hasil" value="waspada" className="inline-flex h-11 items-center rounded-xl border-[1.5px] border-status-waspada bg-status-waspadaBg px-4 text-sm font-extrabold text-status-waspada">Ada tanda bahaya</button>
+                    </form>
+                  )}
+                </div>
+              );
+            })() : null}
             <div className="flex flex-wrap items-end gap-2">
               <form action={tolakVerifikasi} className="flex flex-1 flex-wrap items-end gap-2">
                 <input type="hidden" name="booking" value={b.id} /><input type="hidden" name="q" value={q} />
@@ -51,10 +80,19 @@ export default function Verifikasi({ searchParams }: { searchParams: SPCabang })
                 </select>
                 <button className={tombolBahaya}>Tolak</button>
               </form>
-              <form action={setujuiVerifikasi}>
-                <input type="hidden" name="booking" value={b.id} /><input type="hidden" name="q" value={q} />
-                <button className={tombol}>Setujui, minta bayar DP</button>
-              </form>
+              {(() => {
+                const gc = gcTerakhir(b.id);
+                const perluCek = !b.pelanggan?.terverifikasi && !gc;
+                const butuhKepala = gc?.hasil === "waspada" && !["kepala_cabang", "owner"].includes(staf.peran);
+                if (perluCek) return <button className={tombol} disabled>Cek GetContact dulu</button>;
+                if (butuhKepala) return <Chip nada="waspada">Menunggu kepala cabang</Chip>;
+                return (
+                  <form action={setujuiVerifikasi}>
+                    <input type="hidden" name="booking" value={b.id} /><input type="hidden" name="q" value={q} />
+                    <button className={tombol}>{gc?.hasil === "waspada" ? "Setujui sebagai kepala cabang" : "Setujui, minta bayar DP"}</button>
+                  </form>
+                );
+              })()}
             </div>
           </Kartu>
         ));

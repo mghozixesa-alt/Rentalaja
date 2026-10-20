@@ -117,7 +117,7 @@ $$;
 create or replace function ubah_status_booking(p_booking uuid, p_baru status_booking, p_catatan text default null)
 returns booking language plpgsql security definer set search_path = public as $$
 declare
-  b booking; boleh boolean;
+  b booking; boleh boolean; v_lama boolean; v_gc text;
 begin
   select * into b from booking where id = p_booking for update;
   if b.id is null then raise exception 'Booking tidak ditemukan'; end if;
@@ -152,6 +152,19 @@ begin
     perform wajib_peran('manajer_experience');          -- pengecualian (bencana, rumah rusak) diputuskan manajer
   elsif b.status = 'menunggu_verifikasi' and p_baru in ('menunggu_bayar', 'ditolak', 'dikonfirmasi') then
     perform wajib_peran('cs', 'kepala_cabang');
+    -- Pelanggan baru wajib dicek GetContact dulu; hasil "waspada" hanya bisa disetujui kepala cabang
+    if p_baru <> 'ditolak' then
+      select terverifikasi into v_lama from pelanggan where id = b.pelanggan_id;
+      if not coalesce(v_lama, false) then
+        select hasil into v_gc from cek_getcontact where booking_id = b.id order by dibuat_pada desc limit 1;
+        if v_gc is null then
+          raise exception 'Cek GetContact dulu untuk pelanggan baru' using errcode = 'P0001';
+        end if;
+        if v_gc = 'waspada' and peran_saya() not in ('kepala_cabang', 'owner') then
+          raise exception 'Ada tanda bahaya di GetContact: hanya kepala cabang yang bisa menyetujui' using errcode = '42501';
+        end if;
+      end if;
+    end if;
   elsif p_baru in ('dipakai', 'selesai') then
     perform wajib_peran('cs', 'kasir', 'kepala_cabang', 'runner', 'sopir', 'cs_experience', 'manajer_experience');
   elsif p_baru = 'dikonfirmasi' then
