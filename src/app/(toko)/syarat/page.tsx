@@ -3,7 +3,7 @@ import { Judul, Kartu } from "@/components/ui";
 export const metadata = { title: "Syarat dan ketentuan" };
 
 const POKOK = [
-  ["Sewa barang dan kendaraan", "Wajib KTP dan KK (motor ditambah SIM C). DP 20% setelah lolos verifikasi, dibayar dalam 20 menit. KTP asli dititipkan di cabang selama sewa."],
+  ["Sewa barang dan kendaraan", "Wajib KTP dan satu dokumen pendukung (SIM, KK, STNK, atau NPWP); camping dan piknik cukup KTP. DP 20% setelah lolos verifikasi, dibayar dalam 20 menit. KTP asli dititipkan di cabang selama sewa."],
   ["Keterlambatan", "Denda 15% tarif harian per jam, dibulatkan ke atas, maksimal satu hari tarif per unit."],
   ["Pembatalan sewa barang", "Gratis sampai 3 jam sebelum jam ambil; DP dikembalikan penuh. Kurang dari itu atau tidak datang: DP tidak dikembalikan."],
   ["Menginap", "Check-in 14.00, check-out 12.00. Tidak ada pembatalan setelah bayar. Tanggal bisa diubah sekali, paling lambat H-3, dengan jumlah malam yang sama."],

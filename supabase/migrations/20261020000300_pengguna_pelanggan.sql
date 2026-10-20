@@ -38,7 +38,7 @@ create table pelanggan (
 create table dokumen (
   id uuid primary key default gen_random_uuid(),
   pelanggan_id uuid not null references pelanggan(id) on delete cascade,
-  jenis text not null check (jenis in ('ktp', 'kk', 'sim_c', 'lainnya')),
+  jenis text not null check (jenis in ('ktp', 'sim', 'kk', 'stnk', 'npwp', 'lainnya')),  -- KTP + 1 dokumen pendukung
   path_storage text not null,                       -- bucket privat, akses lewat link sementara
   nik_terenkripsi bytea,                            -- tampil hanya 4 digit terakhir
   nik_4_akhir text,

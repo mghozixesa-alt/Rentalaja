@@ -30,7 +30,7 @@ export function tambahHari(tgl: string, n: number): string {
 
 export const STATUS_BOOKING: Record<string, { label: string; nada: Nada; langkah: string }> = {
   draf: { label: "Draf", nada: "abu", langkah: "Lanjutkan checkout untuk mengirim booking." },
-  menunggu_verifikasi: { label: "Menunggu verifikasi", nada: "waspada", langkah: "CS memeriksa KTP dan KK Anda, biasanya kurang dari 15 menit." },
+  menunggu_verifikasi: { label: "Menunggu verifikasi", nada: "waspada", langkah: "CS memeriksa dokumen Anda, biasanya kurang dari 15 menit." },
   menunggu_bayar: { label: "Menunggu bayar", nada: "waspada", langkah: "Bayar DP sebelum batas waktu supaya unit tidak dilepas." },
   dikonfirmasi: { label: "Dikonfirmasi", nada: "baik", langkah: "Booking terkunci. Datang sesuai jadwal atau tunggu unit diantar." },
   dipakai: { label: "Sedang dipakai", nada: "info", langkah: "Kembalikan tepat waktu. Perpanjang lewat WhatsApp bila perlu." },

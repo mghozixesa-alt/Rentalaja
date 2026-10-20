@@ -77,7 +77,7 @@ export default async function Produk({ params, searchParams }: { params: { slug:
               <label className={label}>Jumlah<input type="number" name="jumlah" min={1} max={Math.max(1, total)} defaultValue={1} className={input} /></label>
               <div className="flex justify-between text-sm"><span>Perkiraan {hari} hari</span><b>{rupiah((p.harga_mulai ?? 0) * hari)}</b></div>
               <button className={tombol} disabled={total === 0}>{total === 0 ? "Habis di tanggal ini" : "Tambah ke keranjang"}</button>
-              <p className="text-xs leading-4 text-abu">Harga akhir, diskon bundling, dan DP 20% dihitung saat checkout. Wajib KTP dan KK{p.lini === "transportation" ? ", serta SIM C untuk motor" : ""}.</p>
+              <p className="text-xs leading-4 text-abu">Harga akhir, diskon bundling, dan DP 20% dihitung saat checkout. {p.kategori_slug === "camping" ? "Cukup KTP." : "Wajib KTP dan satu dokumen pendukung: SIM, KK, STNK, atau NPWP."}</p>
             </form>
           </Kartu>
         </div>

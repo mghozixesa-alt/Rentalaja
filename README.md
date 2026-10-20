@@ -9,12 +9,12 @@ Website dan panel operasional Rentalaja (PT Popo Karya Investama): sewa barang (
 | Bagian | Halaman | Keterangan |
 |---|---|---|
 | Pelanggan | `/`, `/katalog`, `/produk/[slug]` | Katalog dari database, cek ketersediaan per cabang |
-| | `/keranjang`, `/checkout` | Satu periode sewa per booking; unggah KTP, KK, SIM C ke bucket privat |
+| | `/keranjang`, `/checkout` | Satu periode sewa per booking; unggah KTP + 1 dokumen pendukung (SIM, KK, STNK, NPWP; camping cukup KTP) ke bucket privat |
 | | `/experience`, `/experience/[slug]` | Menginap (check-in 14.00, check-out 12.00) dan trip Jeep per slot jam, tanpa KTP |
 | | `/booking/[kode]` | Status, rincian harga dari server, bayar lewat Xendit |
 | | `/masuk`, `/akun` | Masuk dengan kode WhatsApp; semua booking dalam satu daftar |
 | Panel cabang | `/cabang` | Hari ini: ambil, kembali, telat |
-| | `/cabang/verifikasi` | Lihat KTP/KK (link sementara 5 menit), setujui atau tolak |
+| | `/cabang/verifikasi` | Lihat KTP dan dokumen pendukung (link sementara 5 menit), setujui atau tolak |
 | | `/cabang/serah-terima` | DP tunai, serahkan unit, terima kembali (denda otomatis) |
 | | `/cabang/qc` | Daftar cek per kategori; gagal QC otomatis jadi work order |
 | Panel Experience | `/panel-experience`, `/panel-experience/jadwal` | Check-in/out, kamar siap, jadwal ulang oleh CS (tanpa pembatalan), status konfirmasi sopir |
@@ -72,5 +72,5 @@ supabase/tests       uji alur sewa, Jeep, Experience, web
 
 ## Catatan keamanan
 - Semua tabel memakai Row Level Security. Klien service role hanya dipakai di server untuk webhook dan link sementara dokumen, setelah peran dicek.
-- Foto KTP/KK di bucket privat; staf melihat lewat link yang kedaluwarsa dalam 5 menit.
+- Foto KTP dan dokumen pendukung di bucket privat; staf melihat lewat link yang kedaluwarsa dalam 5 menit.
 - Status booking dan unit hanya bisa berubah lewat fungsi database, bukan update langsung.

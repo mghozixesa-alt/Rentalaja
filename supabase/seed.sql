@@ -19,7 +19,7 @@ insert into pengaturan (kunci, nilai, keterangan) values
  ('poin', '{"per_rupiah":10000,"tepat_waktu":10,"ulasan_foto":20,"rujukan":100,"nilai_rupiah":100,"maks_persen_sewa":20,"berlaku_bulan":12}', 'Poin pelanggan'),
  ('member_tanpa_dp', '{"level":["langganan","prioritas"],"maks_barang":2,"no_show_poin":-100,"turun_level":"2 pelanggaran dalam 3 bulan"}', 'Member boleh tanpa DP'),
  ('poin_staf', '{"per_100rb":1,"bundling":5,"verifikasi_cepat":10,"kas_pas":20,"telat":-20,"selisih_kas":-50,"nilai_rupiah":500,"batas_bulanan":1000000}', 'Komisi staf (nilai rupiah dan batas: usulan)'),
- ('dokumen_wajib', '{"barang":["ktp","kk"],"motor_tambahan":["sim_c"],"penginapan":[]}', 'Penginapan tanpa KTP'),
+ ('dokumen_wajib', '{"ktp_saja":["camping"],"pendukung":["sim","kk","stnk","npwp"],"experience":[]}', 'Camping cukup KTP; sewa lain KTP + 1 dokumen pendukung; Experience tanpa dokumen'),
  ('rekening_payout', '{"bank":"BCA","atas_nama":"PT Popo Karya"}', 'Nomor rekening disimpan di pengaturan Xendit, bukan di sini'),
  ('whatsapp_bisnis', '"+62 813-2470-0077"', 'Nomor WhatsApp Business'),
  ('jeep', '{"dp_persen":50,"jeda_antar_trip_menit":60,"konfirmasi_sopir_jam":2,"boleh_batal":false,"dokumen":[]}', 'Trip Jeep: tanpa KTP, DP 50%, sopir menerima trip maks 2 jam setelah DP, tanpa pembatalan; sisa dibayar ke sopir');
@@ -33,15 +33,15 @@ insert into cabang (kode, nama, lini, alamat, jam_buka, jam_tutup, jam_check_in,
  ('ERT', 'Ertap Village', '{experience}', 'Samarang, Tarogong Selatan, Garut', null, null, '14:00', '12:00', 'kepala_cabang'),
  ('JEEP', 'Jeep Trip Garut', '{experience}', '[TITIK KUMPUL JEEP]', '04:00', '18:00', null, null, 'kepala_cabang');
 
-insert into kategori (lini, nama, slug, promo_2_gratis_1, boleh_bundling, wajib_sim_c, urutan) values
- ('transportation', 'Motor', 'motor', false, false, true, 1),
- ('transportation', 'Mobil dan Jeep', 'mobil', false, false, false, 2),
- ('hub', 'iPhone', 'iphone', true, true, false, 3),
- ('hub', 'Kamera dan lensa', 'kamera', true, true, false, 4),
- ('hub', 'PlayStation dan proyektor', 'hiburan', false, true, false, 5),
- ('hub', 'Camping dan piknik', 'camping', true, true, false, 6),
- ('experience', 'Penginapan', 'penginapan', false, false, false, 7),
- ('experience', 'Trip Jeep', 'jeep', false, false, false, 8);
+insert into kategori (lini, nama, slug, promo_2_gratis_1, boleh_bundling, syarat_dokumen, urutan) values
+ ('transportation', 'Motor', 'motor', false, false, 'ktp_pendukung', 1),
+ ('transportation', 'Mobil dan Jeep', 'mobil', false, false, 'ktp_pendukung', 2),
+ ('hub', 'iPhone', 'iphone', true, true, 'ktp_pendukung', 3),
+ ('hub', 'Kamera dan lensa', 'kamera', true, true, 'ktp_pendukung', 4),
+ ('hub', 'PlayStation dan proyektor', 'hiburan', false, true, 'ktp_pendukung', 5),
+ ('hub', 'Camping dan piknik', 'camping', true, true, 'ktp', 6),
+ ('experience', 'Penginapan', 'penginapan', false, false, 'ktp_pendukung', 7),
+ ('experience', 'Trip Jeep', 'jeep', false, false, 'ktp_pendukung', 8);
 
 insert into daftar_cek_qc (kategori_id, urutan, poin, wajib_foto)
 select k.id, x.u, x.p, x.f from kategori k join (values

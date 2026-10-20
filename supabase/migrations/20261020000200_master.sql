@@ -34,7 +34,8 @@ create table kategori (
   slug text not null unique,
   promo_2_gratis_1 boolean not null default false,  -- elektronik dan camping
   boleh_bundling boolean not null default true,     -- motor tidak ikut bundling
-  wajib_sim_c boolean not null default false,
+  syarat_dokumen text not null default 'ktp_pendukung'   -- camping: KTP saja; lainnya: KTP + 1 pendukung (SIM, KK, STNK, NPWP)
+    check (syarat_dokumen in ('ktp', 'ktp_pendukung')),
   urutan int not null default 0
 );
 

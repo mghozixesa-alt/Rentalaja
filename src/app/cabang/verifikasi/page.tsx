@@ -17,14 +17,14 @@ export default function Verifikasi({ searchParams }: { searchParams: SPCabang })
           .select("id, kode, mulai, selesai, total, dp_wajib, dibuat_pada, pelanggan:pelanggan_id(id, nama, nomor_wa, terverifikasi), booking_item(produk:produk_id(nama))")
           .eq("cabang_id", cabang.id).eq("status", "menunggu_verifikasi").order("dibuat_pada");
         const rows = (data ?? []) as unknown as B[];
-        if (rows.length === 0) return <Kosong judul="Antrean kosong" isi="Booking baru yang butuh pemeriksaan KTP dan KK muncul di sini." />;
+        if (rows.length === 0) return <Kosong judul="Antrean kosong" isi="Booking baru yang butuh pemeriksaan KTP dan dokumen pendukung muncul di sini." />;
         const admin = createAdminClient();
         const ids = rows.map((r) => r.pelanggan?.id).filter(Boolean) as string[];
         const { data: dok } = await admin.from("dokumen").select("pelanggan_id, jenis, status, path_storage").in("pelanggan_id", ids).order("diunggah_pada", { ascending: false });
         const link = async (path: string) => (await admin.storage.from("dokumen").createSignedUrl(path, 300)).data?.signedUrl ?? null;
         const kartu = await Promise.all(rows.map(async (b) => {
           const milik = (dok ?? []).filter((d) => d.pelanggan_id === b.pelanggan?.id);
-          const terbaru = ["ktp", "kk", "sim_c"].map((j) => milik.find((d) => d.jenis === j)).filter(Boolean) as { jenis: string; status: string; path_storage: string }[];
+          const terbaru = [milik.find((d) => d.jenis === "ktp"), milik.find((d) => ["sim", "kk", "stnk", "npwp"].includes(d.jenis))].filter(Boolean) as { jenis: string; status: string; path_storage: string }[];
           const foto = await Promise.all(terbaru.map(async (d) => ({ ...d, url: await link(d.path_storage) })));
           return { b, foto };
         }));
@@ -39,7 +39,7 @@ export default function Verifikasi({ searchParams }: { searchParams: SPCabang })
               {foto.map((f) => (
                 <a key={f.jenis} href={f.url ?? "#"} target="_blank" rel="noreferrer" className="flex flex-col gap-1 text-sm font-bold no-underline">
                   {f.url ? <img src={f.url} alt={`Foto ${f.jenis.toUpperCase()}`} className="aspect-[3/2] w-full rounded-lg border border-abu-garis object-cover" /> : null}
-                  {f.jenis.toUpperCase().replace("_", " ")} · {f.status}
+                  {f.jenis === "ktp" ? "KTP" : `Pendukung · ${f.jenis.toUpperCase()}`} · {f.status}
                 </a>
               ))}
             </div>
@@ -47,7 +47,7 @@ export default function Verifikasi({ searchParams }: { searchParams: SPCabang })
               <form action={tolakVerifikasi} className="flex flex-1 flex-wrap items-end gap-2">
                 <input type="hidden" name="booking" value={b.id} /><input type="hidden" name="q" value={q} />
                 <select name="alasan" aria-label="Alasan tolak" className={`${input} h-11 max-w-xs`}>
-                  <option>Foto KTP atau KK tidak jelas</option><option>Nama di KTP dan KK tidak sesuai</option><option>SIM C tidak berlaku</option><option>Masuk daftar pelanggaran</option>
+                  <option>Foto KTP tidak jelas</option><option>Foto dokumen pendukung tidak jelas</option><option>Nama di dokumen pendukung tidak sama dengan KTP</option><option>Dokumen sudah tidak berlaku</option><option>Masuk daftar pelanggaran</option>
                 </select>
                 <button className={tombolBahaya}>Tolak</button>
               </form>

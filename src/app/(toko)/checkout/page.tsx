@@ -20,14 +20,19 @@ export default async function Checkout({ searchParams }: { searchParams: { galat
     ambilKatalog(),
     ambilCabang(),
     supabase.from("dokumen").select("jenis, status, diunggah_pada").order("diunggah_pada", { ascending: false }),
-    supabase.from("kategori").select("slug, wajib_sim_c"),
+    supabase.from("kategori").select("slug, syarat_dokumen"),
   ]);
   const isi = k.items.map((i) => semua.find((s) => s.slug === i.produk)).filter((p): p is NonNullable<typeof p> => !!p);
   const lini = new Set(isi.map((p) => p.lini));
-  const butuhSim = isi.some((p) => (kat.data ?? []).find((x) => x.slug === p.kategori_slug)?.wajib_sim_c);
-  const statusDok = (j: string) => (dok.data ?? []).find((d) => d.jenis === j)?.status ?? null;
-  const wajib: ("ktp" | "kk" | "sim_c")[] = butuhSim ? ["ktp", "kk", "sim_c"] : ["ktp", "kk"];
-  const lengkap = pl.terverifikasi || wajib.every((j) => statusDok(j) === "lolos" || statusDok(j) === "menunggu");
+  // Camping cukup KTP; sewa lain KTP + 1 dokumen pendukung (SIM, KK, STNK, atau NPWP). Ambil syarat tertinggi di keranjang.
+  const butuhPendukung = isi.some((p) => (kat.data ?? []).find((x) => x.slug === p.kategori_slug)?.syarat_dokumen !== "ktp");
+  const semuaDok = (dok.data ?? []) as { jenis: string; status: string }[];
+  const terbaru = (pred: (j: string) => boolean) => semuaDok.find((d) => pred(d.jenis) && d.status !== "ditolak") ?? semuaDok.find((d) => pred(d.jenis)) ?? null;
+  const ktp = terbaru((j) => j === "ktp");
+  const pendukung = terbaru((j) => ["sim", "kk", "stnk", "npwp"].includes(j));
+  const ok = (d: { status: string } | null) => d?.status === "lolos" || d?.status === "menunggu";
+  const lengkap = ok(ktp) && (!butuhPendukung || ok(pendukung));
+  const semuaLolos = ktp?.status === "lolos" && (!butuhPendukung || pendukung?.status === "lolos");
   const pilihan = cabang.filter((c) => Array.from(lini).every((l) => c.lini.includes(l)));
   return (
     <>
@@ -37,16 +42,11 @@ export default async function Checkout({ searchParams }: { searchParams: { galat
         <div className="flex flex-col gap-4">
           <Kartu className="flex flex-col gap-3">
             <h2 className="text-lg font-extrabold">1. Dokumen</h2>
-            {pl.terverifikasi ? (
-              <Pesan nada="baik">Dokumen Anda sudah terverifikasi. Tidak perlu unggah lagi.</Pesan>
-            ) : (
-              <>
-                <p className="text-sm text-abu">Diperiksa CS sekali, lalu tersimpan aman untuk sewa berikutnya. KTP asli dititipkan di cabang saat pengambilan.</p>
-                {wajib.map((j) => (
-                  <UnggahDokumen key={j} jenis={j} pelangganId={pl.id} status={statusDok(j)} />
-                ))}
-              </>
+            {semuaLolos ? <Pesan nada="baik">Dokumen Anda sudah terverifikasi dan tersimpan. Tidak perlu unggah lagi.</Pesan> : (
+              <p className="text-sm text-abu">{butuhPendukung ? "KTP dan satu dokumen pendukung: pilih SIM, KK, STNK, atau NPWP." : "Sewa camping dan piknik cukup KTP."} Diperiksa CS sekali, lalu tersimpan untuk sewa berikutnya. KTP asli dititipkan di cabang saat pengambilan.</p>
             )}
+            <UnggahDokumen mode="ktp" pelangganId={pl.id} status={ktp?.status ?? null} />
+            {butuhPendukung ? <UnggahDokumen mode="pendukung" pelangganId={pl.id} status={pendukung?.status ?? null} jenisTersimpan={pendukung?.jenis ?? null} /> : null}
           </Kartu>
           <Kartu>
             <form id="checkout" action={checkout} className="flex flex-col gap-3">
