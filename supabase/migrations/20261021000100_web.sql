@@ -162,3 +162,22 @@ begin
   end loop;
   return n;
 end $$;
+
+-- Sopir Jeep menerima sisa bayar dari tamu (tunai dipegang sopir, disetor saat tutup shift; QRIS lewat Xendit).
+create or replace function catat_sisa_bayar_sopir(p_booking uuid, p_jumlah bigint) returns pembayaran
+language plpgsql security definer set search_path = public as $$
+declare b booking; p pembayaran;
+begin
+  perform wajib_peran('sopir');
+  select * into b from booking where id = p_booking for update;
+  if b.id is null or (peran_saya() = 'sopir' and b.sopir_id is distinct from auth.uid()) then
+    raise exception 'Trip ini bukan milik Anda' using errcode = '42501';
+  end if;
+  if b.status not in ('dikonfirmasi', 'dipakai') then raise exception 'Trip belum berjalan' using errcode = 'P0001'; end if;
+  if p_jumlah <= 0 or p_jumlah > b.total then raise exception 'Jumlah tidak wajar' using errcode = 'P0001'; end if;
+  insert into pembayaran (booking_id, jenis, metode, jumlah, status, dibayar_pada, diterima_oleh)
+  values (b.id, 'pelunasan', 'tunai', p_jumlah, 'lunas', now(), auth.uid()) returning * into p;
+  return p;
+end $$;
+grant execute on function catat_sisa_bayar_sopir(uuid, bigint) to authenticated;
+grant execute on function kedaluwarsakan_booking() to authenticated;

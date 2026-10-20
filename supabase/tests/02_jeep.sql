@@ -42,7 +42,9 @@ select keluar();
 select cek(exists (select 1 from notifikasi where template = 'jeep_terkonfirmasi' and tujuan = '081234567890'), 'pelanggan menerima kabar terkonfirmasi beserta sopir');
 select sebagai('00000000-0000-0000-0000-000000000011');
 select serahkan_unit('30000000-0000-0000-0000-000000000001', 52000);
+select catat_sisa_bayar_sopir('30000000-0000-0000-0000-000000000001', 375000);
 select keluar();
+select cek((select sum(jumlah) from pembayaran where booking_id = '30000000-0000-0000-0000-000000000001' and status = 'lunas') = 750000, 'sisa bayar tunai dicatat atas nama sopir');
 select set_config('rentalaja.ubah_status', 'on', false);  -- pemutar waktu khusus uji
 update booking set mulai = now() - interval '3 hours', selesai = now() + interval '1 hour' where kode = 'JP-UJI-0001';
 select set_config('rentalaja.ubah_status', '', false);

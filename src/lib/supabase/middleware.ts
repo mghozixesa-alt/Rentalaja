@@ -1,7 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-const PANEL = ["/cabang", "/manajemen", "/keuangan", "/panel-experience", "/teknisi", "/akun", "/checkout"];
+const PANEL = ["/cabang", "/manajemen", "/keuangan", "/panel-experience", "/sopir", "/teknisi", "/akun", "/checkout"];
 
 /** Memperbarui sesi Supabase di setiap request dan mengarahkan ke /masuk bila halaman butuh login. */
 export async function updateSession(request: NextRequest) {
