@@ -1,0 +1,13 @@
+# Konfigurasi minimal Supabase CLI. Jalankan `supabase link --project-ref <ref>` lalu `supabase db push`.
+project_id = "rentalaja"
+
+[db]
+major_version = 15
+
+[auth]
+site_url = "http://localhost:3000"
+additional_redirect_urls = ["https://rentalaja.co.id"]
+
+[auth.sms]
+enable_signup = true
+enable_confirmations = true

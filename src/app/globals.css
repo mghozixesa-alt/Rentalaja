@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html { -webkit-text-size-adjust: 100%; }
+body { @apply bg-abu-latar text-navy antialiased; }
+a { @apply underline-offset-2; }
+:focus-visible { outline: 3px solid #09BEAF; outline-offset: 2px; }
