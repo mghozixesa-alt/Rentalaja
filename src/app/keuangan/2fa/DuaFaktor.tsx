@@ -27,8 +27,10 @@ export function DuaFaktor() {
       for (const f of data.all.filter((x) => x.status === "unverified")) await supabase.auth.mfa.unenroll({ factorId: f.id });
       const daftar = await supabase.auth.mfa.enroll({ factorType: "totp", friendlyName: `Keuangan ${Date.now()}` });
       if (daftar.error) return setGalat(daftar.error.message);
+      const d = daftar.data;
+      if (d.type !== "totp") return setGalat("Jenis 2FA tidak didukung");
       setBaru(true);
-      setFaktor({ id: daftar.data.id, qr: daftar.data.totp.qr_code, secret: daftar.data.totp.secret });
+      setFaktor({ id: d.id, qr: d.totp.qr_code, secret: d.totp.secret });
     })();
   }, []);
 
