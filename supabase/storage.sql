@@ -13,3 +13,10 @@ create policy "staf unggah foto unit" on storage.objects for insert to authentic
   with check (bucket_id = 'foto-unit' and public.is_staf());
 create policy "staf baca foto unit" on storage.objects for select to authenticated
   using (bucket_id = 'foto-unit' and public.is_staf());
+
+-- Nota biaya dan pembelian: hanya owner dan keuangan
+insert into storage.buckets (id, name, public) values ('nota', 'nota', false) on conflict (id) do nothing;
+create policy "keuangan unggah nota" on storage.objects for insert to authenticated
+  with check (bucket_id = 'nota' and public.is_keuangan());
+create policy "keuangan baca nota" on storage.objects for select to authenticated
+  using (bucket_id = 'nota' and public.is_keuangan());

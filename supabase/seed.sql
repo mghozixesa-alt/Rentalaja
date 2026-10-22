@@ -123,3 +123,15 @@ insert into konten_web (jenis, judul, isi, tampil_dari, tampil_sampai, status) v
 
 -- Fasilitas penginapan (CONTOH, lengkapi dari listing)
 update produk set kamar_tidur = 2, fasilitas = '{kolam renang,hot tub,karaoke,dapur,parkir}' where slug = 'ertap-village';
+
+-- Kas tunai per cabang (jurnal otomatis pembayaran tunai)
+insert into pemetaan_akun (kunci, cabang_id, akun_id)
+select 'kas_tunai', c.id, a.id from (values ('GRT', '1-10001'), ('WNR', '1-10002'), ('BDG-HUB', '1-10003'), ('BDG-JKL', '1-10003'),
+  ('RMT', '1-10004'), ('ERT', '1-10004'), ('JEEP', '1-10004')) m(cabang, kode)
+join cabang c on c.kode = m.cabang join akun a on a.kode = m.kode;
+update akun set cabang_id = (select id from cabang where kode = 'GRT') where kode = '1-10001';
+update akun set cabang_id = (select id from cabang where kode = 'WNR') where kode = '1-10002';
+update akun set cabang_id = (select id from cabang where kode = 'BDG-HUB') where kode = '1-10003';
+
+-- Kontak supplier contoh
+insert into kontak (jenis, nama, termin_hari) values ('supplier', 'Bengkel Jaya Motor', 7), ('supplier', 'Toko Part Garut', 10), ('supplier', 'Meta Ads', 0);

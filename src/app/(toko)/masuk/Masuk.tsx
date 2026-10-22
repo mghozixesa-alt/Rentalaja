@@ -48,7 +48,7 @@ export function Masuk({ lanjut }: { lanjut: string }) {
     // Staf tidak didaftarkan sebagai pelanggan.
     const { data: staf } = await supabase.from("pengguna").select("peran").maybeSingle();
     if (!staf) await supabase.rpc("daftar_pelanggan", { p_nama: nama, p_nomor_wa: hp });
-    const tujuan = !staf ? lanjut : staf.peran === "sopir" ? "/sopir" : ["cs_experience", "manajer_experience"].includes(staf.peran) ? "/panel-experience" : "/cabang";
+    const tujuan = !staf ? lanjut : staf.peran === "keuangan" ? "/keuangan" : staf.peran === "sopir" ? "/sopir" : ["cs_experience", "manajer_experience"].includes(staf.peran) ? "/panel-experience" : "/cabang";
     router.replace(tujuan);
     router.refresh();
   }
