@@ -133,26 +133,55 @@ function adapt(root){
 }
 
 
-/* ---------- tombol "Beranda" di samping tombol kembali (layar mobile tanpa menu bawah) ---------- */
-var HOME_OF=[[/^(Pos)/,'PosHariIni'],[/^Mgmt/,'MgmtDashboard'],[/^Keu/,'KeuDasbor'],[/^Inv(?!Login|Gabung)/,'Investor'],[/^(Tek)/,'Teknisi'],[/^Runner/,'Runner'],[/^SopirJeep/,'SopirJeep'],[/^Exp/,'ExpHariIni']];
-var NO_HOME={Home:1,HomeEn:1,Masuk:1,Login:1,InvLogin:1,InvGabung:1,Investor:1,Teknisi:1,Runner:1,SopirJeep:1,ExpHariIni:1,PosHariIni:1,MgmtDashboard:1,KeuDasbor:1};
-function homeOf(n){for(var i=0;i<HOME_OF.length;i++){if(HOME_OF[i][0].test(n))return HOME_OF[i][1];}return 'Home';}
-function homeBtn(root){
-  if(!rootSpec||!rootSpec.mobile||NO_HOME[current])return;
-  if(root.querySelector('nav'))return;
-  var back=root.querySelector('a[aria-label="Kembali"]');if(!back)return;
-  var home=homeOf(current), bh=(back.getAttribute('href')||'').replace(/\.dc\.html.*$/,'');
-  if(bh===home)return;
-  var row=back.parentElement;if(!row||row.querySelector('[data-ra-home]'))return;
-  var a=document.createElement('a');a.href=home+'.dc.html';a.setAttribute('aria-label','Ke beranda');a.setAttribute('data-ra-home','1');a.title='Beranda';
-  a.style.cssText='width:44px;height:44px;display:flex;align-items:center;justify-content:center;margin-left:auto;flex:none;border-radius:12px';
-  a.innerHTML='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1F2B4D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>';
-  if(back.style.position==='absolute'){
-    /* tombol kembali melayang di atas foto: buat tombol beranda kembar di pojok kanan */
-    a.style.cssText=back.getAttribute('style');a.style.left='auto';a.style.right=back.style.left||'12px';a.style.marginLeft='0';
+/* ---------- navigasi pelanggan ----------
+   1) Menu bawah (Beranda · Cari · Booking saya · Akun) di layar utama pelanggan.
+   2) Di tengah alur booking: tombol ✕ Tutup dengan konfirmasi, bukan menu bawah.
+   3) Tombol kembali (‹) di layar lain menuju halaman induknya (sudah diatur di tiap layar). */
+var TAB_ON={Status:'Status',Katalog:'Home',Menginap:'Home',JeepPaket:'Home',Transportasi:'Home',MobilSopir:'Home',Bantuan:'Akun'};
+var FLOW={Checkout:'cart',Antar:'cart',UploadKtp:'cart',Bayar:'saved',InapTanggal:'new',InapBayar:'new',JeepJadwal:'new',MobilSopirPaket:'new',MobilSopirCustom:'new'};
+var TABS=[['Home','Beranda','<path d="M3 11l9-7 9 7v9h-6v-6H9v6H3z"/>'],['Cari','Cari','<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>'],
+  ['Status','Booking saya','<rect x="4" y="4" width="16" height="17" rx="2"/><path d="M8 2v4M16 2v4M4 10h16"/>'],['Akun','Akun','<circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/>']];
+function isBottomNav(el){var s=el.getAttribute('style')||'';return el.localName==='nav'&&/position:\s*absolute/.test(s)&&/bottom:\s*0/.test(s);}
+function custNav(root){
+  if(!rootSpec||!rootSpec.mobile)return;
+  var existing=null;for(var c=root.firstElementChild;c;c=c.nextElementSibling){if(isBottomNav(c)){existing=c;break;}}
+  if(existing){
+    /* samakan tujuan "Booking saya" di semua menu bawah */
+    Array.prototype.forEach.call(existing.querySelectorAll('a'),function(a){if(/Booking saya/.test(a.textContent))a.setAttribute('href','Status.dc.html');});
+    return;
   }
-  row.appendChild(a);
+  var act=TAB_ON[current];if(!act)return;
+  var nav=document.createElement('nav');nav.setAttribute('aria-label','Menu utama');nav.setAttribute('data-ra-tabs','1');
+  nav.setAttribute('style','position: absolute; left: 0; right: 0; bottom: 0; height: 68px; background: #FFFFFF; border-top: 1px solid #E6E8EC; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr))');
+  nav.innerHTML=TABS.map(function(t){var on=t[0]===act,col=on?'#1F2B4D':'#5B6474';
+    return '<a href="'+t[0]+'.dc.html"'+(on?' aria-current="page"':'')+' style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 11px; font-weight: '+(on?700:600)+'; text-decoration: none; color: '+col+'"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="'+col+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+t[2]+'</svg>'+t[1]+'</a>';}).join('');
+  root.appendChild(nav);
 }
+function flowClose(root){
+  var kind=FLOW[current];if(!kind||!rootSpec||!rootSpec.mobile)return;
+  var back=root.querySelector('a[aria-label="Kembali"]');if(!back)return;
+  var row=back.parentElement;if(!row||row.querySelector('[data-ra-close]'))return;
+  var x=document.createElement('button');x.type='button';x.setAttribute('aria-label','Tutup');x.setAttribute('data-ra-close',kind);
+  x.style.cssText='height:44px;padding:0 6px 0 10px;display:flex;align-items:center;gap:4px;margin-left:auto;flex:none;border:0;background:none;color:#4A5468;font:700 14px "Plus Jakarta Sans",system-ui,sans-serif;cursor:pointer';
+  x.innerHTML='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4A5468" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>Tutup';
+  row.appendChild(x);
+}
+var SHEET={cart:['Keluar dari booking?','Isi keranjang tetap tersimpan. Anda bisa melanjutkan kapan saja dari Keranjang.','Home'],
+  'new':['Keluar dari booking?','Pilihan tanggal dan isian di halaman ini belum dikirim, jadi tidak tersimpan.','Home'],
+  saved:['Bayar nanti?','Booking Anda sudah tercatat. Lanjutkan pembayaran kapan saja dari Booking saya.','Status']};
+function openSheet(kind){
+  var t=SHEET[kind]||SHEET['new'];var q=location.hash.indexOf('?');var dest=t[2]+'.dc.html'+(kind==='saved'&&q>-1?location.hash.slice(q):'');
+  var o=document.createElement('div');o.setAttribute('data-ra-sheet','1');o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');
+  o.style.cssText='position:fixed;inset:0;z-index:100;background:rgba(31,43,77,.45);display:flex;align-items:flex-end;justify-content:center';
+  o.innerHTML='<div style="width:100%;max-width:430px;background:#fff;border-radius:20px 20px 0 0;padding:22px 16px calc(16px + env(safe-area-inset-bottom));box-sizing:border-box;font-family:\'Plus Jakarta Sans\',system-ui,sans-serif;color:#1F2B4D;display:flex;flex-direction:column;gap:10px">'+
+    '<div style="font-size:18px;font-weight:800">'+t[0]+'</div><div style="font-size:14px;line-height:21px;color:#4A5468">'+t[1]+'</div>'+
+    '<button type="button" data-k="stay" style="margin-top:8px;height:48px;border:0;border-radius:12px;background:#09BEAF;color:#1F2B4D;font-family:inherit;font-weight:800;font-size:15px;cursor:pointer">Lanjutkan booking</button>'+
+    '<a href="'+dest+'" data-k="leave" style="height:48px;border-radius:12px;border:1px solid #E6E8EC;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;text-decoration:none;color:#1F2B4D">'+(kind==='saved'?'Ke Booking saya':'Keluar')+'</a></div>';
+  o.addEventListener('click',function(e){if(e.target===o||e.target.closest('[data-k]'))o.remove();});
+  document.body.appendChild(o);o.querySelector('[data-k=stay]').focus();
+}
+document.addEventListener('click',function(e){var x=e.target.closest&&e.target.closest('[data-ra-close]');if(x){e.preventDefault();openSheet(x.getAttribute('data-ra-close'));}},true);
+window.addEventListener('hashchange',function(){var s=document.querySelector('[data-ra-sheet]');if(s)s.remove();});
 
 /* ---------- render ---------- */
 function render(){
@@ -167,7 +196,7 @@ function render(){
   var frag=document.createDocumentFragment();
   build(rootSpec.tpl,scopes,frag);
   screenEl.innerHTML='';screenEl.appendChild(frag);
-  var root=screenEl.firstElementChild; if(root){adapt(root);homeBtn(root);}
+  var root=screenEl.firstElementChild; if(root){custNav(root);adapt(root);flowClose(root);}
   if(focusInfo&&focusInfo.i>-1){var all2=screenEl.querySelectorAll('input,textarea,select');var t=all2[focusInfo.i];if(t){t.focus({preventScroll:true});try{t.setSelectionRange(focusInfo.s,focusInfo.e);}catch(e){}}}
   window.scrollTo(0,y);
 }
