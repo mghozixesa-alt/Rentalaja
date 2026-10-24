@@ -1,0 +1,1 @@
+window.RA_CONFIG={url:'https://vkivngzfhmifqxubjjut.supabase.co',key:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZraXZuZ3pmaG1pZnF4dWJqanV0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg5NjcxNzUsImV4cCI6MjEwNDU0MzE3NX0.iTrfMn4-EyoGB6kA_a7nzgSqWUVXxTik0v0kpIhZDpE'};
