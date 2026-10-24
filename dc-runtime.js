@@ -132,6 +132,28 @@ function adapt(root){
   if(pad)root.style.paddingBottom=(pad+12)+'px';
 }
 
+
+/* ---------- tombol "Beranda" di samping tombol kembali (layar mobile tanpa menu bawah) ---------- */
+var HOME_OF=[[/^(Pos)/,'PosHariIni'],[/^Mgmt/,'MgmtDashboard'],[/^Keu/,'KeuDasbor'],[/^Inv(?!Login|Gabung)/,'Investor'],[/^(Tek)/,'Teknisi'],[/^Runner/,'Runner'],[/^SopirJeep/,'SopirJeep'],[/^Exp/,'ExpHariIni']];
+var NO_HOME={Home:1,HomeEn:1,Masuk:1,Login:1,InvLogin:1,InvGabung:1,Investor:1,Teknisi:1,Runner:1,SopirJeep:1,ExpHariIni:1,PosHariIni:1,MgmtDashboard:1,KeuDasbor:1};
+function homeOf(n){for(var i=0;i<HOME_OF.length;i++){if(HOME_OF[i][0].test(n))return HOME_OF[i][1];}return 'Home';}
+function homeBtn(root){
+  if(!rootSpec||!rootSpec.mobile||NO_HOME[current])return;
+  if(root.querySelector('nav'))return;
+  var back=root.querySelector('a[aria-label="Kembali"]');if(!back)return;
+  var home=homeOf(current), bh=(back.getAttribute('href')||'').replace(/\.dc\.html.*$/,'');
+  if(bh===home)return;
+  var row=back.parentElement;if(!row||row.querySelector('[data-ra-home]'))return;
+  var a=document.createElement('a');a.href=home+'.dc.html';a.setAttribute('aria-label','Ke beranda');a.setAttribute('data-ra-home','1');a.title='Beranda';
+  a.style.cssText='width:44px;height:44px;display:flex;align-items:center;justify-content:center;margin-left:auto;flex:none;border-radius:12px';
+  a.innerHTML='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1F2B4D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>';
+  if(back.style.position==='absolute'){
+    /* tombol kembali melayang di atas foto: buat tombol beranda kembar di pojok kanan */
+    a.style.cssText=back.getAttribute('style');a.style.left='auto';a.style.right=back.style.left||'12px';a.style.marginLeft='0';
+  }
+  row.appendChild(a);
+}
+
 /* ---------- render ---------- */
 function render(){
   if(!inst||!rootSpec)return;
@@ -145,7 +167,7 @@ function render(){
   var frag=document.createDocumentFragment();
   build(rootSpec.tpl,scopes,frag);
   screenEl.innerHTML='';screenEl.appendChild(frag);
-  var root=screenEl.firstElementChild; if(root)adapt(root);
+  var root=screenEl.firstElementChild; if(root){adapt(root);homeBtn(root);}
   if(focusInfo&&focusInfo.i>-1){var all2=screenEl.querySelectorAll('input,textarea,select');var t=all2[focusInfo.i];if(t){t.focus({preventScroll:true});try{t.setSelectionRange(focusInfo.s,focusInfo.e);}catch(e){}}}
   window.scrollTo(0,y);
 }
