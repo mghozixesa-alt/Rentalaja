@@ -161,6 +161,46 @@
       return RA.rpc('claim_my_access', {}).then(function (c) { if (c.data) d.access = c.data; return d; });
     });
   };
+  /* ---------------- verifikasi dua langkah (TOTP, Supabase MFA) ---------------- */
+  function authApi(method, path, body) {
+    return headers({ 'Content-Type': 'application/json' }).then(function (h) {
+      return fetch(C.url + '/auth/v1/' + path, { method: method, headers: h, body: body ? JSON.stringify(body) : undefined });
+    }).then(function (r) {
+      return r.text().then(function (t) {
+        var d = null; try { d = t ? JSON.parse(t) : null; } catch (e) { d = t; }
+        if (!r.ok) throw new Error(friendly(d && (d.msg || d.message || d.error_description || d.error) || r.statusText));
+        return d;
+      });
+    });
+  }
+  RA.twofa = {
+    status: function () { return RA.call('my_twofa', {}); },
+    factors: function () { return authApi('GET', 'user').then(function (u) { return (u && u.factors) || []; }); },
+    /* daftar baru: hapus faktor yang belum selesai didaftarkan, lalu buat yang baru (QR + kunci) */
+    enroll: function () {
+      return RA.twofa.factors().then(function (fs) {
+        return Promise.all(fs.filter(function (f) { return f.status !== 'verified'; }).map(function (f) { return authApi('DELETE', 'factors/' + f.id).catch(function () {}); }));
+      }).then(function () {
+        return authApi('POST', 'factors', { factor_type: 'totp', friendly_name: 'Rentalaja ' + new Date().toISOString().slice(0, 16), issuer: 'Rentalaja' });
+      });
+    },
+    /* tantangan + verifikasi kode 6 digit; sesi diganti dengan sesi 2FA (aal2) */
+    verify: function (factorId, code) {
+      return authApi('POST', 'factors/' + factorId + '/challenge', {}).then(function (ch) {
+        return authApi('POST', 'factors/' + factorId + '/verify', { challenge_id: ch.id, code: String(code || '').replace(/\D/g, '') });
+      }).then(function (d) {
+        if (d && d.access_token) { setSession(d); RA._perms = null; RA._staff = null; }
+        return d;
+      });
+    }
+  };
+  /* bila akun staf wajib 2FA tapi sesi belum 2FA: arahkan ke layar Mfa, simpan tujuan */
+  RA.twofaGate = function (next) {
+    return RA.twofa.status().then(function (t) {
+      if (t && t.staff && t.required && !t.aal2) { if (!RA.ctx().next) RA.setCtx({ next: next || RA.staffHome(t.role) }); return 'Mfa'; }
+      return null;
+    }).catch(function () { return null; });
+  };
   RA.signOut = function () { setSession(null); LS.del('ra.ctx.staff'); };
   RA.me = function () { return RA._me || (RA._me = LS.get('ra.user')); };
 
@@ -328,6 +368,7 @@
     var kind = RA.kindOf(name);
     var boot = RA.settings().catch(function () {});
     if (kind === 'public') return boot.then(function () { return name; });
+    if (name === 'Mfa') return Promise.resolve(session ? name : 'Masuk');
     if (!session) {
       var next = name + (location.hash.indexOf('?') > -1 ? location.hash.slice(location.hash.indexOf('?')) : '');
       RA.setCtx({ next: next });
@@ -337,7 +378,10 @@
       if (kind === 'customer') return name;
       if (kind === 'partner') return RA.from('partners').select('id,name').maybeSingle().then(function (r) { RA._partner = r.data; return r.data ? name : 'InvLogin'; });
       return RA.staff().then(function (s) {
-        if (!s) { RA.toast('Akun ini bukan akun staf Rentalaja.', 'bad'); return 'Masuk'; }
+        if (!s) return RA.twofaGate(name + (location.hash.indexOf('?') > -1 ? location.hash.slice(location.hash.indexOf('?')) : '')).then(function (g) {
+          if (g) return g;
+          RA.toast('Akun ini bukan akun staf Rentalaja.', 'bad'); return 'Masuk';
+        });
         if (kind === 'finance' && !RA.can('finance.panel')) { RA.toast('Panel Keuangan hanya untuk owner dan keuangan.', 'bad'); return 'Masuk'; }
         return name;
       });
