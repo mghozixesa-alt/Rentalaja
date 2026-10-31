@@ -199,7 +199,7 @@ function staffNav(root){
   }
   var curLabel='Menu';SNAV.forEach(function(g){g[1].forEach(function(it){if(it[0]===current)curLabel=it[1]+' '+it[2];});});
   if(compact){
-    nav.setAttribute('style',nav.getAttribute('data-snav')?'display:block;padding:10px 16px 0;max-width:560px;margin:0 auto':'display:block');
+    nav.setAttribute('style',nav.getAttribute('data-snav')?'display:block;padding:10px 16px 0;width:100%;max-width:560px;margin:0 auto;box-sizing:border-box;align-self:stretch':'display:block');
     nav.innerHTML='<details'+(window.__snavOpen?' open':'')+' style="background:#FFFFFF;border:1px solid #E6E8EC;border-radius:12px"><summary style="list-style:none;cursor:pointer;min-height:44px;padding:0 12px;display:flex;align-items:center;justify-content:space-between;font:800 14px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#1F2B4D"><span>☰ &nbsp;'+curLabel+'</span><span style="font-size:12px;color:#077A70">Menu</span></summary><div style="display:flex;flex-direction:column;gap:12px;padding:6px 4px 10px">'+h+'</div></details>';
     var d=nav.querySelector('details');d.addEventListener('toggle',function(){window.__snavOpen=d.open;});
     nav.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){window.__snavOpen=false;});});
