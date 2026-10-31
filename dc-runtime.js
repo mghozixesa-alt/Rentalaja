@@ -160,6 +160,39 @@ function custNav(root){
   nav.setAttribute('style',NAVSTYLE);nav.innerHTML=navHTML(act);
   root.appendChild(nav);
 }
+
+var SNAV=[
+ ['Harian',[['PosHariIni','🏠','Hari ini'],['PosVerifikasi','🪪','Verifikasi pesanan'],['PosSerahTerima','🔁','Serah-terima & kembali'],['PosKasir','💳','Kasir'],['PosPelanggan','👤','Pelanggan']]],
+ ['Antar-jemput',[['Runner','🛵','Antar-jemput']]],
+ ['Penginapan & Jeep',[['ExpHariIni','🏡','Hari ini Experience'],['ExpKalender','📅','Kalender kamar'],['ExpJeep','🚙','Jadwal jeep'],['SopirJeep','🧑‍✈️','Tugas sopir']]],
+ ['Barang',[['MgmtProduk','🏷️','Barang & harga'],['MgmtPromo','🎁','Promo & member'],['PosUnit','📦','Stok unit']]],
+ ['Aset & servis',[['MgmtPusatAset','🗂️','Pusat aset'],['MgmtServis','🔧','Servis'],['PosQC','✅','Cek kondisi (QC)'],['Teknisi','🧰','Teknisi']]],
+ ['Laporan',[['MgmtDashboard','📊','Laporan']]],
+ ['Pengaturan',[['MgmtPengguna','👥','Staf & akses'],['MgmtCabang','🏬','Cabang']]]
+];
+var SROLE={
+ cashier:{'Harian':1,'Antar-jemput':1,'Barang':['PosUnit']}, cs:{'Harian':1,'Antar-jemput':1,'Barang':['PosUnit']}, staff:{'Harian':1,'Antar-jemput':1,'Barang':['PosUnit']},
+ branch_head:{'Harian':1,'Antar-jemput':1,'Barang':['PosUnit'],'Aset & servis':['PosQC'],'Laporan':1},
+ runner:{'Antar-jemput':1}, technician:{'Aset & servis':['Teknisi','PosQC']}, qc:{'Aset & servis':['PosQC','Teknisi']},
+ asset_manager:{'Barang':1,'Aset & servis':1,'Laporan':1}, experience_manager:{'Penginapan & Jeep':1,'Laporan':1}, cs_experience:{'Penginapan & Jeep':['ExpHariIni','ExpKalender','ExpJeep']},
+ driver:{'Penginapan & Jeep':['SopirJeep']}, finance:{'Laporan':1}
+};
+function staffNav(root){
+  if(!window.RA||!RA.kindOf||RA.kindOf(current)!=='staff')return;
+  var nav=root.querySelector('nav[aria-label="Menu"]');if(!nav)return;
+  var role=(RA._staff&&RA._staff.role)||'';var full=role==='owner'||role==='viewer';var allow=SROLE[role]||{'Harian':1};
+  var h='';
+  SNAV.forEach(function(g){
+    var a=full?1:allow[g[0]];if(!a)return;
+    var items=g[1].filter(function(it){return full||a===1||a.indexOf(it[0])>-1;});if(!items.length)return;
+    h+='<div style="display:flex;flex-direction:column;gap:2px"><div style="font:800 11px \'Plus Jakarta Sans\',system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#8A93A3;padding:0 12px 4px">'+g[0]+'</div>';
+    items.forEach(function(it){var on=it[0]===current;
+      h+='<a href="'+it[0]+'.dc.html"'+(on?' aria-current="page"':'')+' style="min-height:40px;box-sizing:border-box;padding:0 12px;border-radius:10px;background:'+(on?'#E3F7F5':'transparent')+';color:'+(on?'#077A70':'#1F2B4D')+';font:'+(on?'800':'600')+' 14px \'Plus Jakarta Sans\',system-ui,sans-serif;display:flex;align-items:center;gap:10px;text-decoration:none"><span style="width:20px;text-align:center">'+it[1]+'</span>'+it[2]+'</a>';});
+    h+='</div>';
+  });
+  nav.setAttribute('style','display:flex;flex-direction:column;gap:14px');
+  nav.innerHTML=h;
+}
 function flowClose(root){
   var kind=FLOW[current];if(!kind||!rootSpec||!rootSpec.mobile)return;
   var back=root.querySelector('a[aria-label="Kembali"]');if(!back)return;
@@ -199,7 +232,7 @@ function render(){
   var frag=document.createDocumentFragment();
   build(rootSpec.tpl,scopes,frag);
   screenEl.innerHTML='';screenEl.appendChild(frag);
-  var root=screenEl.firstElementChild; if(root){custNav(root);adapt(root);flowClose(root);}
+  var root=screenEl.firstElementChild; if(root){custNav(root);staffNav(root);adapt(root);flowClose(root);}
   if(focusInfo&&focusInfo.i>-1){var all2=screenEl.querySelectorAll('input,textarea,select');var t=all2[focusInfo.i];if(t){t.focus({preventScroll:true});try{t.setSelectionRange(focusInfo.s,focusInfo.e);}catch(e){}}}
   window.scrollTo(0,y);
 }
