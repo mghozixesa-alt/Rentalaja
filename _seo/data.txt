@@ -95,7 +95,6 @@ GRT|mobil|Toyota Fortuner VRZ|825cd4a6-500a-4a45-9882-74fc5c3587e8|1300000|||
 GRT|motor|Honda Beat CBS New|e9bd6f5f-1685-4936-8f77-1d75f82508d9|100000|75000||products/honda-beat-cbs-new/1.png
 GRT|motor|Honda Scoopy New|14f99f29-1174-48fe-8594-48f8ed094053|110000|85000||products/honda-scoopy-new/1.png
 GRT|motor|Honda PCX|2e177356-cfe1-4d63-9863-3d0a4e842559|150000|125000||products/honda-pcx/1.png
-GRT|motor|Honda Beat New|99cd0a7b-9f81-4836-9e1b-7f27f76a95ee|115000|85000||products/honda-beat-new/1.png
 GRT|proyektor|Proyektor Panasonic VW355N|59cf527a-6f72-4fd9-9c9f-46186848e9bf|170000|100000|42000|products/proyektor-panasonic-vw355n/1.png
 GRT|proyektor|Screen Proyektor|99ca6411-483e-4fd3-8ede-d66b964416d7|50000|30000||products/screen-proyektor/1.png
 GRT|game|PlayStation 3|d8deae93-f5cd-45ce-a9c8-f314e60bbf27|75000|35000||
