@@ -190,8 +190,16 @@ function staffNav(root){
       h+='<a href="'+it[0]+'.dc.html"'+(on?' aria-current="page"':'')+' style="min-height:40px;box-sizing:border-box;padding:0 12px;border-radius:10px;background:'+(on?'#E3F7F5':'transparent')+';color:'+(on?'#077A70':'#1F2B4D')+';font:'+(on?'800':'600')+' 14px \'Plus Jakarta Sans\',system-ui,sans-serif;display:flex;align-items:center;gap:10px;text-decoration:none"><span style="width:20px;text-align:center">'+it[1]+'</span>'+it[2]+'</a>';});
     h+='</div>';
   });
-  nav.setAttribute('style','display:flex;flex-direction:column;gap:14px');
-  nav.innerHTML=h;
+  var curLabel='Menu';SNAV.forEach(function(g){g[1].forEach(function(it){if(it[0]===current)curLabel=it[1]+' '+it[2];});});
+  if(window.innerWidth<760){
+    nav.setAttribute('style','display:block');
+    nav.innerHTML='<details'+(window.__snavOpen?' open':'')+' style="background:#FFFFFF;border:1px solid #E6E8EC;border-radius:12px"><summary style="list-style:none;cursor:pointer;min-height:44px;padding:0 12px;display:flex;align-items:center;justify-content:space-between;font:800 14px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#1F2B4D"><span>☰ &nbsp;'+curLabel+'</span><span style="font-size:12px;color:#077A70">Menu</span></summary><div style="display:flex;flex-direction:column;gap:12px;padding:6px 4px 10px">'+h+'</div></details>';
+    var d=nav.querySelector('details');d.addEventListener('toggle',function(){window.__snavOpen=d.open;});
+    nav.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){window.__snavOpen=false;});});
+  }else{
+    nav.setAttribute('style','display:flex;flex-direction:column;gap:14px');
+    nav.innerHTML=h;
+  }
 }
 function flowClose(root){
   var kind=FLOW[current];if(!kind||!rootSpec||!rootSpec.mobile)return;
