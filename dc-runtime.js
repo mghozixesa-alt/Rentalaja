@@ -139,15 +139,15 @@ function adapt(root){
    3) Tombol kembali (‹) di layar lain menuju halaman induknya (sudah diatur di tiap layar). */
 var TAB_ON={Status:'Status',Katalog:'Home',Menginap:'Home',JeepPaket:'Home',Transportasi:'Home',MobilSopir:'Home',Bantuan:'Akun'};
 var FLOW={Checkout:'cart',Antar:'cart',UploadKtp:'cart',Bayar:'saved',InapTanggal:'new',InapBayar:'new',JeepJadwal:'new',MobilSopirPaket:'new',MobilSopirCustom:'new'};
-var TABS=[['Home','Beranda','<path d="M3 11l9-7 9 7v9h-6v-6H9v6H3z"/>'],['Cari','Cari','<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>'],
-  ['Status','Booking saya','<rect x="4" y="4" width="16" height="17" rx="2"/><path d="M8 2v4M16 2v4M4 10h16"/>'],['Akun','Akun','<circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/>']];
+var TABS=[['Home','Beranda','<path d="M3 11l9-7 9 7v9h-6v-6H9v6H3z"/>'],['Status','Pesanan','<rect x="5" y="3" width="14" height="18" rx="2.5"/><path d="M9 8h6M9 12h6M9 16h3"/>'],
+  ['Cari','Pencarian','<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>'],['Akun','Akun','<circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/>']];
 function isBottomNav(el){var s=el.getAttribute('style')||'';return el.localName==='nav'&&/position:\s*absolute/.test(s)&&/bottom:\s*0/.test(s);}
 function custNav(root){
   if(!rootSpec||!rootSpec.mobile)return;
   var existing=null;for(var c=root.firstElementChild;c;c=c.nextElementSibling){if(isBottomNav(c)){existing=c;break;}}
   if(existing){
     /* samakan tujuan "Booking saya" di semua menu bawah */
-    Array.prototype.forEach.call(existing.querySelectorAll('a'),function(a){if(/Booking saya/.test(a.textContent))a.setAttribute('href','Status.dc.html');});
+    Array.prototype.forEach.call(existing.querySelectorAll('a'),function(a){if(/Booking saya|Pesanan/.test(a.textContent))a.setAttribute('href','Status.dc.html');});(function(){var aS=existing.querySelector('a[href^="Status"]'),aC=existing.querySelector('a[href^="Cari"]');if(aS&&aC&&aS.parentNode===aC.parentNode&&(aC.compareDocumentPosition(aS)&4))aC.parentNode.insertBefore(aS,aC);})(function(){});
     return;
   }
   var act=TAB_ON[current];if(!act)return;
@@ -176,7 +176,7 @@ function openSheet(kind){
   o.innerHTML='<div style="width:100%;max-width:430px;background:#fff;border-radius:20px 20px 0 0;padding:22px 16px calc(16px + env(safe-area-inset-bottom));box-sizing:border-box;font-family:\'Plus Jakarta Sans\',system-ui,sans-serif;color:#1F2B4D;display:flex;flex-direction:column;gap:10px">'+
     '<div style="font-size:18px;font-weight:800">'+t[0]+'</div><div style="font-size:14px;line-height:21px;color:#4A5468">'+t[1]+'</div>'+
     '<button type="button" data-k="stay" style="margin-top:8px;height:48px;border:0;border-radius:12px;background:#09BEAF;color:#1F2B4D;font-family:inherit;font-weight:800;font-size:15px;cursor:pointer">Lanjutkan booking</button>'+
-    '<a href="'+dest+'" data-k="leave" style="height:48px;border-radius:12px;border:1px solid #E6E8EC;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;text-decoration:none;color:#1F2B4D">'+(kind==='saved'?'Ke Booking saya':'Keluar')+'</a></div>';
+    '<a href="'+dest+'" data-k="leave" style="height:48px;border-radius:12px;border:1px solid #E6E8EC;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;text-decoration:none;color:#1F2B4D">'+(kind==='saved'?'Ke Pesanan':'Keluar')+'</a></div>';
   o.addEventListener('click',function(e){if(e.target===o||e.target.closest('[data-k]'))o.remove();});
   document.body.appendChild(o);o.querySelector('[data-k=stay]').focus();
 }
