@@ -139,22 +139,25 @@ function adapt(root){
    3) Tombol kembali (‹) di layar lain menuju halaman induknya (sudah diatur di tiap layar). */
 var TAB_ON={Status:'Status',Katalog:'Home',Menginap:'Home',JeepPaket:'Home',Transportasi:'Home',MobilSopir:'Home',Bantuan:'Akun'};
 var FLOW={Checkout:'cart',Antar:'cart',UploadKtp:'cart',Bayar:'saved',InapTanggal:'new',InapBayar:'new',JeepJadwal:'new',MobilSopirPaket:'new',MobilSopirCustom:'new'};
-var TABS=[['Home','Beranda','<path d="M3 11l9-7 9 7v9h-6v-6H9v6H3z"/>'],['Status','Pesanan','<rect x="5" y="3" width="14" height="18" rx="2.5"/><path d="M9 8h6M9 12h6M9 16h3"/>'],
+var TABS=[['Home','Beranda','<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-5h4v5"/>'],['Status','Pesanan','<rect x="5" y="3" width="14" height="18" rx="2.5"/><path d="M9 8h6M9 12h6M9 16h3"/>'],
   ['Cari','Pencarian','<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>'],['Akun','Akun','<circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/>']];
 function isBottomNav(el){var s=el.getAttribute('style')||'';return el.localName==='nav'&&/position:\s*absolute/.test(s)&&/bottom:\s*0/.test(s);}
+var NAVMAP={Home:'Home',Cari:'Cari',Status:'Status',Aktif:'Status',Akun:'Akun'};
+var NAVSTYLE='position: absolute; left: 0; right: 0; bottom: 0; height: 72px; background: #FFFFFF; border-top: 1px solid #E8EBEF; box-shadow: 0 -4px 16px rgba(31,43,77,0.06); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: center; text-align: center';
+function navHTML(act){return TABS.map(function(t){var on=t[0]===act,col=on?'#077A70':'#8A93A3';
+  return '<a href="'+t[0]+'.dc.html"'+(on?' aria-current="page"':'')+' style="text-decoration: none; color: '+col+'; display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 11px; font-weight: 700; font-family: inherit"><span style="width: 52px; height: 30px; border-radius: 15px; '+(on?'background: #E3F7F5; ':'')+'display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="'+col+'" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+t[2]+'</svg></span>'+t[1]+'</a>';}).join('');}
 function custNav(root){
   if(!rootSpec||!rootSpec.mobile)return;
   var existing=null;for(var c=root.firstElementChild;c;c=c.nextElementSibling){if(isBottomNav(c)){existing=c;break;}}
+  var act=TAB_ON[current]||NAVMAP[current];
   if(existing){
-    /* samakan tujuan "Booking saya" di semua menu bawah */
-    Array.prototype.forEach.call(existing.querySelectorAll('a'),function(a){if(/Booking saya|Pesanan/.test(a.textContent))a.setAttribute('href','Status.dc.html');});(function(){var aS=existing.querySelector('a[href^="Status"]'),aC=existing.querySelector('a[href^="Cari"]');if(aS&&aC&&aS.parentNode===aC.parentNode&&(aC.compareDocumentPosition(aS)&4))aC.parentNode.insertBefore(aS,aC);})(function(){});
+    if(current==='Home')return;
+    if(act&&/Akun/.test(existing.textContent)){existing.setAttribute('style',NAVSTYLE);existing.setAttribute('aria-label','Menu utama');existing.innerHTML=navHTML(act);}
     return;
   }
-  var act=TAB_ON[current];if(!act)return;
+  if(!act)return;
   var nav=document.createElement('nav');nav.setAttribute('aria-label','Menu utama');nav.setAttribute('data-ra-tabs','1');
-  nav.setAttribute('style','position: absolute; left: 0; right: 0; bottom: 0; height: 68px; background: #FFFFFF; border-top: 1px solid #E6E8EC; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr))');
-  nav.innerHTML=TABS.map(function(t){var on=t[0]===act,col=on?'#1F2B4D':'#5B6474';
-    return '<a href="'+t[0]+'.dc.html"'+(on?' aria-current="page"':'')+' style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 11px; font-weight: '+(on?700:600)+'; text-decoration: none; color: '+col+'"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="'+col+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+t[2]+'</svg>'+t[1]+'</a>';}).join('');
+  nav.setAttribute('style',NAVSTYLE);nav.innerHTML=navHTML(act);
   root.appendChild(nav);
 }
 function flowClose(root){
