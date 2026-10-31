@@ -283,6 +283,15 @@
     return Math.floor(s / 86400) + ' hari lalu';
   };
   RA.days = function (a, b) { return Math.max(1, Math.ceil((D(b) - D(a)) / 86400000)); };
+  /* label durasi: <=12 jam ditulis jam, sisa <=12 jam setelah hari penuh ditulis ,5 hari (sama dengan aturan harga di server) */
+  RA.durText = function (a, b) {
+    var h = (D(b) - D(a)) / 3600000; if (!(h > 0)) return '0 jam';
+    if (h <= 12) return Math.round(h) === 12 ? '½ hari' : Math.max(1, Math.round(h)) + ' jam';
+    if (h < 24) return '1 hari';
+    var f = Math.floor(h / 24), r = h - f * 24;
+    if (r > 0 && r <= 12) return f + ',5 hari';
+    return Math.ceil(h / 24) + ' hari';
+  };
   RA.nights = function (a, b) { var x = D(a), y = D(b); x = new Date(x.getFullYear(), x.getMonth(), x.getDate()); y = new Date(y.getFullYear(), y.getMonth(), y.getDate()); return Math.max(1, Math.round((y - x) / 86400000)); };
   RA.maskPhone = function (p) { p = String(p || '').replace(/\D/g, ''); if (p.indexOf('62') === 0) p = '0' + p.slice(2); if (p.length < 8) return p; return p.slice(0, 4) + '-••••-' + p.slice(-4); };
   RA.initials = function (n) { return String(n || '?').split(/\s+/).filter(Boolean).slice(0, 2).map(function (w) { return w[0].toUpperCase(); }).join(''); };
