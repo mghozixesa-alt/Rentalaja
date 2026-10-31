@@ -1,0 +1,112 @@
+BDG-JKL|iphone|iPhone XR|e091374b-077c-42ef-b81c-15b0f91ad4a6|75000|60000||products/iphone-xr/1.png
+BDG-JKL|iphone|iPhone 11|716a0863-f990-4b9e-9389-a8b27a361c5b|120000|100000||products/iphone-11/1.png
+BDG-JKL|iphone|iPhone 13|656c0ce5-4c32-404f-ad4f-dea023d1ef9b|230000|200000||products/iphone-13/1.png
+BDG-JKL|iphone|iPhone 15|aa1cf9d6-5d90-4db7-99ab-ff6a69450a21|300000|285000||products/iphone-15/1.png
+BDG-JKL|iphone|iPhone 16|b97adce7-fe9d-451f-868a-ccdfb15a6e0e|390000|310000||products/iphone-16/1.png
+BDG-JKL|motor|Honda Beat CBS New|e9bd6f5f-1685-4936-8f77-1d75f82508d9|135000|100000||products/honda-beat-cbs-new/1.png
+BDG-JKL|motor|Honda Scoopy New|14f99f29-1174-48fe-8594-48f8ed094053|110000|85000||products/honda-scoopy-new/1.png
+BDG-JKL|motor|Honda PCX|2e177356-cfe1-4d63-9863-3d0a4e842559|210000|160000||products/honda-pcx/1.png
+BDG-JKL|proyektor|Proyektor Panasonic VW355N|59cf527a-6f72-4fd9-9c9f-46186848e9bf|225000|145000|42000|products/proyektor-panasonic-vw355n/1.png
+BDG-JKL|proyektor|Screen Proyektor|99ca6411-483e-4fd3-8ede-d66b964416d7|50000|30000||products/screen-proyektor/1.png
+BDG-JKL|game|PlayStation 3|d8deae93-f5cd-45ce-a9c8-f314e60bbf27|75000|35000||
+BDG-JKL|game|PlayStation 4|e407a622-d90a-4226-ad43-d13e8d5bf4eb|90000|70000||
+GRT|camping|Trekking Pole|30109af4-6f8e-485b-b655-9d2731f51b19|15000|||products/trekking-pole/1.jpeg
+GRT|camping|Hydropack|4185aa10-87ac-4938-9594-6ca1b1b03231|20000|||products/hydropack/1.webp
+GRT|camping|Kursi Lipat Outdoor|b193ccc6-d138-456d-b448-f4e1b58b8639|15000|||products/kursi-lipat-outdoor/1.png
+GRT|camping|Sleeping Bag|5e7e9bf5-1ab5-41f2-82e5-a477c79cfebc|15000|||products/sleeping-bag/1.png
+GRT|camping|Matras Spon|8408ebc9-27c0-4be7-a288-ae3f3a836178|5000|||products/matras-spon/1.jpg
+GRT|camping|Sepatu Outdoor|e7bc092f-9aab-46cb-b599-6dd7b75ac728|30000|||products/sepatu-outdoor/1.jpg
+GRT|camping|Headlamp|0d05768d-ce2e-46d0-a15a-1a31af2cb49c|10000|||products/headlamp/1.jpeg
+GRT|camping|Matras Foil|297318d7-7ccd-481e-b675-e7235904a152|10000|||products/matras-foil/1.png
+GRT|camping|Senter|0cc9aac1-1310-44e2-b4a4-542f7c8bf459|5000|||products/senter/1.jpeg
+GRT|camping|Lampu Tenda|4278af45-e400-485d-9164-38295d50a02e|10000|||products/lampu-tenda/1.png
+GRT|camping|Gas|ac0512e3-e891-4067-a5e9-905f6ec92f12|15000|||products/gas/1.jpg
+GRT|camping|Jaket Hiking Gorpcore Pria|9e392f09-f67e-4b66-9f04-600440e499d4|30000|||products/jaket-hiking-gorpcore-pria/1.png
+GRT|camping|Carrier 45L|0c122125-dd5e-4aac-a5b6-8a612be2f35a|30000|||products/carrier-45l/1.png
+GRT|camping|Jaket Hiking Gorpcore Wanita|bf970df8-7d2b-4c4a-94b3-7cb7771674cd|30000|||products/jaket-hiking-gorpcore-wanita/1.jpeg
+GRT|camping|Meja Lipat Outdoor XL|e2a710a1-f2d6-4b0d-8e7e-8ca471d5cd00|25000|||products/meja-lipat-outdoor-xl/1.jpg
+GRT|camping|Sepatu Trail Run|87e15b89-768b-4f65-8765-21d4f5b49106|35000|||products/sepatu-trail-run/1.webp
+GRT|camping|Kompor Portable|dc700370-733a-4cf5-9100-f04177c5d5b4|25000|||products/kompor-portable/1.jpg
+GRT|camping|Hammock|f77937ce-9e6f-4430-a7fe-bd3294a2d386|10000|||products/hammock/1.jpg
+GRT|camping|Carrier 60L|a3145353-9dd9-49af-831d-9f32a303ebab|40000|||products/carrier-60l/1.png
+GRT|camping|Flysheet 3x4|73c66ba4-6439-4b19-ab70-e115232bec72|20000|||products/flysheet-3x4/1.jpeg
+GRT|iphone|iPhone XR|e091374b-077c-42ef-b81c-15b0f91ad4a6|100000|75000||products/iphone-xr/1.png
+GRT|iphone|iPhone 11|716a0863-f990-4b9e-9389-a8b27a361c5b|150000|125000||products/iphone-11/1.png
+GRT|iphone|iPhone 13|656c0ce5-4c32-404f-ad4f-dea023d1ef9b|175000|145000||products/iphone-13/1.png
+GRT|iphone|iPhone 15|aa1cf9d6-5d90-4db7-99ab-ff6a69450a21|225000|200000||products/iphone-15/1.png
+GRT|iphone|iPhone 16|b97adce7-fe9d-451f-868a-ccdfb15a6e0e|325000|260000||products/iphone-16/1.png
+GRT|kamera|Sony A6000|0ed5a059-e9af-4ec3-868c-616f3a2392c5|150000|85000|40000|
+GRT|kamera|HT Baofeng UV5R|d1693629-6c8b-4943-8d11-ebe3b5ddc880|30000|20000||
+GRT|kamera|Fujifilm XT20|df88af7b-81d8-4b9a-a811-cf4340b1111c|180000|100000|46000|
+GRT|kamera|Canon 700D|6ce5e3a1-a4dc-4bf1-a927-ba4962aa3655|125000|75000|35000|
+GRT|kamera|Canon M10|8393498c-09e3-4a58-b518-91d2abe2ba3e|125000|75000|32000|
+GRT|kamera|Canon 600D|10b9658a-4e8a-4d6e-b20b-7d76ce97a271|110000|65000|25000|
+GRT|kamera|Fujifilm XT4|aa916a54-de99-48c4-a52a-b5b18ce65461|325000|220000|81000|
+GRT|kamera|Canon 1200D|7ec0842b-a16a-4117-974f-bf5801d47170|95000|60000|22000|
+GRT|kamera|Canon 1300D|429e3bf0-a8c2-4ed5-a749-b81c892ca04a|110000|65000|24000|
+GRT|kamera|Fujifilm XT2|596dcde9-24c0-4c2e-b8a6-d3872681666d|220000|140000|55000|
+GRT|kamera|Fujifilm XA5|24638d23-de17-4e52-a14c-eff165e23784|140000|80000|35000|
+GRT|kamera|Fujifilm XT10|940793c1-3c58-49e3-96e7-31431e41360c|145000|85000|36000|
+GRT|kamera|Sony A7III|16ba3221-01f8-4e7f-a22d-1781c7df2396|275000|225000|69000|
+GRT|kamera|Sony A6400|d275133e-45b1-44a2-b2ed-5c21bd079ae8|250000|165000|60000|
+GRT|kamera|Canon 1100D|5ae91735-4eb0-4a38-b793-9b60b3dbd676|90000|55000|20000|
+GRT|kamera|Tripod TNW S30|e7d8444d-75ea-4ec1-96e7-04f02716dd6c|20000|15000||products/tripod-tnw-s30/1.png
+GRT|kamera|Sony A7II|3b3045f4-e712-442b-8f86-559d46044e49|250000|165000|62000|
+GRT|kamera|Panasonic HC-PV100|9289173a-2702-4c37-8b99-4f348fc4a685|275000|180000|69000|
+GRT|kamera|Powerbank Ugreen 10.000mAh MagSafe|e9d15d63-6f0b-41ea-9f99-2d03e8a70c8a|35000|25000||products/powerbank-ugreen-10000mah-magsafe/1.jpeg
+GRT|kamera|Canon 70D|fc608834-355b-4702-8e99-bb89e57308ba|165000|105000|41000|
+GRT|kamera|Tripod Tongsis|045c1af1-db9a-4ce5-b0d3-bbc6f989764c|15000|||products/tripod-tongsis/1.png
+GRT|kamera|GoPro 7 Silver|ab979b07-276c-4fb0-ba48-5b7fba1b65b6|120000|80000|30000|
+GRT|kamera|Canon 3000D|d48c1c6a-6943-48dc-a8a6-dc1d224b80d0|95000|60000|24000|
+GRT|kamera|Canon M6|71e8708d-2428-44f5-a6a7-29527d080bd6|135000|90000|34000|
+GRT|lensa|Lensa Sigma 30mm F1.4 for Sony|571b2368-ee35-4dbb-80f6-5ed441608cbc|100000|60000|32000|
+GRT|lensa|Lensa Sigma 30mm F1.4 for Fujifilm|acb190c6-d62b-494d-804e-ac99996b3e18|100000|60000|40000|
+GRT|lensa|Lensa Fujinon 35mm F2|88f18a67-b493-4549-869b-34fa1819f55b|100000|60000|20000|
+GRT|lensa|Lensa Fujinon XF 23mm F2|29616dca-bf99-4ff3-b8e9-fc014bb4f287|100000|60000|32000|
+GRT|lensa|Lensa Canon 50mm STM|e71a603e-1db6-45b6-82e2-59f87012ab0f|55000|40000|18000|
+GRT|lensa|Lensa Tamron 18-200mm F3.5-6.3 VC|067c01dd-236a-4007-94f6-bd47f4571c58|35000|25000||
+GRT|lensa|Lensa Sony FE 85mm F1.8|3a689919-d1a4-46cc-a749-ac1054e44990|110000|80000|28000|
+GRT|lensa|Lensa Sigma 16mm F1.4 for Sony|a6849287-43e6-4f65-ae97-be959588f682|130000|95000|40000|
+GRT|lensa|Lensa Sony E 35mm F1.8|b9fb963e-7a24-470b-9c81-85c91050087b|100000|60000|20000|
+GRT|lensa|Lensa Sigma 56mm F1.4 for Fujifilm|8ec08e22-56c9-4490-bdef-1f99a7ee36a8|130000|95000|32000|
+GRT|lensa|Lensa Canon 50mm F1.8|3fb01255-0867-4888-bc1d-39f81168249e|50000|35000|15000|
+GRT|lensa|Lensa Sigma 16mm F1.4 for Fujifilm|488cfa3f-a4a0-4692-94c2-4ee2251e3929|130000|95000|30000|
+GRT|lensa|Lensa Sony kit 16-50mm OSS|43e74751-37b0-4a3a-83f7-e4fa271871af|30000|20000||
+GRT|lensa|Lensa Fujinon 35mm F1.4|3ad1cf7a-739e-482f-b99d-75c06daba1fb|100000|60000|25000|
+GRT|lensa|Lensa Canon EF-S 10-18mm F4.5-5.6 IS STM|aca6a96f-84b0-41ed-9bb6-d3dcb109c505|55000|40000||
+GRT|lensa|Lensa Viltrox 85mm F1.8 for Fujifilm|14da2af5-846c-4e15-a0bf-0360b9d87788|100000|60000|25000|
+GRT|lensa|Lensa Canon EF-S 55-250mm|c9dd0375-9e6d-4c05-ac67-6133fba7f09d|65000|50000||
+GRT|lensa|Lensa Kamlan 50mm F1.1 for Sony|6f1f648d-0d33-40b9-8aa6-f27c69f5c0ca|60000|45000||
+GRT|lensa|Lensa Sony FE 28-70mm|e5a13527-33c6-4fe0-8d21-e327ed0017cf|65000|50000||products/lensa-sony-fe-28-70mm/1.png
+GRT|lensa|Lensa Canon 15-45mm (kit EOS M)|6e205d54-33ab-4543-ab5f-3c8dc40e21ec|25000|||
+GRT|lensa|Lensa Sigma 18-250mm F3.5-6.3 for Canon|a0825182-3e2b-4c67-ac92-9923ac17b4d2|65000|40000||
+GRT|lensa|Lensa Canon EF-S 18-55mm STM|c319808f-92f9-46cb-b92e-e7785b9ad425|35000|||
+GRT|mobil|Honda Brio AT|5ab70a68-b6d2-4653-b28c-cd6d5dfc52f5|250000|||
+GRT|mobil|Suzuki Ertiga MT|29885d47-4514-462d-a414-4d43058c1618|225000|||
+GRT|mobil|Daihatsu Gran Max Blind Van MT|3dd4238b-b971-443f-9554-860b862bc483|225000|||
+GRT|mobil|Toyota Hiace|07c43d2d-8868-43ff-af4d-4ae73ac673f7|1000000|||
+GRT|mobil|Toyota Calya MT|b3e486a3-5875-436c-b4b5-069b3db90eeb|225000|||
+GRT|mobil|Daihatsu Ayla MT|3f5a632d-e1a6-492e-be20-a87478264b56|225000|||
+GRT|mobil|Honda Mobilio AT|8ba4df58-2478-4d4b-a0ba-006b7f836618|225000|||
+GRT|mobil|Toyota Agya AT|b9598fac-06bc-443b-8614-14d1c16d0eb1|250000|||
+GRT|mobil|Mitsubishi Xpander AT|3ad60d61-ac08-4f00-9421-7903fb44b108|350000|||
+GRT|mobil|Daihatsu Sigra MT|325a32bd-9d1d-415c-b927-1e0fb45a32fe|225000|||
+GRT|mobil|Toyota Fortuner VRZ|825cd4a6-500a-4a45-9882-74fc5c3587e8|1300000|||
+GRT|motor|Honda Beat CBS New|e9bd6f5f-1685-4936-8f77-1d75f82508d9|100000|75000||products/honda-beat-cbs-new/1.png
+GRT|motor|Honda Scoopy New|14f99f29-1174-48fe-8594-48f8ed094053|110000|85000||products/honda-scoopy-new/1.png
+GRT|motor|Honda PCX|2e177356-cfe1-4d63-9863-3d0a4e842559|150000|125000||products/honda-pcx/1.png
+GRT|motor|Honda Beat New|99cd0a7b-9f81-4836-9e1b-7f27f76a95ee|115000|85000||products/honda-beat-new/1.png
+GRT|proyektor|Proyektor Panasonic VW355N|59cf527a-6f72-4fd9-9c9f-46186848e9bf|170000|100000|42000|products/proyektor-panasonic-vw355n/1.png
+GRT|proyektor|Screen Proyektor|99ca6411-483e-4fd3-8ede-d66b964416d7|50000|30000||products/screen-proyektor/1.png
+GRT|game|PlayStation 3|d8deae93-f5cd-45ce-a9c8-f314e60bbf27|75000|35000||
+GRT|game|PlayStation 4|e407a622-d90a-4226-ad43-d13e8d5bf4eb|90000|70000||
+GRT|game|PlayStation 2|e0e3c2ca-ece9-4fbc-8015-c98eaecda18d|25000|20000||
+WNR|iphone|iPhone XR|e091374b-077c-42ef-b81c-15b0f91ad4a6|100000|75000||products/iphone-xr/1.png
+WNR|iphone|iPhone 11|716a0863-f990-4b9e-9389-a8b27a361c5b|150000|110000||products/iphone-11/1.png
+WNR|iphone|iPhone 13|656c0ce5-4c32-404f-ad4f-dea023d1ef9b|175000|145000||products/iphone-13/1.png
+WNR|kamera|Canon 1300D|429e3bf0-a8c2-4ed5-a749-b81c892ca04a|110000|65000|24000|
+WNR|kamera|Panasonic HC-PV100|9289173a-2702-4c37-8b99-4f348fc4a685|275000|180000|69000|
+WNR|kamera|Canon 3000D|d48c1c6a-6943-48dc-a8a6-dc1d224b80d0|95000|60000|24000|
+WNR|game|PlayStation 3|d8deae93-f5cd-45ce-a9c8-f314e60bbf27|75000|35000||
+WNR|game|PlayStation 4|e407a622-d90a-4226-ad43-d13e8d5bf4eb|90000|70000||
+WNR|game|PlayStation 2|e0e3c2ca-ece9-4fbc-8015-c98eaecda18d|25000|20000||

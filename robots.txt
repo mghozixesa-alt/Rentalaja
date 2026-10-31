@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /r-
+
+Sitemap: https://rentalaja-app.vercel.app/sitemap.xml
