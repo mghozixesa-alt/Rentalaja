@@ -179,7 +179,7 @@ var SROLE={
 };
 function staffNav(root){
   if(!window.RA||!RA.kindOf||RA.kindOf(current)!=='staff')return;
-  var nav=root.querySelector('nav[aria-label="Menu"]');if(!nav)return;
+  var nav=root.querySelector('nav[aria-label="Menu"]');var compact=window.innerWidth<760;
   var role=(RA._staff&&RA._staff.role)||'';var full=role==='owner'||role==='viewer';var allow=SROLE[role]||{'Harian':1};
   var h='';
   SNAV.forEach(function(g){
@@ -190,9 +190,16 @@ function staffNav(root){
       h+='<a href="'+it[0]+'.dc.html"'+(on?' aria-current="page"':'')+' style="min-height:40px;box-sizing:border-box;padding:0 12px;border-radius:10px;background:'+(on?'#E3F7F5':'transparent')+';color:'+(on?'#077A70':'#1F2B4D')+';font:'+(on?'800':'600')+' 14px \'Plus Jakarta Sans\',system-ui,sans-serif;display:flex;align-items:center;gap:10px;text-decoration:none"><span style="width:20px;text-align:center">'+it[1]+'</span>'+it[2]+'</a>';});
     h+='</div>';
   });
+  if(!nav){
+    // layar lapangan (Runner, Teknisi, Sopir) tidak punya kolom menu: tampilkan menu ringkas di atas layar
+    var known=false;SNAV.forEach(function(g){g[1].forEach(function(it){if(it[0]===current)known=true;});});
+    if(!known||(h.match(/<a /g)||[]).length<2)return;
+    nav=document.createElement('div');nav.setAttribute('data-snav','1');
+    var host=root.firstElementChild||root;host.insertBefore(nav,host.firstChild);compact=true;
+  }
   var curLabel='Menu';SNAV.forEach(function(g){g[1].forEach(function(it){if(it[0]===current)curLabel=it[1]+' '+it[2];});});
-  if(window.innerWidth<760){
-    nav.setAttribute('style','display:block');
+  if(compact){
+    nav.setAttribute('style',nav.getAttribute('data-snav')?'display:block;padding:10px 16px 0;max-width:560px;margin:0 auto':'display:block');
     nav.innerHTML='<details'+(window.__snavOpen?' open':'')+' style="background:#FFFFFF;border:1px solid #E6E8EC;border-radius:12px"><summary style="list-style:none;cursor:pointer;min-height:44px;padding:0 12px;display:flex;align-items:center;justify-content:space-between;font:800 14px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#1F2B4D"><span>☰ &nbsp;'+curLabel+'</span><span style="font-size:12px;color:#077A70">Menu</span></summary><div style="display:flex;flex-direction:column;gap:12px;padding:6px 4px 10px">'+h+'</div></details>';
     var d=nav.querySelector('details');d.addEventListener('toggle',function(){window.__snavOpen=d.open;});
     nav.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){window.__snavOpen=false;});});
