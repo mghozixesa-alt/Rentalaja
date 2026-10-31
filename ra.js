@@ -44,6 +44,28 @@
   RA.isLoggedIn = function () { return !!session; };
   RA.session = function () { return session; };
 
+  /* ---------------- login Google (Supabase OAuth, alur implicit) ---------------- */
+  function b64url(s) { s = String(s || '').replace(/-/g, '+').replace(/_/g, '/'); while (s.length % 4) s += '='; try { return decodeURIComponent(escape(atob(s))); } catch (e) { return ''; } }
+  RA.googleLogin = function () {
+    var back = location.origin + location.pathname;
+    location.href = C.url + '/auth/v1/authorize?provider=google&redirect_to=' + encodeURIComponent(back);
+  };
+  (function captureOAuth() {
+    var h = location.hash || '';
+    if (h.indexOf('access_token=') < 0 && h.indexOf('error_description=') < 0) return;
+    var p = {}; new URLSearchParams(h.replace(/^#/, '')).forEach(function (v, k) { p[k] = v; });
+    if (p.access_token) {
+      var claims = {}; try { claims = JSON.parse(b64url(p.access_token.split('.')[1])) || {}; } catch (e) {}
+      var meta = claims.user_metadata || {};
+      var user = { id: claims.sub, email: claims.email || null, name: meta.full_name || meta.name || null, provider: 'google' };
+      setSession({ access_token: p.access_token, refresh_token: p.refresh_token, expires_in: +p.expires_in || 3600, expires_at: +p.expires_at || undefined, token_type: p.token_type || 'bearer', user: user });
+      LS.set('ra.user', user); RA._me = user; RA._perms = null; RA._staff = null; RA._cust = null;
+      history.replaceState(null, '', location.pathname + location.search + '#/Login?google=1');
+    } else {
+      history.replaceState(null, '', location.pathname + location.search + '#/Login?gerr=' + encodeURIComponent(p.error_description || 'Login Google gagal'));
+    }
+  })();
+
   /* ---------------- pesan galat yang ramah ---------------- */
   function friendly(msg) {
     msg = String(msg || '');
