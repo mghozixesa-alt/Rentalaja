@@ -314,6 +314,16 @@
     if (r > 0 && r <= 12) return f + ',5 hari';
     return Math.ceil(h / 24) + ' hari';
   };
+  /* ringkasan riwayat sewa di sistem lama (legacy_customer_summary) */
+  RA.legacyText = function (L) {
+    if (!L || !L.orders) return '';
+    return 'Sistem lama: ' + L.completed + '× sewa selesai, ' + RA.rp(L.spend)
+      + (L.canceled ? ' · ' + L.canceled + ' batal' : '')
+      + (L.fines ? ' · denda telat ' + L.fines + '× (' + RA.rp(L.fines_sum) + ')' : ' · tanpa denda')
+      + (L.unpaid ? ' · ' + L.unpaid + ' order kurang bayar' : '')
+      + ' · ' + RA.monthYear(L.first) + (RA.monthYear(L.first) !== RA.monthYear(L.last) ? '–' + RA.monthYear(L.last) : '')
+      + (L.top && L.top.length ? ' · sering sewa ' + L.top.join(', ') : '');
+  };
   RA.nights = function (a, b) { var x = D(a), y = D(b); x = new Date(x.getFullYear(), x.getMonth(), x.getDate()); y = new Date(y.getFullYear(), y.getMonth(), y.getDate()); return Math.max(1, Math.round((y - x) / 86400000)); };
   RA.maskPhone = function (p) { p = String(p || '').replace(/\D/g, ''); if (p.indexOf('62') === 0) p = '0' + p.slice(2); if (p.length < 8) return p; return p.slice(0, 4) + '-••••-' + p.slice(-4); };
   RA.initials = function (n) { return String(n || '?').split(/\s+/).filter(Boolean).slice(0, 2).map(function (w) { return w[0].toUpperCase(); }).join(''); };
