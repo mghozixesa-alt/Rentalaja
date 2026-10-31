@@ -163,7 +163,7 @@ function custNav(root){
 
 var SNAV=[
  ['Harian',[['PosHariIni','🏠','Hari ini'],['PosVerifikasi','🪪','Verifikasi pesanan'],['PosSerahTerima','🔁','Serah-terima & kembali'],['PosKasir','💳','Kasir'],['PosPelanggan','👤','Pelanggan']]],
- ['Antar-jemput',[['Runner','🛵','Antar-jemput']]],
+ ['Lapangan',[['Runner','🛵','Antar-jemput']]],
  ['Penginapan & Jeep',[['ExpHariIni','🏡','Hari ini Experience'],['ExpKalender','📅','Kalender kamar'],['ExpJeep','🚙','Jadwal jeep'],['SopirJeep','🧑‍✈️','Tugas sopir']]],
  ['Barang',[['MgmtProduk','🏷️','Barang & harga'],['MgmtPromo','🎁','Promo & member'],['PosUnit','📦','Stok unit']]],
  ['Aset & servis',[['MgmtPusatAset','🗂️','Pusat aset'],['MgmtServis','🔧','Servis'],['PosQC','✅','Cek kondisi (QC)'],['Teknisi','🧰','Teknisi']]],
@@ -171,11 +171,11 @@ var SNAV=[
  ['Pengaturan',[['MgmtPengguna','👥','Staf & akses'],['MgmtCabang','🏬','Cabang']]]
 ];
 var SROLE={
- cashier:{'Harian':1,'Antar-jemput':1,'Barang':['PosUnit']}, cs:{'Harian':1,'Antar-jemput':1,'Barang':['PosUnit']}, staff:{'Harian':1,'Antar-jemput':1,'Barang':['PosUnit']},
- branch_head:{'Harian':1,'Antar-jemput':1,'Barang':['PosUnit']},
- runner:{'Antar-jemput':1}, technician:{'Aset & servis':['Teknisi','PosQC']}, qc:{'Aset & servis':['PosQC','Teknisi']},
+ cashier:{'Harian':1,'Lapangan':1,'Barang':['PosUnit']}, cs:{'Harian':1,'Lapangan':1,'Barang':['PosUnit']}, staff:{'Harian':1,'Lapangan':1,'Barang':['PosUnit']},
+ branch_head:{'Harian':1,'Lapangan':1,'Barang':['PosUnit']},
+ runner:{'Lapangan':1,'Penginapan & Jeep':['ExpHariIni','ExpKalender','ExpJeep','SopirJeep'],'Aset & servis':['Teknisi','PosQC']}, technician:{'Lapangan':1,'Penginapan & Jeep':['ExpHariIni','ExpKalender','ExpJeep','SopirJeep'],'Aset & servis':['Teknisi','PosQC']}, qc:{'Lapangan':1,'Penginapan & Jeep':['ExpHariIni','ExpKalender','ExpJeep','SopirJeep'],'Aset & servis':['Teknisi','PosQC']},
  asset_manager:{'Barang':1,'Aset & servis':1,'Manajemen':['MgmtDashboard']}, experience_manager:{'Penginapan & Jeep':1,'Manajemen':['MgmtDashboard']}, cs_experience:{'Penginapan & Jeep':['ExpHariIni','ExpKalender','ExpJeep']},
- driver:{'Penginapan & Jeep':['SopirJeep']}, finance:{'Manajemen':['MgmtDashboard']}
+ driver:{'Lapangan':1,'Penginapan & Jeep':['ExpHariIni','ExpKalender','ExpJeep','SopirJeep'],'Aset & servis':['Teknisi','PosQC']}, finance:{'Manajemen':['MgmtDashboard']}
 };
 function staffNav(root){
   if(!window.RA||!RA.kindOf||RA.kindOf(current)!=='staff')return;
