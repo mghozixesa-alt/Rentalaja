@@ -167,15 +167,15 @@ var SNAV=[
  ['Penginapan & Jeep',[['ExpHariIni','🏡','Hari ini Experience'],['ExpKalender','📅','Kalender kamar'],['ExpJeep','🚙','Jadwal jeep'],['SopirJeep','🧑‍✈️','Tugas sopir']]],
  ['Barang',[['MgmtProduk','🏷️','Barang & harga'],['MgmtPromo','🎁','Promo & member'],['PosUnit','📦','Stok unit']]],
  ['Aset & servis',[['MgmtPusatAset','🗂️','Pusat aset'],['MgmtServis','🔧','Servis'],['PosQC','✅','Cek kondisi (QC)'],['Teknisi','🧰','Teknisi']]],
- ['Laporan',[['MgmtDashboard','📊','Laporan']]],
+ ['Manajemen',[['MgmtDashboard','📊','Laporan'],['MgmtSetuju','✋','Persetujuan']]],
  ['Pengaturan',[['MgmtPengguna','👥','Staf & akses'],['MgmtCabang','🏬','Cabang']]]
 ];
 var SROLE={
  cashier:{'Harian':1,'Antar-jemput':1,'Barang':['PosUnit']}, cs:{'Harian':1,'Antar-jemput':1,'Barang':['PosUnit']}, staff:{'Harian':1,'Antar-jemput':1,'Barang':['PosUnit']},
- branch_head:{'Harian':1,'Antar-jemput':1,'Barang':['PosUnit'],'Aset & servis':['PosQC'],'Laporan':1},
+ branch_head:{'Harian':1,'Antar-jemput':1,'Barang':['PosUnit']},
  runner:{'Antar-jemput':1}, technician:{'Aset & servis':['Teknisi','PosQC']}, qc:{'Aset & servis':['PosQC','Teknisi']},
- asset_manager:{'Barang':1,'Aset & servis':1,'Laporan':1}, experience_manager:{'Penginapan & Jeep':1,'Laporan':1}, cs_experience:{'Penginapan & Jeep':['ExpHariIni','ExpKalender','ExpJeep']},
- driver:{'Penginapan & Jeep':['SopirJeep']}, finance:{'Laporan':1}
+ asset_manager:{'Barang':1,'Aset & servis':1,'Manajemen':['MgmtDashboard']}, experience_manager:{'Penginapan & Jeep':1,'Manajemen':['MgmtDashboard']}, cs_experience:{'Penginapan & Jeep':['ExpHariIni','ExpKalender','ExpJeep']},
+ driver:{'Penginapan & Jeep':['SopirJeep']}, finance:{'Manajemen':['MgmtDashboard']}
 };
 function staffNav(root){
   if(!window.RA||!RA.kindOf||RA.kindOf(current)!=='staff')return;
