@@ -195,7 +195,7 @@ function staffNav(root){
     var known=false;SNAV.forEach(function(g){g[1].forEach(function(it){if(it[0]===current)known=true;});});
     if(!known||(h.match(/<a /g)||[]).length<2)return;
     nav=document.createElement('div');nav.setAttribute('data-snav','1');
-    var host=root.firstElementChild||root;host.insertBefore(nav,host.firstChild);compact=true;
+    var hd=root.querySelector('header');if(hd&&hd.parentNode){hd.parentNode.insertBefore(nav,hd.nextSibling);}else{var host=root.firstElementChild||root;host.insertBefore(nav,host.firstChild);}compact=true;
   }
   var curLabel='Menu';SNAV.forEach(function(g){g[1].forEach(function(it){if(it[0]===current)curLabel=it[1]+' '+it[2];});});
   if(compact){
