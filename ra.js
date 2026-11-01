@@ -16,7 +16,7 @@
   function setSession(s) {
     session = s && s.access_token ? s : null;
     if (session && !session.expires_at && session.expires_in) session.expires_at = Math.floor(Date.now() / 1000) + session.expires_in;
-    if (session) LS.set('ra.session', session); else { LS.del('ra.session'); LS.del('ra.user'); RA._me = null; RA._perms = null; }
+    if (session) { LS.set('ra.session', session); if (RA.affAttribute) setTimeout(function () { try { RA.affAttribute(); } catch (e) {} }, 800); } else { LS.del('ra.session'); LS.del('ra.user'); RA._me = null; RA._perms = null; }
   }
   function refresh() {
     if (!session || !session.refresh_token) { setSession(null); return Promise.resolve(); }
@@ -485,7 +485,7 @@
   };
   RA.quote = function (extra) {
     var c = RA.ctx();
-    var p = Object.assign({ branch_id: c.branch_id, start_at: c.start_at, end_at: c.end_at, items: c.cart, delivery: c.delivery || null, promo_code: c.promo_code || null, use_points: !!c.use_points }, extra || {});
+    var p = Object.assign({ branch_id: c.branch_id, start_at: c.start_at, end_at: c.end_at, items: c.cart, delivery: c.delivery || null, promo_code: c.promo_code || null, use_points: !!c.use_points }, RA.affParams(), extra || {});
     return RA.rpc('quote', { p: p });
   };
 
@@ -597,8 +597,25 @@
     });
   })();
 
-  /* referral dari link ?ref= */
-  var ref = RA.param('ref'); if (ref) LS.set('ra.ref', ref);
+  /* referral dari link ?ref= (kode mitra Pokama atau kode teman). Berlaku 30 hari; link terakhir menang.
+     Kode mitra juga disimpan di akun (login) lewat mitra_attribute, bukan hanya di browser. */
+  var ref = RA.param('ref'); try { ref = ref || new URLSearchParams(location.search).get('ref'); } catch (e) {}
+  if (ref) { ref = String(ref).trim().toUpperCase().slice(0, 40); LS.set('ra.ref', ref); LS.set('ra.ref_at', Date.now()); }
+  RA.refCode = function () {
+    var r = LS.get('ra.ref'), at = +LS.get('ra.ref_at') || 0, days = RA.setting ? (+RA.setting('mitra_attribution_days') || 30) : 30;
+    if (!r) return null; if (at && Date.now() - at > days * 864e5) return null; return r;
+  };
+  RA.affParams = function () {
+    var c = RA.ctx ? RA.ctx() : {};
+    if (c.aff_off) return { aff_off: 'true' };
+    if (c.aff_code) return { aff_code: c.aff_code, aff_src: 'kode' };
+    var r = RA.refCode(); return r ? { aff_code: r, aff_src: 'link' } : {};
+  };
+  RA.affAttribute = function () {
+    var r = RA.refCode(); if (!r || !session || LS.get('ra.ref_saved') === r + '|' + LS.get('ra.ref_at')) return;
+    RA.rpc('mitra_attribute', { p_code: r }).then(function (x) { if (x && !x.error) LS.set('ra.ref_saved', r + '|' + LS.get('ra.ref_at')); }).catch(function () {});
+  };
+  setTimeout(function () { try { RA.affAttribute(); } catch (e) {} }, 1500);
 
   /* pembaruan langsung (polling ringan) untuk layar operasional */
   RA.poll = function (comp, fn, ms) { var stop = false; function tick() { if (stop) return; Promise.resolve(fn()).catch(function () {}).then(function () { if (!stop) comp._pollT = setTimeout(tick, ms || 15000); }); } tick(); return function () { stop = true; clearTimeout(comp._pollT); }; };
