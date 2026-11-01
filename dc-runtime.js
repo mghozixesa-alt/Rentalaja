@@ -517,6 +517,6 @@ window.addEventListener('hashchange',menuVis);menuVis();
 /* ---------- start ---------- */
 fetch('manifest.json?t='+Date.now()).then(function(r){return r.json();}).then(function(m){
   MAN=m;TITLES=m.titles||[];
-  var h0=(location.hash.replace(/^#\/?/,'').split('?')[0])||'Home';var first=bundleFor(h0)||bundleFor('Home');return first?loadBundle(first):null;
+  var h0=(location.hash.replace(/^#\/?/,'').split('?')[0])||'Home';var first=bundleFor(h0)||bundleFor('Home');var pr=first?loadBundle(first):null;if(first&&first.id==='cust'){var bk=bundleFor('Checkout');if(bk&&pr){pr.then(function(){var go=function(){loadBundle(bk).catch(function(){});};if(window.requestIdleCallback)requestIdleCallback(go,{timeout:5000});else setTimeout(go,2000);});}}return pr;
 }).then(route).catch(function(err){screenEl.innerHTML='<div class="ra-load">Gagal memuat aplikasi. Coba muat ulang halaman.</div>';console.error(err);});
 })();
