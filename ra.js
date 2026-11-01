@@ -507,6 +507,24 @@
   window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); window.RA_INSTALL_PROMPT = e; });
   if ('serviceWorker' in navigator && location.protocol === 'https:') { try { navigator.serviceWorker.register('sw.js'); } catch (e) {} }
 
+  /* pembaruan otomatis: bila ada versi baru, muat ulang saat pindah layar atau saat kembali ke tab */
+  (function () {
+    var base = null, stale = false, hiddenAt = 0, lastCheck = 0;
+    function sig() { return fetch('manifest.json?v=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (m) { return (m.bundles || []).map(function (b) { return (b.chunks || []).join(','); }).join('|'); }); }
+    function check() {
+      if (stale || Date.now() - lastCheck < 30000) return Promise.resolve(stale);
+      lastCheck = Date.now();
+      return sig().then(function (s) { if (base === null) base = s; else if (s !== base) stale = true; return stale; }).catch(function () { return stale; });
+    }
+    sig().then(function (s) { base = s; }).catch(function () {});
+    setInterval(check, 300000);
+    window.addEventListener('hashchange', function () { if (stale) location.reload(); else check(); });
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) { hiddenAt = Date.now(); return; }
+      if (hiddenAt && Date.now() - hiddenAt > 20000) { lastCheck = 0; check().then(function (st) { if (st) location.reload(); }); }
+    });
+  })();
+
   /* referral dari link ?ref= */
   var ref = RA.param('ref'); if (ref) LS.set('ra.ref', ref);
 
