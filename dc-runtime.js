@@ -199,18 +199,18 @@ var SNAV=[
  ['Aset & servis',[['MgmtPusatAset','folder','Pusat aset'],['MgmtServis','tool','Servis'],['PosQC','check','Cek kondisi (QC)'],['Teknisi','kit','Teknisi']]],
  ['Manajemen',[['MgmtDashboard','chart','Laporan'],['MgmtSetuju','approve','Persetujuan']]],
  ['Pengaturan',[['MgmtPengguna','users','Staf & akses'],['MgmtCabang','store','Cabang']]],
- ['Pelanggan',[['MgmtInbox','chat','Inbox WhatsApp'],['MgmtKeluhan','approve','Tiket keluhan'],['MgmtPenawaran','tag','Permintaan perjalanan'],['MgmtTindakLanjut','users','Tindak lanjut']]],
- ['Saya',[['AgendaLapangan','calcheck','Agenda'],['AkunLapangan','user','Akun saya']]]
+ ['Pelanggan',[['MgmtInbox','chat','Inbox WhatsApp'],['TiketCS','approve','Tiket keluhan'],['AlatChat','chat','Template & link sewa'],['MgmtPenawaran','tag','Permintaan perjalanan'],['MgmtTindakLanjut','users','Tindak lanjut']]],
+ ['Saya',[['AgendaLapangan','calcheck','Agenda'],['AkunLapangan','user','Akun saya'],['TiketCS','approve','Tiket keluhan']]]
 ];
 var SROLE={
- cashier:{'Harian':1,'Lapangan':1,'Barang':['PosUnit']}, cs:{'CS':1,'Harian':['PosHariIni','PosVerifikasi','PosPelanggan'],'Penginapan & Jeep':['ExpHariIni','ExpJeep','ExpKalender'],'Pelanggan':['MgmtInbox','MgmtKeluhan','MgmtPenawaran']}, staff:{'Harian':1,'Lapangan':1,'Barang':['PosUnit']},
- branch_head:{'Harian':1,'Lapangan':1,'Barang':['PosUnit'],'Manajemen':['MgmtSetuju']},
+ cashier:{'Harian':1,'Lapangan':1,'Barang':['PosUnit']}, cs:{'CS':1,'Harian':['PosHariIni','PosVerifikasi','PosPelanggan'],'Penginapan & Jeep':['ExpHariIni','ExpJeep','ExpKalender'],'Pelanggan':['MgmtInbox','TiketCS','AlatChat','MgmtPenawaran']}, staff:{'Harian':1,'Lapangan':1,'Barang':['PosUnit']},
+ branch_head:{'Saya':['TiketCS'],'Harian':1,'Lapangan':1,'Barang':['PosUnit'],'Manajemen':['MgmtSetuju']},
  runner:{'Harian':['PosAbsen'],'Lapangan':1,'Penginapan & Jeep':['Housekeeping','SopirJeep'],'Saya':1}, technician:{'Saya':1,'Harian':['PosAbsen'],'Lapangan':1,'Penginapan & Jeep':['ExpHariIni','ExpKalender','ExpJeep','SopirJeep'],'Aset & servis':['Teknisi','PosQC']}, qc:{'Saya':1,'Harian':['PosAbsen'],'Lapangan':1,'Penginapan & Jeep':['ExpHariIni','ExpKalender','ExpJeep','SopirJeep'],'Aset & servis':['Teknisi','PosQC']},
- asset_manager:{'Barang':1,'Aset & servis':1,'Manajemen':['MgmtDashboard','MgmtSetuju']}, experience_manager:{'Penginapan & Jeep':1,'Manajemen':['MgmtDashboard']}, cs_experience:{'CS':1,'Harian':['PosVerifikasi','PosPelanggan'],'Penginapan & Jeep':['ExpHariIni','ExpJeep','ExpKalender'],'Pelanggan':['MgmtInbox','MgmtKeluhan','MgmtPenawaran']},
- driver:{'Saya':1,'Harian':['PosAbsen'],'Lapangan':1,'Penginapan & Jeep':['ExpHariIni','ExpKalender','ExpJeep','SopirJeep'],'Aset & servis':['Teknisi','PosQC']}, finance:{'Manajemen':['MgmtDashboard']}
+ asset_manager:{'Saya':['TiketCS'],'Barang':1,'Aset & servis':1,'Manajemen':['MgmtDashboard','MgmtSetuju']}, experience_manager:{'Saya':['TiketCS'],'Penginapan & Jeep':1,'Manajemen':['MgmtDashboard']}, cs_experience:{'CS':1,'Harian':['PosVerifikasi','PosPelanggan'],'Penginapan & Jeep':['ExpHariIni','ExpJeep','ExpKalender'],'Pelanggan':['MgmtInbox','TiketCS','AlatChat','MgmtPenawaran']},
+ driver:{'Saya':1,'Harian':['PosAbsen'],'Lapangan':1,'Penginapan & Jeep':['ExpHariIni','ExpKalender','ExpJeep','SopirJeep'],'Aset & servis':['Teknisi','PosQC']}, finance:{'Saya':['TiketCS'],'Manajemen':['MgmtDashboard']}
 };
-var FIELD={cs:['PusatCS','PosVerifikasi','MgmtInbox','MgmtKeluhan'],cs_experience:['PusatCS','PosVerifikasi','MgmtInbox','MgmtKeluhan'],runner:['AgendaLapangan','Runner','Housekeeping','SopirJeep','AkunLapangan'],driver:['SopirJeep','ExpJeep','Runner','AkunLapangan'],technician:['Teknisi','PosQC','Runner','AkunLapangan'],qc:['PosQC','Teknisi','Runner','AkunLapangan']};
-var FLABEL={Runner:'Antar',PosAbsen:'Absen',PosQC:'Cek barang',SopirJeep:'Jeep',ExpJeep:'Jadwal jeep',Teknisi:'Teknisi',ExpHariIni:'Penginapan',ExpKalender:'Kalender',Housekeeping:'Kamar',AkunLapangan:'Akun',AgendaLapangan:'Agenda',PusatCS:'Beranda',PosVerifikasi:'Verifikasi',MgmtInbox:'Chat',MgmtKeluhan:'Keluhan'};
+var FIELD={cs:['PusatCS','PosVerifikasi','MgmtInbox','TiketCS'],cs_experience:['PusatCS','PosVerifikasi','MgmtInbox','TiketCS'],runner:['AgendaLapangan','Runner','Housekeeping','SopirJeep','AkunLapangan'],driver:['SopirJeep','ExpJeep','Runner','AkunLapangan'],technician:['Teknisi','PosQC','Runner','AkunLapangan'],qc:['PosQC','Teknisi','Runner','AkunLapangan']};
+var FLABEL={Runner:'Antar',PosAbsen:'Absen',PosQC:'Cek barang',SopirJeep:'Jeep',ExpJeep:'Jadwal jeep',Teknisi:'Teknisi',ExpHariIni:'Penginapan',ExpKalender:'Kalender',Housekeeping:'Kamar',AkunLapangan:'Akun',AgendaLapangan:'Agenda',PusatCS:'Beranda',PosVerifikasi:'Verifikasi',MgmtInbox:'Chat',MgmtKeluhan:'Keluhan',TiketCS:'Keluhan'};
 function fico(k,c){return ico(k,c).replace('width="18" height="18"','width="22" height="22"');}
 function fieldSheet(rest){
   var o=document.createElement('div');o.setAttribute('data-ra-sheet','1');o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');o.setAttribute('aria-label','Menu lainnya');
@@ -223,6 +223,7 @@ function fieldSheet(rest){
   document.body.appendChild(o);
 }
 function fieldNav(root,nav,role,allow,pv){
+  var lm=document.getElementById('ra-menu');if(lm)lm.style.display='none';
   var items=[];SNAV.forEach(function(g){var a=allow[g[0]];if(!a)return;g[1].forEach(function(it){if(a===1||a.indexOf(it[0])>-1)items.push(it);});});
   var pri=FIELD[role].map(function(k){return items.filter(function(it){return it[0]===k;})[0];}).filter(Boolean).slice(0,5);
   var rest=items.filter(function(it){return pri.indexOf(it)<0&&!(it[0]==='PosAbsen'&&pri.some(function(p){return p[0]==='AkunLapangan';}));});
