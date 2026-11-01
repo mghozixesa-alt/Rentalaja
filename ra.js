@@ -256,6 +256,22 @@
       });
     });
   };
+  /* invoice PDF (A4) — dibuat server, dibuka di tab baru */
+  RA.invoice = function (bookingId, code) {
+    if (!bookingId) { RA.toast && RA.toast('Booking belum ada.'); return; }
+    var w = window.open('', '_blank');
+    if (w) w.document.write('<p style="font:14px sans-serif;padding:16px">Menyiapkan invoice…</p>');
+    return headers({}).then(function (h) {
+      return fetch(C.url + '/functions/v1/invoice?id=' + encodeURIComponent(bookingId), { headers: h });
+    }).then(function (r) {
+      if (!r.ok) return r.json().catch(function () { return {}; }).then(function (d) { throw new Error(friendly(d.error || 'Invoice belum bisa dibuat')); });
+      return r.blob();
+    }).then(function (b) {
+      var u = URL.createObjectURL(b);
+      if (w) { w.location.href = u; } else { var a = document.createElement('a'); a.href = u; a.download = 'Invoice-' + (code || bookingId) + '.pdf'; document.body.appendChild(a); a.click(); a.remove(); }
+      setTimeout(function () { URL.revokeObjectURL(u); }, 60000);
+    }).catch(function (e) { if (w) w.close(); RA.toast && RA.toast(e.message); });
+  };
   /* nota 58mm untuk printer thermal kasir (dibuka di jendela baru lalu dialog cetak) */
   RA.printNota = function (bookingId) {
     if (!bookingId) { RA.toast && RA.toast('Booking belum ada.'); return; }
