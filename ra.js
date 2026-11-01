@@ -256,6 +256,51 @@
       });
     });
   };
+  /* nota 58mm untuk printer thermal kasir (dibuka di jendela baru lalu dialog cetak) */
+  RA.printNota = function (bookingId) {
+    if (!bookingId) { RA.toast && RA.toast('Booking belum ada.'); return; }
+    var w = window.open('', '_blank', 'width=360,height=640');
+    if (!w) { RA.toast && RA.toast('Izinkan pop-up untuk mencetak nota.'); return; }
+    w.document.write('<p style="font:14px sans-serif;padding:16px">Menyiapkan nota…</p>');
+    var esc = function (x) { return String(x == null ? '' : x).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+    var rp = function (n) { return 'Rp' + Math.round(+n || 0).toLocaleString('id-ID'); };
+    var dt = function (x) { if (!x) return '-'; var d = new Date(x); return d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }) + ' ' + d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }); };
+    var ML = { cash: 'Tunai', edc: 'EDC BCA', qris: 'QRIS', link: 'Link bayar', xendit: 'Link bayar', transfer: 'Transfer', va: 'Virtual account', card: 'Kartu', ewallet: 'E-wallet' };
+    var KL = { dp: 'DP', full: 'Lunas', settlement: 'Pelunasan', extension: 'Perpanjangan', late_fee: 'Denda telat', damage: 'Kerusakan', delivery: 'Ongkir', addon: 'Tambahan', refund: 'Refund' };
+    Promise.all([
+      RA.from('bookings').select('code,status,start_at,end_at,guest_name,total,paid_amount,dp_amount,late_fee,damage_fee,delivery_fee,branches(name,address),booking_items(quantity,unit_price,line_total,status,products(name),units(code,plate_or_serial))').eq('id', bookingId).maybeSingle(),
+      RA.from('payments').select('kind,method,amount,status,paid_at,provider_ref').eq('booking_id', bookingId).eq('status', 'paid').order('paid_at')
+    ]).then(function (r) {
+      var b = r[0].data; var ps = r[1].data || [];
+      if (!b) { w.document.body.innerHTML = '<p style="font:14px sans-serif;padding:16px">Booking tidak ditemukan.</p>'; return; }
+      var br = b.branches || {}; var staff = (RA._staff && RA._staff.name) || '';
+      var items = (b.booking_items || []).filter(function (i) { return i.status !== 'released'; });
+      var line = function (l, v, bold) { return '<tr' + (bold ? ' class="b"' : '') + '><td>' + esc(l) + '</td><td class="r">' + esc(v) + '</td></tr>'; };
+      var paid = ps.reduce(function (a, p) { return a + (p.kind === 'refund' ? -1 : 1) * +p.amount; }, 0);
+      var total = +b.total + +(b.late_fee || 0) + +(b.damage_fee || 0);
+      var h = '<!doctype html><html><head><meta charset="utf-8"><title>Nota ' + esc(b.code) + '</title><style>'
+        + '@page{size:58mm auto;margin:0}*{box-sizing:border-box}body{margin:0;padding:3mm 3mm 6mm;width:58mm;font:11px/1.35 "Courier New",monospace;color:#000}'
+        + 'h1{font-size:15px;margin:0;text-align:center;letter-spacing:.5px}.c{text-align:center}.s{font-size:10px}hr{border:0;border-top:1px dashed #000;margin:5px 0}'
+        + 'table{width:100%;border-collapse:collapse}td{vertical-align:top;padding:1px 0}.r{text-align:right;white-space:nowrap;padding-left:4px}.b td{font-weight:bold}'
+        + '.it{margin:3px 0}@media screen{body{margin:10px auto;box-shadow:0 0 0 1px #ddd}}</style></head><body>'
+        + '<h1>RENTALAJA</h1><div class="c s">' + esc(br.name || '') + (br.address ? '<br>' + esc(br.address) : '') + '</div><hr>'
+        + '<table>' + line('No', b.code) + line('Tgl', dt(new Date())) + line('Nama', b.guest_name || '-') + (staff ? line('Kasir', staff) : '') + '</table><hr>'
+        + '<div class="s">Sewa ' + esc(dt(b.start_at)) + '<br>s/d&nbsp; ' + esc(dt(b.end_at)) + '</div><hr>';
+      items.forEach(function (i) {
+        var u = i.units ? ' [' + (i.units.plate_or_serial || i.units.code) + ']' : '';
+        h += '<div class="it">' + esc((i.products && i.products.name) || 'Barang') + esc(u) + '<table>' + line((i.quantity || 1) + ' x ' + rp(i.unit_price), rp(i.line_total)) + '</table></div>';
+      });
+      h += '<hr><table>' + line('Total sewa', rp(b.total));
+      if (+b.late_fee) h += line('Denda telat', rp(b.late_fee));
+      if (+b.damage_fee) h += line('Kerusakan', rp(b.damage_fee));
+      h += line('TOTAL', rp(total), true) + '</table><hr><table>';
+      ps.forEach(function (p) { h += line((KL[p.kind] || p.kind) + ' · ' + (ML[p.method] || p.method), (p.kind === 'refund' ? '-' : '') + rp(p.amount)); if (p.method === 'edc' && p.provider_ref) h += '<tr><td colspan="2" class="s">' + esc(p.provider_ref) + '</td></tr>'; });
+      h += line('Dibayar', rp(paid), true) + line('Sisa', rp(Math.max(0, total - paid)), true) + '</table><hr>'
+        + '<div class="c s">Simpan nota ini. Nota digital &amp; berita acara<br>ada di aplikasi / WhatsApp Anda.<br>Terima kasih sudah sewa di Rentalaja<br>rentalaja.co.id</div>'
+        + '<script>window.onload=function(){setTimeout(function(){window.print()},300)}<\/script></body></html>';
+      w.document.open(); w.document.write(h); w.document.close();
+    }).catch(function (e) { w.document.body.innerHTML = '<p style="font:14px sans-serif;padding:16px">Gagal memuat nota: ' + esc(e.message || e) + '</p>'; });
+  };
   RA.VIEW_ROLES = { cashier: 'Kasir / staf cabang', runner: 'Petugas lapangan', asset_manager: 'Manajer aset', experience_manager: 'Manajer Experience', cs_experience: 'CS Experience', finance: 'Keuangan', viewer: 'Pemantau' };
   RA.viewAs = function (role) { if (role && RA.VIEW_ROLES[role]) LS.set('ra.viewAs', role); else LS.del('ra.viewAs'); RA._staff = null; location.reload(); };
   RA.can = function (perm) { var s = RA._staff; if (!s) return false; if (s.role === 'owner') return true; return !!(s.perms && s.perms[perm]); };
