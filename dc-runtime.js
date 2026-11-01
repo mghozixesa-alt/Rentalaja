@@ -191,13 +191,13 @@ var ICO={
 };
 function ico(k,c){return '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="'+c+'" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(ICO[k]||'')+'</svg>';}
 var SNAV=[
- ['Operasional',[['OpsBeranda','home','Dashboard manajemen'],['OpsUnit','chart','Utilisasi & mutasi'],['MgmtTim','users','Tim lapangan']]],
+ ['Operasional',[['OpsBeranda','home','Dashboard manajemen'],['OpsUnit','chart','Utilisasi & mutasi'],['OpsQC','check','QC pelayanan'],['MgmtTim','users','Tim lapangan']]],
  ['CS',[['PusatCS','head','Pusat CS'],['LaporanShift','chart','Laporan shift']]],
- ['Harian',[['PosHariIni','home','Rental hari ini'],['PosVerifikasi','idcard','Verifikasi pesanan'],['PosKasir','cart','Kasir (sewa OTS)'],['PosSerahTerima','swap','Serah-terima & kembali'],['PosPelanggan','user','Pelanggan'],['PosShift','clock','Shift & tutup kas'],['PosAbsen','calcheck','Absen']]],
+ ['Harian',[['PosHariIni','home','Rental hari ini'],['PosVerifikasi','idcard','Verifikasi pesanan'],['PosKasir','cart','Kasir (sewa OTS)'],['PosSerahTerima','swap','Serah-terima & kembali'],['PosPelanggan','user','Pelanggan'],['PosShift','clock','Shift & tutup kas'],['PosAbsen','calcheck','Absen'],['CekBuka','check','Checklist buka toko']]],
  ['Lapangan',[['Runner','truck','Antar-jemput']]],
  ['Penginapan & Jeep',[['Housekeeping','bed','Penginapan & kamar'],['ExpJeep','jeep','Jadwal jeep'],['SopirJeep','wheel','Tugas sopir']]],
  ['Barang',[['MgmtProduk','tag','Barang & harga'],['MgmtPromo','gift','Promo & member'],['PosUnit','box','Stok unit']]],
- ['Aset & servis',[['AsetBeranda','home','Beranda aset'],['MgmtAset','box','Daftar unit & riwayat'],['MgmtPusatAset','folder','Ringkasan aset'],['MgmtServis','tool','Servis'],['PosQC','check','Cek kondisi (QC)'],['Teknisi','kit','Teknisi']]],
+ ['Aset & servis',[['AsetBeranda','home','Beranda aset'],['MgmtAset','box','Daftar unit & riwayat'],['MgmtPusatAset','folder','Ringkasan aset'],['MgmtServis','tool','Servis'],['PosQC','check','Cek kondisi (QC)'],['Teknisi','kit','Teknisi'],['TekPart','cart','Belanja part']]],
  ['Manajemen',[['MgmtDashboard','chart','Laporan'],['MgmtSetuju','approve','Persetujuan']]],
  ['Pengaturan',[['MgmtPengguna','users','Staf & akses'],['MgmtCabang','store','Cabang']]],
  ['Pelanggan',[['MgmtInbox','chat','Inbox WhatsApp'],['TiketCS','approve','Tiket keluhan'],['AlatChat','chat','Template & link sewa'],['MgmtPenawaran','tag','Permintaan perjalanan'],['MgmtTindakLanjut','users','Tindak lanjut']]],
@@ -210,26 +210,26 @@ var MASET={'Aset & servis':['AsetBeranda','MgmtAset','MgmtPusatAset','MgmtServis
 var SROLE={
  cashier:{'Harian':1,'Lapangan':1,'Barang':['PosUnit']}, cs:CSM, cs_experience:CSM, staff:{'Harian':1,'Lapangan':1,'Barang':['PosUnit']},
  branch_head:{'Saya':['TiketCS'],'Harian':1,'Lapangan':1,'Barang':['PosUnit'],'Manajemen':['MgmtSetuju']},
- runner:{'Harian':['PosAbsen'],'Lapangan':1,'Penginapan & Jeep':['Housekeeping','SopirJeep'],'Saya':1}, technician:{'Aset & servis':['Teknisi'],'Harian':['PosAbsen']}, qc:{'Saya':1,'Harian':['PosAbsen'],'Lapangan':1,'Penginapan & Jeep':['Housekeeping','ExpJeep','SopirJeep'],'Aset & servis':['Teknisi','PosQC']},
+ runner:{'Harian':['PosAbsen'],'Lapangan':1,'Penginapan & Jeep':['Housekeeping','SopirJeep'],'Saya':1}, technician:{'Aset & servis':['Teknisi','TekPart'],'Harian':['PosAbsen']}, qc:{'Saya':1,'Harian':['PosAbsen'],'Lapangan':1,'Penginapan & Jeep':['Housekeeping','ExpJeep','SopirJeep'],'Aset & servis':['Teknisi','PosQC']},
  asset_manager:MASET, experience_manager:MOPS,
  driver:{'Saya':1,'Harian':['PosAbsen'],'Lapangan':1,'Penginapan & Jeep':['ExpJeep','SopirJeep']},
  finance:{'Manajemen':['MgmtDashboard','MgmtSetuju']},
  viewer:{'Manajemen':['MgmtDashboard']}
 };
-var FIELD={cs:['PusatCS','PosVerifikasi','AlatChat','TiketCS'],cs_experience:['PusatCS','PosVerifikasi','AlatChat','TiketCS'],runner:['AgendaLapangan','Runner','Housekeeping','SopirJeep','AkunLapangan'],driver:['SopirJeep','ExpJeep','Runner','AkunLapangan'],technician:['Teknisi','PosAbsen'],qc:['PosQC','Teknisi','Runner','AkunLapangan'],
+var FIELD={cs:['PusatCS','PosVerifikasi','AlatChat','TiketCS'],cs_experience:['PusatCS','PosVerifikasi','AlatChat','TiketCS'],runner:['AgendaLapangan','Runner','Housekeeping','SopirJeep','AkunLapangan'],driver:['SopirJeep','ExpJeep','Runner','AkunLapangan'],technician:['Teknisi','TekPart','PosAbsen'],qc:['PosQC','Teknisi','Runner','AkunLapangan'],
  owner:['MgmtDashboard','OpsBeranda','PusatCS','MgmtSetuju'],viewer:['MgmtDashboard'],finance:['MgmtDashboard','MgmtSetuju'],
- asset_manager:['AsetBeranda','MgmtAset','MgmtServis','MgmtSetuju'],experience_manager:['OpsBeranda','OpsUnit','MgmtTim','Housekeeping'],
+ asset_manager:['AsetBeranda','MgmtAset','MgmtServis','MgmtSetuju'],experience_manager:['OpsBeranda','OpsUnit','OpsQC','Housekeeping'],
  cashier:['PosHariIni','PosVerifikasi','PosKasir','PosSerahTerima'],staff:['PosHariIni','PosVerifikasi','PosKasir','PosSerahTerima'],branch_head:['PosHariIni','PosVerifikasi','PosSerahTerima','MgmtSetuju']};
 /* peran yang layarnya memang dibuat untuk HP (tetap menu bawah walau dibuka di layar lebar tanpa kolom menu) */
 var FIELDONLY={technician:1,cs:1,cs_experience:1,runner:1,driver:1,technician:1,qc:1};
 var FLABEL={Runner:'Antar',PosAbsen:'Absen',PosQC:'Cek barang',SopirJeep:'Jeep',ExpJeep:'Jadwal jeep',Teknisi:'Teknisi',ExpHariIni:'Penginapan',ExpKalender:'Kalender',Housekeeping:'Kamar',AkunLapangan:'Akun',AgendaLapangan:'Agenda',PusatCS:'Beranda',PosVerifikasi:'Verifikasi',MgmtInbox:'Chat',MgmtKeluhan:'Keluhan',TiketCS:'Keluhan',AlatChat:'Chat',
- MgmtDashboard:'Laporan',MgmtSetuju:'Setujui',OpsBeranda:'Beranda',MgmtPusatAset:'Aset',MgmtServis:'Servis & QC',MgmtTim:'Tim',OpsUnit:'Utilisasi',PosHariIni:'Hari ini',PosKasir:'Kasir',PosSerahTerima:'Serah-terima',KeuDasbor:'Keuangan'};
-var FLABEL_R={technician:{Teknisi:'Pekerjaan'},owner:{OpsBeranda:'Operasional',PusatCS:'CS'},asset_manager:{AsetBeranda:'Beranda',MgmtAset:'Unit',MgmtServis:'Servis'},experience_manager:{ExpJeep:'Jeep'}};
+ MgmtDashboard:'Laporan',MgmtSetuju:'Setujui',OpsBeranda:'Beranda',MgmtPusatAset:'Aset',MgmtServis:'Servis & QC',MgmtTim:'Tim',OpsUnit:'Utilisasi',OpsQC:'Layanan',PosHariIni:'Hari ini',PosKasir:'Kasir',PosSerahTerima:'Serah-terima',KeuDasbor:'Keuangan'};
+var FLABEL_R={technician:{Teknisi:'Pekerjaan',TekPart:'Belanja part'},owner:{OpsBeranda:'Operasional',PusatCS:'CS'},asset_manager:{AsetBeranda:'Beranda',MgmtAset:'Unit',MgmtServis:'Servis'},experience_manager:{ExpJeep:'Jeep',Housekeeping:'Experience'}};
 /* tab bawah tetap menyala saat membuka halaman "saudara"-nya */
-var ALIAS={MgmtAsetDetail:'MgmtAset',MgmtKelola:'MgmtAset',PosQC:'MgmtServis',PosAbsen:'AkunLapangan',ExpKalender:'Housekeeping',LaporanShift:'PusatCS'};
+var ALIAS={TekMasuk:'Teknisi',TekKerja:'Teknisi',TekSelesai:'Teknisi',MgmtAsetDetail:'MgmtAset',MgmtKelola:'MgmtAset',PosQC:'MgmtServis',PosAbsen:'AkunLapangan',ExpKalender:'Housekeeping',LaporanShift:'PusatCS'};
 /* halaman yang digabung dalam satu tab: tampilkan tombol pindah di atas */
 var SUBT=[[['MgmtServis','Servis'],['PosQC','Cek QC']]];
-var REST_TOP={asset_manager:['MgmtPusatAset','PosUnit','PosQC','MgmtDashboard'],experience_manager:['ExpJeep','PosHariIni','MgmtPromo','MgmtProduk','MgmtDashboard','MgmtSetuju']};
+var REST_TOP={asset_manager:['MgmtPusatAset','PosUnit','PosQC','MgmtDashboard'],experience_manager:['MgmtTim','ExpJeep','PosHariIni','MgmtPromo','MgmtProduk','MgmtDashboard','MgmtSetuju']};
 var ALLG={};SNAV.forEach(function(g){ALLG[g[0]]=1;});
 function roleAllow(role){return role==='owner'?ALLG:(SROLE[role]||{'Harian':1});}
 window.RA_MENU_ALLOWS=function(role,name){
@@ -314,6 +314,7 @@ function fieldNav(root,nav,role,allow,isPv){
   h+=tab(null,dots,'Lainnya',inRest);
   var bar=document.createElement('nav');bar.setAttribute('aria-label','Menu bawah');bar.setAttribute('data-ra-field','1');
   bar.style.cssText='position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:480px;height:calc(66px + env(safe-area-inset-bottom));padding:0 4px env(safe-area-inset-bottom);box-sizing:border-box;background:#FFFFFF;border-top:1px solid #E8EBEF;box-shadow:0 -4px 16px rgba(31,43,77,.06);display:grid;grid-template-columns:repeat('+(pri.length+1)+',minmax(0,1fr));align-items:center;z-index:45';
+  Array.prototype.forEach.call(root.querySelectorAll('nav'),function(n){var st=n.getAttribute('style')||'';if(n!==bar&&/position:\s*(absolute|fixed)/.test(st)&&/bottom:\s*0/.test(st))n.style.display='none';});
   bar.innerHTML=h;root.appendChild(bar);
   var mb=bar.querySelector('[data-more]');if(mb)mb.addEventListener('click',function(){fieldSheet(rest);});
   var pbm=parseInt(root.style.paddingBottom||'0',10)||0;if(pbm<84)root.style.paddingBottom='84px';
