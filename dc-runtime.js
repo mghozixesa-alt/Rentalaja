@@ -201,7 +201,7 @@ var SROLE={
  cashier:{'Harian':1,'Lapangan':1,'Barang':['PosUnit']}, cs:{'Harian':1,'Lapangan':1,'Barang':['PosUnit']}, staff:{'Harian':1,'Lapangan':1,'Barang':['PosUnit']},
  branch_head:{'Harian':1,'Lapangan':1,'Barang':['PosUnit'],'Manajemen':['MgmtSetuju']},
  runner:{'Harian':['PosAbsen'],'Lapangan':1,'Penginapan & Jeep':['Housekeeping','ExpKalender','SopirJeep'],'Aset & servis':['Teknisi']}, technician:{'Harian':['PosAbsen'],'Lapangan':1,'Penginapan & Jeep':['ExpHariIni','ExpKalender','ExpJeep','SopirJeep'],'Aset & servis':['Teknisi','PosQC']}, qc:{'Harian':['PosAbsen'],'Lapangan':1,'Penginapan & Jeep':['ExpHariIni','ExpKalender','ExpJeep','SopirJeep'],'Aset & servis':['Teknisi','PosQC']},
- asset_manager:{'Barang':1,'Aset & servis':1,'Manajemen':['MgmtDashboard','MgmtSetuju']}, experience_manager:{'Penginapan & Jeep':1,'Manajemen':['MgmtDashboard']}, cs_experience:{'Penginapan & Jeep':['ExpHariIni','ExpKalender','ExpJeep','Housekeeping']},
+ asset_manager:{'Barang':1,'Aset & servis':1,'Manajemen':['MgmtDashboard','MgmtSetuju']}, experience_manager:{'Penginapan & Jeep':1,'Manajemen':['MgmtDashboard']}, cs_experience:{'Penginapan & Jeep':['Housekeeping','ExpKalender','ExpJeep']},
  driver:{'Harian':['PosAbsen'],'Lapangan':1,'Penginapan & Jeep':['ExpHariIni','ExpKalender','ExpJeep','SopirJeep'],'Aset & servis':['Teknisi','PosQC']}, finance:{'Manajemen':['MgmtDashboard']}
 };
 var FIELD={runner:['Runner','Housekeeping','SopirJeep','Teknisi'],driver:['SopirJeep','ExpJeep','Runner'],technician:['Teknisi','PosQC','Runner'],qc:['PosQC','Teknisi','Runner']};
