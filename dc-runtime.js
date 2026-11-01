@@ -204,32 +204,32 @@ var SNAV=[
  ['Saya',[['AgendaLapangan','calcheck','Agenda'],['AkunLapangan','user','Akun saya'],['TiketCS','approve','Tiket keluhan']]]
 ];
 var CSM={'CS':1,'Harian':['PosHariIni','PosVerifikasi','PosPelanggan'],'Penginapan & Jeep':['Housekeeping','ExpJeep'],'Pelanggan':['TiketCS','AlatChat','MgmtPenawaran']};
-/* manajer operasional = aset + operasional harian + experience (penginapan & jeep) */
-var MOPS={'Operasional':1,'Harian':['PosHariIni','PosSerahTerima','PosPelanggan'],'Penginapan & Jeep':['Housekeeping','ExpJeep'],'Aset & servis':['MgmtPusatAset','MgmtServis','PosQC'],'Barang':['PosUnit','MgmtProduk','MgmtPromo'],'Manajemen':['MgmtDashboard','MgmtSetuju'],'Saya':['TiketCS']};
+/* manajer operasional = operasional harian + experience (penginapan & jeep); manajer aset terpisah */
+var MOPS={'Operasional':1,'Harian':['PosHariIni','PosSerahTerima','PosPelanggan'],'Penginapan & Jeep':['Housekeeping','ExpJeep'],'Manajemen':['MgmtDashboard','MgmtSetuju'],'Saya':['TiketCS']};
+var MASET={'Aset & servis':['MgmtPusatAset','MgmtServis','PosQC','Teknisi'],'Barang':['PosUnit','MgmtProduk','MgmtPromo'],'Manajemen':['MgmtDashboard','MgmtSetuju'],'Saya':['TiketCS']};
 var SROLE={
  cashier:{'Harian':1,'Lapangan':1,'Barang':['PosUnit']}, cs:CSM, cs_experience:CSM, staff:{'Harian':1,'Lapangan':1,'Barang':['PosUnit']},
  branch_head:{'Saya':['TiketCS'],'Harian':1,'Lapangan':1,'Barang':['PosUnit'],'Manajemen':['MgmtSetuju']},
  runner:{'Harian':['PosAbsen'],'Lapangan':1,'Penginapan & Jeep':['Housekeeping','SopirJeep'],'Saya':1}, technician:{'Saya':1,'Harian':['PosAbsen'],'Lapangan':1,'Penginapan & Jeep':['Housekeeping','ExpJeep','SopirJeep'],'Aset & servis':['Teknisi','PosQC']}, qc:{'Saya':1,'Harian':['PosAbsen'],'Lapangan':1,'Penginapan & Jeep':['Housekeeping','ExpJeep','SopirJeep'],'Aset & servis':['Teknisi','PosQC']},
- asset_manager:MOPS, experience_manager:MOPS,
+ asset_manager:MASET, experience_manager:MOPS,
  driver:{'Saya':1,'Harian':['PosAbsen'],'Lapangan':1,'Penginapan & Jeep':['Housekeeping','ExpJeep','SopirJeep'],'Aset & servis':['Teknisi','PosQC']},
  finance:{'Manajemen':['MgmtDashboard','KeuDasbor','MgmtSetuju'],'Saya':['TiketCS']},
  viewer:{'Manajemen':['MgmtDashboard']}
 };
 var FIELD={cs:['PusatCS','PosVerifikasi','AlatChat','TiketCS'],cs_experience:['PusatCS','PosVerifikasi','AlatChat','TiketCS'],runner:['AgendaLapangan','Runner','Housekeeping','SopirJeep','AkunLapangan'],driver:['SopirJeep','ExpJeep','Runner','AkunLapangan'],technician:['Teknisi','PosQC','Runner','AkunLapangan'],qc:['PosQC','Teknisi','Runner','AkunLapangan'],
  owner:['MgmtDashboard','OpsBeranda','PusatCS','MgmtSetuju'],viewer:['MgmtDashboard'],finance:['MgmtDashboard','KeuDasbor','MgmtSetuju','TiketCS'],
- asset_manager:['OpsBeranda','MgmtPusatAset','MgmtServis','Housekeeping'],experience_manager:['OpsBeranda','MgmtPusatAset','MgmtServis','Housekeeping'],
+ asset_manager:['MgmtPusatAset','PosUnit','MgmtServis','MgmtSetuju'],experience_manager:['OpsBeranda','Housekeeping','ExpJeep','MgmtTim'],
  cashier:['PosHariIni','PosVerifikasi','PosKasir','PosSerahTerima'],staff:['PosHariIni','PosVerifikasi','PosKasir','PosSerahTerima'],branch_head:['PosHariIni','PosVerifikasi','PosSerahTerima','MgmtSetuju']};
 /* peran yang layarnya memang dibuat untuk HP (tetap menu bawah walau dibuka di layar lebar tanpa kolom menu) */
 var FIELDONLY={cs:1,cs_experience:1,runner:1,driver:1,technician:1,qc:1};
 var FLABEL={Runner:'Antar',PosAbsen:'Absen',PosQC:'Cek barang',SopirJeep:'Jeep',ExpJeep:'Jadwal jeep',Teknisi:'Teknisi',ExpHariIni:'Penginapan',ExpKalender:'Kalender',Housekeeping:'Kamar',AkunLapangan:'Akun',AgendaLapangan:'Agenda',PusatCS:'Beranda',PosVerifikasi:'Verifikasi',MgmtInbox:'Chat',MgmtKeluhan:'Keluhan',TiketCS:'Keluhan',AlatChat:'Chat',
  MgmtDashboard:'Laporan',MgmtSetuju:'Setujui',OpsBeranda:'Beranda',MgmtPusatAset:'Aset',MgmtServis:'Servis & QC',MgmtTim:'Tim',PosHariIni:'Hari ini',PosKasir:'Kasir',PosSerahTerima:'Serah-terima',KeuDasbor:'Keuangan'};
-var FLABEL_R={owner:{OpsBeranda:'Operasional',PusatCS:'CS'}};
+var FLABEL_R={owner:{OpsBeranda:'Operasional',PusatCS:'CS'},asset_manager:{MgmtPusatAset:'Aset',PosUnit:'Stok unit'},experience_manager:{ExpJeep:'Jeep'}};
 /* tab bawah tetap menyala saat membuka halaman "saudara"-nya */
 var ALIAS={PosQC:'MgmtServis',PosAbsen:'AkunLapangan',ExpKalender:'Housekeeping',LaporanShift:'PusatCS'};
 /* halaman yang digabung dalam satu tab: tampilkan tombol pindah di atas */
 var SUBT=[[['MgmtServis','Servis'],['PosQC','Cek QC']]];
-var RT_OPS=['ExpJeep','MgmtTim','PosUnit','MgmtDashboard','MgmtSetuju','MgmtProduk','MgmtPromo'];
-var REST_TOP={asset_manager:RT_OPS,experience_manager:RT_OPS};
+var REST_TOP={asset_manager:['MgmtProduk','MgmtPromo','MgmtDashboard','PosQC'],experience_manager:['PosHariIni','PosSerahTerima','MgmtDashboard','MgmtSetuju']};
 var ALLG={};SNAV.forEach(function(g){ALLG[g[0]]=1;});
 function roleAllow(role){return role==='owner'?ALLG:(SROLE[role]||{'Harian':1});}
 window.RA_MENU_ALLOWS=function(role,name){
