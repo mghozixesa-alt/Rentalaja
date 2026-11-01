@@ -297,7 +297,7 @@
     var ML = { cash: 'Tunai', edc: 'EDC BCA', qris: 'QRIS', link: 'Link bayar', xendit: 'Link bayar', transfer: 'Transfer', va: 'Virtual account', card: 'Kartu', ewallet: 'E-wallet' };
     var KL = { dp: 'DP', full: 'Lunas', settlement: 'Pelunasan', extension: 'Perpanjangan', late_fee: 'Denda telat', damage: 'Kerusakan', delivery: 'Ongkir', addon: 'Tambahan', refund: 'Refund' };
     Promise.all([
-      RA.from('bookings').select('code,status,start_at,end_at,guest_name,total,paid_amount,dp_amount,late_fee,damage_fee,delivery_fee,branches(name,address),booking_items(quantity,unit_price,line_total,status,products(name),units(code,plate_or_serial))').eq('id', bookingId).maybeSingle(),
+      RA.from('bookings').select('code,status,start_at,end_at,guest_name,total,paid_amount,dp_amount,late_fee,damage_fee,delivery_fee,branches(name,address),booking_items(quantity,unit_price,line_total,status,products(name),units(code,asset_no,plate_or_serial))').eq('id', bookingId).maybeSingle(),
       RA.from('payments').select('kind,method,amount,status,paid_at,provider_ref').eq('booking_id', bookingId).eq('status', 'paid').order('paid_at')
     ]).then(function (r) {
       var b = r[0].data; var ps = r[1].data || [];
@@ -316,7 +316,7 @@
         + '<table>' + line('No', b.code) + line('Tgl', dt(new Date())) + line('Nama', b.guest_name || '-') + (staff ? line('Kasir', staff) : '') + '</table><hr>'
         + '<div class="s">Sewa ' + esc(dt(b.start_at)) + '<br>s/d&nbsp; ' + esc(dt(b.end_at)) + '</div><hr>';
       items.forEach(function (i) {
-        var u = i.units ? ' [' + (i.units.plate_or_serial || i.units.code) + ']' : '';
+        var u = i.units ? ' [' + (i.units.asset_no || i.units.code) + (i.units.plate_or_serial && i.units.plate_or_serial !== '—' ? ' / ' + i.units.plate_or_serial : '') + ']' : '';
         h += '<div class="it">' + esc((i.products && i.products.name) || 'Barang') + esc(u) + '<table>' + line((i.quantity || 1) + ' x ' + rp(i.unit_price), rp(i.line_total)) + '</table></div>';
       });
       h += '<hr><table>' + line('Total sewa', rp(b.total));
