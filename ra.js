@@ -2,6 +2,15 @@
    Semua layar memakai window.RA. */
 (function () {
   'use strict';
+  /* Investor dipindah ke Pokama (Nov 2026): halaman investor → investor.pokama.org, panel mitra & bagi hasil → app.pokama.org/investor */
+  function toPokama() {
+    var h = location.hash || '';
+    if (/^#\/(InvGabung|InvLogin|Investor|InvAset|InvLaporan|InvTarik|InvTambah)(\?|$)/.test(h)) { location.replace('https://investor.pokama.org/'); return true; }
+    if (/^#\/MgmtInvestor(\?|$)/.test(h)) { location.replace('https://app.pokama.org/investor'); return true; }
+    return false;
+  }
+  if (toPokama()) return;
+  window.addEventListener('hashchange', toPokama);
   var C = window.RA_CONFIG || {};
   var LS = {
     get: function (k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } },
