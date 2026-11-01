@@ -192,31 +192,31 @@ var ICO={
 function ico(k,c){return '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="'+c+'" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(ICO[k]||'')+'</svg>';}
 var SNAV=[
  ['CS',[['PusatCS','head','Pusat CS']]],
- ['Harian',[['PosHariIni','home','Hari ini'],['PosVerifikasi','idcard','Verifikasi pesanan'],['PosKasir','cart','Kasir (sewa OTS)'],['PosSerahTerima','swap','Serah-terima & kembali'],['PosPelanggan','user','Pelanggan'],['PosShift','clock','Shift & tutup kas'],['PosAbsen','calcheck','Absen']]],
+ ['Harian',[['PosHariIni','home','Rental hari ini'],['PosVerifikasi','idcard','Verifikasi pesanan'],['PosKasir','cart','Kasir (sewa OTS)'],['PosSerahTerima','swap','Serah-terima & kembali'],['PosPelanggan','user','Pelanggan'],['PosShift','clock','Shift & tutup kas'],['PosAbsen','calcheck','Absen']]],
  ['Lapangan',[['Runner','truck','Antar-jemput']]],
- ['Penginapan & Jeep',[['ExpHariIni','house','Hari ini Experience'],['ExpKalender','cal','Kalender kamar'],['Housekeeping','bed','Housekeeping kamar'],['ExpJeep','jeep','Jadwal jeep'],['SopirJeep','wheel','Tugas sopir']]],
+ ['Penginapan & Jeep',[['ExpHariIni','house','Penginapan hari ini'],['ExpKalender','cal','Kalender kamar'],['Housekeeping','bed','Housekeeping kamar'],['ExpJeep','jeep','Jadwal jeep'],['SopirJeep','wheel','Tugas sopir']]],
  ['Barang',[['MgmtProduk','tag','Barang & harga'],['MgmtPromo','gift','Promo & member'],['PosUnit','box','Stok unit']]],
  ['Aset & servis',[['MgmtPusatAset','folder','Pusat aset'],['MgmtServis','tool','Servis'],['PosQC','check','Cek kondisi (QC)'],['Teknisi','kit','Teknisi']]],
  ['Manajemen',[['MgmtDashboard','chart','Laporan'],['MgmtSetuju','approve','Persetujuan']]],
  ['Pengaturan',[['MgmtPengguna','users','Staf & akses'],['MgmtCabang','store','Cabang']]],
- ['Pelanggan',[['MgmtInbox','chat','Inbox WhatsApp'],['MgmtKeluhan','approve','Keluhan'],['MgmtPenawaran','tag','Permintaan perjalanan'],['MgmtTindakLanjut','users','Tindak lanjut']]],
+ ['Pelanggan',[['MgmtInbox','chat','Inbox WhatsApp'],['MgmtKeluhan','approve','Tiket keluhan'],['MgmtPenawaran','tag','Permintaan perjalanan'],['MgmtTindakLanjut','users','Tindak lanjut']]],
  ['Saya',[['AgendaLapangan','calcheck','Agenda'],['AkunLapangan','user','Akun saya']]]
 ];
 var SROLE={
- cashier:{'Harian':1,'Lapangan':1,'Barang':['PosUnit']}, cs:{'CS':1,'Harian':1,'Lapangan':1,'Penginapan & Jeep':['ExpHariIni','Housekeeping','ExpKalender','ExpJeep'],'Pelanggan':1,'Barang':['PosUnit']}, staff:{'Harian':1,'Lapangan':1,'Barang':['PosUnit']},
+ cashier:{'Harian':1,'Lapangan':1,'Barang':['PosUnit']}, cs:{'CS':1,'Harian':['PosHariIni','PosVerifikasi','PosSerahTerima','PosKasir','PosPelanggan','PosShift','PosAbsen'],'Penginapan & Jeep':['ExpHariIni','ExpJeep','ExpKalender'],'Pelanggan':['MgmtInbox','MgmtKeluhan','MgmtPenawaran']}, staff:{'Harian':1,'Lapangan':1,'Barang':['PosUnit']},
  branch_head:{'Harian':1,'Lapangan':1,'Barang':['PosUnit'],'Manajemen':['MgmtSetuju']},
  runner:{'Harian':['PosAbsen'],'Lapangan':1,'Penginapan & Jeep':['Housekeeping','SopirJeep'],'Saya':1}, technician:{'Saya':1,'Harian':['PosAbsen'],'Lapangan':1,'Penginapan & Jeep':['ExpHariIni','ExpKalender','ExpJeep','SopirJeep'],'Aset & servis':['Teknisi','PosQC']}, qc:{'Saya':1,'Harian':['PosAbsen'],'Lapangan':1,'Penginapan & Jeep':['ExpHariIni','ExpKalender','ExpJeep','SopirJeep'],'Aset & servis':['Teknisi','PosQC']},
- asset_manager:{'Barang':1,'Aset & servis':1,'Manajemen':['MgmtDashboard','MgmtSetuju']}, experience_manager:{'Penginapan & Jeep':1,'Manajemen':['MgmtDashboard']}, cs_experience:{'CS':1,'Penginapan & Jeep':['ExpHariIni','Housekeeping','ExpKalender','ExpJeep'],'Pelanggan':1},
+ asset_manager:{'Barang':1,'Aset & servis':1,'Manajemen':['MgmtDashboard','MgmtSetuju']}, experience_manager:{'Penginapan & Jeep':1,'Manajemen':['MgmtDashboard']}, cs_experience:{'CS':1,'Harian':['PosVerifikasi','PosPelanggan','PosAbsen'],'Penginapan & Jeep':['ExpHariIni','ExpJeep','ExpKalender'],'Pelanggan':['MgmtInbox','MgmtKeluhan','MgmtPenawaran']},
  driver:{'Saya':1,'Harian':['PosAbsen'],'Lapangan':1,'Penginapan & Jeep':['ExpHariIni','ExpKalender','ExpJeep','SopirJeep'],'Aset & servis':['Teknisi','PosQC']}, finance:{'Manajemen':['MgmtDashboard']}
 };
-var FIELD={runner:['AgendaLapangan','Runner','Housekeeping','SopirJeep','AkunLapangan'],driver:['SopirJeep','ExpJeep','Runner','AkunLapangan'],technician:['Teknisi','PosQC','Runner','AkunLapangan'],qc:['PosQC','Teknisi','Runner','AkunLapangan']};
-var FLABEL={Runner:'Antar',PosAbsen:'Absen',PosQC:'Cek barang',SopirJeep:'Jeep',ExpJeep:'Jadwal jeep',Teknisi:'Teknisi',ExpHariIni:'Penginapan',ExpKalender:'Kalender',Housekeeping:'Kamar',AkunLapangan:'Akun',AgendaLapangan:'Agenda'};
+var FIELD={cs:['PusatCS','PosVerifikasi','MgmtInbox','MgmtKeluhan'],cs_experience:['PusatCS','PosVerifikasi','MgmtInbox','MgmtKeluhan'],runner:['AgendaLapangan','Runner','Housekeeping','SopirJeep','AkunLapangan'],driver:['SopirJeep','ExpJeep','Runner','AkunLapangan'],technician:['Teknisi','PosQC','Runner','AkunLapangan'],qc:['PosQC','Teknisi','Runner','AkunLapangan']};
+var FLABEL={Runner:'Antar',PosAbsen:'Absen',PosQC:'Cek barang',SopirJeep:'Jeep',ExpJeep:'Jadwal jeep',Teknisi:'Teknisi',ExpHariIni:'Penginapan',ExpKalender:'Kalender',Housekeeping:'Kamar',AkunLapangan:'Akun',AgendaLapangan:'Agenda',PusatCS:'Beranda',PosVerifikasi:'Verifikasi',MgmtInbox:'Chat',MgmtKeluhan:'Keluhan'};
 function fico(k,c){return ico(k,c).replace('width="18" height="18"','width="22" height="22"');}
 function fieldSheet(rest){
   var o=document.createElement('div');o.setAttribute('data-ra-sheet','1');o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');o.setAttribute('aria-label','Menu lainnya');
   o.style.cssText='position:fixed;inset:0;z-index:100;background:rgba(31,43,77,.45);display:flex;align-items:flex-end;justify-content:center';
-  var li=rest.map(function(it){var on=it[0]===current;return '<a href="'+it[0]+'.dc.html" data-k="go" style="min-height:52px;padding:0 14px;border-radius:12px;display:flex;align-items:center;gap:12px;text-decoration:none;font-weight:'+(on?'800':'700')+';font-size:15px;color:'+(on?'#077A70':'#1F2B4D')+';background:'+(on?'#E3F7F5':'#F6F7F9')+'">'+fico(it[1],on?'#077A70':'#4A5468')+it[2]+'</a>';}).join('');
-  o.innerHTML='<div style="width:100%;max-width:430px;background:#fff;border-radius:22px 22px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom));box-sizing:border-box;font-family:\'Plus Jakarta Sans\',system-ui,sans-serif;color:#1F2B4D;display:flex;flex-direction:column;gap:8px">'+
+  var li=rest.map(function(it){var on=it[0]===current;return '<a href="'+it[0]+'.dc.html" data-k="go" style="min-height:48px;padding:0 14px;border-radius:12px;display:flex;align-items:center;gap:12px;text-decoration:none;font-weight:'+(on?'800':'700')+';font-size:15px;color:'+(on?'#077A70':'#1F2B4D')+';background:'+(on?'#E3F7F5':'#F6F7F9')+'">'+fico(it[1],on?'#077A70':'#4A5468')+it[2]+'</a>';}).join('');
+  o.innerHTML='<div style="width:100%;max-width:430px;max-height:85vh;overflow-y:auto;background:#fff;border-radius:22px 22px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom));box-sizing:border-box;font-family:\'Plus Jakarta Sans\',system-ui,sans-serif;color:#1F2B4D;display:flex;flex-direction:column;gap:8px">'+
     '<div style="width:40px;height:4px;border-radius:2px;background:#D5D9E0;align-self:center;margin-bottom:6px"></div><div style="font-size:16px;font-weight:800;margin-bottom:4px">Menu lainnya</div>'+li+
     '<button type="button" data-k="out" style="margin-top:6px;min-height:48px;border-radius:12px;border:1px solid #E3B7B2;background:#FFFFFF;color:#A12A1F;font-family:inherit;font-weight:800;font-size:15px;cursor:pointer">Keluar dari akun</button></div>';
   o.addEventListener('click',function(e){var k=e.target.closest&&e.target.closest('[data-k]');if(k&&k.getAttribute('data-k')==='out'){o.remove();RA.signOut();RA.go('Masuk');return;}if(e.target===o||k)o.remove();});
@@ -229,7 +229,9 @@ function fieldNav(root,nav,role,allow,pv){
   var as=nav&&nav.closest?nav.closest('aside'):null;
   if(nav)nav.style.display='none';
   if(as){as.style.flex='1 1 100%';as.style.flexDirection='row';as.style.flexWrap='wrap';as.style.alignItems='center';as.style.gap='12px';as.style.padding='10px 16px';as.style.borderRight='0';as.style.borderBottom='1px solid #E6E8EC';}
-  if(pv){var pb=document.createElement('div');pb.setAttribute('data-snav','1');pb.style.cssText='padding:10px 16px 0;width:100%;max-width:560px;margin:0 auto;box-sizing:border-box;align-self:stretch;flex:1 1 100%';pb.innerHTML=pv;
+  if(pv){var opts='<option value="">Owner (semua menu)</option>';Object.keys(RA.VIEW_ROLES||{}).forEach(function(k){opts+='<option value="'+k+'"'+(role===k?' selected':'')+'>'+RA.VIEW_ROLES[k]+'</option>';});
+    var pb=document.createElement('div');pb.setAttribute('data-snav','1');pb.style.cssText='padding:8px 16px 0;width:100%;max-width:560px;margin:0 auto;box-sizing:border-box;align-self:stretch;flex:'+(as?'1 1 100%':'0 0 auto');
+    pb.innerHTML='<label style="display:flex;align-items:center;gap:8px;padding:6px 8px 6px 12px;border-radius:12px;background:#FFF6E0;border:1px solid #F2C14E;font:800 12px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#7A4B00;white-space:nowrap">Pratinjau<select data-viewas style="flex:1;min-width:0;height:34px;border-radius:9px;border:1px solid #E6D3A3;padding:0 8px;font:700 13px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#1F2B4D;background:#FFFFFF">'+opts+'</select></label>';
     if(as)as.appendChild(pb);else{var hd=root.querySelector('header');if(hd&&hd.parentNode)hd.parentNode.insertBefore(pb,hd.nextSibling);else root.insertBefore(pb,root.firstChild);}
     var sv=pb.querySelector('select[data-viewas]');if(sv)sv.addEventListener('change',function(){RA.viewAs(sv.value||null);});}
   var inRest=rest.some(function(it){return it[0]===current;});

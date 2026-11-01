@@ -364,7 +364,7 @@
       w.document.open(); w.document.write(h); w.document.close();
     }).catch(function (e) { w.document.body.innerHTML = '<p style="font:14px sans-serif;padding:16px">Gagal memuat: ' + esc(e.message || e) + '</p>'; });
   };
-  RA.VIEW_ROLES = { cashier:'Kasir / staf cabang', runner: 'Petugas lapangan', asset_manager: 'Manajer aset', experience_manager: 'Manajer Experience', cs_experience: 'CS Experience', finance: 'Keuangan', viewer: 'Pemantau' };
+  RA.VIEW_ROLES = { cs: 'Customer Service (CS)', cashier:'Kasir / staf cabang', runner: 'Petugas lapangan', asset_manager: 'Manajer aset', experience_manager: 'Manajer Experience', cs_experience: 'CS Experience', finance: 'Keuangan', viewer: 'Pemantau' };
   RA.viewAs = function (role) { if (role && RA.VIEW_ROLES[role]) LS.set('ra.viewAs', role); else LS.del('ra.viewAs'); RA._staff = null; location.reload(); };
   RA.can = function (perm) { var s = RA._staff; if (!s) return false; if (s.role === 'owner') return true; return !!(s.perms && s.perms[perm]); };
   /* cabang aktif untuk panel staf */
