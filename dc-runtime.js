@@ -190,23 +190,31 @@ function staffNav(root){
       h+='<a href="'+it[0]+'.dc.html"'+(on?' aria-current="page"':'')+' style="min-height:40px;box-sizing:border-box;padding:0 12px;border-radius:10px;background:'+(on?'#E3F7F5':'transparent')+';color:'+(on?'#077A70':'#1F2B4D')+';font:'+(on?'800':'600')+' 14px \'Plus Jakarta Sans\',system-ui,sans-serif;display:flex;align-items:center;gap:10px;text-decoration:none"><span style="width:20px;text-align:center">'+it[1]+'</span>'+it[2]+'</a>';});
     h+='</div>';
   });
+  // owner: pratinjau tampilan per peran
+  var isOwner=RA._staff&&(RA._staff.role==='owner'||RA._staff.realRole==='owner');var pv='';
+  if(isOwner&&RA.VIEW_ROLES){
+    var opts='<option value="">Owner (semua menu)</option>';Object.keys(RA.VIEW_ROLES).forEach(function(k){opts+='<option value="'+k+'"'+(role===k?' selected':'')+'>'+RA.VIEW_ROLES[k]+'</option>';});
+    var prev=RA._staff.realRole==='owner';
+    pv='<div style="display:flex;flex-direction:column;gap:6px;padding:10px 12px;border-radius:12px;background:'+(prev?'#FFF6E0;border:1.5px solid #F2C14E':'#F4F6F8;border:1px solid #E6E8EC')+'"><label style="font:800 11px \'Plus Jakarta Sans\',system-ui,sans-serif;letter-spacing:.05em;text-transform:uppercase;color:#5B6573">👁 Lihat sebagai</label><select data-viewas style="min-height:40px;border-radius:10px;border:1px solid #D5D9E0;padding:0 10px;font:700 14px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#1F2B4D;background:#FFFFFF">'+opts+'</select>'+(prev?'<div style="font:600 12px/17px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#7A4B00">Mode pratinjau: menu & halaman seperti peran ini. Datanya tetap data asli, jadi tombol simpan tetap jalan — cukup dilihat, jangan diubah.</div>':'')+'</div>';
+  }
   if(!nav){
     // layar lapangan (Runner, Teknisi, Sopir) tidak punya kolom menu: tampilkan menu ringkas di atas layar
     var known=false;SNAV.forEach(function(g){g[1].forEach(function(it){if(it[0]===current)known=true;});});
-    if(!known||(h.match(/<a /g)||[]).length<2)return;
+    if(!known||(!pv&&(h.match(/<a /g)||[]).length<2))return;
     nav=document.createElement('div');nav.setAttribute('data-snav','1');
     var hd=root.querySelector('header');if(hd&&hd.parentNode){hd.parentNode.insertBefore(nav,hd.nextSibling);}else{var host=root.firstElementChild||root;host.insertBefore(nav,host.firstChild);}compact=true;
   }
   var curLabel='Menu';SNAV.forEach(function(g){g[1].forEach(function(it){if(it[0]===current)curLabel=it[1]+' '+it[2];});});
   if(compact){
     nav.setAttribute('style',nav.getAttribute('data-snav')?'display:block;padding:10px 16px 0;width:100%;max-width:560px;margin:0 auto;box-sizing:border-box;align-self:stretch':'display:block');
-    nav.innerHTML='<details'+(window.__snavOpen?' open':'')+' style="background:#FFFFFF;border:1px solid #E6E8EC;border-radius:12px"><summary style="list-style:none;cursor:pointer;min-height:44px;padding:0 12px;display:flex;align-items:center;justify-content:space-between;font:800 14px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#1F2B4D"><span>☰ &nbsp;'+curLabel+'</span><span style="font-size:12px;color:#077A70">Menu</span></summary><div style="display:flex;flex-direction:column;gap:12px;padding:6px 4px 10px">'+h+'</div></details>';
+    nav.innerHTML=(pv?'<div style="margin-bottom:8px">'+pv+'</div>':'')+'<details'+(window.__snavOpen?' open':'')+' style="background:#FFFFFF;border:1px solid #E6E8EC;border-radius:12px"><summary style="list-style:none;cursor:pointer;min-height:44px;padding:0 12px;display:flex;align-items:center;justify-content:space-between;font:800 14px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#1F2B4D"><span>☰ &nbsp;'+curLabel+'</span><span style="font-size:12px;color:#077A70">Menu</span></summary><div style="display:flex;flex-direction:column;gap:12px;padding:6px 4px 10px">'+h+'</div></details>';
     var d=nav.querySelector('details');d.addEventListener('toggle',function(){window.__snavOpen=d.open;});
     nav.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){window.__snavOpen=false;});});
   }else{
     nav.setAttribute('style','display:flex;flex-direction:column;gap:14px');
-    nav.innerHTML=h;
+    nav.innerHTML=pv+h;
   }
+  var sv=nav.querySelector('select[data-viewas]');if(sv)sv.addEventListener('change',function(){RA.viewAs(sv.value||null);});
 }
 function flowClose(root){
   var kind=FLOW[current];if(!kind||!rootSpec||!rootSpec.mobile)return;

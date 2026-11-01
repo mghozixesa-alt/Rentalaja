@@ -242,6 +242,9 @@
     var uid = (RA.me() || {}).id || (session.user && session.user.id);
     return RA.from('staff').select('*').eq('user_id', uid).maybeSingle().then(function (r) {
       var s = r.data; if (!s || !s.is_active) { RA._staff = null; return null; }
+      // pratinjau peran: owner bisa melihat panel seperti peran lain (hanya tampilan & menu; data tetap akses owner)
+      var va = s.role === 'owner' ? LS.get('ra.viewAs') : null;
+      if (va && RA.VIEW_ROLES[va]) { s.realRole = 'owner'; s.role = va; }
       return Promise.all([
         RA.from('role_permissions').select('perm,limited').eq('role', s.role),
         s.all_branches ? RA.from('branches').select('id,code,name,kind,city').order('sort') :
@@ -253,6 +256,8 @@
       });
     });
   };
+  RA.VIEW_ROLES = { cashier: 'Kasir / staf cabang', runner: 'Petugas lapangan', asset_manager: 'Manajer aset', experience_manager: 'Manajer Experience', cs_experience: 'CS Experience', finance: 'Keuangan', viewer: 'Pemantau' };
+  RA.viewAs = function (role) { if (role && RA.VIEW_ROLES[role]) LS.set('ra.viewAs', role); else LS.del('ra.viewAs'); RA._staff = null; location.reload(); };
   RA.can = function (perm) { var s = RA._staff; if (!s) return false; if (s.role === 'owner') return true; return !!(s.perms && s.perms[perm]); };
   /* cabang aktif untuk panel staf */
   RA.staffBranch = function () {
