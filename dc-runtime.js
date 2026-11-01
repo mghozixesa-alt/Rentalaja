@@ -348,8 +348,9 @@ function deskFix(root){
   if(rootSpec.mobile){screenEl.style.maxWidth='760px';screenEl.style.boxShadow='none';screenEl.style.background='transparent';root.style.maxWidth='760px';root.style.background='#F4F6F9';
     Array.prototype.forEach.call(root.querySelectorAll('[style*="position: fixed"],[style*="position:fixed"]'),function(el){if(el.getAttribute('data-ra-field'))return;if(el.style.maxWidth==='430px'){el.style.maxWidth='760px';el.style.left='calc(50% + 124px)';}});}
 }
+function prefetchRole(role){if(window.__pf===role||!MAN)return;window.__pf=role;var ids={};(FIELD[role]||[]).concat(Object.keys(ALIAS)).forEach(function(n){var b=bundleFor(n);if(b)ids[b.id]=b;});var go=function(){Object.keys(ids).forEach(function(k){loadBundle(ids[k]).catch(function(){});});};if(window.requestIdleCallback)requestIdleCallback(go,{timeout:4000});else setTimeout(go,1500);}
 function staffNav(root){
-  clearShell();
+  clearShell();if(window.RA&&RA._staff)prefetchRole(RA._staff.role);
   if(!window.RA||!RA.kindOf||RA.kindOf(current)!=='staff'||!RA._staff)return;
   var nav=root.querySelector('nav[aria-label="Menu"]');var narrow=window.innerWidth<760;
   var role=(RA._staff&&RA._staff.role)||'';var allow=roleAllow(role);
@@ -516,6 +517,6 @@ window.addEventListener('hashchange',menuVis);menuVis();
 /* ---------- start ---------- */
 fetch('manifest.json?t='+Date.now()).then(function(r){return r.json();}).then(function(m){
   MAN=m;TITLES=m.titles||[];
-  var first=bundleFor('Home');return first?loadBundle(first):null;
+  var h0=(location.hash.replace(/^#\/?/,'').split('?')[0])||'Home';var first=bundleFor(h0)||bundleFor('Home');return first?loadBundle(first):null;
 }).then(route).catch(function(err){screenEl.innerHTML='<div class="ra-load">Gagal memuat aplikasi. Coba muat ulang halaman.</div>';console.error(err);});
 })();
