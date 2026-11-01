@@ -364,7 +364,7 @@
       w.document.open(); w.document.write(h); w.document.close();
     }).catch(function (e) { w.document.body.innerHTML = '<p style="font:14px sans-serif;padding:16px">Gagal memuat: ' + esc(e.message || e) + '</p>'; });
   };
-  RA.VIEW_ROLES = { cs: 'Customer Service (CS)', cashier:'Kasir / staf cabang', runner: 'Petugas lapangan', asset_manager: 'Manajer operasional', experience_manager: 'Manajer Experience', finance: 'Keuangan', viewer: 'Pemantau' };
+  RA.VIEW_ROLES = { cs: 'Customer Service (CS)', cashier:'Kasir / staf cabang', runner: 'Petugas lapangan', asset_manager: 'Manajer operasional', finance: 'Keuangan', viewer: 'Pemantau' };
   RA.viewAs = function (role) { if (role && RA.VIEW_ROLES[role]) LS.set('ra.viewAs', role); else LS.del('ra.viewAs'); RA._staff = null; location.reload(); };
   RA.can = function (perm) { var s = RA._staff; if (!s) return false; if (s.role === 'owner') return true; return !!(s.perms && s.perms[perm]); };
   /* cabang aktif untuk panel staf */
@@ -561,7 +561,7 @@
       });
     });
   };
-  RA.STAFF_HOME = { owner: 'MgmtDashboard', viewer: 'MgmtDashboard', finance: 'KeuDasbor', asset_manager: 'OpsBeranda', experience_manager: 'Housekeeping',
+  RA.STAFF_HOME = { owner: 'MgmtDashboard', viewer: 'MgmtDashboard', finance: 'KeuDasbor', asset_manager: 'OpsBeranda', experience_manager: 'OpsBeranda',
     cs_experience: 'PusatCS', branch_head: 'PosHariIni', cs: 'PusatCS', cashier: 'PosHariIni', staff: 'PosHariIni', qc: 'PosQC',
     technician: 'Teknisi', runner: 'AgendaLapangan', driver: 'SopirJeep' };
   RA.PAGE_PERM = { PosHariIni: 'pos.bookings', PosVerifikasi: 'pos.verify', PosSerahTerima: 'pos.handover', PosKasir: 'pos.cashier', PosPelanggan: 'pos.customers', PosUnit: 'pos.units', PosQC: ['pos.qc', 'mgmt.qc'], PosShift: 'pos.shift',
