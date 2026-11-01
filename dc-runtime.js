@@ -228,11 +228,25 @@ function fieldNav(root,nav,role,allow,pv){
   var rest=items.filter(function(it){return pri.indexOf(it)<0&&!(it[0]==='PosAbsen'&&pri.some(function(p){return p[0]==='AkunLapangan';}));});
   var as=nav&&nav.closest?nav.closest('aside'):null;
   if(nav)nav.style.display='none';
-  if(as){as.style.flex='1 1 100%';as.style.flexDirection='row';as.style.flexWrap='wrap';as.style.alignItems='center';as.style.gap='12px';as.style.padding='10px 16px';as.style.borderRight='0';as.style.borderBottom='1px solid #E6E8EC';}
+  var TEAL='linear-gradient(160deg,#09BEAF 0%,#077A70 100%)';var curL='';SNAV.forEach(function(g){g[1].forEach(function(it){if(it[0]===current)curL=FLABEL[it[0]]&&FIELD[role].indexOf(it[0])>-1?it[2]:it[2];});});
+  var ini=(RA.initials&&RA._staff)?RA.initials(RA._staff.name):'';var appbar=null;
+  if(as){as.style.display='none';
+    appbar=document.createElement('div');appbar.setAttribute('data-appbar','1');
+    appbar.style.cssText='flex:1 1 100%;width:100%;box-sizing:border-box;background:'+TEAL+';color:#FFFFFF;padding:12px 16px;display:flex;align-items:center;gap:10px';
+    appbar.innerHTML='<img src="logo.png" alt="Rentalaja" style="height:22px;width:auto;background:#FFFFFF;border-radius:7px;padding:3px 7px;display:block;flex-shrink:0"><div style="flex:1;min-width:0;font:800 16px \'Plus Jakarta Sans\',system-ui,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+curL+'</div><span style="width:34px;height:34px;border-radius:17px;background:rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;font:800 13px \'Plus Jakarta Sans\',system-ui,sans-serif;flex-shrink:0">'+ini+'</span>';
+    var bsel=as.querySelector('select[aria-label="Pilih cabang"]');if(bsel){bsel.style.cssText='height:32px;max-width:130px;border-radius:16px;border:0;padding:0 8px;font:700 12px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#1F2B4D;background:#FFFFFF;flex-shrink:1;min-width:0';appbar.insertBefore(bsel,appbar.lastChild);}
+    root.insertBefore(appbar,root.firstChild);root.style.background='#F4F6F9';root.style.alignContent='flex-start';root.style.alignItems='flex-start';
+    var mn=as.parentNode&&as.parentNode.querySelector(':scope > main');if(mn){mn.style.padding='16px 16px 24px';mn.style.gap='14px';mn.style.alignSelf='stretch';}
+  }else if(rootSpec&&rootSpec.mobile){var hd0=root.querySelector('header');
+    if(hd0&&!hd0.hasAttribute('data-hero')){hd0.style.background=TEAL;hd0.style.borderBottom='0';
+      Array.prototype.forEach.call(hd0.querySelectorAll('div,span,b'),function(e){if(!/background/.test(e.getAttribute('style')||''))e.style.color='#FFFFFF';});
+      var lg=hd0.querySelector('img');if(lg){lg.style.background='#FFFFFF';lg.style.borderRadius='8px';lg.style.padding='3px 8px';lg.style.height='22px';}}}
+  // kotak "Laporan ... Bagikan ke WhatsApp" tidak perlu di HP
+  Array.prototype.forEach.call(root.querySelectorAll('[data-wa-share]'),function(x){x.style.display='none';});
   if(pv){var opts='<option value="">Owner (semua menu)</option>';Object.keys(RA.VIEW_ROLES||{}).forEach(function(k){opts+='<option value="'+k+'"'+(role===k?' selected':'')+'>'+RA.VIEW_ROLES[k]+'</option>';});
-    var pb=document.createElement('div');pb.setAttribute('data-snav','1');pb.style.cssText='padding:8px 16px 0;width:100%;max-width:560px;margin:0 auto;box-sizing:border-box;align-self:stretch;flex:'+(as?'1 1 100%':'0 0 auto');
-    pb.innerHTML='<label style="display:flex;align-items:center;gap:8px;padding:6px 8px 6px 12px;border-radius:12px;background:#FFF6E0;border:1px solid #F2C14E;font:800 12px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#7A4B00;white-space:nowrap">Pratinjau<select data-viewas style="flex:1;min-width:0;height:34px;border-radius:9px;border:1px solid #E6D3A3;padding:0 8px;font:700 13px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#1F2B4D;background:#FFFFFF">'+opts+'</select></label>';
-    if(as)as.appendChild(pb);else{var hd=root.querySelector('header');if(hd&&hd.parentNode)hd.parentNode.insertBefore(pb,hd.nextSibling);else root.insertBefore(pb,root.firstChild);}
+    var pb=document.createElement('div');pb.setAttribute('data-snav','1');pb.style.cssText='padding:8px 16px;width:100%;box-sizing:border-box;align-self:stretch;background:#FFF6E0;flex:'+(as?'1 1 100%':'0 0 auto');
+    pb.innerHTML='<label style="display:flex;align-items:center;gap:8px;max-width:520px;margin:0 auto;font:800 12px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#7A4B00;white-space:nowrap">Pratinjau<select data-viewas style="flex:1;min-width:0;height:34px;border-radius:9px;border:1px solid #E6D3A3;padding:0 8px;font:700 13px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#1F2B4D;background:#FFFFFF">'+opts+'</select></label>';
+    if(appbar)root.insertBefore(pb,appbar.nextSibling);else{var hd=root.querySelector('header');if(hd&&hd.hasAttribute('data-hero'))hd.parentNode.insertBefore(pb,hd);else if(hd&&hd.parentNode)hd.parentNode.insertBefore(pb,hd.nextSibling);else root.insertBefore(pb,root.firstChild);}
     var sv=pb.querySelector('select[data-viewas]');if(sv)sv.addEventListener('change',function(){RA.viewAs(sv.value||null);});}
   var inRest=rest.some(function(it){return it[0]===current;});
   var tab=function(href,ic,label,on,extra){var col=on?'#077A70':'#6B7486';return '<'+(href?'a href="'+href+'"':'button type="button" data-more="1"')+(on?' aria-current="page"':'')+' style="'+(href?'text-decoration:none;':'border:0;background:none;padding:0;cursor:pointer;')+'color:'+col+';display:flex;flex-direction:column;align-items:center;gap:2px;font:'+(on?'800':'700')+' 11px \'Plus Jakarta Sans\',system-ui,sans-serif;min-width:0"><span style="width:48px;height:30px;border-radius:15px;display:flex;align-items:center;justify-content:center;'+(on?'background:#E3F7F5':'')+'">'+ic+'</span><span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%">'+label+'</span></'+(href?'a':'button')+'>';};
@@ -240,10 +254,10 @@ function fieldNav(root,nav,role,allow,pv){
   var dots='<svg width="22" height="22" viewBox="0 0 24 24" fill="'+(inRest?'#077A70':'#6B7486')+'" aria-hidden="true"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>';
   if(rest.length)h+=tab(null,dots,'Lainnya',inRest);
   var bar=document.createElement('nav');bar.setAttribute('aria-label','Menu lapangan');bar.setAttribute('data-ra-field','1');
-  bar.style.cssText='position:fixed;left:50%;transform:translateX(-50%);bottom:calc(10px + env(safe-area-inset-bottom));width:calc(100% - 24px);max-width:420px;height:66px;box-sizing:border-box;padding:0 6px;background:#FFFFFF;border:1px solid #E6E8EC;border-radius:20px;box-shadow:0 8px 24px rgba(31,43,77,.18);display:grid;grid-template-columns:repeat('+(pri.length+(rest.length?1:0))+',minmax(0,1fr));align-items:center;z-index:45';
+  bar.style.cssText='position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:480px;height:calc(66px + env(safe-area-inset-bottom));padding:0 4px env(safe-area-inset-bottom);box-sizing:border-box;background:#FFFFFF;border-top:1px solid #E8EBEF;box-shadow:0 -4px 16px rgba(31,43,77,.06);display:grid;grid-template-columns:repeat('+(pri.length+(rest.length?1:0))+',minmax(0,1fr));align-items:center;z-index:45';
   bar.innerHTML=h;root.appendChild(bar);
   var mb=bar.querySelector('[data-more]');if(mb)mb.addEventListener('click',function(){fieldSheet(rest);});
-  var pbm=parseInt(root.style.paddingBottom||'0',10)||0;if(pbm<96)root.style.paddingBottom='96px';
+  var pbm=parseInt(root.style.paddingBottom||'0',10)||0;if(pbm<84)root.style.paddingBottom='84px';
 }
 function staffNav(root){
   if(!window.RA||!RA.kindOf||RA.kindOf(current)!=='staff')return;
