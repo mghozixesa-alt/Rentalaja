@@ -130,7 +130,20 @@
   RA.from = function (t) { return new Q(t); };
 
   /* RPC: {data, error} */
+  /* cache singkat untuk daftar katalog (Beranda, Katalog, Cari): 60 detik per cabang+tanggal, permintaan yang sama tidak dikirim dua kali */
+  var RPC_CACHE = { catalog_list: 60000 }, rpcMemo = {};
   RA.rpc = function (fn, args) {
+    if (RPC_CACHE[fn]) {
+      var key = fn + ':' + JSON.stringify(args || {}), hit = rpcMemo[key];
+      if (hit && Date.now() - hit.t < RPC_CACHE[fn]) return hit.p;
+      var pr = RA._rpc(fn, args).then(function (r) { if (r.error) delete rpcMemo[key]; return r; });
+      rpcMemo[key] = { t: Date.now(), p: pr };
+      return pr;
+    }
+    return RA._rpc(fn, args);
+  };
+  RA.rpcClear = function () { rpcMemo = {}; };
+  RA._rpc = function (fn, args) {
     return headers({ 'Content-Type': 'application/json' }).then(function (h) {
       return fetch(C.url + '/rest/v1/rpc/' + fn, { method: 'POST', headers: h, body: JSON.stringify(args || {}) });
     }).then(function (r) {
