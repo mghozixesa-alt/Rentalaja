@@ -206,7 +206,7 @@ var SNAV=[
 var CSM={'CS':1,'Harian':['PosHariIni','PosVerifikasi','PosPelanggan'],'Penginapan & Jeep':['Housekeeping','ExpJeep'],'Pelanggan':['TiketCS','AlatChat','MgmtPenawaran']};
 /* manajer operasional = operasional harian + experience (penginapan & jeep); manajer aset terpisah */
 var MOPS={'Operasional':1,'Harian':['PosHariIni'],'Penginapan & Jeep':['Housekeeping','ExpJeep'],'Barang':['MgmtProduk','MgmtPromo'],'Manajemen':['MgmtDashboard','MgmtSetuju'],'Saya':['TiketCS']};
-var MASET={'Aset & servis':['AsetBeranda','AsetPreventif','AsetServis','MgmtAset','MgmtPusatAset','MgmtServis','PosQC'],'Barang':['PosUnit'],'Manajemen':['MgmtDashboard','MgmtSetuju'],'Saya':['TiketCS']};
+var MASET={'Aset & servis':['AsetBeranda','AsetPreventif','AsetServis','MgmtAset','MgmtServis','PosQC'],'Barang':['PosUnit'],'Manajemen':['MgmtDashboard','MgmtSetuju'],'Saya':['TiketCS']};
 var SROLE={
  cashier:{'Harian':1,'Lapangan':1,'Barang':['PosUnit']}, cs:CSM, cs_experience:CSM, staff:{'Harian':1,'Lapangan':1,'Barang':['PosUnit']},
  branch_head:{'Saya':['TiketCS'],'Harian':1,'Lapangan':1,'Barang':['PosUnit'],'Manajemen':['MgmtSetuju']},
@@ -226,10 +226,10 @@ var FLABEL={Runner:'Antar',PosAbsen:'Absen',PosQC:'Cek barang',SopirJeep:'Jeep',
  MgmtDashboard:'Laporan',MgmtSetuju:'Setujui',OpsBeranda:'Beranda',MgmtPusatAset:'Aset',MgmtServis:'Servis & QC',MgmtTim:'Tim',OpsUnit:'Utilisasi',OpsQC:'Layanan',PosHariIni:'Hari ini',PosKasir:'Kasir',PosSerahTerima:'Serah-terima',KeuDasbor:'Keuangan'};
 var FLABEL_R={technician:{Teknisi:'Pekerjaan',TekBelanja:'Belanja part',TekAkun:'Akun'},owner:{OpsBeranda:'Operasional',PusatCS:'CS'},asset_manager:{AsetBeranda:'Beranda',AsetPreventif:'Preventif',AsetServis:'Servis',MgmtAset:'Unit'},experience_manager:{ExpJeep:'Jeep',Housekeeping:'Experience'}};
 /* tab bawah tetap menyala saat membuka halaman "saudara"-nya */
-var ALIAS={MgmtServis:'AsetServis',TekPart:'TekBelanja',TekMasuk:'Teknisi',TekKerja:'Teknisi',TekSelesai:'Teknisi',MgmtAsetDetail:'MgmtAset',MgmtKelola:'MgmtAset',PosQC:'MgmtServis',PosAbsen:'AkunLapangan',ExpKalender:'Housekeeping',LaporanShift:'PusatCS'};
+var ALIAS={MgmtServis:'AsetServis',PosUnit:'MgmtAset',TekPart:'TekBelanja',TekMasuk:'Teknisi',TekKerja:'Teknisi',TekSelesai:'Teknisi',MgmtAsetDetail:'MgmtAset',MgmtKelola:'MgmtAset',PosQC:'AsetServis',PosAbsen:'AkunLapangan',ExpKalender:'Housekeeping',LaporanShift:'PusatCS'};
 /* halaman yang digabung dalam satu tab: tampilkan tombol pindah di atas */
-var SUBT=[[['MgmtServis','Servis'],['PosQC','Cek QC']]];
-var REST_TOP={asset_manager:['MgmtSetuju','PosUnit','MgmtServis','PosQC','MgmtPusatAset','MgmtDashboard'],experience_manager:['MgmtTim','ExpJeep','PosHariIni','MgmtPromo','MgmtProduk','MgmtDashboard','MgmtSetuju']};
+var SUBT=[[['AsetServis','Papan servis'],['PosQC','Cek QC'],['MgmtServis','Detail & aturan']],[['MgmtAset','Daftar unit'],['PosUnit','Stok cabang']]];
+var REST_TOP={asset_manager:['MgmtSetuju','MgmtDashboard'],experience_manager:['MgmtTim','ExpJeep','PosHariIni','MgmtPromo','MgmtProduk','MgmtDashboard','MgmtSetuju']};
 var ALLG={};SNAV.forEach(function(g){ALLG[g[0]]=1;});
 function roleAllow(role){return role==='owner'?ALLG:(SROLE[role]||{'Harian':1});}
 window.RA_MENU_ALLOWS=function(role,name){
@@ -282,6 +282,7 @@ function fieldNav(root,nav,role,allow,isPv){
   var items=menuItems(allow);
   var pri=(FIELD[role]||[]).map(function(k){return items.filter(function(it){return it[0]===k;})[0];}).filter(Boolean).slice(0,5);
   var rest=items.filter(function(it){return pri.indexOf(it)<0&&!(it[0]==='PosAbsen'&&pri.some(function(p){return p[0]==='AkunLapangan';}));});
+  var priIds=pri.map(function(p){return p[0];});rest=rest.filter(function(it){return !SUBT.some(function(g){return g.some(function(x){return x[0]===it[0];})&&g.some(function(x){return x[0]!==it[0]&&priIds.indexOf(x[0])>-1;});});});
   var top=REST_TOP[role];if(top){var a1=[],a2=[];rest.forEach(function(it){var k=top.indexOf(it[0]);if(k>-1)a1[k]=[it[0],it[1],it[2],'Sering dipakai'];else a2.push(it);});rest=a1.filter(Boolean).concat(a2);}
   var as=nav&&nav.closest?nav.closest('aside'):null;if(!as)as=root.querySelector(':scope > aside');
   if(nav)nav.style.display='none';
