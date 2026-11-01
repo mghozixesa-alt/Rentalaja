@@ -330,7 +330,41 @@
       w.document.open(); w.document.write(h); w.document.close();
     }).catch(function (e) { w.document.body.innerHTML = '<p style="font:14px sans-serif;padding:16px">Gagal memuat nota: ' + esc(e.message || e) + '</p>'; });
   };
-  RA.VIEW_ROLES = { cashier: 'Kasir / staf cabang', runner: 'Petugas lapangan', asset_manager: 'Manajer aset', experience_manager: 'Manajer Experience', cs_experience: 'CS Experience', finance: 'Keuangan', viewer: 'Pemantau' };
+  /* cetak nomor aset per cabang: mode 'list' = daftar cek A4 (isi plat/seri yang kosong), 'sticker' = stiker 58mm untuk ditempel */
+  RA.printAssets = function (branch, mode, onlyIds) {
+    if (!branch) { RA.toast && RA.toast('Pilih cabang dulu.'); return; }
+    var w = window.open('', '_blank'); if (!w) { RA.toast && RA.toast('Izinkan pop-up untuk mencetak.'); return; }
+    w.document.write('<p style="font:14px sans-serif;padding:16px">Menyiapkan…</p>');
+    var esc = function (x) { return String(x == null ? '' : x).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+    var q = RA.from('units').select('id,asset_no,code,plate_or_serial,status,products(name,categories(name))').eq('branch_id', branch.id).is('archived_at', null).order('asset_no').limit(3000);
+    q.then(function (r) {
+      if (r.error) throw new Error(r.error.message);
+      var rows = (r.data || []).filter(function (u) { return !onlyIds || onlyIds.indexOf(u.id) > -1; });
+      var sn = function (u) { return u.plate_or_serial && u.plate_or_serial !== '—' ? u.plate_or_serial : ''; };
+      var h;
+      if (mode === 'sticker') {
+        h = '<!doctype html><html><head><meta charset="utf-8"><title>Stiker nomor aset · ' + esc(branch.name) + '</title><style>@page{size:58mm auto;margin:0}*{box-sizing:border-box}body{margin:0;width:58mm;font-family:Arial,Helvetica,sans-serif;color:#000}'
+          + '.st{height:28mm;padding:2.5mm 3mm;border-bottom:1px dashed #000;display:flex;flex-direction:column;justify-content:center;page-break-inside:avoid}.br{font-size:8px;letter-spacing:.5px;font-weight:700}.no{font-size:26px;font-weight:900;letter-spacing:1px;line-height:1.05}.nm{font-size:9px;line-height:1.2;max-height:2.4em;overflow:hidden}'
+          + '@media screen{body{margin:10px auto;box-shadow:0 0 0 1px #ddd}}</style></head><body>';
+        rows.forEach(function (u) { h += '<div class="st"><div class="br">RENTALAJA · MILIK PERUSAHAAN</div><div class="no">' + esc(u.asset_no || u.code) + '</div><div class="nm">' + esc((u.products && u.products.name) || '') + (sn(u) ? ' · ' + esc(sn(u)) : '') + '</div></div>'; });
+      } else {
+        var groups = {}; rows.forEach(function (u) { var c = (u.products && u.products.categories && u.products.categories.name) || 'Lainnya'; (groups[c] = groups[c] || []).push(u); });
+        var miss = rows.filter(function (u) { return !sn(u); }).length;
+        h = '<!doctype html><html><head><meta charset="utf-8"><title>Daftar nomor aset · ' + esc(branch.name) + '</title><style>@page{size:A4;margin:12mm}*{box-sizing:border-box}body{font:11px/1.4 Arial,Helvetica,sans-serif;color:#111;margin:0}'
+          + 'h1{font-size:17px;margin:0 0 2px}.sub{color:#555;margin-bottom:10px}h2{font-size:13px;margin:14px 0 4px;padding:4px 6px;background:#eef1f5}table{width:100%;border-collapse:collapse}th,td{border:1px solid #c9ced6;padding:4px 6px;text-align:left;vertical-align:top}th{background:#f6f7f9;font-size:10px}'
+          + '.no{font-weight:800;white-space:nowrap;font-size:12px}.blank{color:#999}.ck{width:16px;height:16px;border:1.5px solid #333;display:inline-block}tr{page-break-inside:avoid}@media screen{body{margin:20px}}</style></head><body>'
+          + '<h1>Daftar nomor aset · ' + esc(branch.name) + '</h1><div class="sub">' + rows.length + ' unit · ' + miss + ' belum ada plat/nomor seri · dicetak ' + esc(new Date().toLocaleString('id-ID')) + '. Tempel label nomor aset di tiap unit, centang, dan isi plat/seri yang kosong. Masukkan hasilnya ke sistem lewat Stok unit atau Pusat aset.</div>';
+        Object.keys(groups).sort().forEach(function (c) {
+          h += '<h2>' + esc(c) + ' · ' + groups[c].length + ' unit</h2><table><tr><th>No. aset</th><th>Barang</th><th>Plat / nomor seri</th><th>Status</th><th>Label</th><th>Catatan</th></tr>';
+          groups[c].forEach(function (u) { h += '<tr><td class="no">' + esc(u.asset_no || u.code) + '</td><td>' + esc((u.products && u.products.name) || '') + '</td><td>' + (sn(u) ? esc(sn(u)) : '<span class="blank">______________________</span>') + '</td><td>' + esc((RA.UNIT && RA.UNIT[u.status] ? RA.UNIT[u.status][0] : u.status) || '') + '</td><td><span class="ck"></span></td><td style="width:22%"></td></tr>'; });
+          h += '</table>';
+        });
+      }
+      h += '<script>window.onload=function(){setTimeout(function(){window.print()},300)}<\/script></body></html>';
+      w.document.open(); w.document.write(h); w.document.close();
+    }).catch(function (e) { w.document.body.innerHTML = '<p style="font:14px sans-serif;padding:16px">Gagal memuat: ' + esc(e.message || e) + '</p>'; });
+  };
+  RA.VIEW_ROLES = { cashier:'Kasir / staf cabang', runner: 'Petugas lapangan', asset_manager: 'Manajer aset', experience_manager: 'Manajer Experience', cs_experience: 'CS Experience', finance: 'Keuangan', viewer: 'Pemantau' };
   RA.viewAs = function (role) { if (role && RA.VIEW_ROLES[role]) LS.set('ra.viewAs', role); else LS.del('ra.viewAs'); RA._staff = null; location.reload(); };
   RA.can = function (perm) { var s = RA._staff; if (!s) return false; if (s.role === 'owner') return true; return !!(s.perms && s.perms[perm]); };
   /* cabang aktif untuk panel staf */
