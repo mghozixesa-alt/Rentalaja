@@ -161,21 +161,47 @@ function custNav(root){
   root.appendChild(nav);
 }
 
+var ICO={
+ home:'<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/>',
+ idcard:'<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="12" r="2"/><path d="M14 10h4M14 14h4"/>',
+ swap:'<path d="M4 8h13l-3-3M20 16H7l3 3"/>',
+ cart:'<circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M3 4h2l2.5 11h11L21 8H7"/>',
+ user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/>',
+ clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+ calcheck:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18M9 15l2 2 4-4"/>',
+ truck:'<path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="18" r="1.6"/><circle cx="17" cy="18" r="1.6"/>',
+ house:'<path d="M3 21h18M5 21V10l7-5 7 5v11"/><path d="M10 21v-5h4v5"/>',
+ cal:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/>',
+ jeep:'<path d="M3 15V9h4l2-3h6l2 3h4v6zM3 15h18"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/>',
+ wheel:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2"/><path d="M12 14v7M10 12H3M14 12h7"/>',
+ tag:'<path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="7.5" r="1.5"/>',
+ gift:'<rect x="3" y="8" width="18" height="5"/><path d="M5 13v8h14v-8M12 8v13M12 8c-2-4-6-3-5 0M12 8c2-4 6-3 5 0"/>',
+ box:'<path d="M3 7l9-4 9 4v10l-9 4-9-4z"/><path d="M3 7l9 4 9-4M12 11v10"/>',
+ folder:'<path d="M3 6h6l2 2h10v11H3z"/>',
+ tool:'<path d="M14.5 5.5a4 4 0 0 0 4 4l-9 9a2 2 0 0 1-3-3l9-9a4 4 0 0 0-1-1z"/>',
+ check:'<circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/>',
+ kit:'<rect x="3" y="8" width="18" height="12" rx="2"/><path d="M9 8V5h6v3M3 13h18"/>',
+ chart:'<path d="M4 20V10M10 20V4M16 20v-7M2 20h20"/>',
+ approve:'<path d="M5 12l5 5L20 7"/>',
+ users:'<circle cx="9" cy="8" r="3.5"/><path d="M2 20c1-3.5 3.8-5 7-5s6 1.5 7 5M16 4.5a3.5 3.5 0 0 1 0 7M18 15c2 .6 3.4 2.2 4 5"/>',
+ store:'<path d="M4 10v10h16V10M3 10l2-6h14l2 6zM9 20v-5h6v5"/>'
+};
+function ico(k,c){return '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="'+c+'" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(ICO[k]||'')+'</svg>';}
 var SNAV=[
- ['Harian',[['PosHariIni','🏠','Hari ini'],['PosVerifikasi','🪪','Verifikasi pesanan'],['PosSerahTerima','🔁','Serah-terima & kembali'],['PosKasir','💳','Kasir'],['PosPelanggan','👤','Pelanggan']]],
- ['Lapangan',[['Runner','🛵','Antar-jemput']]],
- ['Penginapan & Jeep',[['ExpHariIni','🏡','Hari ini Experience'],['ExpKalender','📅','Kalender kamar'],['ExpJeep','🚙','Jadwal jeep'],['SopirJeep','🧑‍✈️','Tugas sopir']]],
- ['Barang',[['MgmtProduk','🏷️','Barang & harga'],['MgmtPromo','🎁','Promo & member'],['PosUnit','📦','Stok unit']]],
- ['Aset & servis',[['MgmtPusatAset','🗂️','Pusat aset'],['MgmtServis','🔧','Servis'],['PosQC','✅','Cek kondisi (QC)'],['Teknisi','🧰','Teknisi']]],
- ['Manajemen',[['MgmtDashboard','📊','Laporan'],['MgmtSetuju','✋','Persetujuan']]],
- ['Pengaturan',[['MgmtPengguna','👥','Staf & akses'],['MgmtCabang','🏬','Cabang']]]
+ ['Harian',[['PosHariIni','home','Hari ini'],['PosVerifikasi','idcard','Verifikasi pesanan'],['PosKasir','cart','Kasir (sewa OTS)'],['PosSerahTerima','swap','Serah-terima & kembali'],['PosPelanggan','user','Pelanggan'],['PosShift','clock','Shift & tutup kas'],['PosAbsen','calcheck','Absen']]],
+ ['Lapangan',[['Runner','truck','Antar-jemput']]],
+ ['Penginapan & Jeep',[['ExpHariIni','house','Hari ini Experience'],['ExpKalender','cal','Kalender kamar'],['ExpJeep','jeep','Jadwal jeep'],['SopirJeep','wheel','Tugas sopir']]],
+ ['Barang',[['MgmtProduk','tag','Barang & harga'],['MgmtPromo','gift','Promo & member'],['PosUnit','box','Stok unit']]],
+ ['Aset & servis',[['MgmtPusatAset','folder','Pusat aset'],['MgmtServis','tool','Servis'],['PosQC','check','Cek kondisi (QC)'],['Teknisi','kit','Teknisi']]],
+ ['Manajemen',[['MgmtDashboard','chart','Laporan'],['MgmtSetuju','approve','Persetujuan']]],
+ ['Pengaturan',[['MgmtPengguna','users','Staf & akses'],['MgmtCabang','store','Cabang']]]
 ];
 var SROLE={
  cashier:{'Harian':1,'Lapangan':1,'Barang':['PosUnit']}, cs:{'Harian':1,'Lapangan':1,'Barang':['PosUnit']}, staff:{'Harian':1,'Lapangan':1,'Barang':['PosUnit']},
  branch_head:{'Harian':1,'Lapangan':1,'Barang':['PosUnit']},
- runner:{'Lapangan':1,'Penginapan & Jeep':['ExpHariIni','ExpKalender','ExpJeep','SopirJeep'],'Aset & servis':['Teknisi','PosQC']}, technician:{'Lapangan':1,'Penginapan & Jeep':['ExpHariIni','ExpKalender','ExpJeep','SopirJeep'],'Aset & servis':['Teknisi','PosQC']}, qc:{'Lapangan':1,'Penginapan & Jeep':['ExpHariIni','ExpKalender','ExpJeep','SopirJeep'],'Aset & servis':['Teknisi','PosQC']},
+ runner:{'Harian':['PosAbsen'],'Lapangan':1,'Penginapan & Jeep':['ExpHariIni','ExpKalender','ExpJeep','SopirJeep'],'Aset & servis':['Teknisi','PosQC']}, technician:{'Harian':['PosAbsen'],'Lapangan':1,'Penginapan & Jeep':['ExpHariIni','ExpKalender','ExpJeep','SopirJeep'],'Aset & servis':['Teknisi','PosQC']}, qc:{'Harian':['PosAbsen'],'Lapangan':1,'Penginapan & Jeep':['ExpHariIni','ExpKalender','ExpJeep','SopirJeep'],'Aset & servis':['Teknisi','PosQC']},
  asset_manager:{'Barang':1,'Aset & servis':1,'Manajemen':['MgmtDashboard']}, experience_manager:{'Penginapan & Jeep':1,'Manajemen':['MgmtDashboard']}, cs_experience:{'Penginapan & Jeep':['ExpHariIni','ExpKalender','ExpJeep']},
- driver:{'Lapangan':1,'Penginapan & Jeep':['ExpHariIni','ExpKalender','ExpJeep','SopirJeep'],'Aset & servis':['Teknisi','PosQC']}, finance:{'Manajemen':['MgmtDashboard']}
+ driver:{'Harian':['PosAbsen'],'Lapangan':1,'Penginapan & Jeep':['ExpHariIni','ExpKalender','ExpJeep','SopirJeep'],'Aset & servis':['Teknisi','PosQC']}, finance:{'Manajemen':['MgmtDashboard']}
 };
 function staffNav(root){
   if(!window.RA||!RA.kindOf||RA.kindOf(current)!=='staff')return;
@@ -187,7 +213,7 @@ function staffNav(root){
     var items=g[1].filter(function(it){return full||a===1||a.indexOf(it[0])>-1;});if(!items.length)return;
     h+='<div style="display:flex;flex-direction:column;gap:2px"><div style="font:800 11px \'Plus Jakarta Sans\',system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#8A93A3;padding:0 12px 4px">'+g[0]+'</div>';
     items.forEach(function(it){var on=it[0]===current;
-      h+='<a href="'+it[0]+'.dc.html"'+(on?' aria-current="page"':'')+' style="min-height:40px;box-sizing:border-box;padding:0 12px;border-radius:10px;background:'+(on?'#E3F7F5':'transparent')+';color:'+(on?'#077A70':'#1F2B4D')+';font:'+(on?'800':'600')+' 14px \'Plus Jakarta Sans\',system-ui,sans-serif;display:flex;align-items:center;gap:10px;text-decoration:none"><span style="width:20px;text-align:center">'+it[1]+'</span>'+it[2]+'</a>';});
+      h+='<a href="'+it[0]+'.dc.html"'+(on?' aria-current="page"':'')+' style="min-height:40px;box-sizing:border-box;padding:0 12px;border-radius:10px;background:'+(on?'#E3F7F5':'transparent')+';color:'+(on?'#077A70':'#1F2B4D')+';font:'+(on?'800':'600')+' 14px \'Plus Jakarta Sans\',system-ui,sans-serif;display:flex;align-items:center;gap:10px;text-decoration:none"><span style="width:20px;display:flex;justify-content:center">'+ico(it[1],on?'#077A70':'#6B7486')+'</span>'+it[2]+'</a>';});
     h+='</div>';
   });
   // owner: pratinjau tampilan per peran
@@ -195,7 +221,7 @@ function staffNav(root){
   if(isOwner&&RA.VIEW_ROLES){
     var opts='<option value="">Owner (semua menu)</option>';Object.keys(RA.VIEW_ROLES).forEach(function(k){opts+='<option value="'+k+'"'+(role===k?' selected':'')+'>'+RA.VIEW_ROLES[k]+'</option>';});
     var prev=RA._staff.realRole==='owner';
-    pv='<div style="display:flex;flex-direction:column;gap:6px;padding:10px 12px;border-radius:12px;background:'+(prev?'#FFF6E0;border:1.5px solid #F2C14E':'#F4F6F8;border:1px solid #E6E8EC')+'"><label style="font:800 11px \'Plus Jakarta Sans\',system-ui,sans-serif;letter-spacing:.05em;text-transform:uppercase;color:#5B6573">👁 Lihat sebagai</label><select data-viewas style="min-height:40px;border-radius:10px;border:1px solid #D5D9E0;padding:0 10px;font:700 14px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#1F2B4D;background:#FFFFFF">'+opts+'</select>'+(prev?'<div style="font:600 12px/17px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#7A4B00">Mode pratinjau: menu & halaman seperti peran ini. Datanya tetap data asli, jadi tombol simpan tetap jalan — cukup dilihat, jangan diubah.</div>':'')+'</div>';
+    pv='<div style="display:flex;flex-direction:column;gap:6px;padding:10px 12px;border-radius:12px;background:'+(prev?'#FFF6E0;border:1.5px solid #F2C14E':'#F4F6F8;border:1px solid #E6E8EC')+'"><label style="font:800 11px \'Plus Jakarta Sans\',system-ui,sans-serif;letter-spacing:.05em;text-transform:uppercase;color:#5B6573">Lihat sebagai</label><select data-viewas style="min-height:40px;border-radius:10px;border:1px solid #D5D9E0;padding:0 10px;font:700 14px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#1F2B4D;background:#FFFFFF">'+opts+'</select>'+(prev?'<div style="font:600 12px/17px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#7A4B00">Mode pratinjau: menu & halaman seperti peran ini. Datanya tetap data asli, jadi tombol simpan tetap jalan — cukup dilihat, jangan diubah.</div>':'')+'</div>';
   }
   if(!nav){
     // layar lapangan (Runner, Teknisi, Sopir) tidak punya kolom menu: tampilkan menu ringkas di atas layar
@@ -204,7 +230,7 @@ function staffNav(root){
     nav=document.createElement('div');nav.setAttribute('data-snav','1');
     var hd=root.querySelector('header');if(hd&&hd.parentNode){hd.parentNode.insertBefore(nav,hd.nextSibling);}else{var host=root.firstElementChild||root;host.insertBefore(nav,host.firstChild);}compact=true;
   }
-  var curLabel='Menu';SNAV.forEach(function(g){g[1].forEach(function(it){if(it[0]===current)curLabel=it[1]+' '+it[2];});});
+  var curLabel='Menu';SNAV.forEach(function(g){g[1].forEach(function(it){if(it[0]===current)curLabel=it[2];});});
   if(compact){
     nav.setAttribute('style',nav.getAttribute('data-snav')?'display:block;padding:10px 16px 0;width:100%;max-width:560px;margin:0 auto;box-sizing:border-box;align-self:stretch':'display:block');
     nav.innerHTML=(pv?'<div style="margin-bottom:8px">'+pv+'</div>':'')+'<details'+(window.__snavOpen?' open':'')+' style="background:#FFFFFF;border:1px solid #E6E8EC;border-radius:12px"><summary style="list-style:none;cursor:pointer;min-height:44px;padding:0 12px;display:flex;align-items:center;justify-content:space-between;font:800 14px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#1F2B4D"><span>☰ &nbsp;'+curLabel+'</span><span style="font-size:12px;color:#077A70">Menu</span></summary><div style="display:flex;flex-direction:column;gap:12px;padding:6px 4px 10px">'+h+'</div></details>';
