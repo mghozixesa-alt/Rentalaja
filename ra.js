@@ -364,7 +364,7 @@
       w.document.open(); w.document.write(h); w.document.close();
     }).catch(function (e) { w.document.body.innerHTML = '<p style="font:14px sans-serif;padding:16px">Gagal memuat: ' + esc(e.message || e) + '</p>'; });
   };
-  RA.VIEW_ROLES = { cs: 'Customer Service (CS)', cashier:'Kasir / staf cabang', runner: 'Petugas lapangan', asset_manager: 'Manajer aset', experience_manager: 'Manajer Experience', cs_experience: 'CS Experience', finance: 'Keuangan', viewer: 'Pemantau' };
+  RA.VIEW_ROLES = { cs: 'Customer Service (CS)', cashier:'Kasir / staf cabang', runner: 'Petugas lapangan', asset_manager: 'Manajer operasional', experience_manager: 'Manajer Experience', finance: 'Keuangan', viewer: 'Pemantau' };
   RA.viewAs = function (role) { if (role && RA.VIEW_ROLES[role]) LS.set('ra.viewAs', role); else LS.del('ra.viewAs'); RA._staff = null; location.reload(); };
   RA.can = function (perm) { var s = RA._staff; if (!s) return false; if (s.role === 'owner') return true; return !!(s.perms && s.perms[perm]); };
   /* cabang aktif untuk panel staf */
@@ -439,6 +439,8 @@
   };
   RA.nights = function (a, b) { var x = D(a), y = D(b); x = new Date(x.getFullYear(), x.getMonth(), x.getDate()); y = new Date(y.getFullYear(), y.getMonth(), y.getDate()); return Math.max(1, Math.round((y - x) / 86400000)); };
   RA.maskPhone = function (p) { p = String(p || '').replace(/\D/g, ''); if (p.indexOf('62') === 0) p = '0' + p.slice(2); if (p.length < 8) return p; return p.slice(0, 4) + '-••••-' + p.slice(-4); };
+  RA.nick = function (n) { var w = String(n || '').split(/\s+/).filter(Boolean); var x = w.filter(function (v) { return v.replace(/\./g, '').length > 2 && !/^(m(o|u)?h(a|e)?m+(a|e)?d|moch?|muh|moh|mochamad|siti|hj?)$/i.test(v.replace(/\./g, '')); })[0] || w[0] || 'Kak'; return x.charAt(0).toUpperCase() + x.slice(1); };
+  RA.isCS = function () { var r = (RA._staff || {}).role; return r === 'cs' || r === 'cs_experience'; };
   RA.initials = function (n) { return String(n || '?').split(/\s+/).filter(Boolean).slice(0, 2).map(function (w) { return w[0].toUpperCase(); }).join(''); };
   RA.esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
   RA.at = function (dateStr, hhmm) { var p = String(hhmm || '09.00').split(/[.:]/); var d = new Date(D(dateStr).getTime()); d.setHours(+p[0] || 0, +p[1] || 0, 0, 0); return d; };
@@ -512,8 +514,8 @@
     var ML = { cash: 'tunai', qris: 'QRIS', va: 'VA', ewallet: 'e-wallet', transfer: 'transfer', edc: 'EDC', link: 'link bayar', xendit: 'link bayar', card: 'kartu' };
     var KL = { dp: 'DP', settlement: 'Pelunasan', addon: 'Tambahan', deposit: 'Deposit', full: 'Lunas' };
     var tot = +bk.total + +(bk.late_fee || 0) + +(bk.damage_fee || 0), paid = +bk.paid_amount || 0, bal = Math.max(0, tot - paid);
-    var via = pays.map(function (p) { return (KL[p.kind] || 'Bayar') + ' ' + RA.rp(p.amount) + ' via ' + (ML[p.method] || p.method || '?') + (p.bank ? ' ' + p.bank : ''); }).join(', ');
-    var base = 'Total ' + RA.rp(tot) + ' · sudah dibayar ' + RA.rp(paid) + (via ? ' (' + via + ')' : '');
+    var ms = []; pays.forEach(function (p) { var m = (ML[p.method] || p.method || '') + (p.bank ? ' ' + p.bank : ''); if (m && ms.indexOf(m) < 0) ms.push(m); }); var over = Math.max(0, paid - tot);
+    var base = 'Total ' + RA.rp(tot) + ' · sudah dibayar ' + RA.rp(Math.min(paid, tot)) + (ms.length ? ' via ' + ms.join(' + ') : '') + (over ? ' (ada kelebihan bayar ' + RA.rp(over) + ', dicek kasir)' : '');
     var box = 'border-radius: 12px; padding: 10px 12px; display: flex; flex-direction: column; gap: 4px; ';
     return bal > 0 ? { bal: bal, head: 'Tagih ke pelanggan', amt: RA.rp(bal), lines: base + '. ' + (when || 'Tagih di lokasi') + ': QRIS di HP ini atau tunai.', style: box + 'background: #FFF1D6; color: #5C3600', short: 'tagih ' + RA.rp(bal) }
       : { bal: 0, head: 'Pembayaran lunas', amt: '✓', lines: base + '. Tidak perlu menagih.', style: box + 'background: #E4F2EA; color: #1F3D2D', short: 'lunas' };
@@ -549,13 +551,24 @@
           RA.toast('Akun ini bukan akun staf Rentalaja.', 'bad'); return 'Masuk';
         });
         if (kind === 'finance' && !RA.can('finance.panel')) { RA.toast('Panel Keuangan hanya untuk owner dan keuangan.', 'bad'); return 'Masuk'; }
+        if (kind === 'staff' && s.role !== 'owner') {
+          var home = RA.staffHome(s.role), pp = RA.PAGE_PERM[name];
+          var noPerm = pp !== undefined && pp !== null && ![].concat(pp).some(function (x) { return RA.can(x); });
+          var notMenu = window.RA_MENU_ALLOWS && window.RA_MENU_ALLOWS(s.role, name) === false;
+          if ((noPerm || notMenu) && home !== name) return home;
+        }
         return name;
       });
     });
   };
-  RA.STAFF_HOME = { owner: 'MgmtDashboard', viewer: 'MgmtDashboard', finance: 'KeuDasbor', asset_manager: 'MgmtPusatAset', experience_manager: 'Housekeeping',
+  RA.STAFF_HOME = { owner: 'MgmtDashboard', viewer: 'MgmtDashboard', finance: 'KeuDasbor', asset_manager: 'OpsBeranda', experience_manager: 'Housekeeping',
     cs_experience: 'PusatCS', branch_head: 'PosHariIni', cs: 'PusatCS', cashier: 'PosHariIni', staff: 'PosHariIni', qc: 'PosQC',
     technician: 'Teknisi', runner: 'AgendaLapangan', driver: 'SopirJeep' };
+  RA.PAGE_PERM = { PosHariIni: 'pos.bookings', PosVerifikasi: 'pos.verify', PosSerahTerima: 'pos.handover', PosKasir: 'pos.cashier', PosPelanggan: 'pos.customers', PosUnit: 'pos.units', PosQC: ['pos.qc', 'mgmt.qc'], PosShift: 'pos.shift',
+    MgmtDashboard: 'mgmt.reports', MgmtLini: 'mgmt.reports', MgmtSetuju: ['mgmt.approvals', 'finance.approve'], MgmtPusatAset: 'mgmt.assets', MgmtAset: 'mgmt.assets', MgmtBeli: 'mgmt.assets', MgmtServis: 'mgmt.assets', MgmtQC: 'mgmt.qc', MgmtKlaim: 'mgmt.claims', MgmtProduk: 'mgmt.pricing',
+    MgmtHargaMusim: 'mgmt.pricing', MgmtPromo: 'mgmt.promo', MgmtKorporat: 'mgmt.corporate', MgmtKonten: 'mgmt.content', MgmtSumber: ['mgmt.marketing', 'mgmt.reports'], MgmtPelanggan: 'mgmt.customers', MgmtInbox: 'mgmt.inbox', MgmtPenawaran: 'mgmt.offers', MgmtTindakLanjut: 'mgmt.followup', MgmtSegmen: 'mgmt.broadcast',
+    MgmtKeluhan: 'mgmt.complaints', MgmtCabang: 'mgmt.branches', MgmtTim: 'mgmt.team', MgmtInvestor: 'mgmt.partners', MgmtPengguna: 'mgmt.users', MgmtAudit: 'mgmt.audit', MgmtImpor: 'mgmt.import', MgmtAturan: ['mgmt.settings', 'finance.settings'],
+    ExpKalender: ['exp.calendar', 'exp.bookings'], ExpJeep: ['exp.bookings', 'field.driver'], Housekeeping: ['pos.qc', 'exp.bookings', 'field.runner'], OpsBeranda: ['mgmt.assets', 'mgmt.reports', 'pos.bookings'] };
   RA.staffHome = function (role) { return RA.STAFF_HOME[role] || 'PosHariIni'; };
   RA.afterLogin = function (fallback) {
     var n = RA.ctx().next; RA.setCtx({ next: null });

@@ -191,45 +191,100 @@ var ICO={
 };
 function ico(k,c){return '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="'+c+'" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(ICO[k]||'')+'</svg>';}
 var SNAV=[
+ ['Operasional',[['OpsBeranda','home','Dashboard manajemen'],['MgmtTim','users','Tim lapangan']]],
  ['CS',[['PusatCS','head','Pusat CS'],['LaporanShift','chart','Laporan shift']]],
  ['Harian',[['PosHariIni','home','Rental hari ini'],['PosVerifikasi','idcard','Verifikasi pesanan'],['PosKasir','cart','Kasir (sewa OTS)'],['PosSerahTerima','swap','Serah-terima & kembali'],['PosPelanggan','user','Pelanggan'],['PosShift','clock','Shift & tutup kas'],['PosAbsen','calcheck','Absen']]],
  ['Lapangan',[['Runner','truck','Antar-jemput']]],
  ['Penginapan & Jeep',[['Housekeeping','bed','Penginapan & kamar'],['ExpJeep','jeep','Jadwal jeep'],['SopirJeep','wheel','Tugas sopir']]],
  ['Barang',[['MgmtProduk','tag','Barang & harga'],['MgmtPromo','gift','Promo & member'],['PosUnit','box','Stok unit']]],
  ['Aset & servis',[['MgmtPusatAset','folder','Pusat aset'],['MgmtServis','tool','Servis'],['PosQC','check','Cek kondisi (QC)'],['Teknisi','kit','Teknisi']]],
- ['Manajemen',[['MgmtDashboard','chart','Laporan'],['MgmtSetuju','approve','Persetujuan']]],
+ ['Manajemen',[['MgmtDashboard','chart','Laporan'],['MgmtSetuju','approve','Persetujuan'],['KeuDasbor','folder','Panel keuangan']]],
  ['Pengaturan',[['MgmtPengguna','users','Staf & akses'],['MgmtCabang','store','Cabang']]],
  ['Pelanggan',[['MgmtInbox','chat','Inbox WhatsApp'],['TiketCS','approve','Tiket keluhan'],['AlatChat','chat','Template & link sewa'],['MgmtPenawaran','tag','Permintaan perjalanan'],['MgmtTindakLanjut','users','Tindak lanjut']]],
  ['Saya',[['AgendaLapangan','calcheck','Agenda'],['AkunLapangan','user','Akun saya'],['TiketCS','approve','Tiket keluhan']]]
 ];
+var CSM={'CS':1,'Harian':['PosHariIni','PosVerifikasi','PosPelanggan'],'Penginapan & Jeep':['Housekeeping','ExpJeep'],'Pelanggan':['TiketCS','AlatChat','MgmtPenawaran']};
 var SROLE={
- cashier:{'Harian':1,'Lapangan':1,'Barang':['PosUnit']}, cs:{'CS':1,'Harian':['PosHariIni','PosVerifikasi','PosPelanggan'],'Penginapan & Jeep':['Housekeeping','ExpJeep'],'Pelanggan':['TiketCS','AlatChat','MgmtPenawaran']}, staff:{'Harian':1,'Lapangan':1,'Barang':['PosUnit']},
+ cashier:{'Harian':1,'Lapangan':1,'Barang':['PosUnit']}, cs:CSM, cs_experience:CSM, staff:{'Harian':1,'Lapangan':1,'Barang':['PosUnit']},
  branch_head:{'Saya':['TiketCS'],'Harian':1,'Lapangan':1,'Barang':['PosUnit'],'Manajemen':['MgmtSetuju']},
  runner:{'Harian':['PosAbsen'],'Lapangan':1,'Penginapan & Jeep':['Housekeeping','SopirJeep'],'Saya':1}, technician:{'Saya':1,'Harian':['PosAbsen'],'Lapangan':1,'Penginapan & Jeep':['Housekeeping','ExpJeep','SopirJeep'],'Aset & servis':['Teknisi','PosQC']}, qc:{'Saya':1,'Harian':['PosAbsen'],'Lapangan':1,'Penginapan & Jeep':['Housekeeping','ExpJeep','SopirJeep'],'Aset & servis':['Teknisi','PosQC']},
- asset_manager:{'Saya':['TiketCS'],'Barang':1,'Aset & servis':1,'Manajemen':['MgmtDashboard','MgmtSetuju']}, experience_manager:{'Saya':['TiketCS'],'Penginapan & Jeep':1,'Manajemen':['MgmtDashboard']}, cs_experience:{'CS':1,'Harian':['PosVerifikasi','PosPelanggan'],'Penginapan & Jeep':['Housekeeping','ExpJeep'],'Pelanggan':['TiketCS','AlatChat','MgmtPenawaran']},
- driver:{'Saya':1,'Harian':['PosAbsen'],'Lapangan':1,'Penginapan & Jeep':['Housekeeping','ExpJeep','SopirJeep'],'Aset & servis':['Teknisi','PosQC']}, finance:{'Saya':['TiketCS'],'Manajemen':['MgmtDashboard']}
+ asset_manager:{'Operasional':1,'Harian':['PosHariIni','PosSerahTerima','PosPelanggan'],'Aset & servis':['MgmtPusatAset','MgmtServis','PosQC'],'Barang':['PosUnit','MgmtProduk','MgmtPromo'],'Manajemen':['MgmtDashboard','MgmtSetuju'],'Saya':['TiketCS']},
+ experience_manager:{'Saya':['TiketCS'],'Penginapan & Jeep':1,'Manajemen':['MgmtDashboard']},
+ driver:{'Saya':1,'Harian':['PosAbsen'],'Lapangan':1,'Penginapan & Jeep':['Housekeeping','ExpJeep','SopirJeep'],'Aset & servis':['Teknisi','PosQC']},
+ finance:{'Manajemen':['MgmtDashboard','KeuDasbor','MgmtSetuju'],'Saya':['TiketCS']},
+ viewer:{'Manajemen':['MgmtDashboard']}
 };
-var FIELD={cs:['PusatCS','PosVerifikasi','AlatChat','TiketCS'],cs_experience:['PusatCS','PosVerifikasi','AlatChat','TiketCS'],runner:['AgendaLapangan','Runner','Housekeeping','SopirJeep','AkunLapangan'],driver:['SopirJeep','ExpJeep','Runner','AkunLapangan'],technician:['Teknisi','PosQC','Runner','AkunLapangan'],qc:['PosQC','Teknisi','Runner','AkunLapangan']};
-var FLABEL={Runner:'Antar',PosAbsen:'Absen',PosQC:'Cek barang',SopirJeep:'Jeep',ExpJeep:'Jadwal jeep',Teknisi:'Teknisi',ExpHariIni:'Penginapan',ExpKalender:'Kalender',Housekeeping:'Kamar',AkunLapangan:'Akun',AgendaLapangan:'Agenda',PusatCS:'Beranda',PosVerifikasi:'Verifikasi',MgmtInbox:'Chat',MgmtKeluhan:'Keluhan',TiketCS:'Keluhan',AlatChat:'Chat'};
+var FIELD={cs:['PusatCS','PosVerifikasi','AlatChat','TiketCS'],cs_experience:['PusatCS','PosVerifikasi','AlatChat','TiketCS'],runner:['AgendaLapangan','Runner','Housekeeping','SopirJeep','AkunLapangan'],driver:['SopirJeep','ExpJeep','Runner','AkunLapangan'],technician:['Teknisi','PosQC','Runner','AkunLapangan'],qc:['PosQC','Teknisi','Runner','AkunLapangan'],
+ owner:['MgmtDashboard','OpsBeranda','PusatCS','MgmtSetuju'],viewer:['MgmtDashboard'],finance:['MgmtDashboard','KeuDasbor','MgmtSetuju','TiketCS'],
+ asset_manager:['OpsBeranda','MgmtPusatAset','MgmtServis','MgmtTim'],experience_manager:['Housekeeping','ExpJeep','TiketCS','MgmtDashboard'],
+ cashier:['PosHariIni','PosVerifikasi','PosKasir','PosSerahTerima'],staff:['PosHariIni','PosVerifikasi','PosKasir','PosSerahTerima'],branch_head:['PosHariIni','PosVerifikasi','PosSerahTerima','MgmtSetuju']};
+/* peran yang layarnya memang dibuat untuk HP (tetap menu bawah walau dibuka di layar lebar tanpa kolom menu) */
+var FIELDONLY={cs:1,cs_experience:1,runner:1,driver:1,technician:1,qc:1};
+var FLABEL={Runner:'Antar',PosAbsen:'Absen',PosQC:'Cek barang',SopirJeep:'Jeep',ExpJeep:'Jadwal jeep',Teknisi:'Teknisi',ExpHariIni:'Penginapan',ExpKalender:'Kalender',Housekeeping:'Kamar',AkunLapangan:'Akun',AgendaLapangan:'Agenda',PusatCS:'Beranda',PosVerifikasi:'Verifikasi',MgmtInbox:'Chat',MgmtKeluhan:'Keluhan',TiketCS:'Keluhan',AlatChat:'Chat',
+ MgmtDashboard:'Laporan',MgmtSetuju:'Setujui',OpsBeranda:'Beranda',MgmtPusatAset:'Aset',MgmtServis:'Servis & QC',MgmtTim:'Tim',PosHariIni:'Hari ini',PosKasir:'Kasir',PosSerahTerima:'Serah-terima',KeuDasbor:'Keuangan'};
+var FLABEL_R={owner:{OpsBeranda:'Operasional',PusatCS:'CS'},experience_manager:{ExpJeep:'Jeep'}};
+/* tab bawah tetap menyala saat membuka halaman "saudara"-nya */
+var ALIAS={PosUnit:'MgmtPusatAset',PosQC:'MgmtServis',PosAbsen:'AkunLapangan',ExpKalender:'Housekeeping',LaporanShift:'PusatCS'};
+/* halaman yang digabung dalam satu tab: tampilkan tombol pindah di atas */
+var SUBT=[[['MgmtPusatAset','Pusat aset'],['PosUnit','Stok unit']],[['MgmtServis','Servis'],['PosQC','Cek QC']]];
+var REST_TOP={asset_manager:['MgmtDashboard','MgmtSetuju','MgmtProduk','MgmtPromo']};
+var ALLG={};SNAV.forEach(function(g){ALLG[g[0]]=1;});
+function roleAllow(role){return role==='owner'?ALLG:(SROLE[role]||{'Harian':1});}
+window.RA_MENU_ALLOWS=function(role,name){
+  var inMenu=false,known=false,a=roleAllow(role);
+  SNAV.forEach(function(g){g[1].forEach(function(it){if(it[0]!==name)return;known=true;var x=a[g[0]];if(x&&(x===1||x.indexOf(name)>-1))inMenu=true;});});
+  if(!known)return null;return inMenu;
+};
+function flab(role,k,def){return (FLABEL_R[role]&&FLABEL_R[role][k])||FLABEL[k]||def;}
+function menuItems(allow){var items=[],seen={};SNAV.forEach(function(g){var a=allow[g[0]];if(!a)return;g[1].forEach(function(it){if((a===1||a.indexOf(it[0])>-1)&&!seen[it[0]]){seen[it[0]]=1;items.push([it[0],it[1],it[2],g[0]]);}});});return items;}
+function isOwnerReal(){return RA._staff&&(RA._staff.role==='owner'||RA._staff.realRole==='owner');}
 function fico(k,c){return ico(k,c).replace('width="18" height="18"','width="22" height="22"');}
 function fieldSheet(rest){
   var o=document.createElement('div');o.setAttribute('data-ra-sheet','1');o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');o.setAttribute('aria-label','Menu lainnya');
   o.style.cssText='position:fixed;inset:0;z-index:100;background:rgba(31,43,77,.45);display:flex;align-items:flex-end;justify-content:center';
-  var li=rest.map(function(it){var on=it[0]===current;return '<a href="'+it[0]+'.dc.html" data-k="go" style="min-height:48px;padding:0 14px;border-radius:12px;display:flex;align-items:center;gap:12px;text-decoration:none;font-weight:'+(on?'800':'700')+';font-size:15px;color:'+(on?'#077A70':'#1F2B4D')+';background:'+(on?'#E3F7F5':'#F6F7F9')+'">'+fico(it[1],on?'#077A70':'#4A5468')+it[2]+'</a>';}).join('');
-  o.innerHTML='<div style="width:100%;max-width:430px;max-height:85vh;overflow-y:auto;background:#fff;border-radius:22px 22px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom));box-sizing:border-box;font-family:\'Plus Jakarta Sans\',system-ui,sans-serif;color:#1F2B4D;display:flex;flex-direction:column;gap:8px">'+
+  var li='',lastG=null,many=rest.length>7;
+  rest.forEach(function(it){var on=it[0]===current;
+    if(many&&it[3]!==lastG){lastG=it[3];li+='<div style="font:800 11px \'Plus Jakarta Sans\',system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#8A93A3;padding:8px 4px 0">'+it[3]+'</div>';}
+    li+='<a href="'+it[0]+'.dc.html" data-k="go" style="min-height:'+(many?'44':'48')+'px;padding:0 14px;border-radius:12px;display:flex;align-items:center;gap:12px;text-decoration:none;font-weight:'+(on?'800':'700')+';font-size:15px;color:'+(on?'#077A70':'#1F2B4D')+';background:'+(on?'#E3F7F5':'#F6F7F9')+'">'+fico(it[1],on?'#077A70':'#4A5468')+it[2]+'</a>';});
+  if(isOwnerReal())li+='<a href="#/peta" data-k="go" style="min-height:44px;padding:0 14px;border-radius:12px;display:flex;align-items:center;gap:12px;text-decoration:none;font-weight:700;font-size:14px;color:#4A5468;background:#FFFFFF;border:1px dashed #D5D9E0">'+fico('folder','#8A93A3')+'Peta semua layar (owner)</a>';
+  o.innerHTML='<div style="width:100%;max-width:480px;max-height:85vh;overflow-y:auto;background:#fff;border-radius:22px 22px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom));box-sizing:border-box;font-family:\'Plus Jakarta Sans\',system-ui,sans-serif;color:#1F2B4D;display:flex;flex-direction:column;gap:8px">'+
     '<div style="width:40px;height:4px;border-radius:2px;background:#D5D9E0;align-self:center;margin-bottom:6px"></div><div style="font-size:16px;font-weight:800;margin-bottom:4px">Menu lainnya</div>'+li+
     '<button type="button" data-k="out" style="margin-top:6px;min-height:48px;border-radius:12px;border:1px solid #E3B7B2;background:#FFFFFF;color:#A12A1F;font-family:inherit;font-weight:800;font-size:15px;cursor:pointer">Keluar dari akun</button></div>';
   o.addEventListener('click',function(e){var k=e.target.closest&&e.target.closest('[data-k]');if(k&&k.getAttribute('data-k')==='out'){o.remove();RA.signOut();RA.go('Masuk');return;}if(e.target===o||k)o.remove();});
   document.body.appendChild(o);
 }
-function fieldNav(root,nav,role,allow,pv){
-  var lm=document.getElementById('ra-menu');if(lm)lm.style.display='none';
-  var items=[];SNAV.forEach(function(g){var a=allow[g[0]];if(!a)return;g[1].forEach(function(it){if(a===1||a.indexOf(it[0])>-1)items.push(it);});});
-  var pri=FIELD[role].map(function(k){return items.filter(function(it){return it[0]===k;})[0];}).filter(Boolean).slice(0,5);
+/* penjelasan panjang di bawah judul → 1 baris, ketuk ⓘ untuk membuka */
+function clampDesc(root){
+  Array.prototype.forEach.call(root.querySelectorAll('h1'),function(h){
+    var d=h.nextElementSibling;if(!d||d.localName!=='div'||d.querySelector('input,select,button,a,img'))return;
+    var t=(d.textContent||'').trim();if(t.length<70)return;
+    d.style.display='-webkit-box';d.style.webkitBoxOrient='vertical';d.style.webkitLineClamp='1';d.style.overflow='hidden';d.style.cursor='pointer';d.title='Ketuk untuk membaca penjelasan';
+    var i=document.createElement('span');i.textContent='ⓘ ';i.setAttribute('aria-hidden','true');i.style.cssText='color:#077A70;font-weight:800';d.insertBefore(i,d.firstChild);
+    d.setAttribute('role','button');d.setAttribute('aria-expanded','false');
+    d.addEventListener('click',function(){var op=d.style.webkitLineClamp!=='1';d.style.webkitLineClamp=op?'1':'unset';d.style.display=op?'-webkit-box':'block';d.setAttribute('aria-expanded',op?'false':'true');});
+  });
+}
+function pvSelect(role,slim){
+  var opts='<option value="">Owner (semua menu)</option>';Object.keys(RA.VIEW_ROLES||{}).forEach(function(k){opts+='<option value="'+k+'"'+(role===k?' selected':'')+'>'+RA.VIEW_ROLES[k]+'</option>';});
+  return '<label style="display:flex;align-items:center;gap:8px;font:800 12px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#7A4B00;white-space:nowrap">Pratinjau<select data-viewas style="flex:1;min-width:0;height:'+(slim?'32':'34')+'px;border-radius:9px;border:1px solid #E6D3A3;padding:0 8px;font:700 13px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#1F2B4D;background:#FFFFFF">'+opts+'</select></label>';
+}
+function subTabs(role,allow){
+  var ids=menuItems(allow).map(function(it){return it[0];});var grp=null;
+  SUBT.forEach(function(g){if(g.some(function(x){return x[0]===current;})&&g.every(function(x){return ids.indexOf(x[0])>-1;}))grp=g;});
+  if(!grp)return null;
+  var w=document.createElement('div');w.setAttribute('data-subt','1');w.style.cssText='width:100%;box-sizing:border-box;padding:10px 16px 0;align-self:stretch;flex:1 1 100%';
+  w.innerHTML='<div role="tablist" style="max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat('+grp.length+',minmax(0,1fr));gap:4px;background:#E9ECF0;border-radius:12px;padding:4px">'+grp.map(function(x){var on=x[0]===current;return '<a role="tab" aria-selected="'+on+'" href="'+x[0]+'.dc.html" style="height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;text-decoration:none;font:800 13px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#1F2B4D;background:'+(on?'#FFFFFF':'transparent')+';box-shadow:'+(on?'0 1px 3px rgba(31,43,77,.12)':'none')+'">'+x[1]+'</a>';}).join('')+'</div>';
+  return w;
+}
+function fieldNav(root,nav,role,allow,isPv){
+  var items=menuItems(allow);
+  var pri=(FIELD[role]||[]).map(function(k){return items.filter(function(it){return it[0]===k;})[0];}).filter(Boolean).slice(0,5);
   var rest=items.filter(function(it){return pri.indexOf(it)<0&&!(it[0]==='PosAbsen'&&pri.some(function(p){return p[0]==='AkunLapangan';}));});
-  var as=nav&&nav.closest?nav.closest('aside'):null;
+  var top=REST_TOP[role];if(top){var a1=[],a2=[];rest.forEach(function(it){var k=top.indexOf(it[0]);if(k>-1)a1[k]=[it[0],it[1],it[2],'Sering dipakai'];else a2.push(it);});rest=a1.filter(Boolean).concat(a2);}
+  var as=nav&&nav.closest?nav.closest('aside'):null;if(!as)as=root.querySelector(':scope > aside');
   if(nav)nav.style.display='none';
-  var TEAL='linear-gradient(160deg,#09BEAF 0%,#077A70 100%)';var curL='';SNAV.forEach(function(g){g[1].forEach(function(it){if(it[0]===current)curL=FLABEL[it[0]]&&FIELD[role].indexOf(it[0])>-1?it[2]:it[2];});});
+  var TEAL='linear-gradient(160deg,#09BEAF 0%,#077A70 100%)';var curL='';SNAV.forEach(function(g){g[1].forEach(function(it){if(it[0]===current)curL=it[2];});});
+  if(!curL){var t0=root.querySelector('h1');curL=t0?t0.textContent.trim():'Rentalaja';}
   var ini=(RA.initials&&RA._staff)?RA.initials(RA._staff.name):'';var appbar=null;
   if(as){as.style.display='none';
     appbar=document.createElement('div');appbar.setAttribute('data-appbar','1');
@@ -237,67 +292,71 @@ function fieldNav(root,nav,role,allow,pv){
     appbar.innerHTML='<img src="logo.png" alt="Rentalaja" style="height:22px;width:auto;background:#FFFFFF;border-radius:7px;padding:3px 7px;display:block;flex-shrink:0"><div style="flex:1;min-width:0;font:800 16px \'Plus Jakarta Sans\',system-ui,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+curL+'</div><span style="width:34px;height:34px;border-radius:17px;background:rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;font:800 13px \'Plus Jakarta Sans\',system-ui,sans-serif;flex-shrink:0">'+ini+'</span>';
     var bsel=as.querySelector('select[aria-label="Pilih cabang"]');if(bsel){bsel.style.cssText='height:32px;max-width:130px;border-radius:16px;border:0;padding:0 8px;font:700 12px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#1F2B4D;background:#FFFFFF;flex-shrink:1;min-width:0';appbar.insertBefore(bsel,appbar.lastChild);}
     root.insertBefore(appbar,root.firstChild);root.style.background='#F4F6F9';root.style.alignContent='flex-start';root.style.alignItems='flex-start';
-    var mn=as.parentNode&&as.parentNode.querySelector(':scope > main');if(mn){mn.style.padding='16px 16px 24px';mn.style.gap='14px';mn.style.alignSelf='stretch';}
+    var mn=root.querySelector(':scope > main');if(mn){mn.style.padding='16px 16px 24px';mn.style.gap='14px';mn.style.alignSelf='stretch';mn.style.flex='1 1 100%';mn.style.maxWidth='100%';}
   }else if(rootSpec&&rootSpec.mobile){var hd0=root.querySelector('header');
     if(hd0&&!hd0.hasAttribute('data-hero')){hd0.style.background=TEAL;hd0.style.borderBottom='0';
       Array.prototype.forEach.call(hd0.querySelectorAll('div,span,b'),function(e){if(!/background/.test(e.getAttribute('style')||''))e.style.color='#FFFFFF';});
       var lg=hd0.querySelector('img');if(lg){lg.style.background='#FFFFFF';lg.style.borderRadius='8px';lg.style.padding='3px 8px';lg.style.height='22px';}}}
-  // kotak "Laporan ... Bagikan ke WhatsApp" tidak perlu di HP
   Array.prototype.forEach.call(root.querySelectorAll('[data-wa-share]'),function(x){x.style.display='none';});
-  if(pv){var opts='<option value="">Owner (semua menu)</option>';Object.keys(RA.VIEW_ROLES||{}).forEach(function(k){opts+='<option value="'+k+'"'+(role===k?' selected':'')+'>'+RA.VIEW_ROLES[k]+'</option>';});
-    var pb=document.createElement('div');pb.setAttribute('data-snav','1');pb.style.cssText='padding:8px 16px;width:100%;box-sizing:border-box;align-self:stretch;background:#FFF6E0;flex:'+(as?'1 1 100%':'0 0 auto');
-    pb.innerHTML='<label style="display:flex;align-items:center;gap:8px;max-width:520px;margin:0 auto;font:800 12px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#7A4B00;white-space:nowrap">Pratinjau<select data-viewas style="flex:1;min-width:0;height:34px;border-radius:9px;border:1px solid #E6D3A3;padding:0 8px;font:700 13px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#1F2B4D;background:#FFFFFF">'+opts+'</select></label>';
+  var anchor=appbar;
+  if(isPv){var pb=document.createElement('div');pb.setAttribute('data-snav','1');pb.style.cssText='padding:6px 16px;width:100%;box-sizing:border-box;align-self:stretch;background:#FFF6E0;flex:'+(as?'1 1 100%':'0 0 auto');
+    pb.innerHTML='<div style="max-width:520px;margin:0 auto">'+pvSelect(role,true)+'</div>';
     if(appbar)root.insertBefore(pb,appbar.nextSibling);else{var hd=root.querySelector('header');if(hd&&hd.hasAttribute('data-hero'))hd.parentNode.insertBefore(pb,hd);else if(hd&&hd.parentNode)hd.parentNode.insertBefore(pb,hd.nextSibling);else root.insertBefore(pb,root.firstChild);}
-    var sv=pb.querySelector('select[data-viewas]');if(sv)sv.addEventListener('change',function(){RA.viewAs(sv.value||null);});}
-  var inRest=rest.some(function(it){return it[0]===current;});
-  var tab=function(href,ic,label,on,extra){var col=on?'#077A70':'#6B7486';return '<'+(href?'a href="'+href+'"':'button type="button" data-more="1"')+(on?' aria-current="page"':'')+' style="'+(href?'text-decoration:none;':'border:0;background:none;padding:0;cursor:pointer;')+'color:'+col+';display:flex;flex-direction:column;align-items:center;gap:2px;font:'+(on?'800':'700')+' 11px \'Plus Jakarta Sans\',system-ui,sans-serif;min-width:0"><span style="width:48px;height:30px;border-radius:15px;display:flex;align-items:center;justify-content:center;'+(on?'background:#E3F7F5':'')+'">'+ic+'</span><span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%">'+label+'</span></'+(href?'a':'button')+'>';};
-  var h=pri.map(function(it){var on=it[0]===current||(it[0]==='AkunLapangan'&&current==='PosAbsen');return tab(it[0]+'.dc.html',fico(it[1],on?'#077A70':'#6B7486'),FLABEL[it[0]]||it[2],on);}).join('');
+    anchor=pb;var sv=pb.querySelector('select[data-viewas]');if(sv)sv.addEventListener('change',function(){RA.viewAs(sv.value||null);});}
+  var st=subTabs(role,allow);if(st){if(as&&anchor)root.insertBefore(st,anchor.nextSibling);else{var hdx=root.querySelector('header');if(hdx&&hdx.parentNode)hdx.parentNode.insertBefore(st,hdx.nextSibling);else root.insertBefore(st,root.firstChild);}}
+  var alias=ALIAS[current]&&!pri.some(function(p){return p[0]===current;})?ALIAS[current]:null;
+  var inRest=rest.some(function(it){return it[0]===current;})&&!alias;
+  var tab=function(href,ic,label,on){var col=on?'#077A70':'#6B7486';return '<'+(href?'a href="'+href+'"':'button type="button" data-more="1"')+(on?' aria-current="page"':'')+' style="'+(href?'text-decoration:none;':'border:0;background:none;padding:0;cursor:pointer;')+'color:'+col+';display:flex;flex-direction:column;align-items:center;gap:2px;font:'+(on?'800':'700')+' 11px \'Plus Jakarta Sans\',system-ui,sans-serif;min-width:0"><span style="width:48px;height:30px;border-radius:15px;display:flex;align-items:center;justify-content:center;'+(on?'background:#E3F7F5':'')+'">'+ic+'</span><span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%">'+label+'</span></'+(href?'a':'button')+'>';};
+  var h=pri.map(function(it){var on=it[0]===current||it[0]===alias;return tab(it[0]+'.dc.html',fico(it[1],on?'#077A70':'#6B7486'),flab(role,it[0],it[2]),on);}).join('');
   var dots='<svg width="22" height="22" viewBox="0 0 24 24" fill="'+(inRest?'#077A70':'#6B7486')+'" aria-hidden="true"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>';
-  if(rest.length)h+=tab(null,dots,'Lainnya',inRest);
-  var bar=document.createElement('nav');bar.setAttribute('aria-label','Menu lapangan');bar.setAttribute('data-ra-field','1');
-  bar.style.cssText='position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:480px;height:calc(66px + env(safe-area-inset-bottom));padding:0 4px env(safe-area-inset-bottom);box-sizing:border-box;background:#FFFFFF;border-top:1px solid #E8EBEF;box-shadow:0 -4px 16px rgba(31,43,77,.06);display:grid;grid-template-columns:repeat('+(pri.length+(rest.length?1:0))+',minmax(0,1fr));align-items:center;z-index:45';
+  h+=tab(null,dots,'Lainnya',inRest);
+  var bar=document.createElement('nav');bar.setAttribute('aria-label','Menu bawah');bar.setAttribute('data-ra-field','1');
+  bar.style.cssText='position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:480px;height:calc(66px + env(safe-area-inset-bottom));padding:0 4px env(safe-area-inset-bottom);box-sizing:border-box;background:#FFFFFF;border-top:1px solid #E8EBEF;box-shadow:0 -4px 16px rgba(31,43,77,.06);display:grid;grid-template-columns:repeat('+(pri.length+1)+',minmax(0,1fr));align-items:center;z-index:45';
   bar.innerHTML=h;root.appendChild(bar);
   var mb=bar.querySelector('[data-more]');if(mb)mb.addEventListener('click',function(){fieldSheet(rest);});
   var pbm=parseInt(root.style.paddingBottom||'0',10)||0;if(pbm<84)root.style.paddingBottom='84px';
 }
-function staffNav(root){
-  if(!window.RA||!RA.kindOf||RA.kindOf(current)!=='staff')return;
-  var nav=root.querySelector('nav[aria-label="Menu"]');var compact=window.innerWidth<760;
-  var role=(RA._staff&&RA._staff.role)||'';var full=role==='owner'||role==='viewer';var allow=SROLE[role]||{'Harian':1};
-  var h='';
-  SNAV.forEach(function(g){
-    var a=full?1:allow[g[0]];if(!a)return;
-    var items=g[1].filter(function(it){return full||a===1||a.indexOf(it[0])>-1;});if(!items.length)return;
+/* layar lebar tanpa kolom menu (layar HP seperti Runner, Pusat CS): beri kolom menu kiri yang sama dengan halaman lain */
+function sideHTML(role,allow,isPv){
+  var h='';SNAV.forEach(function(g){var a=allow[g[0]];if(!a)return;var items=g[1].filter(function(it){return a===1||a.indexOf(it[0])>-1;});if(!items.length)return;
     h+='<div style="display:flex;flex-direction:column;gap:2px"><div style="font:800 11px \'Plus Jakarta Sans\',system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#8A93A3;padding:0 12px 4px">'+g[0]+'</div>';
-    items.forEach(function(it){var on=it[0]===current;
+    items.forEach(function(it){var on=it[0]===current||(ALIAS[current]===it[0]&&!items.some(function(x){return x[0]===current;})&&false);
       h+='<a href="'+it[0]+'.dc.html"'+(on?' aria-current="page"':'')+' style="min-height:40px;box-sizing:border-box;padding:0 12px;border-radius:10px;background:'+(on?'#E3F7F5':'transparent')+';color:'+(on?'#077A70':'#1F2B4D')+';font:'+(on?'800':'600')+' 14px \'Plus Jakarta Sans\',system-ui,sans-serif;display:flex;align-items:center;gap:10px;text-decoration:none"><span style="width:20px;display:flex;justify-content:center">'+ico(it[1],on?'#077A70':'#6B7486')+'</span>'+it[2]+'</a>';});
-    h+='</div>';
-  });
-  // owner: pratinjau tampilan per peran
-  var isOwner=RA._staff&&(RA._staff.role==='owner'||RA._staff.realRole==='owner');var pv='';
-  if(isOwner&&RA.VIEW_ROLES){
-    var opts='<option value="">Owner (semua menu)</option>';Object.keys(RA.VIEW_ROLES).forEach(function(k){opts+='<option value="'+k+'"'+(role===k?' selected':'')+'>'+RA.VIEW_ROLES[k]+'</option>';});
-    var prev=RA._staff.realRole==='owner';
-    pv='<div style="display:flex;flex-direction:column;gap:6px;padding:10px 12px;border-radius:12px;background:'+(prev?'#FFF6E0;border:1.5px solid #F2C14E':'#F4F6F8;border:1px solid #E6E8EC')+'"><label style="font:800 11px \'Plus Jakarta Sans\',system-ui,sans-serif;letter-spacing:.05em;text-transform:uppercase;color:#5B6573">Lihat sebagai</label><select data-viewas style="min-height:40px;border-radius:10px;border:1px solid #D5D9E0;padding:0 10px;font:700 14px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#1F2B4D;background:#FFFFFF">'+opts+'</select>'+(prev?'<div style="font:600 12px/17px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#7A4B00">Mode pratinjau: menu & halaman seperti peran ini. Datanya tetap data asli, jadi tombol simpan tetap jalan — cukup dilihat, jangan diubah.</div>':'')+'</div>';
-  }
-  if(FIELD[role]){fieldNav(root,nav,role,allow,pv);return;}
-  if(!nav){
-    // layar lapangan (Runner, Teknisi, Sopir) tidak punya kolom menu: tampilkan menu ringkas di atas layar
-    var known=false;SNAV.forEach(function(g){g[1].forEach(function(it){if(it[0]===current)known=true;});});
-    if(!known||(!pv&&(h.match(/<a /g)||[]).length<2))return;
-    nav=document.createElement('div');nav.setAttribute('data-snav','1');
-    var hd=root.querySelector('header');if(hd&&hd.parentNode){hd.parentNode.insertBefore(nav,hd.nextSibling);}else{var host=root.firstElementChild||root;host.insertBefore(nav,host.firstChild);}compact=true;
-  }
-  var curLabel='Menu';SNAV.forEach(function(g){g[1].forEach(function(it){if(it[0]===current)curLabel=it[2];});});
-  if(compact){
-    nav.setAttribute('style',nav.getAttribute('data-snav')?'display:block;padding:10px 16px 0;width:100%;max-width:560px;margin:0 auto;box-sizing:border-box;align-self:stretch':'display:block');
-    nav.innerHTML=(pv?'<div style="margin-bottom:8px">'+pv+'</div>':'')+'<details'+(window.__snavOpen?' open':'')+' style="background:#FFFFFF;border:1px solid #E6E8EC;border-radius:12px"><summary style="list-style:none;cursor:pointer;min-height:44px;padding:0 12px;display:flex;align-items:center;justify-content:space-between;font:800 14px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#1F2B4D"><span>☰ &nbsp;'+curLabel+'</span><span style="font-size:12px;color:#077A70">Menu</span></summary><div style="display:flex;flex-direction:column;gap:12px;padding:6px 4px 10px">'+h+'</div></details>';
-    var d=nav.querySelector('details');d.addEventListener('toggle',function(){window.__snavOpen=d.open;});
-    nav.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){window.__snavOpen=false;});});
-  }else{
-    nav.setAttribute('style','display:flex;flex-direction:column;gap:14px');
-    nav.innerHTML=pv+h;
-  }
+    h+='</div>';});
+  if(isOwnerReal())h+='<a href="#/peta" style="min-height:36px;padding:0 12px;border-radius:10px;border:1px dashed #D5D9E0;color:#4A5468;font:700 13px \'Plus Jakarta Sans\',system-ui,sans-serif;display:flex;align-items:center;text-decoration:none">Peta semua layar (owner)</a>';
+  return (isPv?'<div style="padding:8px 10px;border-radius:12px;background:#FFF6E0">'+pvSelect(role,true)+'</div>':'')+h;
+}
+function deskShell(root,role,allow,isPv){
+  var sh=document.createElement('aside');sh.setAttribute('data-dshell','1');
+  sh.style.cssText='position:fixed;left:0;top:0;bottom:0;width:248px;box-sizing:border-box;background:#FFFFFF;border-right:1px solid #E6E8EC;padding:20px 16px;display:flex;flex-direction:column;gap:16px;overflow-y:auto;z-index:46;font-family:\'Plus Jakarta Sans\',system-ui,sans-serif';
+  var st=RA._staff||{};
+  sh.innerHTML='<img src="logo.png" alt="Rentalaja" style="height:28px;width:auto;align-self:flex-start;display:block"><nav aria-label="Menu" style="display:flex;flex-direction:column;gap:14px">'+sideHTML(role,allow,isPv)+'</nav>'+
+    '<div style="margin-top:auto;display:flex;align-items:center;gap:10px;padding-top:14px;border-top:1px solid #E6E8EC"><div style="width:36px;height:36px;border-radius:18px;background:#1F2B4D;color:#09BEAF;font:800 13px \'Plus Jakarta Sans\',system-ui,sans-serif;display:flex;align-items:center;justify-content:center;flex-shrink:0">'+(RA.initials?RA.initials(st.name):'')+'</div><div style="flex:1;min-width:0;display:flex;flex-direction:column"><span style="font:700 13px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#1F2B4D;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+(st.name||'')+'</span><span style="font:600 12px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#4A5468">'+((RA.VIEW_ROLES||{})[st.role]||(st.role==='owner'?'Owner':''))+'</span></div><button type="button" data-out="1" style="border:0;background:none;font:700 13px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#4A5468;cursor:pointer">Keluar</button></div>';
+  document.body.appendChild(sh);document.body.style.paddingLeft='248px';
+  var sv=sh.querySelector('select[data-viewas]');if(sv)sv.addEventListener('change',function(){RA.viewAs(sv.value||null);});
+  var ob=sh.querySelector('[data-out]');if(ob)ob.addEventListener('click',function(){RA.signOut();RA.go('Masuk');});
+  window.__dshell=true;
+}
+function clearShell(){var o=document.querySelectorAll('[data-dshell]');Array.prototype.forEach.call(o,function(x){x.remove();});if(window.__dshell){document.body.style.paddingLeft='';window.__dshell=false;}if(screenEl){screenEl.style.maxWidth='';screenEl.style.boxShadow='';screenEl.style.background='';}}
+/* setelah adapt(): layar HP di layar lebar dengan kolom menu → lebar konsisten, tidak "mengambang" */
+function deskFix(root){
+  if(!window.__dshell||!rootSpec)return;
+  if(rootSpec.mobile){screenEl.style.maxWidth='760px';screenEl.style.boxShadow='none';screenEl.style.background='transparent';root.style.maxWidth='760px';root.style.background='#F4F6F9';
+    Array.prototype.forEach.call(root.querySelectorAll('[style*="position: fixed"],[style*="position:fixed"]'),function(el){if(el.getAttribute('data-ra-field'))return;if(el.style.maxWidth==='430px'){el.style.maxWidth='760px';el.style.left='calc(50% + 124px)';}});}
+}
+function staffNav(root){
+  clearShell();
+  if(!window.RA||!RA.kindOf||RA.kindOf(current)!=='staff'||!RA._staff)return;
+  var nav=root.querySelector('nav[aria-label="Menu"]');var narrow=window.innerWidth<760;
+  var role=(RA._staff&&RA._staff.role)||'';var allow=roleAllow(role);
+  var isPv=isOwnerReal()&&!!RA.VIEW_ROLES;
+  clampDesc(root);
+  var hasAside=!!(nav&&nav.closest&&nav.closest('aside'))||!!root.querySelector(':scope > aside');
+  var known=window.RA_MENU_ALLOWS(role,current)!==null||FIELD[role]&&FIELD[role].indexOf(current)>-1;
+  if(narrow||(!hasAside&&FIELDONLY[role]&&window.innerWidth<1000)){fieldNav(root,nav,role,allow,isPv);return;}
+  if(!hasAside){if(known||RA_MENU_ALLOWS(role,current)!==false)deskShell(root,role,allow,isPv);return;}
+  nav.setAttribute('style','display:flex;flex-direction:column;gap:14px');
+  nav.innerHTML=sideHTML(role,allow,isPv);
   var sv=nav.querySelector('select[data-viewas]');if(sv)sv.addEventListener('change',function(){RA.viewAs(sv.value||null);});
 }
 function flowClose(root){
@@ -339,7 +398,7 @@ function render(){
   var frag=document.createDocumentFragment();
   build(rootSpec.tpl,scopes,frag);
   screenEl.innerHTML='';screenEl.appendChild(frag);
-  var root=screenEl.firstElementChild; if(root){custNav(root);staffNav(root);adapt(root);flowClose(root);}
+  var root=screenEl.firstElementChild; if(root){custNav(root);staffNav(root);adapt(root);deskFix(root);flowClose(root);}
   if(focusInfo&&focusInfo.i>-1){var all2=screenEl.querySelectorAll('input,textarea,select');var t=all2[focusInfo.i];if(t){t.focus({preventScroll:true});try{t.setSelectionRange(focusInfo.s,focusInfo.e);}catch(e){}}}
   window.scrollTo(0,y);
 }
@@ -425,7 +484,7 @@ window.RA_SHOW=function(){route();};
 var GN={'0':'Peta alur','1':'Pelanggan · sewa barang dan transportasi','2':'Pelanggan · menginap dan trip Jeep','3':'Pelanggan · akun dan fitur pendukung','4':'Pelanggan · saat ada kendala','5':'Web desktop dan pesan otomatis','6':'Panel cabang (kasir, CS, serah-terima)','7':'Panel Experience','8':'Aplikasi lapangan: teknisi, runner, sopir','9':'Panel manajemen','10':'Panel Keuangan','11':'Mitra dan investor','12':'Masuk'};
 function peta(){
   if(inst&&inst.componentWillUnmount){try{inst.componentWillUnmount();}catch(e){}}
-  inst=null;rootSpec=null;current='peta';helmetBox.innerHTML='';screenEl.className='';
+  clearShell();inst=null;rootSpec=null;current='peta';helmetBox.innerHTML='';screenEl.className='';
   var groups={},order=[];
   TITLES.forEach(function(t){var g=t[1].split('.')[0];if(!groups[g]){groups[g]=[];order.push(g);}groups[g].push(t);});
   var h='<div class="ra-peta"><h1>Semua layar</h1><p>Aplikasi Rentalaja. Pelanggan mulai dari Beranda; staf dan manajemen masuk lewat halaman Masuk staf.</p>';
