@@ -553,7 +553,7 @@
       });
     });
   };
-  RA.STAFF_HOME = { owner: 'MgmtDashboard', viewer: 'MgmtDashboard', finance: 'KeuDasbor', asset_manager: 'MgmtPusatAset', experience_manager: 'ExpHariIni',
+  RA.STAFF_HOME = { owner: 'MgmtDashboard', viewer: 'MgmtDashboard', finance: 'KeuDasbor', asset_manager: 'MgmtPusatAset', experience_manager: 'Housekeeping',
     cs_experience: 'PusatCS', branch_head: 'PosHariIni', cs: 'PusatCS', cashier: 'PosHariIni', staff: 'PosHariIni', qc: 'PosQC',
     technician: 'Teknisi', runner: 'AgendaLapangan', driver: 'SopirJeep' };
   RA.staffHome = function (role) { return RA.STAFF_HOME[role] || 'PosHariIni'; };
