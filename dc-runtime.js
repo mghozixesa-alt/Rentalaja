@@ -196,7 +196,7 @@ var SNAV=[
  ['Aset & servis',[['MgmtPusatAset','folder','Pusat aset'],['MgmtServis','tool','Servis'],['PosQC','check','Cek kondisi (QC)'],['Teknisi','kit','Teknisi']]],
  ['Manajemen',[['MgmtDashboard','chart','Laporan'],['MgmtSetuju','approve','Persetujuan']]],
  ['Pengaturan',[['MgmtPengguna','users','Staf & akses'],['MgmtCabang','store','Cabang']]],
- ['Saya',[['AkunLapangan','user','Akun saya']]]
+ ['Saya',[['AgendaLapangan','calcheck','Agenda'],['AkunLapangan','user','Akun saya']]]
 ];
 var SROLE={
  cashier:{'Harian':1,'Lapangan':1,'Barang':['PosUnit']}, cs:{'Harian':1,'Lapangan':1,'Barang':['PosUnit']}, staff:{'Harian':1,'Lapangan':1,'Barang':['PosUnit']},
@@ -205,8 +205,8 @@ var SROLE={
  asset_manager:{'Barang':1,'Aset & servis':1,'Manajemen':['MgmtDashboard','MgmtSetuju']}, experience_manager:{'Penginapan & Jeep':1,'Manajemen':['MgmtDashboard']}, cs_experience:{'Penginapan & Jeep':['Housekeeping','ExpKalender','ExpJeep']},
  driver:{'Saya':1,'Harian':['PosAbsen'],'Lapangan':1,'Penginapan & Jeep':['ExpHariIni','ExpKalender','ExpJeep','SopirJeep'],'Aset & servis':['Teknisi','PosQC']}, finance:{'Manajemen':['MgmtDashboard']}
 };
-var FIELD={runner:['Runner','Housekeeping','SopirJeep','AkunLapangan'],driver:['SopirJeep','ExpJeep','Runner','AkunLapangan'],technician:['Teknisi','PosQC','Runner','AkunLapangan'],qc:['PosQC','Teknisi','Runner','AkunLapangan']};
-var FLABEL={Runner:'Antar',PosAbsen:'Absen',PosQC:'Cek barang',SopirJeep:'Jeep',ExpJeep:'Jadwal jeep',Teknisi:'Teknisi',ExpHariIni:'Penginapan',ExpKalender:'Kalender',Housekeeping:'Kamar',AkunLapangan:'Akun'};
+var FIELD={runner:['AgendaLapangan','Runner','Housekeeping','SopirJeep','AkunLapangan'],driver:['SopirJeep','ExpJeep','Runner','AkunLapangan'],technician:['Teknisi','PosQC','Runner','AkunLapangan'],qc:['PosQC','Teknisi','Runner','AkunLapangan']};
+var FLABEL={Runner:'Antar',PosAbsen:'Absen',PosQC:'Cek barang',SopirJeep:'Jeep',ExpJeep:'Jadwal jeep',Teknisi:'Teknisi',ExpHariIni:'Penginapan',ExpKalender:'Kalender',Housekeeping:'Kamar',AkunLapangan:'Akun',AgendaLapangan:'Agenda'};
 function fico(k,c){return ico(k,c).replace('width="18" height="18"','width="22" height="22"');}
 function fieldSheet(rest){
   var o=document.createElement('div');o.setAttribute('data-ra-sheet','1');o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');o.setAttribute('aria-label','Menu lainnya');
@@ -220,7 +220,7 @@ function fieldSheet(rest){
 }
 function fieldNav(root,nav,role,allow,pv){
   var items=[];SNAV.forEach(function(g){var a=allow[g[0]];if(!a)return;g[1].forEach(function(it){if(a===1||a.indexOf(it[0])>-1)items.push(it);});});
-  var pri=FIELD[role].map(function(k){return items.filter(function(it){return it[0]===k;})[0];}).filter(Boolean).slice(0,4);
+  var pri=FIELD[role].map(function(k){return items.filter(function(it){return it[0]===k;})[0];}).filter(Boolean).slice(0,5);
   var rest=items.filter(function(it){return pri.indexOf(it)<0&&!(it[0]==='PosAbsen'&&pri.some(function(p){return p[0]==='AkunLapangan';}));});
   var as=nav&&nav.closest?nav.closest('aside'):null;
   if(nav)nav.style.display='none';

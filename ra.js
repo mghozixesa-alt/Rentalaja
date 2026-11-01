@@ -555,7 +555,7 @@
   };
   RA.STAFF_HOME = { owner: 'MgmtDashboard', viewer: 'MgmtDashboard', finance: 'KeuDasbor', asset_manager: 'MgmtPusatAset', experience_manager: 'ExpHariIni',
     cs_experience: 'ExpHariIni', branch_head: 'PosHariIni', cs: 'PosHariIni', cashier: 'PosHariIni', staff: 'PosHariIni', qc: 'PosQC',
-    technician: 'Teknisi', runner: 'Runner', driver: 'SopirJeep' };
+    technician: 'Teknisi', runner: 'AgendaLapangan', driver: 'SopirJeep' };
   RA.staffHome = function (role) { return RA.STAFF_HOME[role] || 'PosHariIni'; };
   RA.afterLogin = function (fallback) {
     var n = RA.ctx().next; RA.setCtx({ next: null });
