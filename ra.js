@@ -506,6 +506,18 @@
   };
   RA.err = function (e) { RA.toast(friendly(e && e.message || e), 'bad'); console.warn(e); };
   RA.ok = function (m) { RA.toast(m, 'good'); };
+  /* ringkasan pembayaran untuk petugas lapangan: sudah bayar berapa, lewat apa, sisa yang harus ditagih */
+  RA.payInfo = function (bk, pays, when) {
+    bk = bk || {}; pays = (pays || []).filter(function (p) { return p.booking_id === bk.id; });
+    var ML = { cash: 'tunai', qris: 'QRIS', va: 'VA', ewallet: 'e-wallet', transfer: 'transfer', edc: 'EDC', link: 'link bayar', xendit: 'link bayar', card: 'kartu' };
+    var KL = { dp: 'DP', settlement: 'Pelunasan', addon: 'Tambahan', deposit: 'Deposit', full: 'Lunas' };
+    var tot = +bk.total + +(bk.late_fee || 0) + +(bk.damage_fee || 0), paid = +bk.paid_amount || 0, bal = Math.max(0, tot - paid);
+    var via = pays.map(function (p) { return (KL[p.kind] || 'Bayar') + ' ' + RA.rp(p.amount) + ' via ' + (ML[p.method] || p.method || '?') + (p.bank ? ' ' + p.bank : ''); }).join(', ');
+    var base = 'Total ' + RA.rp(tot) + ' · sudah dibayar ' + RA.rp(paid) + (via ? ' (' + via + ')' : '');
+    var box = 'border-radius: 12px; padding: 10px 12px; display: flex; flex-direction: column; gap: 4px; ';
+    return bal > 0 ? { bal: bal, head: 'Tagih ke pelanggan', amt: RA.rp(bal), lines: base + '. ' + (when || 'Tagih di lokasi') + ': QRIS di HP ini atau tunai.', style: box + 'background: #FFF1D6; color: #5C3600', short: 'tagih ' + RA.rp(bal) }
+      : { bal: 0, head: 'Pembayaran lunas', amt: '✓', lines: base + '. Tidak perlu menagih.', style: box + 'background: #E4F2EA; color: #1F3D2D', short: 'lunas' };
+  };
 
   /* ---------------- penjaga layar ---------------- */
   var CUSTOMER_LOGIN = { Akun: 1, Status: 1, Bayar: 1, Aktif: 1, Ulasan: 1, Ajak: 1, Lapor: 1, Struk: 1, Ubah: 1, Perjanjian: 1, InapTiket: 1, InapUbah: 1, JeepTiket: 1, MobilSopirStatus: 1, UploadKtp: 1, Ditolak: 1, Kedaluwarsa: 1, LuarJam: 1 };
