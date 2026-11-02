@@ -250,6 +250,7 @@ function fieldSheet(rest){
   rest.forEach(function(it){var on=it[0]===current;
     if(many&&it[3]!==lastG){lastG=it[3];li+='<div style="font:800 11px \'Plus Jakarta Sans\',system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#8A93A3;padding:8px 4px 0">'+it[3]+'</div>';}
     li+='<a href="'+it[0]+'.dc.html" data-k="go" style="min-height:'+(many?'44':'48')+'px;padding:0 14px;border-radius:12px;display:flex;align-items:center;gap:12px;text-decoration:none;font-weight:'+(on?'800':'700')+';font-size:15px;color:'+(on?'#077A70':'#1F2B4D')+';background:'+(on?'#E3F7F5':'#F6F7F9')+'">'+fico(it[1],on?'#077A70':'#4A5468')+it[2]+'</a>';});
+  li+=pkSubHTML(true);
   if(isOwnerReal()&&!pkMode())li+='<a href="#/peta" data-k="go" style="min-height:44px;padding:0 14px;border-radius:12px;display:flex;align-items:center;gap:12px;text-decoration:none;font-weight:700;font-size:14px;color:#4A5468;background:#FFFFFF;border:1px dashed #D5D9E0">'+fico('folder','#8A93A3')+'Peta semua layar (owner)</a>';
   o.innerHTML='<div style="width:100%;max-width:480px;max-height:85vh;overflow-y:auto;background:#fff;border-radius:22px 22px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom));box-sizing:border-box;font-family:\'Plus Jakarta Sans\',system-ui,sans-serif;color:#1F2B4D;display:flex;flex-direction:column;gap:8px">'+
     '<div style="width:40px;height:4px;border-radius:2px;background:#D5D9E0;align-self:center;margin-bottom:6px"></div><div style="font-size:16px;font-weight:800;margin-bottom:4px">Menu lainnya</div>'+li+
@@ -327,7 +328,17 @@ function fieldNav(root,nav,role,allow,isPv){
 function pkMode(){try{var v=JSON.parse(localStorage.getItem('ra.pk')||'null');return v&&v.t&&Date.now()-v.t<12*3600e3?v:null;}catch(e){return null;}}
 function pkHead(){var m=pkMode();if(!m)return '';
   return '<a href="https://app.pokama.org/" data-pkback="1" style="display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:12px;background:#1F2B4D;color:#FFFFFF;text-decoration:none;font-family:\'Plus Jakarta Sans\',system-ui,sans-serif"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#09BEAF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg><span style="display:flex;flex-direction:column;line-height:1.2"><b style="font-size:13.5px;font-weight:800">Sistem Kerja Pokama</b><small style="font-size:11px;font-weight:600;color:#C9D3E0">Kembali ke KKH & menu modul</small></span></a>'+
-    (m.mod?'<div style="padding:2px 12px 0;font:800 12px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#077A70;letter-spacing:.04em;text-transform:uppercase">Modul '+String(m.mod).replace(/[<>&"]/g,'')+'</div>':'');}
+    (m.mod?'<div style="padding:2px 12px 0;font:800 12px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#077A70;letter-spacing:.04em;text-transform:uppercase">Modul '+String(m.mod).replace(/[<>&"]/g,'')+(m.sub&&m.sub!==m.mod?' · '+String(m.sub).replace(/[<>&"]/g,''):'')+'</div>':'');}
+/* panel di dalam modul (dibuka dari Sistem Kerja): owner bisa pindah ke panel CS, lapangan, cabang, teknisi */
+var PKSUB={Operasional:[['Operasional','experience_manager','OpsBeranda',null],['CS','cs','PusatCS',null],['Lapangan','runner','AgendaLapangan',null],['Cabang Garut Kota','cashier','PosHariIni',['GRT']],['Cabang Wanaraja','cashier','PosHariIni',['WNR']],['Cabang Bandung','cashier','PosHariIni',['BDG-HUB','BDG-JKL']],['Cabang Maripoto','cashier','PosHariIni',['MPT']]],
+  Aset:[['Aset','asset_manager','AsetBeranda',null],['Teknisi','technician','Teknisi',null]]};
+function pkSubs(){var m=pkMode();if(!m||!isOwnerReal())return null;var l=PKSUB[m.mod];return l&&l.length>1?l:null;}
+function pkSubHTML(field){var m=pkMode(),l=pkSubs();if(!l)return '';var cur=m.sub||l[0][0];
+  return '<div style="display:flex;flex-direction:column;gap:2px;margin-top:'+(field?'10':'4')+'px;padding-top:12px;border-top:1px solid #E6E8EC"><div style="font:800 11px \'Plus Jakarta Sans\',system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#8A93A3;padding:0 12px 4px">Panel '+m.mod+'</div>'+
+    l.map(function(x,i){var on=x[0]===cur;return '<a href="#" data-pksub="'+i+'" style="min-height:38px;padding:0 12px;border-radius:10px;display:flex;align-items:center;gap:10px;text-decoration:none;font:'+(on?'800':'600')+' 14px \'Plus Jakarta Sans\',system-ui,sans-serif;color:'+(on?'#077A70':'#1F2B4D')+';background:'+(on?'#E3F7F5':'transparent')+'"><span style="width:8px;height:8px;border-radius:4px;background:'+(on?'#09BEAF':'#C9CFD8')+';flex:none"></span>'+x[0]+'</a>';}).join('')+'</div>';}
+document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('[data-pksub]');if(!a)return;e.preventDefault();var m=pkMode(),l=pkSubs();if(!m||!l)return;var x=l[+a.getAttribute('data-pksub')];if(!x)return;
+  try{localStorage.setItem('ra.viewAs',JSON.stringify(x[1]));localStorage.setItem('ra.pk',JSON.stringify({mod:m.mod,sub:x[0],br:x[3],t:m.t}));localStorage.removeItem('ra.staff.branch');localStorage.removeItem('ra.ctx.staff');}catch(er){}
+  location.hash='#/'+x[2];location.reload();},true);
 function sideHTML(role,allow,isPv){
   var h='';SNAV.forEach(function(g){var a=allow[g[0]];if(!a)return;var items=g[1].filter(function(it){return a===1||a.indexOf(it[0])>-1;});if(!items.length)return;
     h+='<div style="display:flex;flex-direction:column;gap:2px"><div style="font:800 11px \'Plus Jakarta Sans\',system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#8A93A3;padding:0 12px 4px">'+g[0]+'</div>';
@@ -335,6 +346,7 @@ function sideHTML(role,allow,isPv){
       h+='<a href="'+it[0]+'.dc.html"'+(on?' aria-current="page"':'')+' style="min-height:40px;box-sizing:border-box;padding:0 12px;border-radius:10px;background:'+(on?'#E3F7F5':'transparent')+';color:'+(on?'#077A70':'#1F2B4D')+';font:'+(on?'800':'600')+' 14px \'Plus Jakarta Sans\',system-ui,sans-serif;display:flex;align-items:center;gap:10px;text-decoration:none"><span style="width:20px;display:flex;justify-content:center">'+ico(it[1],on?'#077A70':'#6B7486')+'</span>'+it[2]+'</a>';});
     h+='</div>';});
   if(isOwnerReal()&&!pkMode())h+='<a href="#/peta" style="min-height:36px;padding:0 12px;border-radius:10px;border:1px dashed #D5D9E0;color:#4A5468;font:700 13px \'Plus Jakarta Sans\',system-ui,sans-serif;display:flex;align-items:center;text-decoration:none">Peta semua layar (owner)</a>';
+  h+=pkSubHTML(false);
   return pkHead()+((isPv&&!pkMode())?'<div style="padding:8px 10px;border-radius:12px;background:#FFF6E0">'+pvSelect(role,true)+'</div>':'')+h;
 }
 function deskShell(root,role,allow,isPv){

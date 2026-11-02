@@ -75,7 +75,7 @@
         /* mode Pusat Kerja Pokama: panel terfokus pada modul yang dibuka (tanpa pemilih pratinjau & peta layar) */
         var as = /^[a-z_]{2,30}$/.test(p.as || '') ? p.as : '';
         var br = /^[A-Z0-9,-]{2,80}$/.test(p.br || '') ? p.br.split(',') : null;
-        LS.del('ra.ctx.staff'); LS.set('ra.pk', { mod: String(p.mod || '').slice(0, 40), br: br, t: Date.now() });
+        LS.del('ra.ctx.staff'); LS.set('ra.pk', { mod: String(p.mod || '').slice(0, 40), sub: String(p.mod || '').slice(0, 40), br: br, t: Date.now() });
         if (br) LS.del('ra.staff.branch');
         if (as) LS.set('ra.viewAs', as); else LS.del('ra.viewAs');
         history.replaceState(null, '', location.pathname + location.search + '#/' + (nx || 'Masuk'));
