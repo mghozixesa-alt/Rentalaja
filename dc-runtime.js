@@ -200,7 +200,7 @@ var SNAV=[
  ['Lapangan',[['Runner','truck','Antar-jemput']]],
  ['Penginapan & Jeep',[['Housekeeping','bed','Penginapan & kamar'],['ExpJeep','jeep','Jadwal jeep'],['SopirJeep','wheel','Tugas sopir'],['KonfirmasiTransfer','card','Konfirmasi transfer']]],
  ['Barang',[['MgmtProduk','tag','Barang & harga'],['MgmtPromo','gift','Promo & member'],['PosUnit','box','Stok unit']]],
- ['Aset & servis',[['AsetBeranda','home','Beranda aset'],['AsetServis','tool','Papan servis'],['PosQC','check','Cek kondisi (QC)'],['AsetPreventif','calcheck','Perawatan preventif'],['AsetLaporan','chart','Laporan aset (downtime & jatuh tempo)'],['AsetData','check','Lengkapi data unit'],['AsetRisiko','alert','Kontrol aset (semua)'],['AsetUnit','box','Unit aset'],['AsetTim','chart','Laporan aset'],['MgmtAset','box','Daftar unit & riwayat'],['MgmtPusatAset','folder','Ringkasan aset'],['MgmtServis','tool','Servis'],['Teknisi','kit','Teknisi'],['TekBelanja','cart','Belanja part'],['TekAkun','user','Akun teknisi']]],
+ ['Aset & servis',[['AsetBeranda','home','Hari ini (aset)'],['AsetKalender','cal','Kalender unit'],['AsetServis','tool','Papan servis'],['PosQC','check','Cek kondisi (QC)'],['AsetPreventif','calcheck','Perawatan preventif'],['AsetLaporan','chart','Laporan aset (downtime & jatuh tempo)'],['AsetData','check','Lengkapi data unit'],['AsetRisiko','alert','Kontrol aset (semua)'],['AsetUnit','box','Unit aset (pusat)'],['AsetTim','chart','Laporan aset'],['MgmtAset','box','Daftar unit & riwayat'],['MgmtPusatAset','folder','Ringkasan aset'],['MgmtServis','tool','Servis'],['Teknisi','kit','Teknisi'],['TekBelanja','cart','Belanja part'],['TekAkun','user','Akun teknisi']]],
  ['Manajemen',[['MgmtSetuju','approve','Persetujuan']]],
  ['Pengaturan',[['MgmtPengguna','users','Staf & akses'],['MgmtCabang','store','Cabang']]],
  ['Pelanggan',[['MgmtInbox','chat','Inbox WhatsApp'],['TiketCS','approve','Tiket keluhan'],['AlatChat','chat','Template & link sewa'],['MgmtPenawaran','tag','Permintaan perjalanan'],['MgmtTindakLanjut','users','Tindak lanjut'],['MgmtDaftarHitam','shieldx','Daftar hitam']]],
@@ -210,7 +210,7 @@ var CSM={'CS':1,'Harian':['PosHariIni','PosVerifikasi','PosPelanggan'],'Penginap
 /* manajer operasional = operasional harian + experience (penginapan & jeep); manajer aset terpisah */
 var MOPS={'Operasional':1,'Harian':['PosHariIni'],'Penginapan & Jeep':['Housekeeping','ExpJeep','KonfirmasiTransfer'],'Pelanggan':['MgmtDaftarHitam'],'Barang':['MgmtProduk','MgmtPromo'],'Manajemen':['MgmtSetuju'],'Saya':['TiketCS']};
 /* manajer aset: menu mengikuti alur kerja (lapor → servis → QC → siap); persetujuan part ada di Beranda aset, stok/mutasi lewat Unit aset, detail servis lewat Papan servis */
-var MASET={'Aset & servis':['AsetBeranda','AsetServis','PosQC','AsetPreventif','MgmtServis','AsetUnit','AsetData','AsetTim','AsetLaporan','AsetRisiko'],'Barang':['PosUnit'],'Manajemen':['MgmtSetuju'],'Saya':['TiketCS']};
+var MASET={'Aset & servis':['AsetBeranda','AsetKalender','AsetServis','PosQC','AsetPreventif','MgmtServis','AsetUnit','AsetData','AsetTim','AsetLaporan','AsetRisiko'],'Barang':['PosUnit'],'Manajemen':['MgmtSetuju'],'Saya':['TiketCS']};
 /* boleh dibuka (lewat tautan di halaman) tapi tidak tampil di menu */
 var FLD={PosAbsen:1,CekBuka:1};/* petugas lapangan absen & ceklis lewat ops.pokama.org */
 var MHIDE={asset_manager:{MgmtServis:1,PosUnit:1,MgmtSetuju:1,AsetRisiko:1},cashier:FLD,staff:FLD,branch_head:FLD,runner:FLD,technician:FLD,qc:FLD,driver:FLD};/* CS: satu pintu lewat tab di Pusat CS; aset owner: masuk lewat 4 pintu (sisanya tab di dalamnya) */
@@ -228,17 +228,17 @@ var SROLE={
 };
 var FIELD={cs:['PusatCS','PosVerifikasi','AlatChat','TiketCS'],cs_experience:['PusatCS','PosVerifikasi','AlatChat','TiketCS'],runner:['AgendaLapangan','Runner','Housekeeping','SopirJeep','AkunLapangan'],driver:['SopirJeep','ExpJeep','Runner','AkunLapangan'],technician:['Teknisi','TekBelanja','TekAkun'],qc:['PosQC','Teknisi','Runner','AkunLapangan'],
  owner:['OpsBeranda','PusatCS','MgmtSetuju'],viewer:['OpsBeranda'],finance:['MgmtSetuju'],
- asset_manager:['AsetBeranda','AsetServis','AsetUnit','AsetTim'],experience_manager:['OpsBeranda','OpsKerja','OpsUnit','Housekeeping'],
+ asset_manager:['AsetBeranda','AsetKalender','AsetUnit','AsetServis','AsetTim'],experience_manager:['OpsBeranda','OpsKerja','OpsUnit','Housekeeping'],
  cashier:['PosHariIni','PosVerifikasi','PosKasir','PosSerahTerima'],staff:['PosHariIni','PosVerifikasi','PosKasir','PosSerahTerima'],branch_head:['PosHariIni','PosVerifikasi','PosSerahTerima','MgmtSetuju']};
 /* peran yang layarnya memang dibuat untuk HP (tetap menu bawah walau dibuka di layar lebar tanpa kolom menu) */
 var FIELDONLY={technician:1,cs:1,cs_experience:1,runner:1,driver:1,technician:1,qc:1};
 var FLABEL={KonfirmasiTransfer:'Transfer',MgmtDaftarHitam:'Daftar hitam',Runner:'Antar',PosAbsen:'Absen',PosQC:'Cek barang',SopirJeep:'Jeep',ExpJeep:'Jadwal jeep',Teknisi:'Teknisi',ExpHariIni:'Penginapan',ExpKalender:'Kalender',Housekeeping:'Kamar',AkunLapangan:'Akun',AgendaLapangan:'Agenda',PusatCS:'Beranda',PosVerifikasi:'Verifikasi',MgmtInbox:'Chat',MgmtKeluhan:'Keluhan',TiketCS:'Keluhan',AlatChat:'Chat',
  MgmtDashboard:'Laporan',MgmtSetuju:'Setujui',OpsBeranda:'Beranda',MgmtPusatAset:'Aset',MgmtServis:'Servis & QC',MgmtTim:'Tim',OpsKerja:'Kerja lapangan',OpsUnit:'Utilisasi',OpsQC:'Kualitas',PosHariIni:'Hari ini',PosKasir:'Kasir',PosSerahTerima:'Serah-terima',KeuDasbor:'Keuangan'};
-var FLABEL_R={technician:{Teknisi:'Pekerjaan',TekBelanja:'Belanja part',TekAkun:'Akun'},owner:{OpsBeranda:'Operasional',PusatCS:'CS'},asset_manager:{AsetBeranda:'Hari ini',AsetServis:'Servis',AsetUnit:'Unit',AsetTim:'Laporan'},experience_manager:{ExpJeep:'Jeep',Housekeeping:'Experience'}};
+var FLABEL_R={technician:{Teknisi:'Pekerjaan',TekBelanja:'Belanja part',TekAkun:'Akun'},owner:{OpsBeranda:'Operasional',PusatCS:'CS'},asset_manager:{AsetBeranda:'Hari ini',AsetKalender:'Kalender',AsetUnit:'Unit',AsetServis:'Servis',AsetTim:'Laporan'},experience_manager:{ExpJeep:'Jeep',Housekeeping:'Experience'}};
 /* tab bawah tetap menyala saat membuka halaman "saudara"-nya */
 var ALIAS={AsetPreventif:'AsetServis',AsetData:'AsetUnit',AsetLaporan:'AsetTim',AsetRisiko:'AsetBeranda',MgmtServis:'AsetServis',PosUnit:'AsetUnit',MgmtAset:'AsetUnit',TekPart:'TekBelanja',TekMasuk:'Teknisi',TekKerja:'Teknisi',TekSelesai:'Teknisi',MgmtAsetDetail:'AsetUnit',MgmtKelola:'MgmtAset',PosQC:'AsetServis',PosAbsen:'AkunLapangan',ExpKalender:'Housekeeping',LaporanShift:'PusatCS'};
 /* halaman yang digabung dalam satu tab: tampilkan tombol pindah di atas */
-var SUBT=[[['PusatCS','Beranda'],['MgmtInbox','Inbox WA'],['TiketCS','Keluhan'],['MgmtTindakLanjut','Tindak lanjut'],['MgmtPenawaran','Perjalanan'],['AlatChat','Template'],['LaporanShift','Shift']],[['AsetServis','Papan'],['PosQC','Cek QC'],['AsetPreventif','Preventif'],['MgmtServis','Aturan']],[['AsetUnit','Daftar unit'],['AsetData','Lengkapi data']],[['AsetTim','Tim'],['AsetLaporan','Downtime & jatuh tempo']]];
+var SUBT=[[['PusatCS','Beranda'],['MgmtInbox','Inbox WA'],['TiketCS','Keluhan'],['MgmtTindakLanjut','Tindak lanjut'],['MgmtPenawaran','Perjalanan'],['AlatChat','Template'],['LaporanShift','Shift']],[['AsetServis','Papan'],['PosQC','Cek QC'],['AsetPreventif','Preventif'],['MgmtServis','Aturan']],[['AsetUnit','Unit'],['AsetData','Lengkapi data']],[['AsetTim','Tim'],['AsetLaporan','Downtime & jatuh tempo']]];
 var REST_TOP={asset_manager:[],experience_manager:['OpsKerja','ExpJeep','PosHariIni','MgmtPromo','MgmtProduk','MgmtSetuju']};
 var ALLG={};SNAV.forEach(function(g){ALLG[g[0]]=1;});
 function roleAllow(role){return role==='owner'?ALLG:(SROLE[role]||{'Harian':1});}
