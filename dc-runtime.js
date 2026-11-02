@@ -193,7 +193,7 @@ var ICO={
 };
 function ico(k,c){return '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="'+c+'" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(ICO[k]||'')+'</svg>';}
 var SNAV=[
- ['Operasional',[['OpsBeranda','home','Dashboard manajemen'],['OpsUnit','chart','Utilisasi & mutasi'],['OpsQC','check','QC pelayanan'],['MgmtTim','users','Tim lapangan'],['OpsKerja','calcheck','Kerja lapangan']]],
+ ['Operasional',[['OpsBeranda','home','Dashboard manajemen'],['OpsUnit','chart','Utilisasi & mutasi'],['OpsQC','check','QC pelayanan'],['OpsKerja','calcheck','Kerja lapangan']]],
  ['CS',[['PusatCS','head','Pusat CS'],['LaporanShift','chart','Laporan shift']]],
  ['Harian',[['PosHariIni','home','Rental hari ini'],['PosVerifikasi','idcard','Verifikasi pesanan'],['PosKasir','cart','Kasir (sewa OTS)'],['PosSerahTerima','swap','Serah-terima & kembali'],['PosPelanggan','user','Pelanggan'],['PosShift','clock','Shift & tutup kas'],['PosAbsen','calcheck','Absen'],['CekBuka','check','Checklist buka toko']]],
  ['Lapangan',[['Runner','truck','Antar-jemput']]],
@@ -211,7 +211,8 @@ var MOPS={'Operasional':1,'Harian':['PosHariIni'],'Penginapan & Jeep':['Housekee
 /* manajer aset: menu mengikuti alur kerja (lapor → servis → QC → siap); persetujuan part ada di Beranda aset, stok/mutasi lewat Unit aset, detail servis lewat Papan servis */
 var MASET={'Aset & servis':['AsetBeranda','AsetServis','PosQC','AsetPreventif','AsetRisiko','AsetUnit','AsetTim','MgmtServis'],'Barang':['PosUnit'],'Manajemen':['MgmtSetuju'],'Saya':['TiketCS']};
 /* boleh dibuka (lewat tautan di halaman) tapi tidak tampil di menu */
-var MHIDE={asset_manager:{MgmtServis:1,PosUnit:1,MgmtSetuju:1}};function mHid(role,n){return !!(MHIDE[role]&&MHIDE[role][n]);}
+var FLD={PosAbsen:1,CekBuka:1};/* petugas lapangan absen & ceklis lewat ops.pokama.org */
+var MHIDE={asset_manager:{MgmtServis:1,PosUnit:1,MgmtSetuju:1},cashier:FLD,staff:FLD,branch_head:FLD,runner:FLD,technician:FLD,qc:FLD,driver:FLD};function mHid(role,n){return !!(MHIDE[role]&&MHIDE[role][n]);}
 var SROLE={
  cashier:{'Harian':1,'Lapangan':1,'Barang':['PosUnit'],'Pelanggan':['MgmtDaftarHitam']}, cs:CSM, cs_experience:CSM, staff:{'Harian':1,'Lapangan':1,'Barang':['PosUnit'],'Pelanggan':['MgmtDaftarHitam']},
  branch_head:{'Saya':['TiketCS'],'Harian':1,'Lapangan':1,'Barang':['PosUnit'],'Manajemen':['MgmtSetuju'],'Pelanggan':['MgmtDaftarHitam']},
@@ -234,7 +235,7 @@ var FLABEL_R={technician:{Teknisi:'Pekerjaan',TekBelanja:'Belanja part',TekAkun:
 var ALIAS={MgmtServis:'AsetServis',PosUnit:'AsetUnit',MgmtAset:'AsetUnit',TekPart:'TekBelanja',TekMasuk:'Teknisi',TekKerja:'Teknisi',TekSelesai:'Teknisi',MgmtAsetDetail:'AsetUnit',MgmtKelola:'MgmtAset',PosQC:'AsetServis',PosAbsen:'AkunLapangan',ExpKalender:'Housekeeping',LaporanShift:'PusatCS'};
 /* halaman yang digabung dalam satu tab: tampilkan tombol pindah di atas */
 var SUBT=[[['AsetServis','Papan servis'],['PosQC','Cek QC'],['MgmtServis','Detail & aturan']]];
-var REST_TOP={asset_manager:[],experience_manager:['MgmtTim','ExpJeep','PosHariIni','MgmtPromo','MgmtProduk','MgmtSetuju']};
+var REST_TOP={asset_manager:[],experience_manager:['OpsKerja','ExpJeep','PosHariIni','MgmtPromo','MgmtProduk','MgmtSetuju']};
 var ALLG={};SNAV.forEach(function(g){ALLG[g[0]]=1;});
 function roleAllow(role){return role==='owner'?ALLG:(SROLE[role]||{'Harian':1});}
 window.RA_MENU_ALLOWS=function(role,name){
