@@ -7,6 +7,11 @@
     var h = location.hash || '';
     if (/^#\/(InvGabung|InvLogin|Investor|InvAset|InvLaporan|InvTarik|InvTambah)(\?|$)/.test(h)) { location.replace('https://investor.pokama.org/'); return true; }
     if (/^#\/MgmtInvestor(\?|$)/.test(h)) { location.replace('https://app.pokama.org/investor'); return true; }
+    /* audit Nov 2026 · satu rumah per fungsi: absen & ceklis petugas → Kerja Lapangan; gaji petugas & persetujuan uang → Pokama */
+    if (/^#\/(PosAbsen|CekBuka)(\?|$)/.test(h)) { location.replace('https://ops.pokama.org/'); return true; }
+    if (/^#\/KeuGaji(\?|$)/.test(h)) { location.replace('https://app.pokama.org/keuangan/#gajiops'); return true; }
+    if (/^#\/KeuSetuju(\?|$)/.test(h)) { location.replace('https://app.pokama.org/#/setuju?f=ra'); return true; }
+    if (/^#\/Main(\?|$)/.test(h)) { location.replace('#/Sistem'); return false; }
     return false;
   }
   if (toPokama()) return;
@@ -604,8 +609,10 @@
           RA.toast('Akun ini bukan akun staf Rentalaja.', 'bad'); return 'Masuk';
         });
         if (kind === 'finance' && !RA.can('finance.panel')) { RA.toast('Panel Keuangan hanya untuk owner dan keuangan.', 'bad'); return 'Masuk'; }
-        /* halaman Laporan (MgmtDashboard) sudah dihapus: arahkan ke beranda peran */
-        if (RETIRED[name]) return RA.staffHome(s.role);
+        /* halaman pensiun / digabung (audit Nov 2026): arahkan ke rumahnya */
+        if (RETIRED[name]) name = RETIRED[name] === 1 ? RA.staffHome(s.role) : RETIRED[name];
+        /* owner & keuangan memutuskan semua persetujuan di Pokama → Kotak Persetujuan */
+        if (name === 'MgmtSetuju' && (s.role === 'owner' || s.realRole === 'owner' || s.role === 'finance')) { location.href = 'https://app.pokama.org/#/setuju?f=ra'; return new Promise(function () {}); }
         if (kind === 'staff' && s.role !== 'owner') {
           var home = RA.staffHome(s.role), pp = RA.PAGE_PERM[name];
           var noPerm = pp !== undefined && pp !== null && ![].concat(pp).some(function (x) { return RA.can(x); });
@@ -616,7 +623,7 @@
       });
     });
   };
-  var RETIRED = { MgmtDashboard: 1, PosAbsen: 1, CekBuka: 1, MgmtTim: 1 };
+  var RETIRED = { MgmtDashboard: 1, PosAbsen: 1, CekBuka: 1, MgmtTim: 'OpsKerja', MgmtKeluhan: 'TiketCS', PesanWa: 1, PesanWaInap: 1, PesanWaJeep: 1 };
   RA.STAFF_HOME = { owner: 'OpsBeranda', viewer: 'OpsBeranda', finance: 'KeuDasbor', asset_manager: 'AsetBeranda', experience_manager: 'OpsBeranda',
     cs_experience: 'PusatCS', branch_head: 'PosHariIni', cs: 'PusatCS', cashier: 'PosHariIni', staff: 'PosHariIni', qc: 'PosQC',
     technician: 'Teknisi', runner: 'AgendaLapangan', driver: 'SopirJeep' };
