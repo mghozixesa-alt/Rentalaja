@@ -616,7 +616,7 @@
       });
     });
   };
-  var RETIRED = { MgmtDashboard: 1 };
+  var RETIRED = { MgmtDashboard: 1, PosAbsen: 1, CekBuka: 1, MgmtTim: 1 };
   RA.STAFF_HOME = { owner: 'OpsBeranda', viewer: 'OpsBeranda', finance: 'KeuDasbor', asset_manager: 'AsetBeranda', experience_manager: 'OpsBeranda',
     cs_experience: 'PusatCS', branch_head: 'PosHariIni', cs: 'PusatCS', cashier: 'PosHariIni', staff: 'PosHariIni', qc: 'PosQC',
     technician: 'Teknisi', runner: 'AgendaLapangan', driver: 'SopirJeep' };

@@ -195,7 +195,7 @@ function ico(k,c){return '<svg width="18" height="18" viewBox="0 0 24 24" fill="
 var SNAV=[
  ['Operasional',[['OpsBeranda','home','Dashboard manajemen'],['OpsUnit','chart','Utilisasi & mutasi'],['OpsQC','check','QC pelayanan'],['OpsKerja','calcheck','Kerja lapangan']]],
  ['CS',[['PusatCS','head','Pusat CS'],['LaporanShift','chart','Laporan shift']]],
- ['Harian',[['PosHariIni','home','Rental hari ini'],['PosVerifikasi','idcard','Verifikasi pesanan'],['PosKasir','cart','Kasir (sewa OTS)'],['PosSerahTerima','swap','Serah-terima & kembali'],['PosPelanggan','user','Pelanggan'],['PosShift','clock','Shift & tutup kas'],['PosAbsen','calcheck','Absen'],['CekBuka','check','Checklist buka toko']]],
+ ['Harian',[['PosHariIni','home','Rental hari ini'],['PosVerifikasi','idcard','Verifikasi pesanan'],['PosKasir','cart','Kasir (sewa OTS)'],['PosSerahTerima','swap','Serah-terima & kembali'],['PosPelanggan','user','Pelanggan'],['PosShift','clock','Shift & tutup kas']]],
  ['Lapangan',[['Runner','truck','Antar-jemput']]],
  ['Penginapan & Jeep',[['Housekeeping','bed','Penginapan & kamar'],['ExpJeep','jeep','Jadwal jeep'],['SopirJeep','wheel','Tugas sopir'],['KonfirmasiTransfer','card','Konfirmasi transfer']]],
  ['Barang',[['MgmtProduk','tag','Barang & harga'],['MgmtPromo','gift','Promo & member'],['PosUnit','box','Stok unit']]],
@@ -212,13 +212,16 @@ var MOPS={'Operasional':1,'Harian':['PosHariIni'],'Penginapan & Jeep':['Housekee
 var MASET={'Aset & servis':['AsetBeranda','AsetServis','PosQC','AsetPreventif','MgmtServis','AsetUnit','AsetData','AsetTim','AsetLaporan','AsetRisiko'],'Barang':['PosUnit'],'Manajemen':['MgmtSetuju'],'Saya':['TiketCS']};
 /* boleh dibuka (lewat tautan di halaman) tapi tidak tampil di menu */
 var FLD={PosAbsen:1,CekBuka:1};/* petugas lapangan absen & ceklis lewat ops.pokama.org */
-var MHIDE={asset_manager:{MgmtServis:1,PosUnit:1,MgmtSetuju:1,AsetRisiko:1},cashier:FLD,staff:FLD,branch_head:FLD,runner:FLD,technician:FLD,qc:FLD,driver:FLD};function mHid(role,n){return !!(MHIDE[role]&&MHIDE[role][n]);}
+var MHIDE={asset_manager:{MgmtServis:1,PosUnit:1,MgmtSetuju:1,AsetRisiko:1},cashier:FLD,staff:FLD,branch_head:FLD,runner:FLD,technician:FLD,qc:FLD,driver:FLD};/* CS: satu pintu lewat tab di Pusat CS; aset owner: masuk lewat 4 pintu (sisanya tab di dalamnya) */
+var CSH={MgmtInbox:1,TiketCS:1,AlatChat:1,MgmtTindakLanjut:1,MgmtPenawaran:1,LaporanShift:1};MHIDE.cs=CSH;MHIDE.cs_experience=CSH;
+MHIDE.owner={MgmtInbox:1,TiketCS:1,AlatChat:1,MgmtTindakLanjut:1,MgmtPenawaran:1,LaporanShift:1,PosQC:1,AsetPreventif:1,AsetLaporan:1,AsetData:1,AsetRisiko:1,MgmtAset:1,MgmtPusatAset:1,MgmtServis:1,Teknisi:1,TekBelanja:1,TekAkun:1,PosUnit:1,AgendaLapangan:1,AkunLapangan:1,PosAbsen:1,CekBuka:1};
+function mHid(role,n){return !!(MHIDE[role]&&MHIDE[role][n]);}
 var SROLE={
  cashier:{'Harian':1,'Lapangan':1,'Barang':['PosUnit'],'Pelanggan':['MgmtDaftarHitam']}, cs:CSM, cs_experience:CSM, staff:{'Harian':1,'Lapangan':1,'Barang':['PosUnit'],'Pelanggan':['MgmtDaftarHitam']},
  branch_head:{'Saya':['TiketCS'],'Harian':1,'Lapangan':1,'Barang':['PosUnit'],'Manajemen':['MgmtSetuju'],'Pelanggan':['MgmtDaftarHitam']},
- runner:{'Harian':['PosAbsen'],'Lapangan':1,'Penginapan & Jeep':['Housekeeping','SopirJeep'],'Saya':1}, technician:{'Aset & servis':['Teknisi','TekBelanja','TekAkun'],'Harian':['PosAbsen']}, qc:{'Saya':1,'Harian':['PosAbsen'],'Lapangan':1,'Penginapan & Jeep':['Housekeeping','ExpJeep','SopirJeep'],'Aset & servis':['Teknisi','PosQC']},
+ runner:{'Lapangan':1,'Penginapan & Jeep':['Housekeeping','SopirJeep'],'Saya':1}, technician:{'Aset & servis':['Teknisi','TekBelanja','TekAkun']}, qc:{'Saya':1,'Lapangan':1,'Penginapan & Jeep':['Housekeeping','ExpJeep','SopirJeep'],'Aset & servis':['Teknisi','PosQC']},
  asset_manager:MASET, experience_manager:MOPS,
- driver:{'Saya':1,'Harian':['PosAbsen'],'Lapangan':1,'Penginapan & Jeep':['ExpJeep','SopirJeep']},
+ driver:{'Saya':1,'Lapangan':1,'Penginapan & Jeep':['ExpJeep','SopirJeep']},
  finance:{'Manajemen':['MgmtSetuju']},
  viewer:{'Operasional':['OpsBeranda','OpsKerja']}
 };
@@ -234,7 +237,7 @@ var FLABEL_R={technician:{Teknisi:'Pekerjaan',TekBelanja:'Belanja part',TekAkun:
 /* tab bawah tetap menyala saat membuka halaman "saudara"-nya */
 var ALIAS={AsetPreventif:'AsetServis',AsetData:'AsetUnit',AsetLaporan:'AsetTim',AsetRisiko:'AsetBeranda',MgmtServis:'AsetServis',PosUnit:'AsetUnit',MgmtAset:'AsetUnit',TekPart:'TekBelanja',TekMasuk:'Teknisi',TekKerja:'Teknisi',TekSelesai:'Teknisi',MgmtAsetDetail:'AsetUnit',MgmtKelola:'MgmtAset',PosQC:'AsetServis',PosAbsen:'AkunLapangan',ExpKalender:'Housekeeping',LaporanShift:'PusatCS'};
 /* halaman yang digabung dalam satu tab: tampilkan tombol pindah di atas */
-var SUBT=[[['AsetServis','Papan'],['PosQC','Cek QC'],['AsetPreventif','Preventif'],['MgmtServis','Aturan']],[['AsetUnit','Daftar unit'],['AsetData','Lengkapi data']],[['AsetTim','Tim'],['AsetLaporan','Downtime & jatuh tempo']]];
+var SUBT=[[['PusatCS','Beranda'],['MgmtInbox','Inbox WA'],['TiketCS','Keluhan'],['MgmtTindakLanjut','Tindak lanjut'],['MgmtPenawaran','Perjalanan'],['AlatChat','Template'],['LaporanShift','Shift']],[['AsetServis','Papan'],['PosQC','Cek QC'],['AsetPreventif','Preventif'],['MgmtServis','Aturan']],[['AsetUnit','Daftar unit'],['AsetData','Lengkapi data']],[['AsetTim','Tim'],['AsetLaporan','Downtime & jatuh tempo']]];
 var REST_TOP={asset_manager:[],experience_manager:['OpsKerja','ExpJeep','PosHariIni','MgmtPromo','MgmtProduk','MgmtSetuju']};
 var ALLG={};SNAV.forEach(function(g){ALLG[g[0]]=1;});
 function roleAllow(role){return role==='owner'?ALLG:(SROLE[role]||{'Harian':1});}
@@ -279,10 +282,10 @@ function pvSelect(role,slim){
 }
 function subTabs(role,allow){
   var ids=menuItems(allow).map(function(it){return it[0];});var grp=null;
-  SUBT.forEach(function(g){if(g.some(function(x){return x[0]===current;})&&g.every(function(x){return ids.indexOf(x[0])>-1;}))grp=g;});
+  SUBT.forEach(function(g){var f=g.filter(function(x){return ids.indexOf(x[0])>-1;});if(f.length>1&&f.some(function(x){return x[0]===current;}))grp=f;});
   if(!grp)return null;
   var w=document.createElement('div');w.setAttribute('data-subt','1');w.style.cssText='width:100%;box-sizing:border-box;padding:10px 16px 0;align-self:stretch;flex:0 0 auto';
-  w.innerHTML='<div role="tablist" style="max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat('+grp.length+',minmax(0,1fr));gap:4px;background:#E9ECF0;border-radius:12px;padding:4px">'+grp.map(function(x){var on=x[0]===current;return '<a role="tab" aria-selected="'+on+'" href="'+x[0]+'.dc.html" style="height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;text-decoration:none;font:800 13px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#1F2B4D;background:'+(on?'#FFFFFF':'transparent')+';box-shadow:'+(on?'0 1px 3px rgba(31,43,77,.12)':'none')+'">'+x[1]+'</a>';}).join('')+'</div>';
+  w.innerHTML='<div role="tablist" style="max-width:'+(grp.length>5?'780':'560')+'px;margin:0 auto;display:grid;grid-template-columns:repeat('+grp.length+',minmax(0,1fr));gap:4px;background:#E9ECF0;border-radius:12px;padding:4px">'+grp.map(function(x){var on=x[0]===current;return '<a role="tab" aria-selected="'+on+'" href="'+x[0]+'.dc.html" style="height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;text-decoration:none;font:800 13px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#1F2B4D;background:'+(on?'#FFFFFF':'transparent')+';box-shadow:'+(on?'0 1px 3px rgba(31,43,77,.12)':'none')+'">'+x[1]+'</a>';}).join('')+'</div>';
   return w;
 }
 function fieldNav(root,nav,role,allow,isPv){
@@ -376,6 +379,8 @@ function deskFix(root){
     Array.prototype.forEach.call(root.querySelectorAll('[style*="position: fixed"],[style*="position:fixed"]'),function(el){if(el.getAttribute('data-ra-field'))return;if(el.style.maxWidth==='430px'){el.style.maxWidth='760px';el.style.left='calc(50% + 124px)';}});}
 }
 function prefetchRole(role){if(window.__pf===role||!MAN)return;window.__pf=role;var ids={};(FIELD[role]||[]).concat(Object.keys(ALIAS)).forEach(function(n){var b=bundleFor(n);if(b)ids[b.id]=b;});var go=function(){Object.keys(ids).forEach(function(k){loadBundle(ids[k]).catch(function(){});});};if(window.requestIdleCallback)requestIdleCallback(go,{timeout:4000});else setTimeout(go,1500);}
+/* layar lebar: halaman yang digabung (SUBT) tampil sebagai tab di atas konten */
+function deskSub(root,role,allow){if(root.querySelector('[data-subt]'))return;var st=subTabs(role,allow);if(!st)return;st.style.padding='12px 16px 0';st.style.flex='0 0 auto';var hdx=root.querySelector(':scope > header')||root.querySelector('header');if(hdx&&hdx.parentNode){hdx.parentNode.insertBefore(st,hdx.nextSibling);var nx=st.nextElementSibling,a1=st.getBoundingClientRect(),b1=nx&&(nx.firstElementChild||nx).getBoundingClientRect();if(b1&&b1.top<a1.bottom-4){st.style.padding='12px 16px';hdx.parentNode.insertBefore(st,hdx);}}else root.insertBefore(st,root.firstChild);}
 function staffNav(root){
   clearShell();if(window.RA&&RA._staff)prefetchRole(RA._staff.role);
   if(!window.RA||!RA.kindOf||RA.kindOf(current)!=='staff'||!RA._staff)return;
@@ -386,9 +391,9 @@ function staffNav(root){
   var hasAside=!!(nav&&nav.closest&&nav.closest('aside'))||!!root.querySelector(':scope > aside');
   var known=window.RA_MENU_ALLOWS(role,current)!==null||FIELD[role]&&FIELD[role].indexOf(current)>-1;
   if(narrow||(!hasAside&&FIELDONLY[role]&&window.innerWidth<1000)){fieldNav(root,nav,role,allow,isPv);return;}
-  if(!hasAside){if(known||RA_MENU_ALLOWS(role,current)!==false)deskShell(root,role,allow,isPv);return;}
+  if(!hasAside){if(known||RA_MENU_ALLOWS(role,current)!==false){deskShell(root,role,allow,isPv);deskSub(root,role,allow);}return;}
   nav.setAttribute('style','display:flex;flex-direction:column;gap:14px');
-  nav.innerHTML=sideHTML(role,allow,isPv);
+  nav.innerHTML=sideHTML(role,allow,isPv);deskSub(root,role,allow);
   var sv=nav.querySelector('select[data-viewas]');if(sv)sv.addEventListener('change',function(){RA.viewAs(sv.value||null);});
 }
 function flowClose(root){
