@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rentalaja Experience · Villa & Homestay Garut</title>
+<meta name="description" content="Ruma Metua & Ertap Village — villa dan homestay di Garut. Cek tanggal kosong & booking langsung.">
+<meta name="theme-color" content="#1F2B4D">
+<meta property="og:title" content="Rentalaja Experience · Villa & Homestay Garut">
+<meta property="og:description" content="Ruma Metua & Ertap Village. Cek tanggal kosong & booking langsung.">
+<meta property="og:image" content="/img/v/ertap-village-4.webp">
+<meta property="og:type" content="website">
+<link rel="icon" href="/logo.png">
+<link rel="preload" as="image" href="/img/v/ruma-metua-2.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#1F2B4D;--navy2:#2A3A66;--teal:#09BEAF;--teal-d:#077A70;--mint:#E3F7F5;--sun:#F2C14E;--mute:#5B6573;--line:#E6E9EE;--bg:#F4F6F9}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--navy);font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif}
+a{color:inherit;text-decoration:none}
+img{display:block}
+.page{max-width:480px;margin:0 auto;padding-bottom:28px;position:relative;overflow:hidden}
+/* latar atas: gradien merek + pola lingkaran */
+.sky{position:absolute;inset:0 0 auto 0;height:300px;background:radial-gradient(120% 90% at 85% 0%,#0FD3C2 0%,rgba(9,190,175,0) 55%),linear-gradient(160deg,#1F2B4D 0%,#22406A 55%,#077A70 100%);z-index:0}
+.sky:after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 12% 30%,rgba(255,255,255,.08) 0 60px,transparent 61px),radial-gradient(circle at 92% 75%,rgba(255,255,255,.06) 0 90px,transparent 91px)}
+.wrap{position:relative;z-index:1;padding:20px 16px 0}
+/* profil */
+.prof{display:flex;align-items:center;gap:12px;color:#fff}
+.av{width:58px;height:58px;border-radius:18px;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 20px rgba(0,0,0,.18);flex-shrink:0}
+.av img{width:36px}
+.prof h1{margin:0;font-size:19px;font-weight:800;display:flex;align-items:center;gap:6px}
+.prof h1 svg{width:17px;height:17px}
+.prof p{margin:2px 0 0;font-size:13px;color:#CFE9E6;font-weight:600}
+.soc{margin-left:auto;display:flex;gap:8px}
+.soc a{width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px)}
+.soc svg{width:19px;height:19px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 16px}
+.chips{flex-wrap:nowrap!important}
+.chips span{font-size:11px;white-space:nowrap;font-weight:700;color:#fff;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:5px 8px;display:inline-flex;align-items:center;gap:5px}
+/* banner geser */
+.car{position:relative}
+.track{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;border-radius:22px}
+.track::-webkit-scrollbar{display:none}
+.slide{flex:0 0 100%;scroll-snap-align:center;height:196px;border-radius:22px;position:relative;overflow:hidden;color:#fff;padding:18px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 14px 30px rgba(31,43,77,.22)}
+.slide .k{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;opacity:.9}
+.slide>div:first-of-type{position:relative;z-index:3}
+.slide h2{margin:6px 0 0;font-size:22px;line-height:26px;font-weight:800;max-width:60%;letter-spacing:-.01em}
+.slide .p{font-size:13px;font-weight:600;opacity:.92;margin-top:4px;max-width:52%}
+.slide .go{align-self:flex-start;background:#fff;color:var(--navy);font-weight:800;font-size:13px;border-radius:999px;padding:8px 14px;display:inline-flex;align-items:center;gap:6px;position:relative;z-index:2}
+.slide .art{position:absolute;right:-12px;bottom:-4px;width:50%;z-index:1;filter:drop-shadow(0 14px 18px rgba(0,0,0,.35))}
+.slide .art2{position:absolute;right:30%;bottom:-10px;width:36%;z-index:0;opacity:.95;filter:drop-shadow(0 10px 14px rgba(0,0,0,.3))}
+.s1{background:radial-gradient(90% 120% at 100% 100%,#0FD3C2 0%,#09BEAF 35%,#077A70 100%)}
+.s2{background:radial-gradient(90% 120% at 100% 100%,#3A4F86 0%,#1F2B4D 70%)}
+.s3{background:#1F2B4D}
+.s3 .ph{position:absolute!important;inset:0;width:100%;height:100%;object-fit:cover;z-index:0!important}
+.s3:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(15,22,40,.9) 0%,rgba(15,22,40,.62) 55%,rgba(15,22,40,.15) 100%);z-index:1}
+.s3>*{position:relative;z-index:2}
+.s4{background:radial-gradient(90% 120% at 100% 0%,#FFD976 0%,#F2C14E 45%,#E79A2B 100%);color:var(--navy)}
+.s4 .go{background:var(--navy);color:#fff}
+.s4 .big{position:absolute;right:16px;top:50%;transform:translateY(-50%) rotate(-6deg);background:#fff;border-radius:18px;padding:14px 16px;text-align:center;box-shadow:0 12px 24px rgba(0,0,0,.15)}
+.s4 .big b{display:block;font-size:26px;font-weight:800;color:var(--teal-d)}
+.s4 .big small{font-size:11px;font-weight:700;color:var(--mute)}
+.dots{display:flex;justify-content:center;gap:6px;margin:10px 0 2px}
+.dots i{width:6px;height:6px;border-radius:3px;background:#C9D1DC;transition:all .25s}
+.dots i.on{width:18px;background:var(--teal-d)}
+/* tombol utama */
+.cta{display:flex;align-items:center;gap:12px;margin:14px 0 6px;padding:14px 16px;border-radius:18px;background:var(--navy);color:#fff;box-shadow:0 10px 24px rgba(31,43,77,.25);position:relative;overflow:hidden}
+.cta:after{content:"";position:absolute;top:0;left:-40%;width:30%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);transform:skewX(-20deg);animation:shine 3.6s ease-in-out infinite}
+@keyframes shine{0%,60%{left:-40%}100%{left:130%}}
+.cta .ic{width:42px;height:42px;border-radius:13px;background:var(--teal);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cta .ic svg{width:22px;height:22px}
+.cta b{display:block;font-size:16.5px}
+.cta small{display:block;color:#C9D3E3;font-size:12.5px;font-weight:600;margin-top:1px}
+.cta .ar{margin-left:auto;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center}
+.trust{display:flex;justify-content:space-between;gap:6px;margin:4px 2px 14px;font-size:11.5px;font-weight:700;color:var(--mute)}
+.trust span{display:flex;align-items:center;gap:5px}
+.trust svg{width:14px;height:14px;flex-shrink:0}
+h3{margin:22px 2px 10px;font-size:15px;font-weight:800;display:flex;align-items:center;justify-content:space-between}
+h3 a{font-size:12.5px;color:var(--teal-d);font-weight:700}
+/* bento kategori */
+.bento{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:118px;gap:10px}
+.b{border-radius:20px;padding:14px;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-start;transition:transform .15s}
+.b:active,.cta:active,.slide:active,.stay:active{transform:scale(.98)}
+.b b{font-size:15px;font-weight:800;line-height:19px;position:relative;z-index:2}
+.b small{font-size:11.5px;font-weight:700;margin-top:3px;position:relative;z-index:2;opacity:.85}
+.b img{position:absolute;z-index:1;filter:drop-shadow(0 10px 12px rgba(0,0,0,.18))}
+.b .tag{position:absolute;left:14px;bottom:12px;z-index:2;font-size:11px;font-weight:800;background:rgba(255,255,255,.9);color:var(--navy);border-radius:999px;padding:4px 9px}
+.b.tall{grid-row:span 2}
+.b-motor{background:linear-gradient(170deg,#E3F7F5 0%,#BDEDE7 100%);color:var(--navy)}
+.b-motor img{width:90%;right:-8%;bottom:40px}
+.b-iph{background:linear-gradient(170deg,#EFEDFF 0%,#DCD6FF 100%)}
+.b-iph img{width:62%;right:-6%;bottom:-14px}
+.b-cam{background:linear-gradient(170deg,#1F2B4D 0%,#2F4170 100%);color:#fff}
+.b-cam img{width:62%;right:-8%;bottom:-12px}
+.b-mob{background:linear-gradient(170deg,#E7F1FB 0%,#CFE3F7 100%)}
+.b-mob img{width:60%;right:-8%;bottom:-12px}
+.b-camp{background:linear-gradient(170deg,#FFF3DC 0%,#FBE0B0 100%)}
+.b-camp img{width:46%;right:2%;bottom:-16px}
+.b-ps{background:linear-gradient(170deg,#E9ECF2 0%,#D3D9E4 100%)}
+.b-ps img{width:64%;right:-8%;bottom:-8px}
+/* penginapan */
+.stay{display:block;border-radius:22px;overflow:hidden;position:relative;height:190px;box-shadow:0 12px 26px rgba(31,43,77,.16)}
+.stay img{width:100%;height:100%;object-fit:cover}
+.stay:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(15,22,40,.86) 0%,rgba(15,22,40,.15) 60%,rgba(15,22,40,0) 100%)}
+.stay .t{position:absolute;left:16px;right:16px;bottom:14px;z-index:2;color:#fff;display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
+.stay .t b{display:block;font-size:18px;font-weight:800}
+.stay .t small{display:block;font-size:12.5px;font-weight:600;color:#DDE6F2;margin-top:2px}
+.stay .t span{background:#fff;color:var(--navy);font-weight:800;font-size:12.5px;border-radius:999px;padding:8px 12px;white-space:nowrap}
+.stay .pill{position:absolute;top:12px;left:12px;z-index:2;background:rgba(255,255,255,.92);border-radius:999px;padding:5px 10px;font-size:11px;font-weight:800;color:var(--teal-d)}
+.thumbs{display:flex;gap:8px;margin-top:8px}
+.thumbs a{flex:1;height:64px;border-radius:14px;overflow:hidden}
+.thumbs img{width:100%;height:100%;object-fit:cover}
+.list{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.li{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:10px 14px 10px 10px;transition:transform .15s}
+.li:active{transform:scale(.98)}
+.li .th{width:52px;height:52px;border-radius:13px;background:var(--mint);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0}
+.li .th img{width:86%;height:86%;object-fit:contain}
+.li .th.ph img{width:100%;height:100%;object-fit:cover}
+.li .th.lg{background:#fff;border:1px solid var(--line)}.li .th.lg img{width:56%;height:56%}
+.li .tx{flex:1;min-width:0}.li b{display:block;font-size:15px}.li small{display:block;font-size:12px;color:var(--mute);font-weight:600;margin-top:2px}
+.li .ar{color:#9AA3B2;font-size:20px}
+.s5{background:#1F2B4D}.s5 .ph{position:absolute!important;inset:0;width:100%;height:100%;object-fit:cover;z-index:0!important}
+.s5:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(15,22,40,.9) 0%,rgba(15,22,40,.6) 55%,rgba(15,22,40,.1) 100%);z-index:1}.s5>*{position:relative;z-index:2}
+.ota{display:flex;flex-wrap:wrap;gap:8px;padding:12px 14px;border-top:1px solid var(--line)}
+.ota a{height:34px;padding:0 12px;border-radius:10px;display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:800;border:1px solid var(--line);background:var(--bg)}
+.ota b{font-size:11px;color:var(--mute);width:100%;font-weight:700}
+/* akun & bantuan */
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mini{background:#fff;border:1px solid var(--line);border-radius:18px;padding:13px;display:flex;align-items:center;gap:10px}
+.mini .ic{width:38px;height:38px;border-radius:12px;background:var(--mint);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mini .ic svg{width:19px;height:19px}
+.mini b{font-size:13.5px;display:block}
+.mini small{font-size:11.5px;color:var(--mute);font-weight:600}
+.help{margin-top:10px;background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.help summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;padding:14px;font-weight:800;font-size:14px}
+.help summary::-webkit-details-marker{display:none}
+.help summary .ic{width:38px;height:38px;border-radius:12px;background:var(--mint);display:flex;align-items:center;justify-content:center}
+.help summary small{display:block;font-size:11.5px;color:var(--mute);font-weight:600}
+.help summary .ar{margin-left:auto;color:#9AA3B2;transition:transform .2s}
+.help[open] summary .ar{transform:rotate(90deg)}
+.br{padding:12px 14px;border-top:1px solid var(--line);display:flex;align-items:center;gap:8px}
+.br div{flex:1;min-width:0}
+.br b{display:block;font-size:13.5px}
+.br span{display:block;font-size:11.5px;color:var(--mute);margin-top:1px;font-weight:600}
+.br a{height:34px;padding:0 12px;border-radius:10px;display:flex;align-items:center;font-size:12.5px;font-weight:800;border:1px solid var(--line);background:var(--bg)}
+.br a.wa{background:#E9F9EF;border-color:#C9EFD6;color:#137A3B}
+.foot{text-align:center;color:#8A93A6;font-size:11.5px;margin-top:22px;font-weight:600}
+/* tombol lengket bawah */
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:20;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:linear-gradient(0deg,rgba(244,246,249,1) 55%,rgba(244,246,249,0));transform:translateY(110%);transition:transform .25s}
+.dock.show{transform:none}
+.dock a{max-width:448px;margin:0 auto;height:52px;border-radius:16px;background:var(--teal);color:var(--navy);font-weight:800;font-size:15.5px;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 10px 24px rgba(9,190,175,.35)}
+@media (prefers-reduced-motion:reduce){.cta:after{animation:none}}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="sky"></div>
+  <main class="wrap">
+    <div class="prof">
+      <div class="av"><img src="/img/link/mark.png" alt="Rentalaja Experience"></div>
+      <div>
+        <h1>Rentalaja Experience <svg viewBox="0 0 24 24" fill="#09BEAF" aria-label="Akun resmi"><path d="M12 2l2.4 1.8 3-.2 1 2.8 2.6 1.6-.8 2.9.8 2.9-2.6 1.6-1 2.8-3-.2L12 22l-2.4-1.8-3 .2-1-2.8L3 16l.8-2.9L3 10.2l2.6-1.6 1-2.8 3 .2z"/><path d="M8.5 12.2l2.3 2.3 4.7-4.7" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></h1>
+        <p>Villa & Homestay Garut</p>
+      </div>
+      <div class="soc">
+        <a data-k="wa_exp" data-label="WA admin Experience" href="https://wa.me/6281324700077" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.1z"/></svg></a>
+      </div>
+    </div>
+    <div class="chips"><span>📍 Garut</span><span>🔑 Check-in 15.00</span><span>🏊 Ada kolam</span></div>
+
+    <div class="car">
+      <div class="track" id="track">
+        <a class="slide s3" data-k="banner_rm" data-label="Banner: Ruma Metua" data-app="/#/Penginapan?id=2a4e32fa-48d1-4e3b-8deb-1ccbedcf7de8">
+          <img class="ph" src="/img/v/ruma-metua-2.webp" alt="" loading="eager">
+          <div><div class="k">Ruma Metua · Tarogong</div><h2>Rumah utuh buat keluarga</h2><div class="p">Maks 5 tamu · mulai Rp950rb/malam</div></div>
+          <span class="go">Cek tanggal →</span>
+        </a>
+        <a class="slide s5" data-k="banner_ert" data-label="Banner: Ertap Village" data-app="/#/Penginapan?id=705145bb-0665-43fd-82b2-bde852623951">
+          <img class="ph" src="/img/v/ertap-village-4.webp" alt="" loading="lazy">
+          <div><div class="k">Ertap Village · Samarang</div><h2>Villa dengan kolam & city light</h2><div class="p">Maks 10 tamu · cocok buat rombongan</div></div>
+          <span class="go">Cek tanggal →</span>
+        </a>
+        <a class="slide s1" data-k="banner_motor" data-label="Banner: sewa motor" data-app="/#/Katalog?cat=motor">
+          <div><div class="k">Sekalian keliling Garut</div><h2>Motor diantar ke villa</h2><div class="p">Mulai Rp100rb/hari · helm & jas hujan</div></div>
+          <span class="go">Pilih motor →</span>
+          <img class="art" src="/img/p/honda-scoopy-new.webp" alt="Sewa motor" loading="lazy">
+        </a>
+      </div>
+      <div class="dots" id="dots"><i class="on"></i><i></i><i></i></div>
+    </div>
+
+    <a class="cta" id="cta" data-k="booking" data-label="Cek tanggal & booking" data-app="/#/Menginap">
+      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#1F2B4D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M3 9h18M8 2v4M16 2v4M8 14l2.5 2.5L16 12"/></svg></span>
+      <span><b>Cek tanggal & booking</b><small>Lihat kamar kosong & harga langsung</small></span>
+      <span class="ar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></span>
+    </a>
+    <div class="trust">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="#077A70" stroke-width="2.4"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 7v5l3 2"/></svg>Check-in 15.00</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="#077A70" stroke-width="2.4"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 7v5l3 2"/></svg>Check-out 12.00</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="#077A70" stroke-width="2.4"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>Booking langsung</span>
+    </div>
+
+    <div class="list">
+      <a class="li" data-k="rm" data-label="Ruma Metua" data-app="/#/Penginapan?id=2a4e32fa-48d1-4e3b-8deb-1ccbedcf7de8"><span class="th ph"><img src="/img/v/ruma-metua-1.webp" alt="" loading="lazy"></span><span class="tx"><b>Ruma Metua</b><small>Rumah utuh · maks 5 tamu · Tarogong</small></span><span class="ar">›</span></a>
+      <a class="li" data-k="ert" data-label="Ertap Village" data-app="/#/Penginapan?id=705145bb-0665-43fd-82b2-bde852623951"><span class="th ph"><img src="/img/v/ertap-village-1.webp" alt="" loading="lazy"></span><span class="tx"><b>Ertap Village</b><small>Villa dengan kolam · maks 10 tamu · Samarang</small></span><span class="ar">›</span></a>
+      <a class="li" data-k="akun" data-label="Booking saya" data-app="/#/Akun"><span class="th lg"><img src="/img/link/mark.png" alt="" loading="lazy"></span><span class="tx"><b>Booking saya</b><small>Status, tambah malam, struk</small></span><span class="ar">›</span></a>
+    </div>
+    <details class="help" id="help">
+      <summary><span class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#077A70" stroke-width="2.2"><path d="M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span><span>Lokasi, ulasan & tanya admin<small>Maps · Airbnb · Agoda · Booking.com · WA</small></span><span class="ar">›</span></summary>
+      <div class="br"><div><b>Ruma Metua</b><span>Tarogong · ±10 menit ke Cipanas</span></div>
+        <a data-k="maps_rm" data-label="Lokasi Ruma Metua" href="https://share.google/QIpPoTpxjN0lRMi6q">Peta</a></div>
+      <div class="br"><div><b>Ertap Village</b><span>Samarang · pemandangan kota malam</span></div>
+        <a data-k="maps_ert" data-label="Lokasi Ertap Village" href="https://share.google/dtRvAM6nSL93jYmjC">Peta</a></div>
+      <div class="ota"><b>Lihat ulasan tamu di</b>
+        <a data-k="airbnb" data-label="Airbnb" href="https://www.airbnb.com.sg/users/profile/1704781491050930912">Airbnb</a>
+        <a data-k="agoda_rm" data-label="Agoda Ruma Metua" href="https://www.agoda.com/ruma-metua/hotel/garut-id.html">Agoda · Ruma Metua</a>
+        <a data-k="agoda_ert" data-label="Agoda Ertap" href="https://www.agoda.com/id-id/NewSite/id-id/hotel/index/97164388?adults=2&amp;rooms=1">Agoda · Ertap</a>
+        <a data-k="bcom_rm" data-label="Booking.com Ruma Metua" href="https://www.booking.com/hotel/id/ruma-metua-by-rentalaja-experience.id.html">Booking.com · Ruma Metua</a>
+        <a data-k="bcom_ert" data-label="Booking.com Ertap" href="https://www.booking.com/hotel/id/ertap-village-by-rentalaja-experience.html">Booking.com · Ertap</a>
+      </div>
+      <div class="br"><div><b>Admin Rentalaja Experience</b><span>Tanya ketersediaan, rombongan, acara</span></div>
+        <a class="wa" data-k="wa_admin" data-label="WA admin Experience" href="https://wa.me/6281324700077">Chat</a></div>
+    </details>
+
+    <p class="foot">© Rentalaja Experience · PT Popo Karya Investama</p>
+  </main>
+</div>
+<script src="/config.js"></script>
+<script>
+/* banner geser otomatis + titik penanda + tombol lengket bawah */
+(function () {
+  var t = document.getElementById('track'), dots = [].slice.call(document.querySelectorAll('#dots i')), n = dots.length, i = 0, hold = false, timer;
+  function cur() { return Math.round(t.scrollLeft / (t.clientWidth + 10)); }
+  function mark() { var c = cur(); dots.forEach(function (d, k) { d.classList.toggle('on', k === c); }); i = c; }
+  t.addEventListener('scroll', function () { clearTimeout(t._s); t._s = setTimeout(mark, 60); }, { passive: true });
+  ['touchstart', 'pointerdown'].forEach(function (e) { t.addEventListener(e, function () { hold = true; clearTimeout(timer); timer = setTimeout(function () { hold = false; }, 6000); }, { passive: true }); });
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) setInterval(function () { if (hold || document.hidden) return; i = (i + 1) % n; t.scrollTo({ left: i * (t.clientWidth + 10), behavior: 'smooth' }); }, 4500);
+})();
+/* Statistik halaman link (anonim, tanpa IP & tanpa data pribadi): kunjungan, klik per tombol, asal (?src= / referrer / aplikasi),
+   perangkat. Halaman Rentalaja Experience (page='exp'). Masuk ke dashboard marketing Pokama (Marketing · Link bio) lewat ra_link_track. */
+(function () {
+  var C = window.RA_CONFIG || {}, ua = navigator.userAgent || '';
+  var q = new URLSearchParams(location.search), vid, isNew = false;
+  try { vid = localStorage.getItem('ra.lbv'); if (!vid) { vid = (crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2) + Date.now().toString(36)).replace(/[^A-Za-z0-9]/g, '').slice(0, 24); localStorage.setItem('ra.lbv', vid); isNew = true; } }
+  catch (e) { vid = 'x' + Math.random().toString(36).slice(2, 14); isNew = true; }
+  var inApp = /Instagram/i.test(ua) ? 'instagram' : /musical_ly|TikTok|BytedanceWebview/i.test(ua) ? 'tiktok' : /FBAN|FBAV|FB_IAB/i.test(ua) ? 'facebook' : /WhatsApp/i.test(ua) ? 'whatsapp' : /Line\//i.test(ua) ? 'line' : null;
+  var rh = ''; try { rh = document.referrer ? new URL(document.referrer).hostname.replace(/^www\./, '') : ''; } catch (e) {}
+  if (rh === location.hostname) rh = '';
+  var MAP = { instagram: 'ig', tiktok: 'tt', facebook: 'fb', whatsapp: 'wa', line: 'line' };
+  var src = (q.get('src') || q.get('utm_source') || '').toLowerCase().slice(0, 30)
+    || (inApp && MAP[inApp])
+    || (/instagram/.test(rh) ? 'ig' : /tiktok/.test(rh) ? 'tt' : /facebook|fb\./.test(rh) ? 'fb' : /google/.test(rh) ? 'google' : /wa\.me|whatsapp/.test(rh) ? 'wa' : rh ? rh : 'langsung');
+  // tombol ke aplikasi selalu membawa sumber (utm) supaya booking yang terjadi tercatat asalnya
+  document.querySelectorAll('[data-app]').forEach(function (a) {
+    var path = a.getAttribute('data-app'), k = a.getAttribute('data-k');
+    a.href = path + (path.indexOf('?') < 0 ? '?' : '&') + 'utm_source=' + encodeURIComponent(src) + '&utm_medium=link_exp&utm_campaign=' + encodeURIComponent(k) + '&lbv=' + encodeURIComponent(vid);
+  });
+  if (/bot|crawl|spider|preview|facebookexternalhit|whatsapp\/|slurp|lighthouse/i.test(ua)) return;
+  var device = /iPad|Tablet/i.test(ua) ? 'tablet' : /Mobi|Android|iPhone/i.test(ua) ? 'mobile' : 'desktop';
+  var os = /iPhone|iPad|iOS/i.test(ua) ? 'iOS' : /Android/i.test(ua) ? 'Android' : /Windows/i.test(ua) ? 'Windows' : /Mac OS/i.test(ua) ? 'macOS' : /Linux/i.test(ua) ? 'Linux' : 'lain';
+  var browser = inApp ? 'in-app' : /Edg\//.test(ua) ? 'Edge' : /Chrome\//.test(ua) ? 'Chrome' : /Safari\//.test(ua) ? 'Safari' : /Firefox\//.test(ua) ? 'Firefox' : 'lain';
+  var base = { vid: vid, src: src, medium: q.get('utm_medium') || 'link_exp', campaign: q.get('utm_campaign') || q.get('c') || null, ref: rh || null,
+    device: device, os: os, browser: browser, in_app: inApp, lang: (navigator.language || '').slice(0, 12), page: 'exp' };
+  function send(extra) {
+    if (!C.url || !C.key) return;
+    var body = JSON.stringify({ p: Object.assign({}, base, extra) });
+    try { fetch(C.url + '/rest/v1/rpc/ra_link_track', { method: 'POST', keepalive: true, headers: { apikey: C.key, Authorization: 'Bearer ' + C.key, 'Content-Type': 'application/json' }, body: body }); } catch (e) {}
+  }
+  send({ kind: 'view', is_new: isNew });
+  document.addEventListener('click', function (ev) {
+    var a = ev.target.closest && ev.target.closest('a[data-k]'); if (!a) return;
+    send({ kind: 'click', key: a.getAttribute('data-k'), label: a.getAttribute('data-label'), url: a.getAttribute('href') });
+  }, true);
+  var h = document.getElementById('help');
+  if (h) h.addEventListener('toggle', function () { if (h.open) send({ kind: 'click', key: 'buka_lokasi', label: 'Buka lokasi & admin' }); });
+})();
+</script>
+</body>
+</html>
