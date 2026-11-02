@@ -250,7 +250,7 @@ function fieldSheet(rest){
   rest.forEach(function(it){var on=it[0]===current;
     if(many&&it[3]!==lastG){lastG=it[3];li+='<div style="font:800 11px \'Plus Jakarta Sans\',system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#8A93A3;padding:8px 4px 0">'+it[3]+'</div>';}
     li+='<a href="'+it[0]+'.dc.html" data-k="go" style="min-height:'+(many?'44':'48')+'px;padding:0 14px;border-radius:12px;display:flex;align-items:center;gap:12px;text-decoration:none;font-weight:'+(on?'800':'700')+';font-size:15px;color:'+(on?'#077A70':'#1F2B4D')+';background:'+(on?'#E3F7F5':'#F6F7F9')+'">'+fico(it[1],on?'#077A70':'#4A5468')+it[2]+'</a>';});
-  if(isOwnerReal())li+='<a href="#/peta" data-k="go" style="min-height:44px;padding:0 14px;border-radius:12px;display:flex;align-items:center;gap:12px;text-decoration:none;font-weight:700;font-size:14px;color:#4A5468;background:#FFFFFF;border:1px dashed #D5D9E0">'+fico('folder','#8A93A3')+'Peta semua layar (owner)</a>';
+  if(isOwnerReal()&&!pkMode())li+='<a href="#/peta" data-k="go" style="min-height:44px;padding:0 14px;border-radius:12px;display:flex;align-items:center;gap:12px;text-decoration:none;font-weight:700;font-size:14px;color:#4A5468;background:#FFFFFF;border:1px dashed #D5D9E0">'+fico('folder','#8A93A3')+'Peta semua layar (owner)</a>';
   o.innerHTML='<div style="width:100%;max-width:480px;max-height:85vh;overflow-y:auto;background:#fff;border-radius:22px 22px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom));box-sizing:border-box;font-family:\'Plus Jakarta Sans\',system-ui,sans-serif;color:#1F2B4D;display:flex;flex-direction:column;gap:8px">'+
     '<div style="width:40px;height:4px;border-radius:2px;background:#D5D9E0;align-self:center;margin-bottom:6px"></div><div style="font-size:16px;font-weight:800;margin-bottom:4px">Menu lainnya</div>'+li+
     '<button type="button" data-k="out" style="margin-top:6px;min-height:48px;border-radius:12px;border:1px solid #E3B7B2;background:#FFFFFF;color:#A12A1F;font-family:inherit;font-weight:800;font-size:15px;cursor:pointer">Keluar dari akun</button></div>';
@@ -294,7 +294,7 @@ function fieldNav(root,nav,role,allow,isPv){
   if(as){as.style.display='none';
     appbar=document.createElement('div');appbar.setAttribute('data-appbar','1');
     appbar.style.cssText='flex:1 1 100%;width:100%;box-sizing:border-box;background:'+TEAL+';color:#FFFFFF;padding:12px 16px;display:flex;align-items:center;gap:10px';
-    appbar.innerHTML='<img src="logo.png" alt="Rentalaja" style="height:22px;width:auto;background:#FFFFFF;border-radius:7px;padding:3px 7px;display:block;flex-shrink:0"><div style="flex:1;min-width:0;font:800 16px \'Plus Jakarta Sans\',system-ui,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+curL+'</div><span style="width:34px;height:34px;border-radius:17px;background:rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;font:800 13px \'Plus Jakarta Sans\',system-ui,sans-serif;flex-shrink:0">'+ini+'</span>';
+    appbar.innerHTML=(pkMode()?'<a href="https://app.pokama.org/" aria-label="Kembali ke Sistem Kerja Pokama" style="width:30px;height:30px;border-radius:15px;background:rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></a>':'')+'<img src="logo.png" alt="Rentalaja" style="height:22px;width:auto;background:#FFFFFF;border-radius:7px;padding:3px 7px;display:block;flex-shrink:0"><div style="flex:1;min-width:0;font:800 16px \'Plus Jakarta Sans\',system-ui,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+curL+'</div><span style="width:34px;height:34px;border-radius:17px;background:rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;font:800 13px \'Plus Jakarta Sans\',system-ui,sans-serif;flex-shrink:0">'+ini+'</span>';
     var bsel=as.querySelector('select[aria-label="Pilih cabang"]');if(bsel){bsel.style.cssText='height:32px;max-width:130px;border-radius:16px;border:0;padding:0 8px;font:700 12px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#1F2B4D;background:#FFFFFF;flex-shrink:1;min-width:0';appbar.insertBefore(bsel,appbar.lastChild);}
     root.insertBefore(appbar,root.firstChild);root.style.background='#F4F6F9';root.style.alignContent='flex-start';root.style.alignItems='flex-start';
     var mn=root.querySelector(':scope > main');if(mn){mn.style.padding='16px 16px 24px';mn.style.gap='14px';mn.style.alignSelf='stretch';mn.style.flex='1 1 100%';mn.style.maxWidth='100%';}
@@ -323,14 +323,19 @@ function fieldNav(root,nav,role,allow,isPv){
   var pbm=parseInt(root.style.paddingBottom||'0',10)||0;if(pbm<84)root.style.paddingBottom='84px';
 }
 /* layar lebar tanpa kolom menu (layar HP seperti Runner, Pusat CS): beri kolom menu kiri yang sama dengan halaman lain */
+/* mode Pusat Kerja Pokama (dibuka dari modul di Sistem Kerja): panel terfokus + jalan kembali ke Sistem Kerja */
+function pkMode(){try{var v=JSON.parse(localStorage.getItem('ra.pk')||'null');return v&&v.t&&Date.now()-v.t<12*3600e3?v:null;}catch(e){return null;}}
+function pkHead(){var m=pkMode();if(!m)return '';
+  return '<a href="https://app.pokama.org/" data-pkback="1" style="display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:12px;background:#1F2B4D;color:#FFFFFF;text-decoration:none;font-family:\'Plus Jakarta Sans\',system-ui,sans-serif"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#09BEAF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg><span style="display:flex;flex-direction:column;line-height:1.2"><b style="font-size:13.5px;font-weight:800">Sistem Kerja Pokama</b><small style="font-size:11px;font-weight:600;color:#C9D3E0">Kembali ke KKH & menu modul</small></span></a>'+
+    (m.mod?'<div style="padding:2px 12px 0;font:800 12px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#077A70;letter-spacing:.04em;text-transform:uppercase">Modul '+String(m.mod).replace(/[<>&"]/g,'')+'</div>':'');}
 function sideHTML(role,allow,isPv){
   var h='';SNAV.forEach(function(g){var a=allow[g[0]];if(!a)return;var items=g[1].filter(function(it){return a===1||a.indexOf(it[0])>-1;});if(!items.length)return;
     h+='<div style="display:flex;flex-direction:column;gap:2px"><div style="font:800 11px \'Plus Jakarta Sans\',system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#8A93A3;padding:0 12px 4px">'+g[0]+'</div>';
     items.forEach(function(it){var on=it[0]===current||(ALIAS[current]===it[0]&&!items.some(function(x){return x[0]===current;})&&false);
       h+='<a href="'+it[0]+'.dc.html"'+(on?' aria-current="page"':'')+' style="min-height:40px;box-sizing:border-box;padding:0 12px;border-radius:10px;background:'+(on?'#E3F7F5':'transparent')+';color:'+(on?'#077A70':'#1F2B4D')+';font:'+(on?'800':'600')+' 14px \'Plus Jakarta Sans\',system-ui,sans-serif;display:flex;align-items:center;gap:10px;text-decoration:none"><span style="width:20px;display:flex;justify-content:center">'+ico(it[1],on?'#077A70':'#6B7486')+'</span>'+it[2]+'</a>';});
     h+='</div>';});
-  if(isOwnerReal())h+='<a href="#/peta" style="min-height:36px;padding:0 12px;border-radius:10px;border:1px dashed #D5D9E0;color:#4A5468;font:700 13px \'Plus Jakarta Sans\',system-ui,sans-serif;display:flex;align-items:center;text-decoration:none">Peta semua layar (owner)</a>';
-  return (isPv?'<div style="padding:8px 10px;border-radius:12px;background:#FFF6E0">'+pvSelect(role,true)+'</div>':'')+h;
+  if(isOwnerReal()&&!pkMode())h+='<a href="#/peta" style="min-height:36px;padding:0 12px;border-radius:10px;border:1px dashed #D5D9E0;color:#4A5468;font:700 13px \'Plus Jakarta Sans\',system-ui,sans-serif;display:flex;align-items:center;text-decoration:none">Peta semua layar (owner)</a>';
+  return pkHead()+((isPv&&!pkMode())?'<div style="padding:8px 10px;border-radius:12px;background:#FFF6E0">'+pvSelect(role,true)+'</div>':'')+h;
 }
 function deskShell(root,role,allow,isPv){
   var sh=document.createElement('aside');sh.setAttribute('data-dshell','1');
@@ -356,7 +361,7 @@ function staffNav(root){
   if(!window.RA||!RA.kindOf||RA.kindOf(current)!=='staff'||!RA._staff)return;
   var nav=root.querySelector('nav[aria-label="Menu"]');var narrow=window.innerWidth<760;
   var role=(RA._staff&&RA._staff.role)||'';var allow=roleAllow(role);
-  var isPv=isOwnerReal()&&!!RA.VIEW_ROLES;
+  var isPv=isOwnerReal()&&!!RA.VIEW_ROLES&&!pkMode();
   clampDesc(root);
   var hasAside=!!(nav&&nav.closest&&nav.closest('aside'))||!!root.querySelector(':scope > aside');
   var known=window.RA_MENU_ALLOWS(role,current)!==null||FIELD[role]&&FIELD[role].indexOf(current)>-1;

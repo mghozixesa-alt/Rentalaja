@@ -71,8 +71,16 @@
       setSession({ access_token: p.access_token, refresh_token: p.refresh_token, expires_in: +p.expires_in || 3600, expires_at: +p.expires_at || undefined, token_type: p.token_type || 'bearer', user: user });
       LS.set('ra.user', user); RA._me = user; RA._perms = null; RA._staff = null; RA._cust = null;
       /* masuk dari Sistem Kerja Pokama (modul Dashboard Manajemen / Aset): langsung ke layar staf yang dituju */
-      if (sso) { LS.del('ra.ctx.staff'); history.replaceState(null, '', location.pathname + location.search + '#/' + (nx || 'Masuk')); }
-      else history.replaceState(null, '', location.pathname + location.search + '#/Login?google=1');
+      if (sso) {
+        /* mode Pusat Kerja Pokama: panel terfokus pada modul yang dibuka (tanpa pemilih pratinjau & peta layar) */
+        var as = /^[a-z_]{2,30}$/.test(p.as || '') ? p.as : '';
+        var br = /^[A-Z0-9,-]{2,80}$/.test(p.br || '') ? p.br.split(',') : null;
+        LS.del('ra.ctx.staff'); LS.set('ra.pk', { mod: String(p.mod || '').slice(0, 40), br: br, t: Date.now() });
+        if (br) LS.del('ra.staff.branch');
+        if (as) LS.set('ra.viewAs', as); else LS.del('ra.viewAs');
+        history.replaceState(null, '', location.pathname + location.search + '#/' + (nx || 'Masuk'));
+      }
+      else { LS.del('ra.pk'); history.replaceState(null, '', location.pathname + location.search + '#/Login?google=1'); }
     } else {
       history.replaceState(null, '', location.pathname + location.search + '#/Login?gerr=' + encodeURIComponent(p.error_description || 'Login Google gagal'));
     }
@@ -262,7 +270,7 @@
       return null;
     }).catch(function () { return null; });
   };
-  RA.signOut = function () { setSession(null); LS.del('ra.ctx.staff'); };
+  RA.signOut = function () { setSession(null); LS.del('ra.ctx.staff'); LS.del('ra.pk'); };
   RA.me = function () { return RA._me || (RA._me = LS.get('ra.user')); };
 
   /* profil pelanggan (baris customers milik sendiri) */
@@ -291,6 +299,8 @@
       ]).then(function (res) {
         s.perms = {}; (res[0].data || []).forEach(function (p) { s.perms[p.perm] = p.limited ? 'limited' : true; });
         s.branches = s.all_branches ? (res[1].data || []) : (res[1].data || []).map(function (x) { return x.branches; }).filter(Boolean);
+        /* dibuka dari modul cabang di Sistem Kerja Pokama: hanya cabang itu yang terlihat */
+        var pk = LS.get('ra.pk'); if (pk && pk.br && pk.br.length && pk.t && Date.now() - pk.t < 12 * 3600e3) s.branches = s.branches.filter(function (b) { return pk.br.indexOf(b.code) > -1; });
         RA._staff = s; return s;
       });
     });
