@@ -281,7 +281,7 @@ function subTabs(role,allow){
   var ids=menuItems(allow).map(function(it){return it[0];});var grp=null;
   SUBT.forEach(function(g){if(g.some(function(x){return x[0]===current;})&&g.every(function(x){return ids.indexOf(x[0])>-1;}))grp=g;});
   if(!grp)return null;
-  var w=document.createElement('div');w.setAttribute('data-subt','1');w.style.cssText='width:100%;box-sizing:border-box;padding:10px 16px 0;align-self:stretch;flex:1 1 100%';
+  var w=document.createElement('div');w.setAttribute('data-subt','1');w.style.cssText='width:100%;box-sizing:border-box;padding:10px 16px 0;align-self:stretch;flex:0 0 auto';
   w.innerHTML='<div role="tablist" style="max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat('+grp.length+',minmax(0,1fr));gap:4px;background:#E9ECF0;border-radius:12px;padding:4px">'+grp.map(function(x){var on=x[0]===current;return '<a role="tab" aria-selected="'+on+'" href="'+x[0]+'.dc.html" style="height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;text-decoration:none;font:800 13px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#1F2B4D;background:'+(on?'#FFFFFF':'transparent')+';box-shadow:'+(on?'0 1px 3px rgba(31,43,77,.12)':'none')+'">'+x[1]+'</a>';}).join('')+'</div>';
   return w;
 }
