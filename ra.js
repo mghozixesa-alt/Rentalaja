@@ -164,7 +164,13 @@
     }).catch(function (e) { return { data: null, error: { message: friendly(e.message) } }; });
   };
   /* RPC yang melempar galat (untuk aksi tombol) */
-  RA.call = function (fn, args) { return RA.rpc(fn, args).then(function (r) { if (r.error) throw new Error(r.error.message); return r.data; }); };
+  RA.call = function (fn, args) { return RA.rpc(fn, args).then(function (r) {
+    if (r.error) {
+      // booking ditolak karena daftar hitam: catat percobaannya (penolakan membatalkan transaksi di server)
+      if (/tidak bisa diproses\. Silakan hubungi cabang/.test(r.error.message || '') && fn !== 'bl_report_attempt') { try { RA.rpc('bl_report_attempt', { p_rpc: fn }); } catch (e) {} }
+      throw new Error(r.error.message);
+    }
+    return r.data; }); };
   /* query yang melempar galat */
   RA.q = function (q) { return q.exec().then(function (r) { if (r.error) throw new Error(r.error.message); return r.data; }); };
 
@@ -575,7 +581,7 @@
     technician: 'Teknisi', runner: 'AgendaLapangan', driver: 'SopirJeep' };
   RA.PAGE_PERM = { PosHariIni: 'pos.bookings', PosVerifikasi: 'pos.verify', PosSerahTerima: 'pos.handover', PosKasir: 'pos.cashier', PosPelanggan: 'pos.customers', PosUnit: 'pos.units', PosQC: ['pos.qc', 'mgmt.qc'], PosShift: 'pos.shift',
     MgmtDashboard: 'mgmt.reports', MgmtLini: 'mgmt.reports', MgmtSetuju: ['mgmt.approvals', 'finance.approve'], MgmtPusatAset: 'mgmt.assets', MgmtAset: 'mgmt.assets', MgmtBeli: 'mgmt.assets', MgmtServis: 'mgmt.assets', MgmtQC: 'mgmt.qc', MgmtKlaim: 'mgmt.claims', MgmtProduk: 'mgmt.pricing',
-    MgmtHargaMusim: 'mgmt.pricing', MgmtPromo: 'mgmt.promo', MgmtKorporat: 'mgmt.corporate', MgmtKonten: 'mgmt.content', MgmtSumber: ['mgmt.marketing', 'mgmt.reports'], MgmtPelanggan: 'mgmt.customers', MgmtInbox: 'mgmt.inbox', MgmtPenawaran: 'mgmt.offers', MgmtTindakLanjut: 'mgmt.followup', MgmtSegmen: 'mgmt.broadcast',
+    MgmtHargaMusim: 'mgmt.pricing', MgmtPromo: 'mgmt.promo', MgmtKorporat: 'mgmt.corporate', MgmtKonten: 'mgmt.content', MgmtSumber: ['mgmt.marketing', 'mgmt.reports'], MgmtPelanggan: 'mgmt.customers', MgmtDaftarHitam: ['mgmt.customers', 'pos.customers'], KonfirmasiTransfer: ['pos.cashier', 'finance.panel'], MgmtInbox: 'mgmt.inbox', MgmtPenawaran: 'mgmt.offers', MgmtTindakLanjut: 'mgmt.followup', MgmtSegmen: 'mgmt.broadcast',
     MgmtKeluhan: 'mgmt.complaints', MgmtCabang: 'mgmt.branches', MgmtTim: 'mgmt.team', MgmtInvestor: 'mgmt.partners', MgmtPengguna: 'mgmt.users', MgmtAudit: 'mgmt.audit', MgmtImpor: 'mgmt.import', MgmtAturan: ['mgmt.settings', 'finance.settings'],
     ExpKalender: ['exp.calendar', 'exp.bookings'], ExpJeep: ['exp.bookings', 'field.driver'], Housekeeping: ['pos.qc', 'exp.bookings', 'field.runner'], OpsBeranda: ['mgmt.reports', 'pos.bookings'], OpsUnit: 'mgmt.team', OpsQC: 'mgmt.team', AsetBeranda: 'mgmt.assets', AsetPreventif: 'mgmt.assets', AsetUnit: ['mgmt.assets', 'pos.units'], AsetTim: 'mgmt.assets', AsetServis: ['mgmt.assets', 'field.workorder'] };
   RA.staffHome = function (role) { return RA.STAFF_HOME[role] || 'PosHariIni'; };
