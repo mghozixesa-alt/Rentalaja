@@ -182,6 +182,7 @@ var ICO={
  check:'<circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/>',
  kit:'<rect x="3" y="8" width="18" height="12" rx="2"/><path d="M9 8V5h6v3M3 13h18"/>',
  chart:'<path d="M4 20V10M10 20V4M16 20v-7M2 20h20"/>',
+ star:'<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>',
  approve:'<path d="M5 12l5 5L20 7"/>',
  users:'<circle cx="9" cy="8" r="3.5"/><path d="M2 20c1-3.5 3.8-5 7-5s6 1.5 7 5M16 4.5a3.5 3.5 0 0 1 0 7M18 15c2 .6 3.4 2.2 4 5"/>',
  store:'<path d="M4 10v10h16V10M3 10l2-6h14l2 6zM9 20v-5h6v5"/>',
@@ -193,7 +194,7 @@ var ICO={
 };
 function ico(k,c){return '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="'+c+'" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(ICO[k]||'')+'</svg>';}
 var SNAV=[
- ['Operasional',[['OpsBeranda','home','Dashboard manajemen'],['OpsUnit','chart','Utilisasi & mutasi'],['OpsQC','check','QC pelayanan'],['OpsKerja','calcheck','Kerja lapangan']]],
+ ['Operasional',[['OpsBeranda','home','Dashboard manajemen'],['OpsUnit','chart','Utilisasi & mutasi'],['OpsQC','star','Kualitas layanan'],['OpsKerja','calcheck','Kerja lapangan']]],
  ['CS',[['PusatCS','head','Pusat CS'],['LaporanShift','chart','Laporan shift']]],
  ['Harian',[['PosHariIni','home','Rental hari ini'],['PosVerifikasi','idcard','Verifikasi pesanan'],['PosKasir','cart','Kasir (sewa OTS)'],['PosSerahTerima','swap','Serah-terima & kembali'],['PosPelanggan','user','Pelanggan'],['PosShift','clock','Shift & tutup kas']]],
  ['Lapangan',[['Runner','truck','Antar-jemput']]],
@@ -227,12 +228,12 @@ var SROLE={
 };
 var FIELD={cs:['PusatCS','PosVerifikasi','AlatChat','TiketCS'],cs_experience:['PusatCS','PosVerifikasi','AlatChat','TiketCS'],runner:['AgendaLapangan','Runner','Housekeeping','SopirJeep','AkunLapangan'],driver:['SopirJeep','ExpJeep','Runner','AkunLapangan'],technician:['Teknisi','TekBelanja','TekAkun'],qc:['PosQC','Teknisi','Runner','AkunLapangan'],
  owner:['OpsBeranda','PusatCS','MgmtSetuju'],viewer:['OpsBeranda'],finance:['MgmtSetuju'],
- asset_manager:['AsetBeranda','AsetServis','AsetUnit','AsetTim'],experience_manager:['OpsBeranda','OpsUnit','OpsQC','Housekeeping'],
+ asset_manager:['AsetBeranda','AsetServis','AsetUnit','AsetTim'],experience_manager:['OpsBeranda','OpsKerja','OpsUnit','Housekeeping'],
  cashier:['PosHariIni','PosVerifikasi','PosKasir','PosSerahTerima'],staff:['PosHariIni','PosVerifikasi','PosKasir','PosSerahTerima'],branch_head:['PosHariIni','PosVerifikasi','PosSerahTerima','MgmtSetuju']};
 /* peran yang layarnya memang dibuat untuk HP (tetap menu bawah walau dibuka di layar lebar tanpa kolom menu) */
 var FIELDONLY={technician:1,cs:1,cs_experience:1,runner:1,driver:1,technician:1,qc:1};
 var FLABEL={KonfirmasiTransfer:'Transfer',MgmtDaftarHitam:'Daftar hitam',Runner:'Antar',PosAbsen:'Absen',PosQC:'Cek barang',SopirJeep:'Jeep',ExpJeep:'Jadwal jeep',Teknisi:'Teknisi',ExpHariIni:'Penginapan',ExpKalender:'Kalender',Housekeeping:'Kamar',AkunLapangan:'Akun',AgendaLapangan:'Agenda',PusatCS:'Beranda',PosVerifikasi:'Verifikasi',MgmtInbox:'Chat',MgmtKeluhan:'Keluhan',TiketCS:'Keluhan',AlatChat:'Chat',
- MgmtDashboard:'Laporan',MgmtSetuju:'Setujui',OpsBeranda:'Beranda',MgmtPusatAset:'Aset',MgmtServis:'Servis & QC',MgmtTim:'Tim',OpsKerja:'Kerja lapangan',OpsUnit:'Utilisasi',OpsQC:'Layanan',PosHariIni:'Hari ini',PosKasir:'Kasir',PosSerahTerima:'Serah-terima',KeuDasbor:'Keuangan'};
+ MgmtDashboard:'Laporan',MgmtSetuju:'Setujui',OpsBeranda:'Beranda',MgmtPusatAset:'Aset',MgmtServis:'Servis & QC',MgmtTim:'Tim',OpsKerja:'Kerja lapangan',OpsUnit:'Utilisasi',OpsQC:'Kualitas',PosHariIni:'Hari ini',PosKasir:'Kasir',PosSerahTerima:'Serah-terima',KeuDasbor:'Keuangan'};
 var FLABEL_R={technician:{Teknisi:'Pekerjaan',TekBelanja:'Belanja part',TekAkun:'Akun'},owner:{OpsBeranda:'Operasional',PusatCS:'CS'},asset_manager:{AsetBeranda:'Hari ini',AsetServis:'Servis',AsetUnit:'Unit',AsetTim:'Laporan'},experience_manager:{ExpJeep:'Jeep',Housekeeping:'Experience'}};
 /* tab bawah tetap menyala saat membuka halaman "saudara"-nya */
 var ALIAS={AsetPreventif:'AsetServis',AsetData:'AsetUnit',AsetLaporan:'AsetTim',AsetRisiko:'AsetBeranda',MgmtServis:'AsetServis',PosUnit:'AsetUnit',MgmtAset:'AsetUnit',TekPart:'TekBelanja',TekMasuk:'Teknisi',TekKerja:'Teknisi',TekSelesai:'Teknisi',MgmtAsetDetail:'AsetUnit',MgmtKelola:'MgmtAset',PosQC:'AsetServis',PosAbsen:'AkunLapangan',ExpKalender:'Housekeeping',LaporanShift:'PusatCS'};
@@ -350,9 +351,14 @@ function pkSubHTML(field){var m=pkMode(),l=pkSubs();if(!l)return '';var cur=m.su
 document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('[data-pksub]');if(!a)return;e.preventDefault();var m=pkMode(),l=pkSubs();if(!m||!l)return;var x=l[+a.getAttribute('data-pksub')];if(!x)return;
   try{localStorage.setItem('ra.viewAs',JSON.stringify(x[1]));localStorage.setItem('ra.pk',JSON.stringify({mod:m.mod,sub:x[0],br:x[3],t:m.t}));localStorage.removeItem('ra.staff.branch');localStorage.removeItem('ra.ctx.staff');}catch(er){}
   location.hash='#/'+x[2];location.reload();},true);
+/* menu kiri ringkas per peran: [judul kelompok, [layar...]]; layar lain yang boleh dibuka masuk "Lainnya" */
+var SIDE_LAYOUT={experience_manager:[['Hari ini',['OpsBeranda','OpsKerja','OpsQC','PosHariIni']],['Unit & barang',['OpsUnit','MgmtProduk','MgmtPromo']],['Penginapan & jeep',['Housekeeping','ExpJeep','KonfirmasiTransfer']]]};
+function sideGroups(role,allow){var all=[],idx={};SNAV.forEach(function(g){var a=allow[g[0]];if(!a)return;g[1].forEach(function(it){if((a===1||a.indexOf(it[0])>-1)&&!mHid(role,it[0])&&!idx[it[0]]){idx[it[0]]=it;all.push(it);}});});
+  var L=SIDE_LAYOUT[role];if(!L)return null;var used={},out=[];L.forEach(function(g){var its=g[1].map(function(k){return idx[k];}).filter(Boolean);its.forEach(function(it){used[it[0]]=1;});if(its.length)out.push([g[0],its]);});
+  var rest=all.filter(function(it){return !used[it[0]];});if(rest.length)out.push(['Lainnya',rest]);return out;}
 function sideHTML(role,allow,isPv){
-  var h='';SNAV.forEach(function(g){var a=allow[g[0]];if(!a)return;var items=g[1].filter(function(it){return (a===1||a.indexOf(it[0])>-1)&&!mHid(role,it[0]);});if(!items.length)return;
-    h+='<div style="display:flex;flex-direction:column;gap:2px"><div style="font:800 11px \'Plus Jakarta Sans\',system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#8A93A3;padding:0 12px 4px">'+g[0]+'</div>';
+  var h='';var GL=sideGroups(role,allow);(GL||SNAV).forEach(function(g){var items;if(GL)items=g[1];else{var a=allow[g[0]];if(!a)return;items=g[1].filter(function(it){return (a===1||a.indexOf(it[0])>-1)&&!mHid(role,it[0]);});}if(!items.length)return;
+    h+='<div style="display:flex;flex-direction:column;gap:2px"><div style="font:700 12px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#8A93A3;padding:0 12px 4px">'+g[0]+'</div>';
     items.forEach(function(it){var on=it[0]===current||(ALIAS[current]===it[0]&&!items.some(function(x){return x[0]===current;})&&false);
       h+='<a href="'+it[0]+'.dc.html"'+(on?' aria-current="page"':'')+' style="min-height:40px;box-sizing:border-box;padding:0 12px;border-radius:10px;background:'+(on?'#E3F7F5':'transparent')+';color:'+(on?'#077A70':'#1F2B4D')+';font:'+(on?'800':'600')+' 14px \'Plus Jakarta Sans\',system-ui,sans-serif;display:flex;align-items:center;gap:10px;text-decoration:none"><span style="width:20px;display:flex;justify-content:center">'+ico(it[1],on?'#077A70':'#6B7486')+'</span>'+it[2]+'</a>';});
     h+='</div>';});
