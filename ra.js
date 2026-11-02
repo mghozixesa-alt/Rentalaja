@@ -203,6 +203,14 @@
     if (d.indexOf('0') === 0) d = '62' + d.slice(1); else if (d.indexOf('8') === 0) d = '62' + d;
     return /^62\d{8,13}$/.test(d) ? d : null;
   };
+  /* sesi tamu: pesan penginapan/Jeep tanpa login & tanpa OTP (akun tamu baru, tidak terhubung ke akun lain) */
+  RA.guestSession = function () {
+    return RA.fn('guest-session', {}).then(function (d) {
+      if (!d || !d.session) throw new Error((d && d.error) || 'Gagal menyiapkan pemesanan. Coba lagi.');
+      setSession(d.session); LS.set('ra.user', d.user); RA._me = d.user; RA._perms = null; RA._staff = null; RA._cust = null;
+      return d;
+    });
+  };
   RA.requestOtp = function (phone, purpose) { return RA.fn('auth-otp', { action: 'request', phone: phone, purpose: purpose || 'login' }); };
   RA.verifyOtp = function (phone, code, purpose) {
     return RA.fn('auth-otp', { action: 'verify', phone: phone, code: code, purpose: purpose || 'login' }).then(function (d) {
