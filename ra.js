@@ -587,6 +587,8 @@
           RA.toast('Akun ini bukan akun staf Rentalaja.', 'bad'); return 'Masuk';
         });
         if (kind === 'finance' && !RA.can('finance.panel')) { RA.toast('Panel Keuangan hanya untuk owner dan keuangan.', 'bad'); return 'Masuk'; }
+        /* halaman Laporan (MgmtDashboard) sudah dihapus: arahkan ke beranda peran */
+        if (RETIRED[name]) return RA.staffHome(s.role);
         if (kind === 'staff' && s.role !== 'owner') {
           var home = RA.staffHome(s.role), pp = RA.PAGE_PERM[name];
           var noPerm = pp !== undefined && pp !== null && ![].concat(pp).some(function (x) { return RA.can(x); });
@@ -597,7 +599,8 @@
       });
     });
   };
-  RA.STAFF_HOME = { owner: 'MgmtDashboard', viewer: 'MgmtDashboard', finance: 'KeuDasbor', asset_manager: 'AsetBeranda', experience_manager: 'OpsBeranda',
+  var RETIRED = { MgmtDashboard: 1 };
+  RA.STAFF_HOME = { owner: 'OpsBeranda', viewer: 'OpsBeranda', finance: 'KeuDasbor', asset_manager: 'AsetBeranda', experience_manager: 'OpsBeranda',
     cs_experience: 'PusatCS', branch_head: 'PosHariIni', cs: 'PusatCS', cashier: 'PosHariIni', staff: 'PosHariIni', qc: 'PosQC',
     technician: 'Teknisi', runner: 'AgendaLapangan', driver: 'SopirJeep' };
   RA.PAGE_PERM = { PosHariIni: 'pos.bookings', PosVerifikasi: 'pos.verify', PosSerahTerima: 'pos.handover', PosKasir: 'pos.cashier', PosPelanggan: 'pos.customers', PosUnit: 'pos.units', PosQC: ['pos.qc', 'mgmt.qc'], PosShift: 'pos.shift',
