@@ -214,7 +214,7 @@ var MASET={'Aset & servis':['AsetBeranda','AsetKalender','AsetOpname','AsetServi
 /* boleh dibuka (lewat tautan di halaman) tapi tidak tampil di menu */
 var FLD={PosAbsen:1,CekBuka:1};/* petugas lapangan absen & ceklis lewat ops.pokama.org */
 var MHIDE={asset_manager:{MgmtServis:1,PosUnit:1,MgmtSetuju:1,AsetRisiko:1,PosQC:1,AsetPreventif:1,AsetData:1,AsetOpname:1,AsetTim:1},cashier:FLD,staff:FLD,branch_head:FLD,runner:FLD,technician:FLD,qc:FLD,driver:FLD};/* CS: satu pintu lewat tab di Pusat CS; aset owner: masuk lewat 4 pintu (sisanya tab di dalamnya) */
-var CSH={MgmtInbox:1,TiketCS:1,AlatChat:1,MgmtTindakLanjut:1,MgmtPenawaran:1,LaporanShift:1};MHIDE.cs=CSH;MHIDE.cs_experience=CSH;
+var CSH={MgmtInbox:1,TiketCS:1,AlatChat:1,MgmtTindakLanjut:1,MgmtPenawaran:1,LaporanShift:1};MHIDE.cs=CSH;MHIDE.cs_experience=CSH;MHIDE.experience_manager={MgmtSetuju:1};
 MHIDE.owner={MgmtInbox:1,TiketCS:1,AlatChat:1,MgmtTindakLanjut:1,MgmtPenawaran:1,LaporanShift:1,PosQC:1,AsetPreventif:1,AsetTim:1,AsetData:1,AsetRisiko:1,AsetOpname:1,AsetTandai:1,MgmtAset:1,MgmtPusatAset:1,MgmtServis:1,Teknisi:1,TekBelanja:1,TekAkun:1,PosUnit:1,AgendaLapangan:1,AkunLapangan:1,PosAbsen:1,CekBuka:1};
 function mHid(role,n){return !!(MHIDE[role]&&MHIDE[role][n]);}
 var SROLE={
@@ -234,12 +234,12 @@ var FIELD={cs:['PusatCS','PosVerifikasi','AlatChat','TiketCS'],cs_experience:['P
 var FIELDONLY={technician:1,cs:1,cs_experience:1,runner:1,driver:1,technician:1,qc:1};
 var FLABEL={KonfirmasiTransfer:'Transfer',MgmtDaftarHitam:'Daftar hitam',Runner:'Antar',PosAbsen:'Absen',PosQC:'Cek barang',SopirJeep:'Jeep',ExpJeep:'Jadwal jeep',Teknisi:'Teknisi',ExpHariIni:'Penginapan',ExpKalender:'Kalender',Housekeeping:'Kamar',AkunLapangan:'Akun',AgendaLapangan:'Agenda',PusatCS:'Beranda',PosVerifikasi:'Verifikasi',MgmtInbox:'Chat',MgmtKeluhan:'Keluhan',TiketCS:'Keluhan',AlatChat:'Chat',
  MgmtDashboard:'Laporan',MgmtSetuju:'Setujui',OpsBeranda:'Beranda',MgmtPusatAset:'Aset',MgmtServis:'Servis & QC',MgmtTim:'Tim',OpsKerja:'Kerja lapangan',OpsUnit:'Utilisasi',OpsQC:'Kualitas',PosHariIni:'Hari ini',PosKasir:'Kasir',PosSerahTerima:'Serah-terima',KeuDasbor:'Keuangan'};
-var FLABEL_R={technician:{Teknisi:'Pekerjaan',TekBelanja:'Belanja part',TekAkun:'Akun'},owner:{OpsBeranda:'Operasional',PusatCS:'CS'},asset_manager:{AsetBeranda:'Hari ini',AsetKalender:'Kalender',AsetUnit:'Unit',AsetServis:'Servis',AsetLaporan:'Laporan'},experience_manager:{ExpJeep:'Jeep',Housekeeping:'Experience'}};
+var FLABEL_R={technician:{Teknisi:'Pekerjaan',TekBelanja:'Belanja part',TekAkun:'Akun'},owner:{OpsBeranda:'Operasional',PusatCS:'CS'},asset_manager:{AsetBeranda:'Hari ini',AsetKalender:'Kalender',AsetUnit:'Unit',AsetServis:'Servis',AsetLaporan:'Laporan'},experience_manager:{ExpJeep:'Jeep',Housekeeping:'Penginapan',OpsKerja:'Lapangan'}};
 /* tab bawah tetap menyala saat membuka halaman "saudara"-nya */
 var ALIAS={AsetPreventif:'AsetServis',AsetData:'AsetUnit',AsetTim:'AsetLaporan',AsetOpname:'AsetUnit',AsetRisiko:'AsetBeranda',MgmtServis:'AsetServis',PosUnit:'AsetUnit',MgmtAset:'AsetUnit',TekPart:'TekBelanja',TekMasuk:'Teknisi',TekKerja:'Teknisi',TekSelesai:'Teknisi',MgmtAsetDetail:'AsetUnit',MgmtKelola:'MgmtAset',PosQC:'AsetServis',PosAbsen:'AkunLapangan',ExpKalender:'Housekeeping',LaporanShift:'PusatCS'};
 /* halaman yang digabung dalam satu tab: tampilkan tombol pindah di atas */
 var SUBT=[[['PusatCS','Beranda'],['MgmtInbox','Inbox WA'],['TiketCS','Keluhan'],['MgmtTindakLanjut','Tindak lanjut'],['MgmtPenawaran','Perjalanan'],['AlatChat','Template'],['LaporanShift','Shift']],[['AsetServis','Papan'],['PosQC','Cek QC'],['AsetPreventif','Preventif'],['MgmtServis','Aturan']],[['AsetUnit','Unit'],['AsetOpname','Stok opname'],['AsetData','Lengkapi data']],[['AsetLaporan','Kinerja & jatuh tempo'],['AsetTim','Tim teknisi & QC']]];
-var REST_TOP={asset_manager:[],experience_manager:['OpsKerja','ExpJeep','PosHariIni','MgmtPromo','MgmtProduk','MgmtSetuju']};
+var REST_TOP={asset_manager:[],experience_manager:['OpsKerja','ExpJeep','PosHariIni','MgmtPromo','MgmtProduk','KonfirmasiTransfer']};
 var ALLG={};SNAV.forEach(function(g){ALLG[g[0]]=1;});
 function roleAllow(role){return role==='owner'?ALLG:(SROLE[role]||{'Harian':1});}
 window.RA_MENU_ALLOWS=function(role,name){
@@ -256,7 +256,7 @@ function fieldSheet(rest){
   o.style.cssText='position:fixed;inset:0;z-index:100;background:rgba(31,43,77,.45);display:flex;align-items:flex-end;justify-content:center';
   var li='',lastG=null,many=rest.length>7;
   rest.forEach(function(it){var on=it[0]===current;
-    if(many&&it[3]!==lastG){lastG=it[3];li+='<div style="font:800 11px \'Plus Jakarta Sans\',system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#8A93A3;padding:8px 4px 0">'+it[3]+'</div>';}
+    if(many&&it[3]!==lastG){lastG=it[3];li+='<div style="font:700 12px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#6B7486;padding:8px 4px 0">'+it[3]+'</div>';}
     li+='<a href="'+it[0]+'.dc.html" data-k="go" style="min-height:'+(many?'44':'48')+'px;padding:0 14px;border-radius:12px;display:flex;align-items:center;gap:12px;text-decoration:none;font-weight:'+(on?'800':'700')+';font-size:15px;color:'+(on?'#077A70':'#1F2B4D')+';background:'+(on?'#E3F7F5':'#F6F7F9')+'">'+fico(it[1],on?'#077A70':'#4A5468')+it[2]+'</a>';});
   li+=pkSubHTML(true);
   if(isOwnerReal()&&!pkMode())li+='<a href="#/peta" data-k="go" style="min-height:44px;padding:0 14px;border-radius:12px;display:flex;align-items:center;gap:12px;text-decoration:none;font-weight:700;font-size:14px;color:#4A5468;background:#FFFFFF;border:1px dashed #D5D9E0">'+fico('folder','#8A93A3')+'Peta semua layar (owner)</a>';
@@ -338,7 +338,7 @@ function pkMode(){try{var v=JSON.parse(localStorage.getItem('ra.pk')||'null');re
 function pkBack(){var m=pkMode();return m&&m.ops?'https://ops.pokama.org/#/shift':'https://app.pokama.org/';}
 function pkHead(){var m=pkMode();if(!m)return '';
   return '<a href="'+pkBack()+'" data-pkback="1" style="display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:12px;background:#1F2B4D;color:#FFFFFF;text-decoration:none;font-family:\'Plus Jakarta Sans\',system-ui,sans-serif"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#09BEAF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg><span style="display:flex;flex-direction:column;line-height:1.2"><b style="font-size:13.5px;font-weight:800">'+(m.ops?'Shift Saya':'Sistem Kerja Pokama')+'</b><small style="font-size:11px;font-weight:600;color:#C9D3E0">'+(m.ops?'Absen, ceklis, lembur':'Kembali ke KKH & menu modul')+'</small></span></a>'+
-    (m.mod?'<div style="padding:2px 12px 0;font:800 12px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#077A70;letter-spacing:.04em;text-transform:uppercase">'+(m.ops?'Panel ':'Modul ')+String(m.mod).replace(/[<>&"]/g,'')+(m.sub&&m.sub!==m.mod?' · '+String(m.sub).replace(/[<>&"]/g,''):'')+'</div>':'');}
+    (m.mod?'<div style="padding:2px 12px 0;font:600 12px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#6B7486">'+(m.ops?'Panel ':'Modul ')+String(m.mod).replace(/[<>&"]/g,'')+(m.sub&&m.sub!==m.mod?' · '+String(m.sub).replace(/[<>&"]/g,''):'')+'</div>':'');}
 /* panel di dalam modul (dibuka dari Sistem Kerja): owner bisa pindah ke panel CS, lapangan, cabang, teknisi */
 var PKSUB={Operasional:[['Operasional','experience_manager','OpsBeranda',null],['CS','cs','PusatCS',null],['Lapangan','runner','AgendaLapangan',null],['Cabang Garut Kota','cashier','PosHariIni',['GRT']],['Cabang Wanaraja','cashier','PosHariIni',['WNR']],['Cabang Bandung','cashier','PosHariIni',['BDG-HUB','BDG-JKL']],['Cabang Maripoto','cashier','PosHariIni',['MPT']]],
   Aset:[['Aset','asset_manager','AsetBeranda',null],['Teknisi','technician','Teknisi',null]]};
@@ -346,7 +346,7 @@ function pkMark(x){var n=x[0],k=/Garut/.test(n)?['GK','#0F766E']:/Wanaraja/.test
   return '<span style="position:relative;width:26px;height:26px;border-radius:8px;background:#FFFFFF;border:1.5px solid '+k[1]+';box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;flex:none;margin-right:2px"><img src="img/ra-mark.png" alt="" style="width:16px;height:16px;object-fit:contain;display:block"><i style="position:absolute;right:-6px;bottom:-6px;min-width:14px;height:14px;border-radius:7px;background:'+k[1]+';color:#FFFFFF;font:900 8.5px/14px \'Plus Jakarta Sans\',system-ui,sans-serif;font-style:normal;text-align:center;padding:0 2px;box-shadow:0 0 0 2px #FFFFFF;box-sizing:border-box">'+k[0]+'</i></span>';}
 function pkSubs(){var m=pkMode();if(!m||!isOwnerReal())return null;var l=PKSUB[m.mod];return l&&l.length>1?l:null;}
 function pkSubHTML(field){var m=pkMode(),l=pkSubs();if(!l)return '';var cur=m.sub||l[0][0];
-  return '<div style="display:flex;flex-direction:column;gap:2px;margin-top:'+(field?'10':'4')+'px;padding-top:12px;border-top:1px solid #E6E8EC"><div style="font:800 11px \'Plus Jakarta Sans\',system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#8A93A3;padding:0 12px 4px">Panel '+m.mod+'</div>'+
+  return '<div style="display:flex;flex-direction:column;gap:2px;margin-top:'+(field?'10':'4')+'px;padding-top:12px;border-top:1px solid #E6E8EC"><div style="font:700 12px \'Plus Jakarta Sans\',system-ui,sans-serif;color:#6B7486;padding:0 12px 4px">Panel '+m.mod+'</div>'+
     l.map(function(x,i){var on=x[0]===cur;return '<a href="#" data-pksub="'+i+'" style="min-height:40px;padding:0 12px;border-radius:10px;display:flex;align-items:center;gap:10px;text-decoration:none;font:'+(on?'800':'600')+' 14px \'Plus Jakarta Sans\',system-ui,sans-serif;color:'+(on?'#077A70':'#1F2B4D')+';background:'+(on?'#E3F7F5':'transparent')+'">'+pkMark(x)+''+x[0]+'</a>';}).join('')+'</div>';}
 document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('[data-pksub]');if(!a)return;e.preventDefault();var m=pkMode(),l=pkSubs();if(!m||!l)return;var x=l[+a.getAttribute('data-pksub')];if(!x)return;
   try{localStorage.setItem('ra.viewAs',JSON.stringify(x[1]));localStorage.setItem('ra.pk',JSON.stringify({mod:m.mod,sub:x[0],br:x[3],t:m.t}));localStorage.removeItem('ra.staff.branch');localStorage.removeItem('ra.ctx.staff');}catch(er){}
@@ -400,6 +400,7 @@ function staffNav(root){
   if(!hasAside){if(known||RA_MENU_ALLOWS(role,current)!==false){deskShell(root,role,allow,isPv);deskSub(root,role,allow);}return;}
   nav.setAttribute('style','display:flex;flex-direction:column;gap:14px');
   nav.innerHTML=sideHTML(role,allow,isPv);deskSub(root,role,allow);
+  var asd=nav.closest('aside');if(asd){var lg=asd.querySelector('img[src="logo.png"]'),nx=lg&&lg.nextElementSibling;if(nx&&nx!==nav&&nx.tagName==='DIV'&&!nx.querySelector('select,a,button,input')&&nx.textContent.trim().length<30)nx.remove();}
   var sv=nav.querySelector('select[data-viewas]');if(sv)sv.addEventListener('change',function(){RA.viewAs(sv.value||null);});
 }
 function flowClose(root){
