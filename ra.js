@@ -130,10 +130,13 @@
     var extra = { 'Content-Type': 'application/json' };
     if (self.pref.length) extra.Prefer = self.pref.join(',');
     if (self.acc) extra.Accept = self.acc;
-    return headers(extra).then(function (h) {
-      return fetch(C.url + '/rest/v1/' + self.t + (self.p.length ? '?' + self.p.join('&') : ''), {
-        method: self.m, headers: h, body: self.b === undefined ? undefined : JSON.stringify(self.b)
-      });
+    var simple = self.m === 'GET' && !session && !self.pref.length;
+    return (simple ? Promise.resolve(null) : headers(extra)).then(function (h) {
+      var qs = self.p.slice(); if (simple) qs.push('apikey=' + encodeURIComponent(C.key));
+      var url = C.url + '/rest/v1/' + self.t + (qs.length ? '?' + qs.join('&') : '');
+      /* pengunjung tanpa login: permintaan GET "sederhana" (kunci di URL, tanpa header khusus) supaya browser tidak perlu preflight */
+      if (simple) return fetch(url, self.acc ? { headers: { Accept: self.acc } } : undefined);
+      return fetch(url, { method: self.m, headers: h, body: self.b === undefined ? undefined : JSON.stringify(self.b) });
     }).then(function (r) {
       var cr = r.headers.get('content-range'); var count = cr && cr.indexOf('/') > -1 ? +cr.split('/')[1] : null;
       return r.text().then(function (txt) {
@@ -163,9 +166,14 @@
     return RA._rpc(fn, args);
   };
   RA.rpcClear = function () { rpcMemo = {}; };
+  /* fungsi baca (STABLE) untuk pengunjung tanpa login: GET sederhana tanpa preflight */
+  var GETRPC = { catalog_list: 1, experience_catalog: 1, stay_nights: 1, trip_days: 1, trip_slots: 1, stay_addons: 1 };
   RA._rpc = function (fn, args) {
-    return headers({ 'Content-Type': 'application/json' }).then(function (h) {
-      return fetch(C.url + '/rest/v1/rpc/' + fn, { method: 'POST', headers: h, body: JSON.stringify(args || {}) });
+    var a = args || {}, ks = Object.keys(a);
+    var simple = !session && GETRPC[fn] && ks.every(function (k) { var v = a[k]; return v !== null && v !== undefined && typeof v !== 'object'; });
+    return (simple ? Promise.resolve(null) : headers({ 'Content-Type': 'application/json' })).then(function (h) {
+      if (simple) return fetch(C.url + '/rest/v1/rpc/' + fn + '?' + ks.map(function (k) { return k + '=' + encodeURIComponent(a[k]); }).concat(['apikey=' + encodeURIComponent(C.key)]).join('&'));
+      return fetch(C.url + '/rest/v1/rpc/' + fn, { method: 'POST', headers: h, body: JSON.stringify(a) });
     }).then(function (r) {
       return r.text().then(function (txt) {
         var d = null; try { d = txt ? JSON.parse(txt) : null; } catch (e) { d = txt; }
@@ -415,9 +423,10 @@
   RA.settings = function (force) {
     if (RA._set && !force && RA._setAuth === !!session) return Promise.resolve(RA._set);
     RA._setAuth = !!session;
-    return RA.from('settings').select('key,value,grp,label,unit,value_type').then(function (r) {
-      var m = {}; (r.data || []).forEach(function (x) { m[x.key] = x.value; }); RA._set = m; return m;
-    });
+    var load = function () { return RA.from('settings').select('key,value,grp,label,unit,value_type').then(function (r) {
+      if (r.error) return null; var m = {}; (r.data || []).forEach(function (x) { m[x.key] = x.value; }); return m; }); };
+    if (force) return load().then(function (m) { RA._set = m || RA._set || {}; return RA._set; });
+    return swr('ra.c.set' + (session ? 'A' : 'P'), load, function (m) { RA._set = m; }).then(function (m) { RA._set = RA._set || m || {}; return RA._set; });
   };
   RA.setting = function (k) { return RA._set ? (RA._set[k] === undefined ? null : RA._set[k]) : null; };
   RA.simulation = function () { return RA.setting('payment_mode') !== 'live'; };
@@ -508,9 +517,17 @@
     if (ex && !item.start_at) ex.quantity = (ex.quantity || 1) + (item.quantity || 1); else c.cart.push(Object.assign({ quantity: 1 }, item));
     LS.set('ra.ctx', c); return c;
   };
+  /* cache ringan: data jarang berubah ditampilkan dari penyimpanan lokal dulu, lalu disegarkan di belakang */
+  function swr(key, fetcher, apply) {
+    var c = LS.get(key), fresh = fetcher().then(function (d) { if (d != null) { LS.set(key, { t: Date.now(), d: d }); apply(d); } return d; });
+    if (c && c.d != null && Date.now() - c.t < 7 * 864e5) { apply(c.d); return Promise.resolve(c.d); }
+    return fresh;
+  }
   RA.branches = function () {
     if (RA._br) return Promise.resolve(RA._br);
-    return RA.from('branches').select('*').order('sort').then(function (r) { RA._br = r.data || []; return RA._br; });
+    if (RA._brP) return RA._brP;
+    return RA._brP = swr('ra.c.br', function () { return RA.from('branches').select('*').order('sort').then(function (r) { return r.error ? null : (r.data || []); }); },
+      function (d) { RA._br = d; }).then(function (d) { RA._brP = null; RA._br = RA._br || d || []; return RA._br; });
   };
   RA.branch = function () {
     return RA.branches().then(function (bs) {
