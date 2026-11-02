@@ -66,10 +66,13 @@
     if (p.access_token) {
       var claims = {}; try { claims = JSON.parse(b64url(p.access_token.split('.')[1])) || {}; } catch (e) {}
       var meta = claims.user_metadata || {};
-      var user = { id: claims.sub, email: claims.email || null, name: meta.full_name || meta.name || null, provider: 'google' };
+      var sso = p.sso === 'pokama', nx = /^[A-Z][A-Za-z]{2,40}$/.test(p.next || '') ? p.next : '';
+      var user = { id: claims.sub, email: claims.email || null, name: meta.full_name || meta.name || null, provider: sso ? 'pokama' : 'google' };
       setSession({ access_token: p.access_token, refresh_token: p.refresh_token, expires_in: +p.expires_in || 3600, expires_at: +p.expires_at || undefined, token_type: p.token_type || 'bearer', user: user });
       LS.set('ra.user', user); RA._me = user; RA._perms = null; RA._staff = null; RA._cust = null;
-      history.replaceState(null, '', location.pathname + location.search + '#/Login?google=1');
+      /* masuk dari Sistem Kerja Pokama (modul Dashboard Manajemen / Aset): langsung ke layar staf yang dituju */
+      if (sso) { LS.del('ra.ctx.staff'); history.replaceState(null, '', location.pathname + location.search + '#/' + (nx || 'Masuk')); }
+      else history.replaceState(null, '', location.pathname + location.search + '#/Login?google=1');
     } else {
       history.replaceState(null, '', location.pathname + location.search + '#/Login?gerr=' + encodeURIComponent(p.error_description || 'Login Google gagal'));
     }
