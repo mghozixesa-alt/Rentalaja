@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Statistik Link Bio · Rentalaja</title>
+<link rel="icon" href="/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#1F2B4D;--teal:#09BEAF;--teal-d:#077A70;--mute:#5B6573;--line:#E3E7EC;--bg:#F3F6F8}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--navy);font-family:'Plus Jakarta Sans',system-ui,sans-serif}
+a{color:var(--teal-d)}
+.top{background:var(--navy);color:#fff}
+.top .w{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:14px 16px}
+.top h1{font-size:18px;margin:0;font-weight:800}
+.top small{color:#C9D3E3;font-size:12px}
+.w{max-width:1100px;margin:0 auto;padding:16px}
+.rng{margin-left:auto;display:flex;gap:6px}
+.rng button{height:34px;padding:0 12px;border-radius:9px;border:1px solid rgba(255,255,255,.25);background:transparent;color:#fff;font:700 13px inherit;font-family:inherit;cursor:pointer}
+.rng button.on{background:var(--teal);color:var(--navy);border-color:var(--teal)}
+.kpi{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.k{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px}
+.k span{display:block;font-size:12px;color:var(--mute);font-weight:700}
+.k b{display:block;font-size:22px;font-weight:800;margin-top:4px;overflow-wrap:anywhere}
+.k i{font-style:normal;font-size:12px;color:var(--mute)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px;margin-top:12px}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px;min-width:0}
+.card h2{font-size:14px;margin:0 0 10px;font-weight:800}
+.card.wide{grid-column:1/-1}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:7px 6px;border-bottom:1px solid #EEF0F3;vertical-align:middle}
+th{color:var(--mute);font-weight:700;font-size:12px}
+td.n,th.n{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.bar{height:8px;border-radius:4px;background:#E7F7F5;overflow:hidden;min-width:60px}
+.bar i{display:block;height:100%;background:var(--teal)}
+.chart{display:flex;align-items:flex-end;gap:3px;height:150px;padding-top:8px}
+.chart .c{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:2px;min-width:0}
+.chart .c i{display:block;width:100%;border-radius:3px 3px 0 0;background:#C9EEEA}
+.chart .c i.k2{background:var(--teal-d)}
+.chart .c span{font-size:9px;color:#8A93A6;white-space:nowrap}
+.lg{display:flex;gap:14px;font-size:12px;color:var(--mute);margin-top:6px}
+.lg i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+.msg{background:#fff;border:1px solid var(--line);border-radius:14px;padding:24px;text-align:center;color:var(--mute)}
+.msg a{font-weight:800}
+.tip{font-size:12px;color:var(--mute);margin:12px 2px 0;line-height:18px}
+code{background:#EEF1F6;padding:1px 5px;border-radius:5px;font-size:12px}
+</style>
+</head>
+<body>
+<div class="top"><div class="w" style="padding:14px 16px">
+  <div><h1>Statistik Link Bio</h1><small id="sub">demo.rentalaja.co.id/link</small></div>
+  <div class="rng" id="rng"><button data-d="7">7 hari</button><button data-d="30" class="on">30 hari</button><button data-d="90">90 hari</button></div>
+</div></div>
+<div class="w" id="app"><div class="msg">Memuat…</div></div>
+<script src="/config.js"></script>
+<script>
+(function () {
+  var C = window.RA_CONFIG || {}, days = 30, app = document.getElementById('app');
+  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
+  var num = function (n) { return (+n || 0).toLocaleString('id-ID'); };
+  var rp = function (n) { return 'Rp' + Math.round(+n || 0).toLocaleString('id-ID'); };
+  var SRC = { ig: 'Instagram', tt: 'TikTok', fb: 'Facebook', wa: 'WhatsApp', google: 'Google', langsung: 'Langsung / tidak diketahui', line: 'LINE' };
+  function token() { try { var s = JSON.parse(localStorage.getItem('ra.session') || 'null'); return s && s.access_token; } catch (e) { return null; } }
+  function ymd(d) { return d.toISOString().slice(0, 10); }
+  function table(rows, cols, max) {
+    if (!rows || !rows.length) return '<p style="color:#8A93A6;font-size:13px;margin:4px 0">Belum ada data.</p>';
+    var top = Math.max.apply(null, rows.map(function (r) { return +r[cols[1][0]] || 0; })) || 1;
+    return '<table><thead><tr>' + cols.map(function (c, i) { return '<th' + (i ? ' class="n"' : '') + '>' + c[1] + '</th>'; }).join('') + (max ? '<th></th>' : '') + '</tr></thead><tbody>' +
+      rows.map(function (r) { return '<tr>' + cols.map(function (c, i) { var v = c[2] ? c[2](r[c[0]], r) : r[c[0]]; return '<td' + (i ? ' class="n"' : '') + '>' + (i ? v : esc(v)) + '</td>'; }).join('') +
+        (max ? '<td style="width:30%"><div class="bar"><i style="width:' + Math.round((+r[cols[1][0]] || 0) / top * 100) + '%"></i></div></td>' : '') + '</tr>'; }).join('') + '</tbody></table>';
+  }
+  function chart(daily, from, to) {
+    var map = {}; (daily || []).forEach(function (d) { map[d.d] = d; });
+    var list = [], d = new Date(from + 'T00:00:00Z'), end = new Date(to + 'T00:00:00Z');
+    while (d <= end) { var k = ymd(d); list.push(map[k] || { d: k, views: 0, clicks: 0 }); d.setUTCDate(d.getUTCDate() + 1); }
+    var top = Math.max.apply(null, list.map(function (x) { return +x.views || 0; }).concat([1]));
+    var step = Math.ceil(list.length / 10);
+    return '<div class="chart">' + list.map(function (x, i) {
+      return '<div class="c" title="' + x.d + ': ' + x.views + ' kunjungan, ' + x.clicks + ' klik"><i style="height:' + Math.round((+x.views || 0) / top * 120) + 'px"></i><i class="k2" style="height:' + Math.round((+x.clicks || 0) / top * 120) + 'px;margin-top:-' + Math.round((+x.clicks || 0) / top * 120) + 'px;width:60%"></i><span>' + (i % step === 0 ? x.d.slice(8) + '/' + x.d.slice(5, 7) : '') + '</span></div>';
+    }).join('') + '</div><div class="lg"><span><i style="background:#C9EEEA"></i>Kunjungan</span><span><i style="background:#077A70"></i>Klik</span></div>';
+  }
+  // sesi aplikasi kedaluwarsa tiap 1 jam: perbarui sekali memakai refresh token yang sama dengan aplikasi
+  function refresh() {
+    var s; try { s = JSON.parse(localStorage.getItem('ra.session') || 'null'); } catch (e) {}
+    if (!s || !s.refresh_token) return Promise.resolve(false);
+    return fetch(C.url + '/auth/v1/token?grant_type=refresh_token', { method: 'POST', headers: { apikey: C.key, 'Content-Type': 'application/json' }, body: JSON.stringify({ refresh_token: s.refresh_token }) })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (n) { if (!n || !n.access_token) return false; try { localStorage.setItem('ra.session', JSON.stringify(Object.assign({}, s, n))); } catch (e) {} return true; })
+      .catch(function () { return false; });
+  }
+  var retried = false;
+  function load() {
+    var t = token();
+    if (!t) { app.innerHTML = '<div class="msg">Halaman ini khusus tim. <a href="/#/Masuk">Masuk ke aplikasi</a> dulu (akun Owner / Marketing), lalu buka lagi halaman ini.</div>'; return; }
+    var to = new Date(Date.now() + 7 * 3600e3), from = new Date(to.getTime() - (days - 1) * 864e5);
+    app.innerHTML = '<div class="msg">Memuat…</div>';
+    fetch(C.url + '/rest/v1/rpc/ra_link_stats', { method: 'POST', headers: { apikey: C.key, Authorization: 'Bearer ' + t, 'Content-Type': 'application/json' }, body: JSON.stringify({ p_from: ymd(from), p_to: ymd(to) }) })
+      .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+      .then(function (x) {
+        if (!x.ok && !retried && /JWT|expired/i.test(JSON.stringify(x.j))) { retried = true; return refresh().then(function (ok) { if (ok) load(); else app.innerHTML = '<div class="msg">Sesi masuk sudah habis. <a href="/#/Masuk">Masuk lagi di aplikasi</a>, lalu muat ulang halaman ini.</div>'; }); }
+        retried = false;
+        if (!x.ok) { app.innerHTML = '<div class="msg">' + (/JWT|expired/i.test(JSON.stringify(x.j)) ? 'Sesi masuk sudah habis. <a href="/#/Masuk">Masuk lagi di aplikasi</a>, lalu muat ulang halaman ini.' : 'Akun ini belum punya akses statistik marketing.') + '</div>'; return; }
+        render(x.j);
+      }).catch(function () { app.innerHTML = '<div class="msg">Gagal memuat. Periksa koneksi lalu coba lagi.</div>'; });
+  }
+  function render(s) {
+    var ctr = s.views ? Math.round(s.clicks / s.views * 100) : 0, conv = s.visitors ? (s.bookings / s.visitors * 100).toFixed(1) : '0';
+    document.getElementById('sub').textContent = 'demo.rentalaja.co.id/link · ' + s.from + ' s.d. ' + s.to;
+    app.innerHTML =
+      '<div class="kpi">' +
+      [['Kunjungan', num(s.views), ''], ['Pengunjung unik', num(s.visitors), ''], ['Klik tombol', num(s.clicks), num(s.clickers) + ' orang'], ['Rasio klik', ctr + '%', 'klik / kunjungan'],
+       ['Booking dari link', num(s.bookings), conv + '% pengunjung'], ['Booking dibayar', num(s.paid_bookings), ''], ['Omzet dari link', rp(s.revenue), 'booking yang sudah bayar']]
+        .map(function (k) { return '<div class="k"><span>' + k[0] + '</span><b>' + k[1] + '</b><i>' + k[2] + '</i></div>'; }).join('') + '</div>' +
+      '<div class="grid">' +
+      '<div class="card wide"><h2>Kunjungan & klik per hari</h2>' + chart(s.daily, s.from, s.to) + '</div>' +
+      '<div class="card"><h2>Tombol yang diklik</h2>' + table(s.links, [['label', 'Tombol'], ['clicks', 'Klik', num], ['people', 'Orang', num]], true) + '</div>' +
+      '<div class="card"><h2>Asal pengunjung</h2>' + table((s.sources || []).map(function (r) { return Object.assign({}, r, { name: SRC[r.src] || r.src }); }), [['name', 'Sumber'], ['views', 'Kunjungan', num], ['visitors', 'Unik', num], ['clicks', 'Klik', num]], true) + '</div>' +
+      '<div class="card"><h2>Booking dari link (per sumber & tombol)</h2>' + table((s.booking_by_source || []).map(function (r) { return Object.assign({}, r, { name: (SRC[r.src] || r.src) + (r.link ? ' · ' + r.link : '') }); }), [['name', 'Sumber · tombol'], ['n', 'Booking', num], ['paid', 'Dibayar', num]], true) + '</div>' +
+      '<div class="card"><h2>Dibuka dari aplikasi</h2>' + table(s.in_app, [['app', 'Aplikasi'], ['n', 'Pengunjung', num]], true) + '</div>' +
+      '<div class="card"><h2>Perangkat</h2>' + table(s.devices, [['device', 'Perangkat'], ['n', 'Pengunjung', num]], true) + table(s.os, [['os', 'Sistem'], ['n', 'Pengunjung', num]], true) + '</div>' +
+      '<div class="card"><h2>Jam ramai (WIB)</h2>' + table((s.hours || []).map(function (r) { return Object.assign({}, r, { jam: String(r.h).padStart(2, '0') + '.00' }); }), [['jam', 'Jam'], ['views', 'Kunjungan', num], ['clicks', 'Klik', num]], true) + '</div>' +
+      ((s.campaigns || []).length ? '<div class="card"><h2>Campaign</h2>' + table(s.campaigns, [['campaign', 'Campaign'], ['views', 'Kunjungan', num], ['clicks', 'Klik', num]], true) + '</div>' : '') +
+      '<div class="card wide"><h2>Aktivitas terbaru</h2>' + table((s.recent || []).map(function (r) {
+        var d = new Date(new Date(r.waktu).getTime() + 7 * 3600e3);
+        return { w: d.toISOString().slice(5, 16).replace('T', ' ').replace('-', '/'), a: (r.kind === 'view' ? 'Membuka halaman' : 'Klik: ' + (r.what || '-')), s: SRC[r.src] || r.src, p: [r.device, r.os, r.in_app].filter(Boolean).join(' · ') };
+      }), [['a', 'Aktivitas'], ['w', 'Waktu', esc], ['s', 'Sumber', esc], ['p', 'Perangkat', esc]]) +
+      '<p class="tip">Pengunjung dihitung anonim (tanpa nama, nomor, atau IP). Kalau pengunjung lanjut booking, bookingnya tercatat di "Booking dari link". Pakai link berbeda per kanal supaya sumbernya jelas: ' +
+      '<code>/link?src=ig</code> di bio Instagram, <code>/link?src=tt</code> di TikTok, <code>/link?src=wa</code> di status WA, dan <code>/link?src=ig&amp;c=promo-akhir-tahun</code> untuk campaign tertentu.</p></div>' +
+      '</div>';
+  }
+  document.getElementById('rng').addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return; days = +b.getAttribute('data-d');
+    this.querySelectorAll('button').forEach(function (x) { x.classList.toggle('on', x === b); }); load();
+  });
+  load();
+})();
+</script>
+</body>
+</html>

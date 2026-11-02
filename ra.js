@@ -614,12 +614,23 @@
     var r = LS.get('ra.ref'), at = +LS.get('ra.ref_at') || 0, days = RA.setting ? (+RA.setting('mitra_attribution_days') || 30) : 30;
     if (!r) return null; if (at && Date.now() - at > days * 864e5) return null; return r;
   };
-  RA.affParams = function () {
+  /* sumber kunjungan (utm_*) — mis. dari halaman link bio /link. Disimpan 30 hari (sentuhan terakhir menang) dan
+     ikut tersimpan di booking (kolom utm) supaya dashboard marketing tahu booking datang dari mana. */
+  (function () {
+    var q = {}; try { new URLSearchParams(location.search).forEach(function (v, k) { q[k] = v; }); } catch (e) {}
+    var g = function (k) { return RA.param(k) || q[k] || null; };
+    var s = g('utm_source');
+    if (s) LS.set('ra.utm', { source: String(s).slice(0, 30), medium: String(g('utm_medium') || '').slice(0, 30) || null,
+      campaign: String(g('utm_campaign') || '').slice(0, 60) || null, vid: String(g('lbv') || '').slice(0, 40) || null, at: Date.now() });
+  })();
+  RA.utm = function () { var u = LS.get('ra.utm'); return u && u.at && Date.now() - u.at < 30 * 864e5 ? u : null; };
+  function affBase() {
     var c = RA.ctx ? RA.ctx() : {};
     if (c.aff_off) return { aff_off: 'true' };
     if (c.aff_code) return { aff_code: c.aff_code, aff_src: 'kode' };
     var r = RA.refCode(); return r ? { aff_code: r, aff_src: 'link' } : {};
-  };
+  }
+  RA.affParams = function () { var o = affBase(), u = RA.utm(); if (u) o.utm = u; return o; };
   RA.affAttribute = function () {
     var r = RA.refCode(); if (!r || !session || LS.get('ra.ref_saved') === r + '|' + LS.get('ra.ref_at')) return;
     RA.rpc('mitra_attribute', { p_code: r }).then(function (x) { if (x && !x.error) LS.set('ra.ref_saved', r + '|' + LS.get('ra.ref_at')); }).catch(function () {});
