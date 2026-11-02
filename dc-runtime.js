@@ -429,9 +429,31 @@ function render(){
   var frag=document.createDocumentFragment();
   build(rootSpec.tpl,scopes,frag);
   screenEl.innerHTML='';screenEl.appendChild(frag);
-  var root=screenEl.firstElementChild; if(root){custNav(root);staffNav(root);adapt(root);deskFix(root);flowClose(root);}
+  var root=screenEl.firstElementChild; if(root){custNav(root);staffNav(root);adapt(root);deskFix(root);flowClose(root);cartUI(root);}
   if(focusInfo&&focusInfo.i>-1){var all2=screenEl.querySelectorAll('input,textarea,select');var t=all2[focusInfo.i];if(t){t.focus({preventScroll:true});try{t.setSelectionRange(focusInfo.s,focusInfo.e);}catch(e){}}}
   window.scrollTo(0,y);
+}
+
+/* ---------- keranjang: ikon di atas + bar melayang saat ada isi ---------- */
+var CART_ICON={Home:1,Katalog:1,Cari:1,Produk:1},CART_BAR={Home:1,Katalog:1,Cari:1};
+function cartUI(root){
+  if(!rootSpec||!rootSpec.mobile||!CART_ICON[current])return;
+  var n=0;try{var c=JSON.parse(localStorage.getItem('ra.ctx')||'{}');n=(c&&c.cart||[]).length;}catch(e){}
+  var a=document.createElement('a');a.href='Keranjang.dc.html';a.setAttribute('aria-label','Keranjang'+(n?' ('+n+' barang)':''));a.setAttribute('data-ra-cart','1');
+  a.setAttribute('style','position:relative;width:36px;height:36px;flex-shrink:0;border-radius:18px;background:#FFFFFF;box-shadow:0 2px 8px rgba(31,43,77,0.16);display:flex;align-items:center;justify-content:center;text-decoration:none');
+  a.innerHTML='<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#1F2B4D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+ICO.cart+'</svg>'+
+    (n?'<span style="position:absolute;top:-4px;right:-4px;min-width:18px;height:18px;padding:0 4px;box-sizing:border-box;border-radius:9px;background:#E4553F;color:#FFFFFF;font-size:10.5px;font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid #FFFFFF">'+(n>9?'9+':n)+'</span>':'');
+  var en=current==='Home'&&root.querySelector('a[href="HomeEn.dc.html"]');
+  if(en){var w=document.createElement('span');w.setAttribute('style','display:flex;align-items:center;gap:8px');en.parentNode.insertBefore(w,en);w.appendChild(a);w.appendChild(en);}
+  else{if(getComputedStyle(root).position==='static')root.style.position='relative';a.style.position='absolute';a.style.top='12px';a.style.right='16px';a.style.zIndex='30';root.appendChild(a);}
+  if(!n||!CART_BAR[current])return;
+  var nav=null;Array.prototype.forEach.call(root.children,function(el){if(el.localName==='nav'&&el.style.position==='fixed')nav=el;});
+  var nh=nav?nav.offsetHeight:0;
+  var bar=document.createElement('a');bar.href='Keranjang.dc.html';bar.setAttribute('data-ra-cartbar','1');
+  bar.setAttribute('style','position:fixed;left:50%;transform:translateX(-50%);bottom:'+(nh+10)+'px;width:calc(100% - 24px);max-width:406px;box-sizing:border-box;z-index:41;background:#09BEAF;color:#1F2B4D;border-radius:16px;padding:11px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;text-decoration:none;box-shadow:0 6px 18px rgba(9,190,175,0.35);font-family:inherit');
+  bar.innerHTML='<span style="display:flex;align-items:center;gap:10px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1F2B4D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+ICO.cart+'</svg><span style="display:flex;flex-direction:column"><b style="font-size:14.5px;font-weight:800">'+n+' barang di keranjang</b><span style="font-size:12px;font-weight:600;opacity:.8">Lanjutkan pesanan</span></span></span><b style="font-size:14.5px;font-weight:800;white-space:nowrap">Lihat →</b>';
+  root.appendChild(bar);
+  root.style.paddingBottom=((parseInt(root.style.paddingBottom||'0',10)||nh)+bar.offsetHeight+10)+'px';
 }
 
 /* ---------- bundles & patches ---------- */
