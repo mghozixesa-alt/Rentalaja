@@ -194,7 +194,7 @@ var ICO={
 };
 function ico(k,c){return '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="'+c+'" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(ICO[k]||'')+'</svg>';}
 var SNAV=[
- ['Operasional',[['OpsBeranda','home','Dashboard manajemen'],['OpsUnit','chart','Utilisasi & mutasi'],['OpsQC','star','Kualitas layanan'],['OpsKerja','calcheck','Kerja lapangan']]],
+ ['Operasional',[['OpsBeranda','home','Dashboard manajemen'],['OpsUnit','chart','Utilisasi & mutasi'],['OpsKalender','cal','Kalender sewa'],['OpsQC','star','Kualitas layanan'],['OpsKerja','calcheck','Kerja lapangan']]],
  ['CS',[['PusatCS','head','Pusat CS'],['LaporanShift','chart','Laporan shift']]],
  ['Harian',[['PosHariIni','home','Rental hari ini'],['PosVerifikasi','idcard','Verifikasi pesanan'],['PosKasir','cart','Kasir (sewa OTS)'],['PosSerahTerima','swap','Serah-terima & kembali'],['PosPelanggan','user','Pelanggan'],['PosShift','clock','Shift & tutup kas']]],
  ['Lapangan',[['Runner','truck','Antar-jemput']]],
@@ -353,7 +353,7 @@ document.addEventListener('click',function(e){var a=e.target.closest&&e.target.c
   try{localStorage.setItem('ra.viewAs',JSON.stringify(x[1]));localStorage.setItem('ra.pk',JSON.stringify({mod:m.mod,sub:x[0],br:x[3],t:m.t}));localStorage.removeItem('ra.staff.branch');localStorage.removeItem('ra.ctx.staff');}catch(er){}
   location.hash='#/'+x[2];location.reload();},true);
 /* menu kiri ringkas per peran: [judul kelompok, [layar...]]; layar lain yang boleh dibuka masuk "Lainnya" */
-var SIDE_LAYOUT={experience_manager:[['Hari ini',['OpsBeranda','OpsKerja','OpsQC','PosHariIni']],['Unit & barang',['OpsUnit','MgmtProduk','MgmtPromo']],['Penginapan & jeep',['Housekeeping','ExpJeep','KonfirmasiTransfer']]]};
+var SIDE_LAYOUT={experience_manager:[['Hari ini',['OpsBeranda','OpsKerja','OpsQC','PosHariIni']],['Unit & barang',['OpsKalender','OpsUnit','MgmtProduk','MgmtPromo']],['Penginapan & jeep',['Housekeeping','ExpJeep','KonfirmasiTransfer']]]};
 function sideGroups(role,allow){var all=[],idx={};SNAV.forEach(function(g){var a=allow[g[0]];if(!a)return;g[1].forEach(function(it){if((a===1||a.indexOf(it[0])>-1)&&!mHid(role,it[0])&&!idx[it[0]]){idx[it[0]]=it;all.push(it);}});});
   var L=SIDE_LAYOUT[role];if(!L)return null;var used={},out=[];L.forEach(function(g){var its=g[1].map(function(k){return idx[k];}).filter(Boolean);its.forEach(function(it){used[it[0]]=1;});if(its.length)out.push([g[0],its]);});
   var rest=all.filter(function(it){return !used[it[0]];});if(rest.length)out.push(['Lainnya',rest]);return out;}
