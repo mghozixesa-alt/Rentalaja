@@ -32,19 +32,40 @@
     if (session && !session.expires_at && session.expires_in) session.expires_at = Math.floor(Date.now() / 1000) + session.expires_in;
     if (session) { LS.set('ra.session', session); if (RA.affAttribute) setTimeout(function () { try { RA.affAttribute(); } catch (e) {} }, 800); } else { LS.del('ra.session'); LS.del('ra.user'); RA._me = null; RA._perms = null; try { Object.keys(localStorage).forEach(function (k) { if (k.indexOf('ra.c.staff.') === 0) localStorage.removeItem(k); }); } catch (e) {} }
   }
-  function refresh() {
+  /* sesi dipakai bersama semua tab: tab lain mungkin sudah memperbarui token, jadi selalu cek localStorage dulu
+     supaya satu tab yang memegang token lama tidak mengeluarkan semua tab (CS tidak perlu login ulang). */
+  function fresh(x) { return x && x.access_token && (!x.expires_at || x.expires_at * 1000 > Date.now() + 60000); }
+  function adoptStored() { var st = LS.get('ra.session'); if (st && st.access_token && (!session || st.access_token !== session.access_token)) { session = st; return true; } return false; }
+  window.addEventListener('storage', function (e) { if (e.key === 'ra.session') { var st = LS.get('ra.session'); if (st && st.access_token) session = st; } });
+  function doRefresh() {
+    if (adoptStored() && fresh(session)) return Promise.resolve();
     if (!session || !session.refresh_token) { setSession(null); return Promise.resolve(); }
-    if (refreshing) return refreshing;
-    refreshing = fetch(C.url + '/auth/v1/token?grant_type=refresh_token', {
+    var used = session.refresh_token;
+    return fetch(C.url + '/auth/v1/token?grant_type=refresh_token', {
       method: 'POST', headers: { apikey: C.key, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ refresh_token: session.refresh_token })
-    }).then(function (r) { return r.ok ? r.json() : null; })
-      .then(function (d) { setSession(d && d.access_token ? d : null); })
-      .catch(function () { /* jaringan putus: biarkan sesi lama */ })
-      .then(function () { refreshing = null; });
+      body: JSON.stringify({ refresh_token: used })
+    }).then(function (r) { return r.ok ? r.json() : (r.status >= 500 ? 'net' : null); })
+      .then(function (d) {
+        if (d === 'net') return;
+        if (d && d.access_token) { if (session && session.user && !d.user) d.user = session.user; setSession(d); return; }
+        /* gagal: bila tab lain sudah memakai token ini dan menyimpan yang baru, pakai yang baru */
+        var st = LS.get('ra.session');
+        if (st && st.refresh_token && st.refresh_token !== used) { session = st; return; }
+        setSession(null);
+      })
+      .catch(function () { /* jaringan putus: biarkan sesi lama */ });
+  }
+  function refresh() {
+    if (refreshing) return refreshing;
+    var run = (navigator.locks && navigator.locks.request) ? navigator.locks.request('ra-auth-refresh', function () { return doRefresh(); }) : doRefresh();
+    refreshing = Promise.resolve(run).catch(function () {}).then(function () { refreshing = null; });
     return refreshing;
   }
+  /* perbarui token sebelum habis selama tab terbuka, dan saat tab kembali aktif */
+  setInterval(function () { if (session && session.expires_at && session.expires_at * 1000 < Date.now() + 5 * 60000) refresh(); }, 60000);
+  document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible') { adoptStored(); if (session && session.expires_at && session.expires_at * 1000 < Date.now() + 5 * 60000) refresh(); } });
   function token() {
+    if (session && !fresh(session)) adoptStored();
     if (session && session.expires_at && session.expires_at * 1000 < Date.now() + 60000) return refresh().then(function () { return session && session.access_token; });
     return Promise.resolve(session && session.access_token);
   }
@@ -650,7 +671,7 @@
   };
   var RETIRED = { MgmtDashboard: 1, PosAbsen: 1, CekBuka: 1, MgmtTim: 'OpsKerja', MgmtKeluhan: 'TiketCS', PesanWa: 1, PesanWaInap: 1, PesanWaJeep: 1 };
   RA.STAFF_HOME = { owner: 'OpsBeranda', viewer: 'OpsBeranda', finance: 'KeuDasbor', asset_manager: 'AsetBeranda', experience_manager: 'OpsBeranda',
-    cs_experience: 'PusatCS', branch_head: 'PosHariIni', cs: 'PusatCS', cashier: 'PosHariIni', staff: 'PosHariIni', qc: 'PosQC',
+    cs_experience: 'PosVerifikasi', branch_head: 'PosHariIni', cs: 'PosVerifikasi', cashier: 'PosHariIni', staff: 'PosHariIni', qc: 'PosQC',
     technician: 'Teknisi', runner: 'AgendaLapangan', driver: 'SopirJeep' };
   RA.PAGE_PERM = { PosHariIni: 'pos.bookings', PosVerifikasi: 'pos.verify', PosSerahTerima: 'pos.handover', PosKasir: 'pos.cashier', PosPelanggan: 'pos.customers', PosUnit: 'pos.units', PosQC: ['pos.qc', 'mgmt.qc'], PosShift: 'pos.shift',
     MgmtDashboard: 'mgmt.reports', MgmtLini: 'mgmt.reports', MgmtSetuju: ['mgmt.approvals', 'finance.approve'], MgmtPusatAset: 'mgmt.assets', MgmtAset: 'mgmt.assets', MgmtBeli: 'mgmt.assets', MgmtServis: 'mgmt.assets', MgmtQC: 'mgmt.qc', MgmtKlaim: 'mgmt.claims', MgmtProduk: 'mgmt.pricing',

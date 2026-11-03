@@ -227,7 +227,8 @@ var SROLE={
  finance:{'Manajemen':['MgmtSetuju']},
  viewer:{'Operasional':['OpsBeranda','OpsKerja']}
 };
-var FIELD={cs:['PosVerifikasi','PusatCS','OpsKalender','PosHariIni'],cs_experience:['PosVerifikasi','PusatCS','OpsKalender','PosHariIni'],runner:['AgendaLapangan','Runner','Housekeeping','SopirJeep','AkunLapangan'],driver:['SopirJeep','ExpJeep','Runner','AkunLapangan'],technician:['Teknisi','TekBelanja','TekAkun'],qc:['PosQC','Teknisi','Runner','AkunLapangan'],
+var FAB={cs:'PosVerifikasi',cs_experience:'PosVerifikasi'};
+var FIELD={cs:['PusatCS','OpsKalender','PosVerifikasi','PosHariIni'],cs_experience:['PusatCS','OpsKalender','PosVerifikasi','PosHariIni'],runner:['AgendaLapangan','Runner','Housekeeping','SopirJeep','AkunLapangan'],driver:['SopirJeep','ExpJeep','Runner','AkunLapangan'],technician:['Teknisi','TekBelanja','TekAkun'],qc:['PosQC','Teknisi','Runner','AkunLapangan'],
  owner:['OpsBeranda','PusatCS','MgmtSetuju'],viewer:['OpsBeranda'],finance:['MgmtSetuju'],
  asset_manager:['AsetBeranda','AsetKalender','AsetUnit','AsetServis','AsetLaporan'],experience_manager:['OpsBeranda','OpsKerja','OpsUnit','Housekeeping'],
  cashier:['PosHariIni','PosVerifikasi','PosKasir','PosSerahTerima'],staff:['PosHariIni','PosVerifikasi','PosKasir','PosSerahTerima'],branch_head:['PosHariIni','PosVerifikasi','PosSerahTerima','MgmtSetuju']};
@@ -322,7 +323,9 @@ function fieldNav(root,nav,role,allow,isPv){
   var alias=ALIAS[current]&&!pri.some(function(p){return p[0]===current;})?ALIAS[current]:null;
   var inRest=rest.some(function(it){return it[0]===current;})&&!alias;
   var tab=function(href,ic,label,on){var col=on?'#077A70':'#6B7486';return '<'+(href?'a href="'+href+'"':'button type="button" data-more="1"')+(on?' aria-current="page"':'')+' style="'+(href?'text-decoration:none;':'border:0;background:none;padding:0;cursor:pointer;')+'color:'+col+';display:flex;flex-direction:column;align-items:center;gap:2px;font:'+(on?'800':'700')+' 11px \'Plus Jakarta Sans\',system-ui,sans-serif;min-width:0"><span style="width:48px;height:30px;border-radius:15px;display:flex;align-items:center;justify-content:center;'+(on?'background:#E3F7F5':'')+'">'+ic+'</span><span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%">'+label+'</span></'+(href?'a':'button')+'>';};
-  var h=pri.map(function(it){var on=it[0]===current||it[0]===alias;return tab(it[0]+'.dc.html',fico(it[1],on?'#077A70':'#6B7486'),flab(role,it[0],it[2]),on);}).join('');
+  var FABK=FAB[role];
+  var big=function(href,ic,label,on){return '<a href="'+href+'"'+(on?' aria-current="page"':'')+' style="text-decoration:none;color:'+(on?'#077A70':'#1F2B4D')+';display:flex;flex-direction:column;align-items:center;gap:3px;font:800 11px \'Plus Jakarta Sans\',system-ui,sans-serif;min-width:0;margin-top:-26px"><span style="width:60px;height:60px;border-radius:30px;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,#09BEAF 0%,#077A70 100%);box-shadow:0 6px 16px rgba(7,122,112,.35),0 0 0 5px #FFFFFF">'+ic+'</span><span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%">'+label+'</span></a>';};
+  var h=pri.map(function(it){var on=it[0]===current||it[0]===alias;if(it[0]===FABK)return big(it[0]+'.dc.html',fico(it[1],'#FFFFFF').replace(/width="\d+" height="\d+"/,'width="28" height="28"'),flab(role,it[0],it[2]),on);return tab(it[0]+'.dc.html',fico(it[1],on?'#077A70':'#6B7486'),flab(role,it[0],it[2]),on);}).join('');
   var dots='<svg width="22" height="22" viewBox="0 0 24 24" fill="'+(inRest?'#077A70':'#6B7486')+'" aria-hidden="true"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>';
   h+=tab(null,dots,'Lainnya',inRest);
   var bar=document.createElement('nav');bar.setAttribute('aria-label','Menu bawah');bar.setAttribute('data-ra-field','1');
