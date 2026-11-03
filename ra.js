@@ -367,9 +367,44 @@
         s.branches = s.all_branches ? (res[1].data || []) : (res[1].data || []).map(function (x) { return x.branches; }).filter(Boolean);
         /* dibuka dari modul cabang di Sistem Kerja Pokama: hanya cabang itu yang terlihat */
         var pk = LS.get('ra.pk'); if (pk && pk.br && pk.br.length && pk.t && Date.now() - pk.t < 12 * 3600e3) s.branches = s.branches.filter(function (b) { return pk.br.indexOf(b.code) > -1; });
-        RA._staff = s; return s;
+        RA._staff = s; try { RA.verifWatch(s); } catch (e) {} return s;
       });
     });
+  };
+  /* CS: bunyi + getar + notifikasi HP setiap ada booking baru masuk verifikasi (di halaman mana pun) */
+  RA.alertSound = function () {
+    try { var A = window.AudioContext || window.webkitAudioContext; var ctx = RA._ac || (RA._ac = new A()); if (ctx.state === 'suspended') ctx.resume();
+      [[988, 0], [784, 0.22], [988, 0.5], [784, 0.72]].forEach(function (x) { var o = ctx.createOscillator(), g = ctx.createGain(); o.type = 'sine'; o.frequency.value = x[0];
+        g.gain.setValueAtTime(0.0001, ctx.currentTime + x[1]); g.gain.exponentialRampToValueAtTime(0.5, ctx.currentTime + x[1] + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + x[1] + 0.2);
+        o.connect(g); g.connect(ctx.destination); o.start(ctx.currentTime + x[1]); o.stop(ctx.currentTime + x[1] + 0.22); }); } catch (e) {}
+    try { if (navigator.vibrate) navigator.vibrate([300, 120, 300, 120, 300]); } catch (e) {}
+  };
+  RA.notifyPhone = function (title, body) {
+    try { if (!('Notification' in window) || Notification.permission !== 'granted') return;
+      var opt = { body: body, icon: 'logo.png', badge: 'logo.png', tag: 'ra-verif', renotify: true, requireInteraction: true, vibrate: [300, 120, 300], data: { url: location.origin + location.pathname + '#/PosVerifikasi' } };
+      if (navigator.serviceWorker && navigator.serviceWorker.ready) navigator.serviceWorker.ready.then(function (r) { r.showNotification(title, opt); }).catch(function () { new Notification(title, opt); });
+      else new Notification(title, opt); } catch (e) {}
+  };
+  RA.askNotify = function () { try { if ('Notification' in window && Notification.permission === 'default') return Notification.requestPermission(); } catch (e) {} return Promise.resolve(); };
+  RA.verifWatch = function (s) {
+    if (RA._vw || !s || ['cs', 'cs_experience'].indexOf(s.role) < 0) return;
+    RA._vw = true; window.__verifWatch = true;
+    var seen = null;
+    function tick() {
+      RA.from('bookings').select('id,code,guest_name').eq('status', 'pending_verification').order('created_at', { ascending: false }).limit(30).then(function (r) {
+        var rows = (r && r.data) || [], ids = rows.map(function (x) { return x.id; });
+        if (seen) { var fresh = rows.filter(function (x) { return seen.indexOf(x.id) < 0; });
+          if (fresh.length) { var on = true; try { on = localStorage.getItem('ra.pos.sound') !== '0'; } catch (e) {}
+            if (on) RA.alertSound();
+            RA.notifyPhone('🔔 Verifikasi baru masuk', fresh.map(function (x) { return x.code + ' · ' + (x.guest_name || ''); }).join('\n') + '\nKetuk untuk cek');
+            if (RA.toast) RA.toast('🔔 ' + fresh.length + ' booking baru menunggu verifikasi'); } }
+        seen = ids;
+      }).catch(function () {});
+    }
+    tick(); setInterval(tick, 15000);
+    /* buka kunci suara di HP: perlu satu sentuhan pertama */
+    var unlock = function () { try { var A = window.AudioContext || window.webkitAudioContext; RA._ac = RA._ac || new A(); RA._ac.resume(); } catch (e) {} RA.askNotify(); document.removeEventListener('click', unlock, true); };
+    document.addEventListener('click', unlock, true);
   };
   /* invoice PDF (A4) — dibuat server, dibuka di tab baru */
   RA.invoice = function (bookingId, code) {
