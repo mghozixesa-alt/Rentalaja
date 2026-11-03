@@ -171,7 +171,7 @@ var ICO={
  calcheck:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18M9 15l2 2 4-4"/>',
  truck:'<path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="18" r="1.6"/><circle cx="17" cy="18" r="1.6"/>',
  house:'<path d="M3 21h18M5 21V10l7-5 7 5v11"/><path d="M10 21v-5h4v5"/>',
- cal:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/>',
+ trash:'<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/>', cal:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/>',
  jeep:'<path d="M3 15V9h4l2-3h6l2 3h4v6zM3 15h18"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/>',
  wheel:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2"/><path d="M12 14v7M10 12H3M14 12h7"/>',
  tag:'<path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="7.5" r="1.5"/>',
@@ -203,7 +203,7 @@ var SNAV=[
  ['Aset & servis',[['AsetBeranda','home','Hari ini (aset)'],['AsetKalender','cal','Kalender unit'],['AsetServis','tool','Papan servis'],['PosQC','check','Cek kondisi (QC)'],['AsetPreventif','calcheck','Perawatan preventif'],['AsetLaporan','chart','Laporan aset'],['AsetData','check','Lengkapi data unit'],['AsetRisiko','alert','Kontrol aset (semua)'],['AsetUnit','box','Unit aset (pusat)'],['AsetOpname','check','Stok opname'],['AsetTim','users','Tim teknisi & QC'],['MgmtAset','box','Daftar unit & riwayat'],['MgmtPusatAset','folder','Ringkasan aset'],['MgmtServis','tool','Servis'],['Teknisi','kit','Teknisi'],['TekBelanja','cart','Belanja part'],['TekAkun','user','Akun teknisi']]],
  ['Manajemen',[['MgmtSetuju','approve','Persetujuan'],['MgmtLini','chart','Ringkasan per lini']]],
  ['Pemasaran',[['MgmtSumber','chart','Pemasaran'],['MgmtKonten','folder','Konten web'],['MgmtKorporat','store','Korporat & B2B']]],
- ['Pengaturan',[['MgmtPengguna','users','Staf & akses'],['MgmtCabang','store','Cabang'],['MgmtAturan','check','Aturan bisnis'],['MgmtLaporanWa','chat','Laporan WhatsApp'],['MgmtAudit','folder','Log audit']]],
+ ['Pengaturan',[['MgmtPengguna','users','Staf & akses'],['MgmtCabang','store','Cabang'],['MgmtAturan','check','Aturan bisnis'],['MgmtLaporanWa','chat','Laporan WhatsApp'],['MgmtAudit','folder','Log audit'],['MgmtDataUji','trash','Hapus data uji']]],
  ['Pelanggan',[['MgmtPelanggan','user','Data pelanggan'],['MgmtSegmen','chat','Broadcast WhatsApp'],['MgmtInbox','chat','Inbox WhatsApp'],['TiketCS','approve','Tiket keluhan'],['AlatChat','chat','Template & link sewa'],['MgmtPenawaran','tag','Permintaan perjalanan'],['MgmtTindakLanjut','users','Tindak lanjut'],['MgmtDaftarHitam','shieldx','Daftar hitam']]],
  ['Saya',[['AgendaLapangan','calcheck','Agenda'],['AkunLapangan','user','Akun saya'],['TiketCS','approve','Tiket keluhan']]]
 ];
