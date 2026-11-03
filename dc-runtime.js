@@ -207,7 +207,7 @@ var SNAV=[
  ['Pelanggan',[['MgmtPelanggan','user','Data pelanggan'],['MgmtSegmen','chat','Broadcast WhatsApp'],['MgmtInbox','chat','Inbox WhatsApp'],['TiketCS','approve','Tiket keluhan'],['AlatChat','chat','Template & link sewa'],['MgmtPenawaran','tag','Permintaan perjalanan'],['MgmtTindakLanjut','users','Tindak lanjut'],['MgmtDaftarHitam','shieldx','Daftar hitam']]],
  ['Saya',[['AgendaLapangan','calcheck','Agenda'],['AkunLapangan','user','Akun saya'],['TiketCS','approve','Tiket keluhan']]]
 ];
-var CSM={'CS':1,'Harian':['PosHariIni','PosVerifikasi','PosPelanggan'],'Operasional':['OpsKalender'],'Penginapan & Jeep':['Housekeeping','ExpJeep','KonfirmasiTransfer'],'Pelanggan':['TiketCS','AlatChat','MgmtPenawaran','MgmtDaftarHitam']};
+var CSM={'CS':1,'Harian':['PosHariIni','PosVerifikasi','PosPelanggan'],'Operasional':['OpsKalender'],'Pengaturan':['MgmtDataUji'],'Penginapan & Jeep':['Housekeeping','ExpJeep','KonfirmasiTransfer'],'Pelanggan':['TiketCS','AlatChat','MgmtPenawaran','MgmtDaftarHitam']};
 /* manajer operasional = operasional harian + experience (penginapan & jeep); manajer aset terpisah */
 var MOPS={'Operasional':1,'Harian':['PosHariIni'],'Penginapan & Jeep':['Housekeeping','ExpJeep','KonfirmasiTransfer'],'Pelanggan':['MgmtDaftarHitam'],'Barang':['MgmtProduk','MgmtPromo'],'Manajemen':['MgmtSetuju'],'Saya':['TiketCS']};
 /* manajer aset: menu mengikuti alur kerja (lapor → servis → QC → siap); persetujuan part ada di Beranda aset, stok/mutasi lewat Unit aset, detail servis lewat Papan servis */
