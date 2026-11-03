@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Sinkron Airbnb & Agoda · Rentalaja</title>
+<link rel="icon" href="/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#1F2B4D;--teal:#09BEAF;--teal-d:#077A70;--mute:#5B6573;--line:#E3E7EC;--bg:#F3F6F8;--red:#C8372D;--red-bg:#FDECEA;--amber:#9A6700;--amber-bg:#FFF5D6;--ok-bg:#E7F7F5}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--navy);font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-size:14px}
+a{color:var(--teal-d)}
+.top{background:var(--navy);color:#fff}
+.top .w{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:14px 16px}
+.top h1{font-size:18px;margin:0;font-weight:800}
+.top small{color:#C9D3E3;font-size:12px}
+.w{max-width:1000px;margin:0 auto;padding:16px}
+.btn{height:36px;padding:0 14px;border-radius:10px;border:1px solid var(--line);background:#fff;color:var(--navy);font:700 13px 'Plus Jakarta Sans',system-ui,sans-serif;cursor:pointer;white-space:nowrap}
+.btn.pri{background:var(--teal);border-color:var(--teal);color:var(--navy)}
+.btn.ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.3);margin-left:auto}
+.btn:disabled{opacity:.5;cursor:default}
+.kpi{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:12px}
+.k{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.k span{display:block;font-size:12px;color:var(--mute);font-weight:700}
+.k b{display:block;font-size:22px;font-weight:800;margin-top:4px}
+.k.bad b{color:var(--red)}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-top:12px}
+.card h2{font-size:16px;margin:0;font-weight:800}
+.card .sub{color:var(--mute);font-size:12px;margin-top:2px}
+.alert{background:var(--red-bg);color:var(--red);border-radius:10px;padding:10px 12px;font-weight:700;font-size:13px;margin-top:10px}
+.feed{border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:10px}
+.feed .hd{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.feed .hd b{font-size:14px}
+.pill{font-size:11px;font-weight:800;padding:3px 8px;border-radius:99px;background:#EEF1F6;color:var(--mute)}
+.pill.ok{background:var(--ok-bg);color:var(--teal-d)}
+.pill.err{background:var(--red-bg);color:var(--red)}
+.pill.wait{background:var(--amber-bg);color:var(--amber)}
+label{display:block;font-size:12px;font-weight:700;color:var(--mute);margin:10px 0 4px}
+.row{display:flex;gap:6px}
+.row input{flex:1;min-width:0;height:36px;border:1px solid var(--line);border-radius:10px;padding:0 10px;font:500 13px 'Plus Jakarta Sans',system-ui,sans-serif;color:var(--navy);background:#fff}
+.row input[readonly]{background:#F7F9FA;color:var(--mute)}
+.meta{font-size:12px;color:var(--mute);margin-top:6px;line-height:18px}
+.meta .e{color:var(--red)}
+details{margin-top:12px}
+summary{cursor:pointer;font-weight:800;font-size:13px}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px}
+th,td{text-align:left;padding:7px 6px;border-bottom:1px solid #EEF0F3;vertical-align:top}
+th{color:var(--mute);font-weight:700;font-size:12px}
+tr.bad td{background:var(--red-bg)}
+.src{font-weight:800}
+.msg{background:#fff;border:1px solid var(--line);border-radius:14px;padding:24px;text-align:center;color:var(--mute)}
+.msg a{font-weight:800}
+.help{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px;font-size:13px;line-height:20px}
+.help ol{margin:6px 0 0;padding-left:18px}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--navy);color:#fff;padding:10px 16px;border-radius:10px;font-weight:700;font-size:13px;opacity:0;transition:opacity .2s;pointer-events:none;max-width:90vw}
+.toast.on{opacity:1}
+@media (max-width:560px){.row{flex-wrap:wrap}.row .btn{flex:1}}
+</style>
+</head>
+<body>
+<div class="top"><div class="w">
+  <div><h1>Sinkron Airbnb & Agoda</h1><small>Kalender penginapan Rentalaja Experience</small></div>
+  <button class="btn ghost" id="syncAll">Sinkron semua</button>
+</div></div>
+<div class="w" id="app"><div class="msg">Memuat…</div></div>
+<div class="toast" id="toast"></div>
+<script src="/config.js"></script>
+<script>
+(function () {
+  var C = window.RA_CONFIG || {}, app = document.getElementById('app'), data = null, retried = false;
+  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
+  var CH = { web: 'Rentalaja', airbnb: 'Airbnb', agoda: 'Agoda', bookingcom: 'Booking.com', lainnya: 'OTA lain', servis: 'Servis', manual: 'Ditutup manual', ota: 'OTA' };
+  function toast(t) { var el = document.getElementById('toast'); el.textContent = t; el.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(function () { el.classList.remove('on'); }, 2600); }
+  function sess() { try { return JSON.parse(localStorage.getItem('ra.session') || 'null'); } catch (e) { return null; } }
+  function refresh() {
+    var s = sess(); if (!s || !s.refresh_token) return Promise.resolve(false);
+    return fetch(C.url + '/auth/v1/token?grant_type=refresh_token', { method: 'POST', headers: { apikey: C.key, 'Content-Type': 'application/json' }, body: JSON.stringify({ refresh_token: s.refresh_token }) })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (n) { if (!n || !n.access_token) return false; try { localStorage.setItem('ra.session', JSON.stringify(Object.assign({}, s, n))); } catch (e) {} return true; })
+      .catch(function () { return false; });
+  }
+  function rpc(fn, body, again) {
+    var s = sess(); if (!s || !s.access_token) return Promise.reject({ login: true });
+    return fetch(C.url + '/rest/v1/rpc/' + fn, { method: 'POST', headers: { apikey: C.key, Authorization: 'Bearer ' + s.access_token, 'Content-Type': 'application/json' }, body: JSON.stringify(body || {}) })
+      .then(function (r) { return r.text().then(function (t) { var j = null; try { j = t ? JSON.parse(t) : null; } catch (e) {} return { ok: r.ok, j: j }; }); })
+      .then(function (x) {
+        if (x.ok) return x.j;
+        var m = (x.j && (x.j.message || x.j.msg)) || 'Gagal';
+        if (/JWT|expired/i.test(m) && !again) return refresh().then(function (ok) { if (ok) return rpc(fn, body, true); throw { login: true }; });
+        throw { msg: m };
+      });
+  }
+  function fmtDay(iso) { var d = new Date(new Date(iso).getTime() + 7 * 3600e3); return d.getUTCDate() + ' ' + ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'][d.getUTCMonth()]; }
+  function ago(iso) {
+    if (!iso) return 'belum pernah';
+    var m = Math.round((Date.now() - new Date(iso).getTime()) / 60000);
+    if (m < 1) return 'baru saja'; if (m < 60) return m + ' menit lalu'; if (m < 1440) return Math.round(m / 60) + ' jam lalu'; return Math.round(m / 1440) + ' hari lalu';
+  }
+  function nights(a, b) { return Math.max(1, Math.round((new Date(b) - new Date(a)) / 864e5)); }
+
+  function load() {
+    if (!sess()) { app.innerHTML = '<div class="msg">Halaman ini khusus tim. <a href="/#/Masuk">Masuk ke aplikasi</a> dulu, lalu buka lagi halaman ini.</div>'; return; }
+    rpc('ical_admin').then(function (d) { data = d; render(); }).catch(err);
+  }
+  function err(e) {
+    if (e && e.login) { app.innerHTML = '<div class="msg">Sesi masuk sudah habis. <a href="/#/Masuk">Masuk lagi di aplikasi</a>, lalu muat ulang halaman ini.</div>'; return; }
+    var m = (e && e.msg) || 'Gagal memuat. Periksa koneksi lalu coba lagi.';
+    if (/berwenang/i.test(m)) m = 'Akun ini belum punya akses. Halaman ini untuk Owner, Manajer operasional/Experience, CS, dan Manajer aset.';
+    if (!data) app.innerHTML = '<div class="msg">' + esc(m) + '</div>'; else toast(m);
+  }
+
+  function feedHtml(u, f) {
+    var st = !f.import_url ? '<span class="pill">Belum ditempel</span>'
+      : f.last_status === 'ok' ? '<span class="pill ok">Tersambung</span>'
+      : f.last_status === 'gagal' ? '<span class="pill err">Gagal</span>' : '<span class="pill wait">Menunggu sinkron</span>';
+    var outSt = f.export_hits ? '<span class="pill ok">Dibaca ' + esc(f.channel_name) + ' ' + esc(ago(f.last_export_at)) + '</span>' : '<span class="pill">Belum dibaca ' + esc(f.channel_name) + '</span>';
+    return '<div class="feed" data-unit="' + u.id + '" data-ch="' + f.channel + '" data-feed="' + f.id + '">' +
+      '<div class="hd"><b>' + esc(f.channel_name) + '</b>' + st + outSt + '</div>' +
+      '<label>1. Link kalender dari ' + esc(f.channel_name) + ' (tempel di sini)</label>' +
+      '<div class="row"><input class="in" placeholder="https://… (link Ekspor kalender dari ' + esc(f.channel_name) + ')" value="' + esc(f.import_url || '') + '">' +
+      '<button class="btn pri" data-act="save">Simpan</button>' + (f.import_url ? '<button class="btn" data-act="sync">Sinkron</button>' : '') + '</div>' +
+      '<div class="meta">' + (f.import_url ? 'Terakhir ditarik ' + esc(ago(f.last_sync_at)) + (f.last_status === 'ok' ? ' · ' + (f.last_count || 0) + ' tanggal terbaca' : '') + ' · otomatis tiap 10 menit' : 'Kosong = tanggal dari ' + esc(f.channel_name) + ' belum masuk ke Rentalaja.') +
+      (f.last_error ? '<br><span class="e">' + esc(f.last_error) + '</span>' : '') + '</div>' +
+      '<label>2. Link kalender Rentalaja (salin, lalu tempel di ' + esc(f.channel_name) + ' → Impor kalender)</label>' +
+      '<div class="row"><input readonly value="' + esc(f.export_url) + '"><button class="btn" data-act="copy">Salin</button></div>' +
+      '</div>';
+  }
+
+  function render() {
+    var units = data.units || [], linked = 0, total = 0, conflicts = 0, ota = 0;
+    units.forEach(function (u) {
+      conflicts += +u.conflicts || 0;
+      (u.feeds || []).forEach(function (f) { total++; if (f.import_url && f.last_status === 'ok') linked++; });
+      (u.upcoming || []).forEach(function (e) { if (e.t !== 'web' && e.t !== 'servis' && e.t !== 'manual') ota++; });
+    });
+    if (!units.length) { app.innerHTML = '<div class="msg">Belum ada unit penginapan aktif.</div>'; return; }
+    app.innerHTML =
+      '<div class="kpi">' +
+        '<div class="k"><span>Unit penginapan</span><b>' + units.length + '</b></div>' +
+        '<div class="k"><span>Kanal tersambung</span><b>' + linked + ' / ' + total + '</b></div>' +
+        '<div class="k"><span>Tanggal dari OTA (ke depan)</span><b>' + ota + '</b></div>' +
+        '<div class="k' + (conflicts ? ' bad' : '') + '"><span>Booking ganda</span><b>' + conflicts + '</b></div>' +
+      '</div>' +
+      '<div class="help"><b>Cara pasang (sekali per unit per kanal)</b><ol>' +
+        '<li><b>Airbnb</b>: Kalender listing → Ketersediaan → Sinkronkan kalender → <i>Ekspor kalender</i>, salin linknya ke kolom 1. Lalu <i>Impor kalender</i>, tempel link kolom 2, beri nama "Rentalaja".</li>' +
+        '<li><b>Agoda (YCS)</b>: Calendar → Calendar connections → <i>Connect calendars</i>. Salin link Agoda ke kolom 1, tempel link kolom 2 di Agoda. Pastikan pengaturan Connectivity: tidak memakai channel manager.</li>' +
+        '<li>Harga tetap diatur di masing-masing OTA. Yang tersinkron hanya tanggal terisi.</li>' +
+        '<li>Airbnb/Agoda membaca link Rentalaja beberapa jam sekali. Untuk booking hari H atau H-1, konfirmasi manual dulu.</li>' +
+      '</ol></div>' +
+      units.map(function (u) {
+        var up = (u.upcoming || []).slice().sort(function (a, b) { return a.s < b.s ? -1 : 1; });
+        return '<div class="card"><h2>' + esc(u.name) + '</h2><div class="sub">' + esc(u.code) + (u.branch ? ' · ' + esc(u.branch) : '') + '</div>' +
+          (u.conflicts ? '<div class="alert">⚠ ' + u.conflicts + ' booking ganda. Segera hubungi tamu dan pindahkan salah satu (lihat baris merah di bawah).</div>' : '') +
+          (u.feeds || []).map(function (f) { return feedHtml(u, f); }).join('') +
+          ((u.feeds || []).some(function (f) { return f.channel === 'bookingcom'; }) ? '' : '<div style="margin-top:10px"><button class="btn" data-act="addbc" data-unit="' + u.id + '">+ Booking.com</button></div>') +
+          '<details' + (u.conflicts ? ' open' : '') + '><summary>Tanggal terisi ke depan (' + up.length + ')</summary>' +
+          (up.length ? '<table><thead><tr><th>Tanggal</th><th>Sumber</th><th>Keterangan</th></tr></thead><tbody>' + up.map(function (e) {
+            var n = nights(e.s, e.e);
+            return '<tr' + (e.conflict ? ' class="bad"' : '') + '><td>' + fmtDay(e.s) + ' – ' + fmtDay(e.e) + '<br><small style="color:#8A93A6">' + n + ' malam</small></td>' +
+              '<td class="src">' + esc(CH[e.t] || e.t) + '</td>' +
+              '<td>' + (e.t === 'web' ? esc(e.code || '') + (e.guest ? ' · ' + esc(e.guest) : '') : esc(e.note || '')) + (e.conflict ? '<br><b style="color:#C8372D">' + esc(e.conflict) + '</b>' : '') + '</td></tr>';
+          }).join('') + '</tbody></table>' : '<p class="meta">Belum ada tanggal terisi.</p>') +
+          '</details></div>';
+      }).join('');
+  }
+
+  app.addEventListener('click', function (ev) {
+    var b = ev.target.closest('[data-act]'); if (!b) return;
+    var box = b.closest('.feed'), act = b.getAttribute('data-act');
+    if (act === 'copy') {
+      var v = box.querySelector('input[readonly]').value;
+      (navigator.clipboard ? navigator.clipboard.writeText(v) : Promise.reject()).then(function () { toast('Link disalin'); }, function () { box.querySelector('input[readonly]').select(); toast('Tekan lama lalu salin'); });
+      return;
+    }
+    if (act === 'addbc') {
+      b.disabled = true;
+      rpc('ical_feed_save', { p_unit: b.getAttribute('data-unit'), p_channel: 'bookingcom', p_url: null }).then(load).catch(function (e) { b.disabled = false; err(e); });
+      return;
+    }
+    if (act === 'save') {
+      b.disabled = true; b.textContent = 'Menyimpan…';
+      rpc('ical_feed_save', { p_unit: box.getAttribute('data-unit'), p_channel: box.getAttribute('data-ch'), p_url: box.querySelector('.in').value })
+        .then(function () { toast('Tersimpan. Menarik kalender…'); setTimeout(load, 6000); load(); })
+        .catch(function (e) { b.disabled = false; b.textContent = 'Simpan'; err(e); });
+      return;
+    }
+    if (act === 'sync') {
+      b.disabled = true; b.textContent = 'Menarik…';
+      rpc('ical_sync_now', { p_feed: box.getAttribute('data-feed') }).then(function () { toast('Sedang ditarik…'); setTimeout(load, 6000); }).catch(function (e) { b.disabled = false; b.textContent = 'Sinkron'; err(e); });
+    }
+  });
+  document.getElementById('syncAll').addEventListener('click', function () {
+    var b = this; b.disabled = true;
+    rpc('ical_sync_now', { p_feed: null }).then(function () { toast('Semua kanal sedang ditarik…'); setTimeout(function () { b.disabled = false; load(); }, 7000); }).catch(function (e) { b.disabled = false; err(e); });
+  });
+  load();
+})();
+</script>
+</body>
+</html>
