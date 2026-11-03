@@ -490,16 +490,20 @@ function applyPatch(orig,p){
   for(;pos<lines.length;pos++)out.push(lines[pos]);
   return out.join('\n');
 }
+var SRCP={};
 function getSource(name){
   var key=name+'.dc.html';
   if(PATCHED[key])return Promise.resolve(PATCHED[key]);
+  if(SRCP[key])return SRCP[key];
   var pv=MAN.patches[name], b=bundleFor(name);
-  var base=b&&!FILES[key]?loadBundle(b):Promise.resolve();
-  return base.then(function(){
-    if(!pv)return FILES[key]||null;
-    return fetch('screens/'+name+'.json?v='+pv).then(function(r){if(!r.ok)throw new Error('patch '+name);return r.json();})
-      .then(function(p){if(p.full==null&&FILES[key]==null)throw new Error('base '+name);return PATCHED[key]=applyPatch(FILES[key]||'',p);});
-  });
+  var base=function(){return b&&!FILES[key]?loadBundle(b):Promise.resolve();};
+  /* patch & bundle diambil bersamaan; patch "full" tidak perlu menunggu bundle */
+  var pr=!pv?base().then(function(){return FILES[key]||null;}):
+    fetch('screens/'+name+'.json?v='+pv).then(function(r){if(!r.ok)throw new Error('patch '+name);return r.json();})
+      .then(function(p){if(p.full!=null)return PATCHED[key]=p.full;return base().then(function(){if(FILES[key]==null)throw new Error('base '+name);return PATCHED[key]=applyPatch(FILES[key],p);});});
+  if(pv&&b&&!FILES[key])loadBundle(b).catch(function(){});
+  SRCP[key]=pr;pr.catch(function(){delete SRCP[key];});
+  return pr;
 }
 
 /* ---------- load a screen ---------- */
@@ -535,6 +539,8 @@ function show(name){
   var seq=++showSeq;
   if(name==='peta')return peta();
   if(!MAN)return;
+  /* ambil kode layar bersamaan dengan cek login/akses (tidak berurutan) */
+  getSource(name).catch(function(){});
   var guard=window.RA&&RA.beforeShow?RA.beforeShow(name):Promise.resolve(name);
   return Promise.resolve(guard).then(function(target){
     if(seq!==showSeq)return;

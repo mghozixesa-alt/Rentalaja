@@ -30,7 +30,7 @@
   function setSession(s) {
     session = s && s.access_token ? s : null;
     if (session && !session.expires_at && session.expires_in) session.expires_at = Math.floor(Date.now() / 1000) + session.expires_in;
-    if (session) { LS.set('ra.session', session); if (RA.affAttribute) setTimeout(function () { try { RA.affAttribute(); } catch (e) {} }, 800); } else { LS.del('ra.session'); LS.del('ra.user'); RA._me = null; RA._perms = null; }
+    if (session) { LS.set('ra.session', session); if (RA.affAttribute) setTimeout(function () { try { RA.affAttribute(); } catch (e) {} }, 800); } else { LS.del('ra.session'); LS.del('ra.user'); RA._me = null; RA._perms = null; try { Object.keys(localStorage).forEach(function (k) { if (k.indexOf('ra.c.staff.') === 0) localStorage.removeItem(k); }); } catch (e) {} }
   }
   function refresh() {
     if (!session || !session.refresh_token) { setSession(null); return Promise.resolve(); }
@@ -296,11 +296,33 @@
   RA.ensureCustomer = function (name, city) { return RA.call('ensure_customer', { p_name: name || null, p_city: city || null, p_ref: LS.get('ra.ref') || null }).then(function (c) { RA._cust = c; return c; }); };
 
   /* staf & hak akses */
+  /* data staf disimpan di HP (12 jam) supaya layar langsung terbuka; tetap dicek ulang di belakang.
+     Hanya untuk tampilan & menu — izin data tetap dijaga server (RLS). */
+  var staffKey = function (uid) { return 'ra.c.staff.' + uid + '.' + (LS.get('ra.viewAs') || '') + '.' + ((LS.get('ra.pk') || {}).br || []).join(','); };
+  var staffSig = function (s) { return s ? [s.role, s.realRole || '', Object.keys(s.perms || {}).sort().join(','), (s.branches || []).map(function (b) { return b.id; }).join(',')].join('|') : ''; };
   RA.staff = function (force) {
     if (!session) return Promise.resolve(null);
     if (RA._staff && !force) return Promise.resolve(RA._staff);
     var uid = (RA.me() || {}).id || (session.user && session.user.id);
+    if (!force && !RA._staffBg) {
+      var c = LS.get(staffKey(uid));
+      if (c && c.s && Date.now() - c.t < 12 * 3600e3) {
+        RA._staff = c.s; RA._staffBg = true;
+        RA.staff(true).then(function (s) {
+          RA._staffBg = false;
+          if (staffSig(s) !== staffSig(c.s)) { LS.del(staffKey(uid)); location.reload(); }
+        }).catch(function () { RA._staffBg = false; RA._staff = RA._staff || c.s; });
+        return Promise.resolve(c.s);
+      }
+    }
+    if (!force && RA._staffP) return RA._staffP;
+    var pr = RA.staffLoad(uid).then(function (s) { if (s) LS.set(staffKey(uid), { t: Date.now(), s: s }); else LS.del(staffKey(uid)); return s; });
+    if (!force) { RA._staffP = pr; pr.then(function () { RA._staffP = null; }, function () { RA._staffP = null; }); }
+    return pr;
+  };
+  RA.staffLoad = function (uid) {
     return RA.from('staff').select('*').eq('user_id', uid).maybeSingle().then(function (r) {
+      if (r.error) throw r.error;
       var s = r.data; if (!s || !s.is_active) { RA._staff = null; return null; }
       // pratinjau peran: owner bisa melihat panel seperti peran lain (hanya tampilan & menu; data tetap akses owner)
       var va = s.role === 'owner' ? LS.get('ra.viewAs') : null;
@@ -310,6 +332,7 @@
         s.all_branches ? RA.from('branches').select('id,code,name,kind,city').order('sort') :
           RA.from('staff_branches').select('branch_id,branches(id,code,name,kind,city)').eq('staff_id', uid)
       ]).then(function (res) {
+        if (res[0].error || res[1].error) throw res[0].error || res[1].error;
         s.perms = {}; (res[0].data || []).forEach(function (p) { s.perms[p.perm] = p.limited ? 'limited' : true; });
         s.branches = s.all_branches ? (res[1].data || []) : (res[1].data || []).map(function (x) { return x.branches; }).filter(Boolean);
         /* dibuka dari modul cabang di Sistem Kerja Pokama: hanya cabang itu yang terlihat */
@@ -593,6 +616,8 @@
   RA.beforeShow = function (name) {
     var kind = RA.kindOf(name);
     var boot = RA.settings().catch(function () {});
+    /* data staf diambil bersamaan dengan pengaturan, tidak menunggu */
+    if (session && kind !== 'public' && kind !== 'customer' && kind !== 'partner') RA.staff().catch(function () {});
     if (kind === 'public') return boot.then(function () { return name; });
     if (name === 'Mfa') return Promise.resolve(session ? name : 'Masuk');
     if (!session) {
