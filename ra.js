@@ -81,6 +81,14 @@
 
   /* ---------------- login Google (Supabase OAuth, alur implicit) ---------------- */
   function b64url(s) { s = String(s || '').replace(/-/g, '+').replace(/_/g, '/'); while (s.length % 4) s += '='; try { return decodeURIComponent(escape(atob(s))); } catch (e) { return ''; } }
+  /* staf: masuk Google, atau hubungkan Google ke akun staf yang sedang masuk (lewat WhatsApp) */
+  RA.googleStaff = function () { LS.set('ra.gstaff', 1); RA.googleLogin(); };
+  RA.linkGoogle = function () {
+    LS.set('ra.gstaff', 1);
+    var back = location.origin + location.pathname;
+    return headers({}).then(function (h) { return fetch(C.url + '/auth/v1/user/identities/authorize?provider=google&skip_http_redirect=true&redirect_to=' + encodeURIComponent(back), { headers: h }); })
+      .then(function (r) { return r.json().then(function (d) { if (!r.ok || !d.url) throw new Error(d.msg || d.error_description || d.message || 'Gagal menghubungkan Google'); location.href = d.url; }); });
+  };
   RA.googleLogin = function () {
     var back = location.origin + location.pathname;
     location.href = C.url + '/auth/v1/authorize?provider=google&redirect_to=' + encodeURIComponent(back);
@@ -106,6 +114,7 @@
         if (as) LS.set('ra.viewAs', as); else LS.del('ra.viewAs');
         history.replaceState(null, '', location.pathname + location.search + '#/' + (nx || 'Masuk'));
       }
+      else if (LS.get('ra.gstaff')) { LS.del('ra.gstaff'); LS.del('ra.pk'); history.replaceState(null, '', location.pathname + location.search + '#/Masuk?google=1'); }
       else { LS.del('ra.pk'); history.replaceState(null, '', location.pathname + location.search + '#/Login?google=1'); }
     } else {
       history.replaceState(null, '', location.pathname + location.search + '#/Login?gerr=' + encodeURIComponent(p.error_description || 'Login Google gagal'));
