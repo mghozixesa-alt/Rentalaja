@@ -209,7 +209,7 @@ var SNAV=[
 ];
 var CSM={'CS':1,'Harian':['PosHariIni','PosVerifikasi','PosPelanggan'],'Operasional':['OpsKalender'],'Pengaturan':['MgmtDataUji'],'Penginapan & Jeep':['ExpKalender','ExpJeep','KonfirmasiTransfer'],'Pelanggan':['TiketCS','AlatChat','MgmtPenawaran','MgmtDaftarHitam']};
 /* manajer operasional = operasional harian + experience (penginapan & jeep); manajer aset terpisah */
-var MOPS={'Operasional':1,'Harian':['PosHariIni'],'Penginapan & Jeep':['ExpKalender','ExpJeep','KonfirmasiTransfer'],'Pelanggan':['MgmtDaftarHitam'],'Barang':['MgmtProduk','MgmtPromo'],'Manajemen':['MgmtSetuju'],'Saya':['TiketCS']};
+var MOPS={'Operasional':1,'Harian':['PosHariIni','PosVerifikasi','PosKasir','PosSerahTerima','PosShift'],'Penginapan & Jeep':['ExpKalender','ExpJeep','KonfirmasiTransfer'],'Pelanggan':['MgmtDaftarHitam'],'Barang':['MgmtProduk','MgmtPromo','PosUnit'],'Manajemen':['MgmtSetuju'],'Saya':['TiketCS']};
 /* manajer aset: menu mengikuti alur kerja (lapor → servis → QC → siap); persetujuan part ada di Beranda aset, stok/mutasi lewat Unit aset, detail servis lewat Papan servis */
 var MASET={'Aset & servis':['AsetBeranda','AsetKalender','AsetOpname','AsetServis','PosQC','AsetPreventif','MgmtServis','AsetUnit','AsetData','AsetTim','AsetLaporan','AsetRisiko'],'Barang':['PosUnit'],'Manajemen':['MgmtSetuju'],'Saya':['TiketCS']};
 /* boleh dibuka (lewat tautan di halaman) tapi tidak tampil di menu */
@@ -356,7 +356,7 @@ document.addEventListener('click',function(e){var a=e.target.closest&&e.target.c
   try{localStorage.setItem('ra.viewAs',JSON.stringify(x[1]));localStorage.setItem('ra.pk',JSON.stringify({mod:m.mod,sub:x[0],br:x[3],t:m.t}));localStorage.removeItem('ra.staff.branch');localStorage.removeItem('ra.ctx.staff');}catch(er){}
   location.hash='#/'+x[2];location.reload();},true);
 /* menu kiri ringkas per peran: [judul kelompok, [layar...]]; layar lain yang boleh dibuka masuk "Lainnya" */
-var SIDE_LAYOUT={experience_manager:[['Hari ini',['OpsBeranda','OpsKerja','OpsQC','PosHariIni']],['Unit & barang',['OpsKalender','OpsUnit','MgmtProduk','MgmtPromo']],['Penginapan & jeep',['ExpKalender','ExpJeep','KonfirmasiTransfer']]]};
+var SIDE_LAYOUT={experience_manager:[['Hari ini',['OpsBeranda','OpsKerja','OpsQC']],['Kasir cabang',['PosHariIni','PosVerifikasi','PosKasir','PosSerahTerima','PosShift']],['Unit & barang',['OpsKalender','OpsUnit','PosUnit','MgmtProduk','MgmtPromo']],['Penginapan & jeep',['ExpKalender','ExpJeep','KonfirmasiTransfer']]]};
 function sideGroups(role,allow){var all=[],idx={};SNAV.forEach(function(g){var a=allow[g[0]];if(!a)return;g[1].forEach(function(it){if((a===1||a.indexOf(it[0])>-1)&&!mHid(role,it[0])&&!idx[it[0]]){idx[it[0]]=it;all.push(it);}});});
   var L=SIDE_LAYOUT[role];if(!L)return null;var used={},out=[];L.forEach(function(g){var its=g[1].map(function(k){return idx[k];}).filter(Boolean);its.forEach(function(it){used[it[0]]=1;});if(its.length)out.push([g[0],its]);});
   var rest=all.filter(function(it){return !used[it[0]];});if(rest.length)out.push(['Lainnya',rest]);return out;}
