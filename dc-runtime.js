@@ -207,7 +207,7 @@ var SNAV=[
  ['Pelanggan',[['MgmtPelanggan','user','Data pelanggan'],['MgmtSegmen','chat','Broadcast WhatsApp'],['MgmtInbox','chat','Inbox WhatsApp'],['TiketCS','approve','Tiket keluhan'],['AlatChat','chat','Template & link sewa'],['MgmtPenawaran','tag','Permintaan perjalanan'],['MgmtTindakLanjut','users','Tindak lanjut'],['MgmtDaftarHitam','shieldx','Daftar hitam']]],
  ['Saya',[['AgendaLapangan','calcheck','Agenda'],['AkunLapangan','user','Akun saya'],['TiketCS','approve','Tiket keluhan']]]
 ];
-var CSM={'CS':1,'Harian':['PosHariIni','PosVerifikasi','PosPelanggan'],'Operasional':['OpsKalender'],'Pengaturan':['MgmtDataUji'],'Penginapan & Jeep':['ExpKalender','ExpJeep','KonfirmasiTransfer'],'Pelanggan':['TiketCS','AlatChat','MgmtPenawaran','MgmtDaftarHitam']};
+var CSM={'CS':1,'Harian':['PosHariIni','PosVerifikasi','PosKasir','PosPelanggan'],'Operasional':['OpsKalender'],'Pengaturan':['MgmtDataUji'],'Penginapan & Jeep':['ExpKalender','ExpJeep','KonfirmasiTransfer'],'Pelanggan':['TiketCS','AlatChat','MgmtPenawaran','MgmtDaftarHitam']};
 /* manajer operasional = operasional harian + experience (penginapan & jeep); manajer aset terpisah */
 var MOPS={'Operasional':1,'Harian':['PosHariIni','PosVerifikasi','PosKasir','PosSerahTerima','PosShift'],'Penginapan & Jeep':['ExpKalender','ExpJeep','KonfirmasiTransfer'],'Pelanggan':['MgmtDaftarHitam'],'Barang':['MgmtProduk','MgmtPromo','PosUnit'],'Manajemen':['MgmtSetuju'],'Saya':['TiketCS']};
 /* manajer aset: menu mengikuti alur kerja (lapor → servis → QC → siap); persetujuan part ada di Beranda aset, stok/mutasi lewat Unit aset, detail servis lewat Papan servis */
@@ -296,6 +296,7 @@ function fieldNav(root,nav,role,allow,isPv){
   var pri=(FIELD[role]||[]).map(function(k){return items.filter(function(it){return it[0]===k;})[0];}).filter(Boolean).slice(0,5);
   var rest=items.filter(function(it){return pri.indexOf(it)<0&&!mHid(role,it[0])&&!(it[0]==='PosAbsen'&&pri.some(function(p){return p[0]==='AkunLapangan';}));});
   var priIds=pri.map(function(p){return p[0];});rest=rest.filter(function(it){return !SUBT.some(function(g){return g.some(function(x){return x[0]===it[0];})&&g.some(function(x){return x[0]!==it[0]&&priIds.indexOf(x[0])>-1;});});});
+  if(role==='cs'||role==='cs_experience')rest=rest.map(function(it){return it[0]==='PosKasir'?[it[0],it[1],'Booking walk-in',it[3]]:it;});
   var top=REST_TOP[role];if(top){var a1=[],a2=[];rest.forEach(function(it){var k=top.indexOf(it[0]);if(k>-1)a1[k]=[it[0],it[1],it[2],'Sering dipakai'];else a2.push(it);});rest=a1.filter(Boolean).concat(a2);}
   var as=nav&&nav.closest?nav.closest('aside'):null;if(!as)as=root.querySelector(':scope > aside');
   if(nav)nav.style.display='none';
