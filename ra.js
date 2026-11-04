@@ -328,7 +328,7 @@
   /* staf & hak akses */
   /* data staf disimpan di HP (12 jam) supaya layar langsung terbuka; tetap dicek ulang di belakang.
      Hanya untuk tampilan & menu — izin data tetap dijaga server (RLS). */
-  var staffKey = function (uid) { return 'ra.c.staff.' + uid + '.' + (LS.get('ra.viewAs') || '') + '.' + ((LS.get('ra.pk') || {}).br || []).join(','); };
+  var staffKey = function (uid) { return 'ra.c.staff2.' + uid + '.' + (LS.get('ra.viewAs') || '') + '.' + ((LS.get('ra.pk') || {}).br || []).join(','); };
   var staffSig = function (s) { return s ? [s.role, s.realRole || '', Object.keys(s.perms || {}).sort().join(','), (s.branches || []).map(function (b) { return b.id; }).join(',')].join('|') : ''; };
   RA.staff = function (force) {
     if (!session) return Promise.resolve(null);
@@ -362,8 +362,8 @@
       if (va && RA.VIEW_ROLES[va]) { s.realRole = 'owner'; s.role = va; permRole = va; }
       return Promise.all([
         RA.from('role_permissions').select('perm,limited').eq('role', permRole),
-        s.all_branches ? RA.from('branches').select('id,code,name,kind,city').order('sort') :
-          RA.from('staff_branches').select('branch_id,branches(id,code,name,kind,city)').eq('staff_id', uid)
+        s.all_branches ? RA.from('branches').select('id,code,name,kind,city,stock_branch_id,only_categories').order('sort') :
+          RA.from('staff_branches').select('branch_id,branches(id,code,name,kind,city,stock_branch_id,only_categories)').eq('staff_id', uid)
       ]).then(function (res) {
         if (res[0].error || res[1].error) throw res[0].error || res[1].error;
         s.perms = {}; (res[0].data || []).forEach(function (p) { s.perms[p.perm] = p.limited ? 'limited' : true; });
