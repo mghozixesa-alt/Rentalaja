@@ -355,10 +355,13 @@
       if (r.error) throw r.error;
       var s = r.data; if (!s || !s.is_active) { RA._staff = null; return null; }
       // pratinjau peran: owner bisa melihat panel seperti peran lain (hanya tampilan & menu; data tetap akses owner)
+      // Kepala Staf: tampilan & menu sama dengan owner, izin tetap dari peran chief_of_staff (tanpa persetujuan uang / hapus data)
+      var permRole = s.role;
+      if (s.role === 'chief_of_staff') { s.chief = true; s.role = 'owner'; s.roleLabel = 'Kepala Staf'; }
       var va = s.role === 'owner' ? LS.get('ra.viewAs') : null;
-      if (va && RA.VIEW_ROLES[va]) { s.realRole = 'owner'; s.role = va; }
+      if (va && RA.VIEW_ROLES[va]) { s.realRole = 'owner'; s.role = va; permRole = va; }
       return Promise.all([
-        RA.from('role_permissions').select('perm,limited').eq('role', s.role),
+        RA.from('role_permissions').select('perm,limited').eq('role', permRole),
         s.all_branches ? RA.from('branches').select('id,code,name,kind,city').order('sort') :
           RA.from('staff_branches').select('branch_id,branches(id,code,name,kind,city)').eq('staff_id', uid)
       ]).then(function (res) {
@@ -503,7 +506,7 @@
   };
   RA.VIEW_ROLES = { cs: 'Customer Service (CS)', cashier:'Kasir / staf cabang', runner: 'Petugas lapangan', experience_manager: 'Manajer operasional', asset_manager: 'Manajer aset', technician: 'Teknisi', viewer: 'Pemantau' };
   RA.viewAs = function (role) { if (role && RA.VIEW_ROLES[role]) LS.set('ra.viewAs', role); else LS.del('ra.viewAs'); RA._staff = null; location.reload(); };
-  RA.can = function (perm) { var s = RA._staff; if (!s) return false; if (s.role === 'owner') return true; return !!(s.perms && s.perms[perm]); };
+  RA.can = function (perm) { var s = RA._staff; if (!s) return false; if (s.role === 'owner' && !s.chief) return true; return !!(s.perms && s.perms[perm]); };
   /* cabang aktif untuk panel staf */
   RA.staffBranch = function () {
     var s = RA._staff; if (!s || !s.branches || !s.branches.length) return null;
