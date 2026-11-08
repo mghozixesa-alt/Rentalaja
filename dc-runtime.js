@@ -162,6 +162,7 @@ function custNav(root){
 }
 
 var ICO={
+ shield:'<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/>',
  home:'<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/>',
  idcard:'<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="12" r="2"/><path d="M14 10h4M14 14h4"/>',
  swap:'<path d="M4 8h13l-3-3M20 16H7l3 3"/>',
@@ -196,8 +197,8 @@ function ico(k,c){return '<svg width="18" height="18" viewBox="0 0 24 24" fill="
 var SNAV=[
  ['Beranda',[['ModulBeranda','home','Beranda']]],
  ['Operasional',[['OpsBeranda','home','Dashboard manajemen'],['OpsUnit','chart','Utilisasi & mutasi'],['OpsKalender','cal','Kalender sewa'],['OpsQC','star','Kualitas layanan'],['OpsKerja','calcheck','Kerja lapangan']]],
- ['CS',[['PusatCS','head','Pusat CS'],['LaporanShift','chart','Laporan shift']]],
- ['Harian',[['PosHariIni','home','Rental hari ini'],['PosVerifikasi','idcard','Verifikasi pesanan'],['PosKasir','cart','Kasir (sewa OTS)'],['PosSerahTerima','swap','Serah-terima & kembali'],['PosPelanggan','user','Pelanggan'],['PosShift','clock','Shift & tutup kas']]],
+ ['CS',[['PusatCS','head','Pusat CS'],['CekPenyewa','shield','Cek calon penyewa'],['LaporanShift','chart','Laporan shift']]],
+ ['Harian',[['PosHariIni','home','Rental hari ini'],['PosVerifikasi','idcard','Verifikasi pesanan'],['CekPenyewa','shield','Cek calon penyewa'],['PosKasir','cart','Kasir (sewa OTS)'],['PosSerahTerima','swap','Serah-terima & kembali'],['PosPelanggan','user','Pelanggan'],['PosShift','clock','Shift & tutup kas']]],
  ['Lapangan',[['Runner','truck','Antar-jemput']]],
  ['Penginapan & Jeep',[['ExpKalender','bed','Kalender penginapan'],['Housekeeping','check','Bersih-bersih kamar'],['ExpJeep','jeep','Jadwal jeep'],['SopirJeep','wheel','Tugas sopir'],['KonfirmasiTransfer','card','Konfirmasi transfer']]],
  ['Barang',[['MgmtProduk','tag','Barang & harga'],['MgmtHargaMusim','cal','Harga musim & libur'],['MgmtPromo','gift','Promo & member'],['PosUnit','box','Stok unit'],['AsetTandai','flag','Tandai unit']]],
@@ -239,7 +240,7 @@ var FLABEL={ModulBeranda:'Beranda',KonfirmasiTransfer:'Transfer',MgmtDaftarHitam
  MgmtDashboard:'Laporan',MgmtSetuju:'Setujui',OpsBeranda:'Beranda',MgmtPusatAset:'Aset',MgmtServis:'Servis & QC',MgmtTim:'Tim',OpsKerja:'Kerja lapangan',OpsUnit:'Utilisasi',OpsQC:'Kualitas',PosHariIni:'Hari ini',PosKasir:'Kasir',PosSerahTerima:'Serah-terima',KeuDasbor:'Keuangan'};
 var FLABEL_R={cs:{PusatCS:'Pusat CS',OpsKalender:'Kalender',PosHariIni:'Jadwal'},cs_experience:{PusatCS:'Pusat CS',OpsKalender:'Kalender',PosHariIni:'Jadwal'},technician:{Teknisi:'Pekerjaan',TekBelanja:'Belanja part',TekAkun:'Akun'},owner:{OpsBeranda:'Operasional',PusatCS:'CS'},asset_manager:{AsetBeranda:'Hari ini',AsetKalender:'Kalender',AsetUnit:'Unit',AsetServis:'Servis',AsetLaporan:'Laporan'},experience_manager:{ExpJeep:'Jeep',ExpKalender:'Penginapan',OpsKerja:'Lapangan'}};
 /* tab bawah tetap menyala saat membuka halaman "saudara"-nya */
-var ALIAS={AsetPreventif:'AsetServis',AsetData:'AsetUnit',AsetTim:'AsetLaporan',AsetOpname:'AsetUnit',AsetRisiko:'AsetBeranda',MgmtServis:'AsetServis',PosUnit:'AsetUnit',MgmtAset:'AsetUnit',TekPart:'TekBelanja',TekMasuk:'Teknisi',TekKerja:'Teknisi',TekSelesai:'Teknisi',MgmtAsetDetail:'AsetUnit',MgmtKelola:'MgmtAset',PosQC:'AsetServis',PosAbsen:'AkunLapangan',Housekeeping:'ExpKalender',LaporanShift:'PusatCS'};
+var ALIAS={GantiPenyewa:'PosHariIni',AsetPreventif:'AsetServis',AsetData:'AsetUnit',AsetTim:'AsetLaporan',AsetOpname:'AsetUnit',AsetRisiko:'AsetBeranda',MgmtServis:'AsetServis',PosUnit:'AsetUnit',MgmtAset:'AsetUnit',TekPart:'TekBelanja',TekMasuk:'Teknisi',TekKerja:'Teknisi',TekSelesai:'Teknisi',MgmtAsetDetail:'AsetUnit',MgmtKelola:'MgmtAset',PosQC:'AsetServis',PosAbsen:'AkunLapangan',Housekeeping:'ExpKalender',LaporanShift:'PusatCS'};
 /* halaman yang digabung dalam satu tab: tampilkan tombol pindah di atas */
 var SUBT=[[['PusatCS','Beranda'],['MgmtInbox','Inbox WA'],['TiketCS','Keluhan'],['MgmtTindakLanjut','Tindak lanjut'],['MgmtPenawaran','Perjalanan'],['AlatChat','Template'],['LaporanShift','Shift']],[['AsetServis','Papan'],['PosQC','Cek QC'],['AsetPreventif','Preventif'],['MgmtServis','Aturan']],[['AsetUnit','Unit'],['AsetOpname','Stok opname'],['AsetData','Lengkapi data']],[['AsetLaporan','Kinerja & jatuh tempo'],['AsetTim','Tim teknisi & QC']],[['OpsBeranda','Hari ini'],['MgmtLini','Per lini']],[['MgmtPelanggan','Profil'],['MgmtSegmen','Broadcast'],['MgmtDaftarHitam','Daftar hitam']],[['MgmtProduk','Barang & harga'],['MgmtHargaMusim','Harga musim'],['MgmtPromo','Promo & member']],[['MgmtSumber','Sumber & iklan'],['MgmtKonten','Konten web'],['MgmtKorporat','Korporat & B2B']]];
 var REST_TOP={asset_manager:[],experience_manager:['OpsKerja','ExpJeep','PosHariIni','MgmtPromo','MgmtProduk','KonfirmasiTransfer']};
