@@ -164,6 +164,10 @@ h3 a{font-size:12.5px;color:var(--teal-d);font-weight:700}
         <a data-k="tiktok" data-label="TikTok" href="https://www.tiktok.com/@rentalaja_" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="#fff"><path d="M16.6 3c.4 2.2 1.7 3.6 3.9 3.8v3a7.3 7.3 0 0 1-3.8-1.2v6.1A5.8 5.8 0 1 1 10.9 9v3.1a2.8 2.8 0 1 0 2 2.7V3h3.7z"/></svg></a>
       </div>
     </div>
+    <a id="liveCard" data-k="live" data-label="Live TikTok" href="https://www.tiktok.com/@rentalaja_" target="_blank" rel="noopener" style="display:none;gap:12px;align-items:center;margin:12px 0 0;padding:12px 14px;border-radius:16px;text-decoration:none;color:#fff;background:linear-gradient(135deg,#111827,#1F2B4D);box-shadow:0 8px 20px rgba(17,24,39,.25)">
+      <span id="liveDot" style="flex:none;width:44px;height:44px;border-radius:12px;background:#FE2C55;display:flex;align-items:center;justify-content:center;font:800 11px/1 system-ui,sans-serif;letter-spacing:.04em">LIVE</span>
+      <span style="flex:1;min-width:0"><b id="liveT" style="display:block;font-size:15px;line-height:19px"></b><span id="liveS" style="font-size:12.5px;opacity:.85"></span></span><span style="font-weight:800">→</span></a>
+    <style>@keyframes lvp{0%{box-shadow:0 0 0 0 rgba(254,44,85,.6)}70%{box-shadow:0 0 0 10px rgba(254,44,85,0)}100%{box-shadow:0 0 0 0 rgba(254,44,85,0)}}#liveDot.on{animation:lvp 1.6s infinite}</style>
     <div class="chips"><span>📍 Garut & Bandung</span><span>⏰ 07.30–21.00</span><span>🛵 Bisa diantar</span></div>
 
     <div class="car">
@@ -270,6 +274,19 @@ h3 a{font-size:12.5px;color:var(--teal-d);font-weight:700}
     try { fetch(C.url + '/rest/v1/rpc/ra_link_track', { method: 'POST', keepalive: true, headers: { apikey: C.key, Authorization: 'Bearer ' + C.key, 'Content-Type': 'application/json' }, body: body }); } catch (e) {}
   }
   send({ kind: 'view', is_new: isNew });
+  // kartu Live TikTok: tampil saat sedang live, atau jadwal live hari ini/besok (data dari modul Marketing Pokama)
+  if (C.url && C.key) fetch(C.url + '/rest/v1/rpc/ra_live_now', { method: 'POST', headers: { apikey: C.key, Authorization: 'Bearer ' + C.key, 'Content-Type': 'application/json' }, body: '{}' })
+    .then(function (r) { return r.ok ? r.json() : null; }).then(function (d) {
+      if (!d || !d.list) return; var now = d.now || '', day = now.slice(0, 10), hm = now.slice(11, 16);
+      var L = d.list.filter(function (x) { return !x.brand || /rentalaja/i.test(x.brand); }).filter(function (x) { return x.date > day || !x.tend || x.tend >= hm; });
+      if (!L.length) return; var x = L[0], live = x.date === day && x.time && x.time <= hm && (!x.tend || x.tend >= hm);
+      var el = document.getElementById('liveCard'); if (!el) return;
+      document.getElementById('liveT').textContent = (live ? '🔴 Sedang LIVE: ' : 'Live TikTok ' + (x.date === day ? 'hari ini ' : 'besok ') + String(x.time || '').replace(':', '.') + ' · ') + (x.title || 'Promo spesial');
+      document.getElementById('liveS').textContent = live ? 'Tonton sekarang, ada promo khusus penonton' + (x.cabang ? ' · ' + x.cabang : '') : 'Nyalakan pengingat di TikTok' + (x.cabang ? ' · ' + x.cabang : '');
+      if (live) document.getElementById('liveDot').className = 'on';
+      var link = x.link || d.link; if (link && /^https:\/\//.test(link)) el.href = link;
+      el.style.display = 'flex';
+    }).catch(function () {});
   document.addEventListener('click', function (ev) {
     var a = ev.target.closest && ev.target.closest('a[data-k]'); if (!a) return;
     send({ kind: 'click', key: a.getAttribute('data-k'), label: a.getAttribute('data-label'), url: a.getAttribute('href') });
