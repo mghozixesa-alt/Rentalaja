@@ -196,8 +196,8 @@ var ICO={
 function ico(k,c){return '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="'+c+'" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(ICO[k]||'')+'</svg>';}
 var SNAV=[
  ['Beranda',[['ModulBeranda','home','Beranda']]],
- ['Operasional',[['OpsBeranda','home','Dashboard manajemen'],['OpsUnit','chart','Utilisasi & mutasi'],['OpsKalender','cal','Kalender sewa'],['OpsQC','star','Kualitas layanan'],['OpsKerja','calcheck','Kerja lapangan']]],
- ['CS',[['PusatCS','head','Pusat CS'],['CekPenyewa','shield','Cek calon penyewa'],['LaporanShift','chart','Laporan shift']]],
+ ['Operasional',[['OpsBeranda','home','Dashboard manajemen'],['OpsUnit','chart','Utilisasi & mutasi'],['AsetPendapatan','chart','Pendapatan per aset'],['OpsKalender','cal','Kalender sewa'],['OpsQC','star','Kualitas layanan'],['OpsKerja','calcheck','Kerja lapangan']]],
+ ['CS',[['PusatCS','head','Pusat CS'],['LaporanShift','chart','Laporan shift']]],
  ['Harian',[['PosHariIni','home','Rental hari ini'],['PosVerifikasi','idcard','Verifikasi pesanan'],['CekPenyewa','shield','Cek calon penyewa'],['PosKasir','cart','Kasir (sewa OTS)'],['PosSerahTerima','swap','Serah-terima & kembali'],['PosPelanggan','user','Pelanggan'],['PosShift','clock','Shift & tutup kas']]],
  ['Lapangan',[['Runner','truck','Antar-jemput']]],
  ['Penginapan & Jeep',[['ExpKalender','bed','Kalender penginapan'],['Housekeeping','check','Bersih-bersih kamar'],['ExpJeep','jeep','Jadwal jeep'],['SopirJeep','wheel','Tugas sopir'],['KonfirmasiTransfer','card','Konfirmasi transfer']]],
@@ -209,11 +209,11 @@ var SNAV=[
  ['Pelanggan',[['MgmtPelanggan','user','Data pelanggan'],['MgmtSegmen','chat','Broadcast WhatsApp'],['MgmtInbox','chat','Inbox WhatsApp'],['TiketCS','approve','Tiket keluhan'],['AlatChat','chat','Template & link sewa'],['MgmtPenawaran','tag','Permintaan perjalanan'],['MgmtTindakLanjut','users','Tindak lanjut'],['MgmtDaftarHitam','shieldx','Daftar hitam']]],
  ['Saya',[['AgendaLapangan','calcheck','Agenda'],['AkunLapangan','user','Akun saya'],['TiketCS','approve','Tiket keluhan']]]
 ];
-var CSM={'CS':1,'Harian':['PosHariIni','PosVerifikasi','PosKasir','PosPelanggan'],'Operasional':['OpsKalender'],'Pengaturan':['MgmtDataUji'],'Penginapan & Jeep':['ExpKalender','ExpJeep','KonfirmasiTransfer'],'Pelanggan':['TiketCS','AlatChat','MgmtPenawaran','MgmtDaftarHitam']};
+var CSM={'CS':1,'Harian':['PosHariIni','PosVerifikasi','CekPenyewa','PosKasir','PosPelanggan'],'Operasional':['OpsKalender'],'Pengaturan':['MgmtDataUji'],'Penginapan & Jeep':['ExpKalender','ExpJeep','KonfirmasiTransfer'],'Pelanggan':['TiketCS','AlatChat','MgmtPenawaran','MgmtDaftarHitam']};
 /* manajer operasional = operasional harian + experience (penginapan & jeep); manajer aset terpisah */
-var MOPS={'Operasional':1,'Harian':['PosHariIni','PosVerifikasi','PosKasir','PosSerahTerima','PosShift'],'Penginapan & Jeep':['ExpKalender','ExpJeep','KonfirmasiTransfer'],'Pelanggan':['MgmtDaftarHitam'],'Barang':['MgmtProduk','MgmtPromo','PosUnit'],'Manajemen':['MgmtSetuju'],'Saya':['TiketCS']};
+var MOPS={'Operasional':1,'Harian':['PosHariIni','PosVerifikasi','CekPenyewa','PosKasir','PosSerahTerima','PosShift'],'Penginapan & Jeep':['ExpKalender','ExpJeep','KonfirmasiTransfer'],'Pelanggan':['MgmtDaftarHitam'],'Barang':['MgmtProduk','MgmtPromo','PosUnit'],'Manajemen':['MgmtSetuju'],'Saya':['TiketCS']};
 /* manajer aset: menu mengikuti alur kerja (lapor → servis → QC → siap); persetujuan part ada di Beranda aset, stok/mutasi lewat Unit aset, detail servis lewat Papan servis */
-var MASET={'Aset & servis':['AsetBeranda','AsetKalender','AsetOpname','AsetServis','PosQC','AsetPreventif','MgmtServis','AsetUnit','AsetData','AsetTim','AsetLaporan','AsetRisiko'],'Barang':['PosUnit'],'Manajemen':['MgmtSetuju'],'Saya':['TiketCS']};
+var MASET={'Operasional':['AsetPendapatan'],'Aset & servis':['AsetBeranda','AsetKalender','AsetOpname','AsetServis','PosQC','AsetPreventif','MgmtServis','AsetUnit','AsetData','AsetTim','AsetLaporan','AsetRisiko'],'Barang':['PosUnit'],'Manajemen':['MgmtSetuju'],'Saya':['TiketCS']};
 /* boleh dibuka (lewat tautan di halaman) tapi tidak tampil di menu */
 var FLD={PosAbsen:1,CekBuka:1};/* petugas lapangan absen & ceklis lewat ops.pokama.org */
 var MHIDE={asset_manager:{MgmtServis:1,PosUnit:1,MgmtSetuju:1,AsetRisiko:1,PosQC:1,AsetPreventif:1,AsetData:1,AsetOpname:1,AsetTim:1},cashier:FLD,staff:FLD,branch_head:FLD,runner:FLD,technician:FLD,qc:FLD,driver:FLD};/* CS: satu pintu lewat tab di Pusat CS; aset owner: masuk lewat 4 pintu (sisanya tab di dalamnya) */
