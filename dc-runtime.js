@@ -219,14 +219,15 @@ var MASET={'Operasional':['AsetPendapatan'],'Aset & servis':['AsetBeranda','Aset
 /* boleh dibuka (lewat tautan di halaman) tapi tidak tampil di menu */
 var FLD={PosAbsen:1,CekBuka:1};/* petugas lapangan absen & ceklis lewat ops.pokama.org */
 var MHIDE={asset_manager:{MgmtServis:1,PosUnit:1,MgmtSetuju:1,AsetRisiko:1,PosQC:1,AsetPreventif:1,AsetData:1,AsetOpname:1,AsetTim:1},cashier:FLD,staff:FLD,branch_head:FLD,runner:FLD,technician:FLD,qc:FLD,driver:FLD};/* CS: satu pintu lewat tab di Pusat CS; aset owner: masuk lewat 4 pintu (sisanya tab di dalamnya) */
-var CSH={MgmtInbox:1,TiketCS:1,AlatChat:1,MgmtTindakLanjut:1,MgmtPenawaran:1,LaporanShift:1};MHIDE.cs=CSH;MHIDE.cs_experience=CSH;MHIDE.experience_manager={MgmtSetuju:1};
+var CSH={MgmtInbox:1,TiketCS:1,AlatChat:1,MgmtTindakLanjut:1,MgmtPenawaran:1,LaporanShift:1};MHIDE.cs=CSH;MHIDE.cs_experience=CSH;MHIDE.experience_manager={MgmtSetuju:1,MgmtDataUji:1};
 MHIDE.owner={Housekeeping:1,MgmtInbox:1,TiketCS:1,AlatChat:1,MgmtTindakLanjut:1,MgmtPenawaran:1,LaporanShift:1,PosQC:1,AsetPreventif:1,AsetTim:1,AsetData:1,AsetRisiko:1,AsetOpname:1,AsetTandai:1,MgmtAset:1,MgmtPusatAset:1,MgmtServis:1,Teknisi:1,TekBelanja:1,TekAkun:1,PosUnit:1,AgendaLapangan:1,AkunLapangan:1,PosAbsen:1,CekBuka:1,MgmtLini:1,MgmtSegmen:1,MgmtDaftarHitam:1,MgmtHargaMusim:1,MgmtPromo:1,MgmtKonten:1,MgmtKorporat:1};/* audit Nov 2026: halaman saudara jadi tab di atas (SUBT) */
 function mHid(role,n){return !!(MHIDE[role]&&MHIDE[role][n]);}
+function mergeAllow(list){var o={};list.forEach(function(m){for(var k in m){var v=m[k];if(o[k]===1)continue;if(v===1){o[k]=1;continue;}o[k]=(o[k]||[]).concat(v.filter(function(x){return (o[k]||[]).indexOf(x)<0;}));}});return o;}
 var SROLE={
  cashier:{'Harian':1,'Lapangan':1,'Barang':['PosUnit','AsetTandai'],'Pelanggan':['MgmtDaftarHitam']}, cs:CSM, cs_experience:CSM, staff:{'Harian':1,'Lapangan':1,'Barang':['PosUnit','AsetTandai'],'Pelanggan':['MgmtDaftarHitam']},
  branch_head:{'Saya':['TiketCS'],'Harian':1,'Lapangan':1,'Barang':['PosUnit','AsetTandai'],'Manajemen':['MgmtSetuju'],'Pelanggan':['MgmtDaftarHitam']},
  runner:{'Lapangan':1,'Penginapan & Jeep':['Housekeeping','SopirJeep'],'Saya':1}, technician:{'Aset & servis':['Teknisi','TekBelanja','TekAkun']}, qc:{'Saya':1,'Lapangan':1,'Penginapan & Jeep':['Housekeeping','ExpJeep','SopirJeep'],'Aset & servis':['Teknisi','PosQC']},
- asset_manager:MASET, experience_manager:MOPS,
+ asset_manager:MASET, experience_manager:mergeAllow([MOPS,MASET,CSM,{'CS':1,'Harian':1,'Lapangan':['Runner']}]),
  driver:{'Saya':1,'Lapangan':1,'Penginapan & Jeep':['ExpJeep','SopirJeep']},
  finance:{'Manajemen':['MgmtSetuju']},
  viewer:{'Operasional':['OpsBeranda','OpsKerja']}
