@@ -10,7 +10,7 @@
 
 ARTICLES = [
 dict(
-    slug='rute-motor-garut-papandayan', city='garut', cats=['motor', 'camping'], date='2026-11-10',
+    slug='rute-motor-garut-papandayan', city='garut', cats=['motor', 'camping'], date='2026-11-09',
     title='Rute Naik Motor dari Garut Kota ke Gunung Papandayan',
     desc='Panduan ke Gunung Papandayan naik motor dari Garut Kota: jalur Bayongbong–Cisurupan, motor yang disarankan untuk tanjakan, dan perlengkapan yang bisa disewa.',
     lead='Cara paling praktis ke Gunung Papandayan dari Garut Kota adalah naik motor lewat jalur Bayongbong–Cisurupan. Untuk tanjakan menuju area parkir Papandayan, kami menyarankan Honda PCX ([[harga:honda-pcx:garut]]) yang bisa diambil di Rentalaja Garut Kota, Jl. Cimanuk.',
@@ -48,7 +48,7 @@ dict(
 '''),
 
 dict(
-    slug='sewa-motor-stasiun-garut', city='garut', cats=['motor'], date='2026-11-10',
+    slug='sewa-motor-stasiun-garut', city='garut', cats=['motor'], date='2026-11-09',
     title='Sewa Motor Dekat Stasiun Garut: Ambil di Jl. Cimanuk atau Minta Diantar',
     desc='Turun di Stasiun Garut dan butuh motor? Rentalaja Garut Kota di Jl. Cimanuk berjarak sekitar 600 meter dari stasiun, atau motor bisa diantar dengan ongkir sesuai jarak.',
     lead='Rentalaja Garut Kota ada di Jl. Cimanuk No.24C, sekitar 600 meter (garis lurus) dari Stasiun Garut. Anda bisa jalan ke cabang untuk ambil motor, atau pilih "Diantar" saat booking supaya motor dikirim ke stasiun dengan ongkir sesuai jarak.',
@@ -81,7 +81,7 @@ dict(
 '''),
 
 dict(
-    slug='wisata-cipanas-garut-naik-motor', city='garut', cats=['motor'], date='2026-11-10',
+    slug='wisata-cipanas-garut-naik-motor', city='garut', cats=['motor'], date='2026-11-09',
     title='Ke Cipanas Garut Naik Motor Sewaan dari Garut Kota',
     desc='Panduan singkat ke kawasan air panas Cipanas Garut naik motor dari Garut Kota: rute, motor yang cocok, dan tips berendam.',
     lead='Kawasan air panas Cipanas di Tarogong Kaler, di kaki Gunung Guntur, mudah dijangkau naik motor dari Garut Kota. Honda Beat dari Rentalaja Garut Kota ([[harga:honda-beat-cbs-new:garut]]) sudah cukup untuk perjalanan ini.',
@@ -106,7 +106,7 @@ dict(
 '''),
 
 dict(
-    slug='rute-motor-kamojang-darajat', city='garut', cats=['motor'], date='2026-11-10',
+    slug='rute-motor-kamojang-darajat', city='garut', cats=['motor'], date='2026-11-09',
     title='Naik Motor ke Kawah Kamojang dan Darajat dari Garut Kota',
     desc='Panduan naik motor ke Kawah Kamojang dan kawasan air panas Darajat dari Garut Kota: jalur pegunungan, motor yang disarankan, dan tips aman.',
     lead='Kawah Kamojang dan kawasan Darajat di barat Garut sama-sama berada di jalur pegunungan yang menanjak dan berkelok. Untuk rute ini kami menyarankan Honda PCX ([[harga:honda-pcx:garut]]) dari Rentalaja Garut Kota.',
@@ -131,14 +131,14 @@ dict(
 '''),
 
 dict(
-    slug='checklist-alat-camping-garut', city='garut', cats=['camping'], date='2026-11-10',
+    slug='checklist-alat-camping-garut', city='garut', cats=['camping'], date='2026-11-09',
     title='Checklist Alat Camping untuk Papandayan, Guntur, dan Cikuray',
     desc='Checklist perlengkapan camping dan hiking di Garut, lengkap dengan harga sewa per item di Rentalaja Garut Kota.',
     lead='Untuk camping di gunung sekitar Garut seperti Papandayan, Guntur, atau Cikuray, perlengkapan dasarnya adalah carrier, sleeping bag, matras, penerangan, alat masak, dan jaket hangat. Item di tabel bawah bisa disewa per hari di Rentalaja Garut Kota.',
     body='''
 <h2>Harga sewa alat camping</h2>
 [[tabel:camping:garut]]
-<p>Harga per item per hari, diperbarui otomatis dari sistem. Promo sewa lebih dari 1 hari otomatis dihitung saat booking.</p>
+<p>Harga per item per hari. Promo sewa lebih dari 1 hari otomatis dihitung saat booking.</p>
 
 <h2>Checklist dasar</h2>
 <ul class="tips">
@@ -162,7 +162,7 @@ dict(
 '''),
 
 dict(
-    slug='kamera-lensa-wisuda-prewedding-garut', city='garut', cats=['kamera', 'lensa'], date='2026-11-10',
+    slug='kamera-lensa-wisuda-prewedding-garut', city='garut', cats=['kamera', 'lensa'], date='2026-11-09',
     title='Pilih Kamera dan Lensa untuk Foto Wisuda dan Prewedding di Garut',
     desc='Kombinasi kamera dan lensa yang cocok untuk foto wisuda, prewedding, dan potret di Garut, dengan harga sewa 2 jam, ½ hari, dan harian.',
     lead='Untuk foto wisuda dan prewedding, kombinasi kamera mirrorless dengan lensa fix berbukaan lebar (f/1.4–f/1.8) memberi latar belakang blur yang rapi. Di Rentalaja Garut Kota tersedia Sony, Fujifilm, dan Canon, dengan tarif mulai 2 jam untuk sesi singkat.',
@@ -193,7 +193,7 @@ dict(
 '''),
 
 dict(
-    slug='pilih-iphone-sewa-garut', city='garut', cats=['iphone'], date='2026-11-10',
+    slug='pilih-iphone-sewa-garut', city='garut', cats=['iphone'], date='2026-11-09',
     title='Sewa iPhone di Garut: Bedanya iPhone XR, 11, 13, 15, dan 16',
     desc='Perbandingan singkat iPhone XR, 11, 13, 15, dan 16 yang bisa disewa di Garut Kota dan Wanaraja, untuk konten, acara, atau coba sebelum beli.',
     lead='Kalau butuh iPhone untuk konten atau acara di Garut, pilih berdasarkan kamera: iPhone XR cukup untuk foto biasa, iPhone 11 dan 13 punya kamera ultra wide, sedangkan iPhone 15 dan 16 punya kamera utama 48MP. Semua model tersedia di Rentalaja Garut Kota, dan sebagian juga di Wanaraja.',
@@ -223,7 +223,7 @@ dict(
 '''),
 
 dict(
-    slug='sewa-iphone-konser-wisuda-bandung', city='bandung', cats=['iphone'], date='2026-11-10',
+    slug='sewa-iphone-konser-wisuda-bandung', city='bandung', cats=['iphone'], date='2026-11-09',
     title='Sewa iPhone untuk Konser dan Wisuda di Bandung (Coblong)',
     desc='Sewa iPhone harian atau ½ hari di Rentalaja Bandung, Kecamatan Coblong, dekat kawasan ITB dan Sabuga, untuk konser, wisuda, dan konten.',
     lead='Rentalaja Bandung di Jl. Kubang Selatan, Kecamatan Coblong, menyewakan iPhone XR sampai iPhone 15 dengan tarif harian dan ½ hari. Lokasinya satu kecamatan dengan kampus ITB Ganesha dan Sabuga, jadi praktis untuk wisuda atau konser.',
@@ -257,7 +257,7 @@ dict(
 '''),
 
 dict(
-    slug='sewa-motor-dekat-itb-unpad-bandung', city='bandung', cats=['motor'], date='2026-11-10',
+    slug='sewa-motor-dekat-itb-unpad-bandung', city='bandung', cats=['motor'], date='2026-11-09',
     title='Sewa Motor Harian di Bandung Dekat ITB dan Unpad Dipatiukur',
     desc='Sewa motor matic harian atau ½ hari di Rentalaja Bandung (Jl. Kubang Selatan, Coblong), dekat kawasan ITB, Dago, dan Unpad Dipatiukur.',
     lead='Rentalaja Bandung di Jl. Kubang Selatan, Kecamatan Coblong, menyewakan Honda Beat dan Honda PCX dengan tarif harian dan ½ hari. Lokasinya dekat kawasan ITB, Dago, dan kampus Unpad di Jl. Dipati Ukur.',
@@ -284,7 +284,7 @@ dict(
 '''),
 
 dict(
-    slug='sewa-proyektor-playstation-nobar', city=None, cats=['proyektor', 'game'], date='2026-11-10',
+    slug='sewa-proyektor-playstation-nobar', city=None, cats=['proyektor', 'game'], date='2026-11-09',
     title='Sewa Proyektor dan PlayStation untuk Nobar dan Acara di Garut dan Bandung',
     desc='Sewa proyektor, layar, dan PlayStation untuk nonton bareng, main bareng, atau acara di Garut dan Bandung, dengan tarif 2 jam, ½ hari, dan harian.',
     lead='Untuk nobar atau acara, sewa proyektor plus layar; untuk main bareng, sewa PlayStation. Keduanya tersedia di Rentalaja Garut Kota dan Bandung, dengan tarif 2 jam (proyektor), ½ hari, dan harian.',
