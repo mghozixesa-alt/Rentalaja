@@ -4,6 +4,7 @@
      Token, id booking, dan data lain di URL tidak pernah dikirim ke Google. */
 (function () {
   var ID = 'G-ZZ84XYDTHN';
+  var META_ID = ''; // Meta Pixel (dataset) ID; kosong = Meta Pixel tidak dimuat
   var h = location.hostname, p = location.pathname;
   if (!/(^|\.)rentalaja\.co\.id$/i.test(h) || /^(demo|kasir)\./i.test(h)) return;
   if (/^\/(kasir|cs|link\/statistik)\/?$/i.test(p)) return;
@@ -14,6 +15,18 @@
   var s = document.createElement('script');
   s.async = true; s.src = 'https://www.googletagmanager.com/gtag/js?id=' + ID;
   document.head.appendChild(s);
+
+  // ---- Meta Pixel (opsional) ----
+  // Tanpa pencocokan data pelanggan (advanced matching) dan tanpa deteksi event otomatis: hanya event di bawah yang dikirim.
+  function fb() {}
+  if (META_ID) {
+    !function (f, b, e, v, n, t, s) { if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments); };
+      if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = []; t = b.createElement(e); t.async = !0; t.src = v;
+      s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s); }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+    window.fbq('set', 'autoConfig', false, META_ID);
+    window.fbq('init', META_ID);
+    fb = function (ev, params, id) { try { window.fbq('track', ev, params || {}, id ? { eventID: id } : undefined); } catch (e) {} };
+  }
 
   var KEEP = /^(utm_[a-z]+|gclid|fbclid|src)$/;
   function clean() {
@@ -39,6 +52,9 @@
     last = loc;
     gtag('set', { page_location: loc });
     gtag('event', 'page_view', { page_location: loc, page_title: document.title });
+    fb('PageView');
+    var pm = location.hash.match(/^#\/Produk\?(.*)/);
+    if (pm) fb('ViewContent', { content_ids: [new URLSearchParams(pm[1]).get('id') || ''], content_type: 'product' });
   }
   pv();
   window.addEventListener('hashchange', function () { setTimeout(pv, 50); });
@@ -54,9 +70,11 @@
     var href = a.getAttribute('href') || '';
     if (/wa\.me\/|api\.whatsapp\.com|whatsapp:\/\//i.test(href)) {
       gtag('event', 'klik_whatsapp', { dari: where() });
+      fb('Contact', { dari: where() });
     } else if (!/^#\//.test(location.hash) && /(^\/|rentalaja\.co\.id\/)#\/(Produk|Katalog|Home)/.test(href)) {
       var m = href.match(/#\/(Produk|Katalog|Home)/);
       gtag('event', 'klik_booking', { dari: where(), tujuan: m ? m[1] : '' });
+      fb('Lead', { dari: where() });
     }
   }, true);
 
@@ -80,10 +98,12 @@
         if (fresh && !store('ga_bk_' + b.code)) {
           store('ga_bk_' + b.code, '1');
           gtag('event', 'booking_dibuat', { transaction_id: b.code, value: Number(b.total) || 0, currency: 'IDR', items: items });
+          fb('InitiateCheckout', { value: Number(b.total) || 0, currency: 'IDR', num_items: items.length }, 'bk_' + b.code);
         }
         if (Number(b.paid_amount) > 0 && !store('ga_pd_' + b.code) && b.status !== 'cancelled' && b.status !== 'expired') {
           store('ga_pd_' + b.code, '1');
           gtag('event', 'purchase', { transaction_id: b.code, value: Number(b.paid_amount) || 0, currency: 'IDR', booking_total: Number(b.total) || 0, items: items });
+          fb('Purchase', { value: Number(b.paid_amount) || 0, currency: 'IDR', num_items: items.length }, 'pd_' + b.code);
           clearInterval(timer); timer = null;
         }
       }, function () {});
