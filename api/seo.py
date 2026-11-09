@@ -388,10 +388,10 @@ def page_index(D):
 
 
 ART_CSS = ('<style>.art p,.art li{font-size:16px}.art h2{margin-top:30px}.meta{font-size:13px;color:var(--mute);margin:0 0 12px}'
-           '.cover{margin:18px 0 6px;border-radius:18px;overflow:hidden;background:var(--bg);aspect-ratio:16/8}.cover img{width:100%;height:100%;object-fit:cover;display:block}'
+           '.cover{margin:18px 0 6px;border-radius:18px;overflow:hidden;background:var(--bg);aspect-ratio:16/8;position:relative}.cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}'
            '.credit{font-size:12px;color:var(--mute);margin:0 0 4px}.credit a{color:var(--mute)}'
            '.agrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-top:8px}.acard{border:1px solid var(--line);border-radius:16px;overflow:hidden;text-decoration:none;color:var(--ink);background:#fff;display:flex;flex-direction:column}'
-           '.acard .t{aspect-ratio:16/9;background:var(--bg)}.acard img{width:100%;height:100%;object-fit:cover;display:block}.acard .b{padding:12px 14px}.acard b{display:block;font-size:16px;line-height:1.3}.acard span{font-size:13px;color:var(--mute)}'
+           '.acard .t{aspect-ratio:16/9;background:var(--bg);position:relative;overflow:hidden;flex:none}.acard img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}.acard .b{padding:12px 14px}.acard b{display:block;font-size:16px;line-height:1.3}.acard span{font-size:13px;color:var(--mute)}'
            '.tag{display:inline-block;font-size:12px;font-weight:700;color:var(--teal-d);background:#E3F7F5;border-radius:999px;padding:3px 10px;margin-bottom:6px}'
            '@media(max-width:640px){.cover{aspect-ratio:4/3}}</style>')
 
