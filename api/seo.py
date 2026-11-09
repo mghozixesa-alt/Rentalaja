@@ -113,9 +113,11 @@ def faq(D):
 
 CSS = """:root{--navy:#1F2B4D;--teal:#09BEAF;--teal-d:#077A70;--ink:#1F2B4D;--mute:#4A5468;--line:#E6E8EC;--bg:#F6F7F9}
 *{box-sizing:border-box}body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:var(--ink);background:#fff;line-height:1.55}
-a{color:var(--teal-d)}header.top{background:var(--navy);color:#fff}header.top .w{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px}
-header.top a{color:#fff;text-decoration:none;font-weight:700}.w{max-width:960px;margin:0 auto;padding:0 16px}
-.logo{height:28px;background:#fff;border-radius:6px;padding:3px 6px}
+a{color:var(--teal-d)}header.top{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}header.top .w{display:flex;align-items:center;gap:20px;height:64px}
+.brand img{display:block;height:34px;width:auto}.nav{display:flex;gap:4px;flex:1}.nav a{color:var(--ink);text-decoration:none;font-weight:700;font-size:15px;padding:8px 12px;border-radius:10px}.nav a:hover{background:var(--bg)}
+.hact{display:flex;gap:8px;align-items:center}.hwa{display:flex;align-items:center;gap:6px;color:#1E7A44;text-decoration:none;font-weight:800;font-size:14px;border:1.5px solid #CDEBD8;border-radius:12px;padding:8px 12px}
+.hbk{background:var(--navy);color:#fff;text-decoration:none;font-weight:800;font-size:14px;border-radius:12px;padding:10px 16px}
+.trust{background:var(--navy);color:#CFE9E6;font-size:12.5px;font-weight:600;text-align:center}.trust .w{padding:7px 16px}.w{max-width:960px;margin:0 auto;padding:0 16px}
 .hero{background:linear-gradient(180deg,#F1FBFA,#fff);padding:28px 0 8px}h1{font-size:28px;line-height:1.25;margin:0 0 10px;font-weight:800}
 .crumb{margin:0 0 6px;font-size:13px;font-weight:700;color:var(--teal-d)}.crumb a{text-decoration:none}
 .lead{color:var(--mute);font-size:16px;margin:0 0 16px;max-width:680px}.cta{display:inline-block;background:var(--teal);color:var(--navy);font-weight:800;text-decoration:none;padding:12px 18px;border-radius:12px}
@@ -135,8 +137,16 @@ td.n,th.n{text-align:right;white-space:nowrap}.scroll{overflow-x:auto}
 ul.tips{padding-left:20px}ul.tips li{margin:6px 0}ol.steps{padding-left:20px}ol.steps li{margin:6px 0}
 .branch{border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:0 0 10px}.branch b{display:block}
 details{border-bottom:1px solid var(--line);padding:10px 0}summary{font-weight:700;cursor:pointer}
-footer{margin-top:40px;background:var(--bg);padding:24px 0;font-size:13px;color:var(--mute)}footer a{margin-right:12px}
-.links{columns:2;padding-left:18px}@media(max-width:640px){h1{font-size:23px}.links{columns:1}.cta.alt{margin:8px 0 0}.prod{grid-template-columns:1fr}}"""
+footer.ft{margin-top:64px;background:var(--navy);color:#C9D2E3;font-size:14px;padding:0 0 20px}footer.ft a{color:#fff;text-decoration:none}
+.fcta{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;background:var(--teal);color:var(--navy);border-radius:20px;padding:20px 22px;transform:translateY(-30px);box-shadow:0 12px 30px rgba(31,43,77,.18)}
+.fcta b{display:block;font-size:20px;font-weight:800}.fcta span{font-weight:600}.fbtn{display:flex;gap:8px;flex-wrap:wrap}.fcta .cta{background:var(--navy);color:#fff}.fcta .cta.wa{background:#fff;color:#1E7A44;border:0;margin:0}
+.fgrid{display:grid;grid-template-columns:1.3fr 1fr 1.2fr 1.2fr;gap:28px;padding:0 0 18px}.fcol h3{color:#fff;font-size:13px;letter-spacing:.06em;text-transform:uppercase;margin:0 0 10px}.fcol ul+h3{margin-top:18px}
+.fcol ul{list-style:none;padding:0;margin:0}.fcol li{margin:0 0 7px}.fcol li a{color:#C9D2E3}.fcol li a:hover{color:#fff}
+.fbrand img{background:#fff;border-radius:10px;padding:6px 10px;height:46px;width:auto}.fbrand p{margin:12px 0}.fmeta{color:#fff;font-weight:600}.flink{display:inline-block;margin-top:6px;font-weight:700;color:var(--teal)!important}
+.fbr{margin:0 0 12px}.fbr b{display:block;color:#fff}.fbr span{display:block;font-size:13px}.fbr a{font-size:13px;font-weight:700;color:var(--teal)!important}
+.fmore{border:0;border-top:1px solid rgba(255,255,255,.12);padding:12px 0}.fmore summary{color:#fff}.fmore ul{columns:2;padding-left:18px}.fmore li{margin:4px 0}.fmore a{color:#C9D2E3!important}
+.fbot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,.12);padding-top:14px;font-size:13px}.fbot a{margin-left:14px;color:#C9D2E3!important}
+.links{columns:2;padding-left:18px}@media(max-width:900px){.fgrid{grid-template-columns:1fr 1fr}}@media(max-width:640px){.nav{display:none}.hwa span{display:none}header.top .w{justify-content:space-between;gap:10px}.fgrid{grid-template-columns:1fr}.fmore ul{columns:1}.fbot a{margin:0 14px 0 0}.trust{font-size:11.5px}.tx{display:none}h1{font-size:23px}.links{columns:1}.cta.alt{margin:8px 0 0}.prod{grid-template-columns:1fr}}"""
 
 
 def esc(s): return html.escape(str(s or ''), quote=True)
@@ -197,17 +207,37 @@ def head(title, desc, path, lds, image=None):
 <script src="/ga.js" defer></script>
 {''.join('<script type="application/ld+json">' + json.dumps(x, ensure_ascii=False) + '</script>' for x in lds)}
 </head><body>
-<header class="top"><div class="w"><a href="/sewa/"><img class="logo" src="/logo.png" alt="Rentalaja"></a><a href="/#/Home">Buka aplikasi →</a></div></header>"""
+<div class="trust"><div class="w">Booking online 24 jam · DP 20%<span class="tx"> · Garut &amp; Bandung</span> · Buka 07.30–21.00</div></div>
+<header class="top"><div class="w"><a href="/sewa/" class="brand"><img src="/logo.png" alt="Rentalaja" width="120" height="34"></a>
+<nav class="nav"><a href="/sewa/garut.html">Garut</a><a href="/sewa/bandung.html">Bandung</a><a href="/panduan/">Panduan</a></nav>
+<div class="hact"><a class="hwa" href="https://wa.me/{WA}?text=Halo%20Rentalaja" rel="nofollow" aria-label="WhatsApp"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l1.3-3.9A8 8 0 1 1 8 19z"/></svg><span>WhatsApp</span></a><a class="hbk" href="/#/Home">Booking</a></div></div></header>"""
 
 
 def foot(D):
-    cats = ''.join(f'<li><a href="/sewa/{cat}-{c}.html">{CAT[cat][1]} {CITY[c]}</a></li>' for (c, cat) in D['pages'])
-    needs = ''.join(f'<li><a href="/sewa/{n["slug"]}.html">{esc(n["title"])}</a></li>' for n in NEEDS)
-    arts = ''.join(f'<li><a href="/panduan/{a["slug"]}">{esc(a["title"])}</a></li>' for a in ARTICLES)
-    return f"""<footer><div class="w"><h2 style="font-size:16px;margin-top:0">Semua layanan sewa</h2><ul class="links">{cats}</ul>
-<h2 style="font-size:16px">Panduan sewa</h2><ul class="links">{needs}</ul>
-<h2 style="font-size:16px">Artikel panduan</h2><ul class="links">{arts}</ul>
-<p>Rentalaja · PT Popo Karya Investama. <a href="/sewa/garut.html">Rentalaja Garut</a><a href="/sewa/bandung.html">Rentalaja Bandung</a><a href="/link">Semua link</a><a href="/#/Bantuan">Bantuan</a></p></div></footer></body></html>"""
+    def lst(items): return '<ul>' + ''.join(f'<li><a href="{u}">{esc(t)}</a></li>' for u, t in items) + '</ul>'
+    garut = [(f'/sewa/{cat}-{c}.html', CAT[cat][1].replace('Sewa ', '')) for (c, cat) in D['pages'] if c == 'garut']
+    bdg = [(f'/sewa/{cat}-{c}.html', CAT[cat][1].replace('Sewa ', '')) for (c, cat) in D['pages'] if c == 'bandung']
+    guides = [(f'/sewa/{n["slug"]}.html', n['title']) for n in NEEDS] + [(f'/panduan/{a["slug"]}', a['title']) for a in ARTICLES]
+    br = ''
+    for code in BR_CITY:
+        b = D['br'].get(code)
+        if not b: continue
+        br += (f'<div class="fbr"><b>{esc(BR_NAME.get(code))}</b><span>{esc(b.get("address"))}</span>'
+               + (f'<a href="{esc(b.get("maps"))}" rel="nofollow">Lihat peta →</a>' if b.get('maps') else '') + '</div>')
+    year = datetime.date.today().year
+    return (f'<footer class="ft"><div class="w">'
+            f'<div class="fcta"><div><b>Butuh barangnya hari ini?</b><span>Cek stok, pilih jam, bayar DP 20% — langsung dari HP.</span></div>'
+            f'<div class="fbtn"><a class="cta" href="/#/Home">Booking sekarang</a><a class="cta wa" href="https://wa.me/{WA}?text=Halo%20Rentalaja" rel="nofollow">Chat admin</a></div></div>'
+            f'<div class="fgrid">'
+            f'<div class="fcol fbrand"><img src="/logo.png" alt="Rentalaja" width="120" height="34"><p>Nggak semua harus dibeli. Sewa motor, mobil, iPhone, kamera, proyektor, PlayStation, dan alat camping di Garut dan Bandung.</p>'
+            f'<p class="fmeta">Buka setiap hari 07.30–21.00<br>WhatsApp <a href="https://wa.me/{WA}" rel="nofollow">0813-2470-0077</a></p><a class="flink" href="/link">Instagram, TikTok &amp; semua link →</a></div>'
+            f'<div class="fcol"><h3>Sewa di Garut</h3>{lst(garut)}<h3>Sewa di Bandung</h3>{lst(bdg)}</div>'
+            f'<div class="fcol"><h3>Cabang</h3>{br}</div>'
+            f'<div class="fcol"><h3>Panduan</h3>{lst(guides[:8])}<a class="flink" href="/panduan/">Semua panduan →</a></div>'
+            f'</div>'
+            f'<details class="fmore"><summary>Panduan lainnya</summary>{lst(guides[8:])}</details>'
+            f'<div class="fbot"><span>© {year} Rentalaja · PT Popo Karya Investama</span><span><a href="/#/Bantuan">Bantuan</a><a href="/#/Bantuan?tab=syarat">Syarat</a><a href="/#/Bantuan?tab=privasi">Privasi</a></span></div>'
+            f'</div></footer></body></html>')
 
 
 def local_business(D, code):
