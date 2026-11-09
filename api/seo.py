@@ -267,15 +267,6 @@ def faq_ld(D): return {"@context": "https://schema.org", "@type": "FAQPage", "ma
 def crumbs_ld(items): return {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": i + 1, "name": n, "item": BASE + u} for i, (n, u) in enumerate(items)]}
 
 
-def card(p):
-    u = img_url(p.get('ph'))
-    img = f'<img src="{esc(u)}" alt="Sewa {esc(p["name"])} {CITY[p["city"]]}" loading="lazy">' if u else 'Foto segera'
-    parts = []
-    if p.get('j'): parts.append(f'2 jam {rp(p["j"])}')
-    if p.get('h'): parts.append(f'½ hari {rp(p["h"])}')
-    return (f'<div class="card"><div class="ph">{img}</div><div class="b"><h3><a href="/sewa/{p["pslug"]}.html">{esc(p["name"])}</a></h3>'
-            f'<div class="price"><b>{rp(p["d"])}</b> / hari</div>' + (f'<div class="price">{" · ".join(parts)}</div>' if parts else '') +
-            f'<a class="go" href="/sewa/{p["pslug"]}.html">Lihat detail</a></div></div>')
 
 
 def offer_ld(p):
@@ -290,34 +281,6 @@ def docs_line(cat):
 
 
 # ---------------- halaman ----------------
-def page_category(D, c, cat):
-    items = D['pages'][(c, cat)]
-    label, title_base, intro, _ = CAT[cat]
-    lo = min(x['d'] for x in items if x['d'])
-    codes = sorted({b for it in items for b in it['branches']}, key=lambda x: list(BR_CITY).index(x))
-    path = f'/sewa/{cat}-{c}.html'
-    title = f'{title_base} {CITY[c]} Mulai {rp(lo)}/Hari | Rentalaja'
-    has_jam = any(x.get('j') or x.get('h') for x in items)
-    desc = f'{title_base} di {CITY[c]}: {len(items)} pilihan, mulai {rp(lo)} per hari' + (', ada tarif 2 jam dan ½ hari' if has_jam else '') + '. Cek ketersediaan dan booking online, DP 20%.'
-    lds = [{"@context": "https://schema.org", "@graph": [local_business(D, k) for k in codes]},
-           {"@context": "https://schema.org", "@type": "ItemList", "name": f'{title_base} {CITY[c]}',
-            "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": f'{BASE}/sewa/{it["pslug"]}.html', "name": it['name']} for i, it in enumerate(items)]},
-           crumbs_ld([('Rentalaja', '/sewa/'), (CITY[c], f'/sewa/{c}.html'), (label, path)]), faq_ld(D)]
-    hj = any(x.get('j') for x in items); hh = any(x.get('h') for x in items)
-    rows = ''.join(f'<tr><td><a href="/sewa/{it["pslug"]}.html">{esc(it["name"])}</a></td>' + (f'<td class="n">{rp(it.get("j"))}</td>' if hj else '') + (f'<td class="n">{rp(it.get("h"))}</td>' if hh else '') + f'<td class="n">{rp(it["d"])}</td></tr>' for it in items)
-    needs = [n for n in NEEDS if (n['city'] in (c, None)) and cat in n['cats']]
-    body = f"""<main><section class="hero"><div class="w">
-<p class="crumb"><a href="/sewa/{c}.html">Rentalaja {CITY[c]}</a> › {label}</p>
-<h1>{esc(title_base)} di {CITY[c]}</h1><p class="lead">{esc(intro)} {len(items)} pilihan mulai {rp(lo)} per hari. Booking online, cukup DP 20% setelah verifikasi.</p>
-<a class="cta" href="/#/Katalog?cat={cat}">Cek ketersediaan</a><a class="cta alt" href="https://wa.me/{WA}" rel="nofollow">Tanya via WhatsApp</a>
-<ul class="chips"><li>Booking online</li><li>DP 20%</li>{'<li>Ada tarif ' + ('2 jam & ' if hj else '') + '½ hari</li>' if has_jam else ''}<li>Buka 07.30–21.00</li></ul></div></section>
-<div class="w"><h2>Pilihan {label if label in ('iPhone', 'PlayStation') else label.lower()} di {CITY[c]}</h2><div class="grid">{''.join(card(it) for it in items)}</div>
-<h2>Daftar harga sewa {label} {CITY[c]}</h2><div class="scroll"><table><thead><tr><th>Barang</th>{'<th class="n">2 jam</th>' if hj else ''}{'<th class="n">½ hari</th>' if hh else ''}<th class="n">1 hari</th></tr></thead><tbody>{rows}</tbody></table></div>
-<p style="font-size:13px;color:var(--mute)">Harga diperbarui otomatis dari sistem Rentalaja. Sewa lebih dari 1 hari dihitung per hari.</p>
-{('<h2>Panduan terkait</h2><ul class="tips">' + ''.join(f'<li><a href="/sewa/{n["slug"]}.html">{esc(n["title"])}</a></li>' for n in needs) + '</ul>') if needs else ''}
-<h2>Lokasi ambil</h2>{branch_box(D, codes)}
-<h2>Pertanyaan yang sering ditanya</h2>{faq_html(D)}</div></main>"""
-    return head(title, desc, path, lds) + body + foot(D)
 
 
 def page_product(D, p):
@@ -339,7 +302,7 @@ def page_product(D, p):
     if d and len(d) > 25: extra.append(esc(d))
     incl = (p.get('incl') or '').strip()
     rc = p.get('rc') or 0
-    related = [x for x in D['pages'].get((c, cat), []) if x['id'] != p['id']][:4]
+    related = [x for x in D['pages'].get((c, cat), []) if x['id'] != p['id']][:12]
     needs = [n for n in NEEDS if (n['city'] in (c, None)) and cat in n['cats']]
     lds = [{"@context": "https://schema.org", **offer_ld(p)}, crumbs_ld([('Rentalaja', '/sewa/'), (CITY[c], f'/sewa/{c}.html'), (label, f'/sewa/{cat}-{c}.html'), (p['name'], path)]),
            {"@context": "https://schema.org", "@graph": [local_business(D, k) for k in codes]}, faq_ld(D)]
@@ -354,67 +317,16 @@ def page_product(D, p):
 <p style="font-size:13px;color:var(--mute)">Harga diperbarui otomatis dari sistem Rentalaja.{' Promo sewa 2 hari gratis 1 berlaku untuk barang ini.' if cat not in ('motor', 'mobil') and any(x.get('key') == 'buy_x_free_y' for x in D.get('promos') or []) else ''}</p>
 <h2>Cara sewa</h2><ol class="steps"><li>Pilih tanggal dan jam di <a href="/#/Produk?id={p['id']}">halaman booking</a>.</li><li>Unggah {docs_line(cat)} sekali saja, lalu tunggu verifikasi.</li><li>Bayar DP 20% secara online.</li><li>Ambil di cabang{' atau minta diantar' if cat in ('motor',) else ''}, sisa dibayar saat ambil.</li></ol>
 {('<h2>Panduan terkait</h2><ul class="tips">' + ''.join(f'<li><a href="/sewa/{n["slug"]}.html">{esc(n["title"])}</a></li>' for n in needs) + '</ul>') if needs else ''}
-{('<h2>' + label + ' lain di ' + CITY[c] + '</h2><div class="grid">' + ''.join(card(x) for x in related) + '</div>') if related else ''}
+{(sec(label + ' lain di ' + CITY[c], '', f'/sewa/{cat}-{c}.html') + '<div class="row">' + cards(related) + '</div>') if related else ''}
 <h2>Lokasi ambil</h2>{branch_box(D, codes)}
 <h2>Pertanyaan yang sering ditanya</h2>{faq_html(D)}</div></main>"""
-    return head(title, desc, path, lds, u) + body + foot(D)
+    return ui_head(title, desc, path, lds, u) + body + foot(D)
 
 
-def page_need(D, n):
-    cities = [n['city']] if n['city'] else list(CITY)
-    items = [p for p in D['prod'].values() if p['city'] in cities and p['cat'] in n['cats']]
-    if n.get('prefer'): items.sort(key=lambda x: (n['prefer'] not in x['name'].lower(), x['d'] or 0))
-    else: items.sort(key=lambda x: (x['city'], x['cat'], x['d'] or 0))
-    path = f'/sewa/{n["slug"]}.html'
-    lo = min((x['d'] for x in items if x['d']), default=None)
-    desc = n['lead'][:150].rsplit(' ', 1)[0] + (f' Mulai {rp(lo)}/hari.' if lo else '')
-    codes = sorted({b for it in items for b in it['branches']}, key=lambda x: list(BR_CITY).index(x))
-    lds = [{"@context": "https://schema.org", "@type": "ItemList", "name": n['title'],
-            "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": f'{BASE}/sewa/{it["pslug"]}.html', "name": it['name']} for i, it in enumerate(items[:20])]},
-           crumbs_ld([('Rentalaja', '/sewa/'), (n['title'], path)]), faq_ld(D)]
-    if codes: lds.append({"@context": "https://schema.org", "@graph": [local_business(D, k) for k in codes]})
-    city_links = ''.join(f'<a class="cta alt" style="margin:8px 8px 0 0" href="/sewa/{cat}-{cc}.html">Semua {CAT[cat][0].lower() if CAT[cat][0] not in ("iPhone", "PlayStation") else CAT[cat][0]} {CITY[cc]}</a>' for cc in cities for cat in n['cats'] if (cc, cat) in D['pages'])
-    also = [x for x in NEEDS if x['slug'] in n.get('also', [])]
-    body = f"""<main><section class="hero"><div class="w">
-<p class="crumb"><a href="/sewa/">Rentalaja</a> › Panduan</p>
-<h1>{esc(n['h1'])}</h1><p class="lead">{esc(n['lead'])}</p>
-<a class="cta" href="/#/Katalog?cat={n['cats'][0]}">Cek ketersediaan</a><a class="cta alt" href="https://wa.me/{WA}?text={quote('Halo Rentalaja, saya mau tanya: ' + n['title'])}" rel="nofollow">Tanya via WhatsApp</a>
-</div></section>
-<div class="w"><h2>Tips</h2><ul class="tips">{''.join(f'<li>{t}</li>' for t in n['tips'])}</ul>
-<h2>Pilihan dan harga</h2><div class="grid">{''.join(card(x) for x in items[:24])}</div>
-<div style="margin-top:12px">{city_links}</div>
-{('<h2>Baca juga</h2><ul class="tips">' + ''.join(f'<li><a href="/sewa/{x["slug"]}.html">{esc(x["title"])}</a></li>' for x in also) + '</ul>') if also else ''}
-{('<h2>Lokasi ambil</h2>' + branch_box(D, codes)) if codes else ''}
-<h2>Pertanyaan yang sering ditanya</h2>{faq_html(D)}</div></main>"""
-    return head(f'{n["title"]} | Rentalaja', desc, path, lds) + body + foot(D)
 
 
-def page_city(D, c):
-    cats = [(cat, items) for (cc, cat), items in D['pages'].items() if cc == c]
-    codes = [k for k in BR_CITY if BR_CITY[k] == c and k in D['br']]
-    path = f'/sewa/{c}.html'
-    title = f'Rentalaja {CITY[c]} – Sewa {", ".join(CAT[cat][0] for cat, _ in cats[:4])} & Lainnya'
-    desc = f'Rentalaja {CITY[c]}: sewa ' + ', '.join(CAT[cat][0] if CAT[cat][0] in ('iPhone', 'PlayStation') else CAT[cat][0].lower() for cat, _ in cats) + '. Booking online, DP 20%, buka setiap hari 07.30–21.00.'
-    tiles = ''.join(f'<div class="card"><div class="b"><h3><a href="/sewa/{cat}-{c}.html">{CAT[cat][1]} {CITY[c]}</a></h3><div class="price">{len(items)} pilihan · mulai <b>{rp(min(x["d"] for x in items if x["d"]))}</b>/hari</div>'
-                    f'<a class="go" href="/sewa/{cat}-{c}.html">Lihat harga</a></div></div>' for cat, items in cats)
-    needs = [n for n in NEEDS if n['city'] in (c, None)]
-    lds = [{"@context": "https://schema.org", "@graph": [local_business(D, k) for k in codes]}, crumbs_ld([('Rentalaja', '/sewa/'), (CITY[c], path)]), faq_ld(D)]
-    body = f"""<main><section class="hero"><div class="w"><h1>Rentalaja {CITY[c]}</h1>
-<p class="lead">Nggak semua harus dibeli. Sewa saat butuh: {', '.join(CAT[cat][0] for cat, _ in cats)}. Cek stok dan booking langsung dari HP.</p>
-<a class="cta" href="/#/Home">Buka aplikasi Rentalaja</a></div></section>
-<div class="w"><h2>Kategori sewa di {CITY[c]}</h2><div class="grid">{tiles}</div>
-<h2>Panduan sewa di {CITY[c]}</h2><ul class="tips">{''.join(f'<li><a href="/sewa/{n["slug"]}.html">{esc(n["title"])}</a></li>' for n in needs)}</ul>
-<h2>Cabang Rentalaja di {CITY[c]}</h2>{branch_box(D, codes)}<h2>Pertanyaan yang sering ditanya</h2>{faq_html(D)}</div></main>"""
-    return head(title, desc, path, lds) + body + foot(D)
 
 
-def page_index(D):
-    body = '<main><section class="hero"><div class="w"><h1>Sewa di Rentalaja</h1><p class="lead">Motor, mobil, iPhone, kamera, lensa, proyektor, PlayStation, dan alat camping di Garut dan Bandung.</p><a class="cta" href="/#/Home">Buka aplikasi</a></div></section><div class="w">'
-    for c in CITY:
-        body += f'<h2><a href="/sewa/{c}.html">Rentalaja {CITY[c]}</a></h2><ul class="links">' + ''.join(f'<li><a href="/sewa/{cat}-{c}.html">{CAT[cat][1]} {CITY[c]}</a></li>' for (cc, cat) in D['pages'] if cc == c) + '</ul>'
-    body += '<h2>Panduan sewa</h2><ul class="links">' + ''.join(f'<li><a href="/sewa/{n["slug"]}.html">{esc(n["title"])}</a></li>' for n in NEEDS) + '</ul></div></main>'
-    ld = [{"@context": "https://schema.org", "@type": "Organization", "name": "Rentalaja", "url": BASE, "logo": BASE + '/logo.png', "parentOrganization": {"@type": "Organization", "name": "PT Popo Karya Investama"}}]
-    return head('Rentalaja – Sewa Motor, iPhone, Kamera & Alat Camping di Garut dan Bandung', 'Sewa motor, mobil, iPhone, kamera, lensa, proyektor, PlayStation, dan alat camping di Garut dan Bandung. Booking online, DP 20%.', '/sewa/', ld) + body + foot(D)
 
 
 ART_CSS = ('<style>.art p,.art li{font-size:16px}.art h2{margin-top:30px}.meta{font-size:13px;color:var(--mute);margin:0 0 12px}'
@@ -494,25 +406,24 @@ def page_article(D, a):
         for cc in ([a['city']] if a['city'] else list(CITY)):
             for ct in a['cats']: its += items_of(D, ct, cc)
         its = sorted(its, key=lambda x: -(x.get('rc') or 0))[:4]
-        if its: strip = '<h2>Barang yang dibahas</h2><div class="grid">' + ''.join(card(x) for x in its) + '</div>'
-    html_ = f"""<main><section class="hero"><div class="w">
-<p class="crumb"><a href="/panduan/">Panduan</a></p>
-<h1>{esc(a['title'])}</h1><p class="meta">Rentalaja · diperbarui {datetime.date.today().strftime('%d-%m-%Y')}</p>
-{cover_html(a)}
-<p class="lead">{lead}</p>
-<a class="cta" href="/#/Katalog?cat={cat0}">Cek ketersediaan</a><a class="cta alt" href="https://wa.me/{WA}?text={quote('Halo Rentalaja, saya baca panduan: ' + a['title'])}" rel="nofollow">Tanya via WhatsApp</a>
-</div></section>
-<div class="w art">{strip}{body}
-{('<h2>Panduan lain</h2>' + acards(others)) if others else ''}
-<h2>Pertanyaan yang sering ditanya</h2>{faq_html(D)}</div></main>"""
-    return head(a['title'] + ' | Rentalaja', a['desc'], path, lds, img_src(a)).replace('</head>', ART_CSS + '</head>') + html_ + foot(D)
+        if its: strip = sec('Barang yang dibahas', 'Harga diperbarui otomatis dari sistem') + '<div class="row">' + cards(its) + '</div>'
+    html_ = banner(esc(a['title']), lead, f'<a class="cta" href="/#/Katalog?cat={cat0}">Cek ketersediaan</a>' + wa_cta('Halo Rentalaja, saya baca panduan: ' + a['title']),
+                   photo=a.get('img'), crumb='<a href="/panduan/">Panduan</a> · ' + CITY.get(a['city'], 'Garut &amp; Bandung'),
+                   badges=['Diperbarui ' + datetime.date.today().strftime('%d-%m-%Y'), 'Harga langsung dari sistem']) + f"""<main class="w art">{strip}{body}
+{(sec('Panduan lain', '', '/panduan/', 'Semua panduan') + acards(others).replace('class="agrid"', 'class="row wide"')) if others else ''}
+<h2>Pertanyaan yang sering ditanya</h2>{faq_html(D)}</main>"""
+    return ui_head(a['title'] + ' | Rentalaja', a['desc'], path, lds, img_src(a)) + html_ + foot(D)
 
 
 def page_articles(D):
-    body = '<main><section class="hero"><div class="w"><h1>Panduan sewa Rentalaja</h1><p class="lead">Rute, tips, dan perbandingan barang untuk sewa di Garut dan Bandung. Harga di setiap panduan diambil langsung dari sistem Rentalaja.</p></div></section><div class="w"><ul class="tips">'
-    body = body.replace('<ul class="tips">', '') + acards(ARTICLES) + '</div></main>'
+    f0 = ARTICLES[0]
+    body = banner('Panduan sewa Rentalaja', 'Rute wisata, checklist, dan tips memilih barang di Garut dan Bandung — harga di setiap panduan diambil langsung dari sistem Rentalaja.',
+                  f'<a class="cta" href="/panduan/{f0["slug"]}">Baca: {esc(f0["title"])}</a>', photo=f0.get('img'), kicker='Inspirasi &amp; panduan')
+    body += '<main class="w">' + cat_pills(D) + sec('Garut', '', '/sewa/garut.html', 'Sewa di Garut') + acards([x for x in ARTICLES if x['city'] == 'garut']).replace('class="agrid"', 'class="row wide"')
+    body += sec('Bandung', '', '/sewa/bandung.html', 'Sewa di Bandung') + acards([x for x in ARTICLES if x['city'] in ('bandung', None)]).replace('class="agrid"', 'class="row wide"')
+    body += sec('Kebutuhan populer') + '<div class="row wide">' + ''.join(guide_cards(D).split('</a>')[i] + '</a>' for i in range(len(NEEDS))) + '</div></main>'
     lds = [crumbs_ld([('Rentalaja', '/sewa/'), ('Panduan', '/panduan/')])]
-    return head('Panduan Sewa Motor, Kamera, iPhone & Camping di Garut dan Bandung | Rentalaja', 'Panduan rute, tips, dan perbandingan barang untuk sewa motor, kamera, iPhone, proyektor, dan alat camping di Garut dan Bandung.', '/panduan/', lds).replace('</head>', ART_CSS + '</head>') + body + foot(D)
+    return head('Panduan Sewa Motor, Kamera, iPhone & Camping di Garut dan Bandung | Rentalaja', 'Panduan rute, tips, dan perbandingan barang untuk sewa motor, kamera, iPhone, proyektor, dan alat camping di Garut dan Bandung.', '/panduan/', lds) .replace('</head>', ART_CSS + '<style>' + UI2_CSS + '</style></head>') + body + foot(D)
 
 
 def acards(arts):
@@ -522,6 +433,252 @@ def acards(arts):
         im = f'<img src="{img_src(x, 640)}" alt="" loading="lazy">' if x.get('img') else ''
         out.append(f'<a class="acard" href="/panduan/{x["slug"]}"><div class="t">{im}</div><div class="b"><span class="tag">{tag}</span><b>{esc(x["title"])}</b><span>{esc(x["desc"])}</span></div></a>')
     return '<div class="agrid">' + ''.join(out) + '</div>'
+
+
+
+# ---------------- Tampilan v2 (gaya Traveloka: banner foto, baris kartu geser, pill kategori) ----------------
+UI2_CSS = """
+.top-w{max-width:1120px}.w{max-width:1120px}
+.banner{position:relative;border-radius:24px;overflow:hidden;min-height:360px;display:flex;align-items:flex-end;color:#fff;margin-top:18px;background:linear-gradient(120deg,#1F2B4D 0%,#1F2B4D 45%,#0B8F84 100%)}
+.banner img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.banner.photo:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,22,40,0) 25%,rgba(15,22,40,.85))}
+.banner .in{position:relative;z-index:2;padding:30px;max-width:640px}
+.banner h1{color:#fff;font-size:38px;line-height:1.15;margin:0 0 10px}.banner .lead{color:#E6ECF5;margin-bottom:18px}
+.banner .crumb,.banner .crumb a{color:#9FF0E7}
+.banner .cta.alt{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.4)}
+.kicker{display:inline-block;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:5px 12px;font-size:13px;font-weight:700;margin-bottom:12px}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}.badges span{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600}
+.credit2{position:absolute;right:14px;bottom:10px;z-index:2;font-size:11px;color:#dfe6f0;opacity:.85}.credit2 a{color:#dfe6f0}
+.collage{position:absolute;right:24px;top:50%;transform:translateY(-50%);display:flex;gap:10px;z-index:1}
+.collage div{width:150px;height:150px;border-radius:22px;background:rgba(255,255,255,.95);display:flex;align-items:center;justify-content:center;box-shadow:0 14px 30px rgba(0,0,0,.25)}
+.collage div:nth-child(2){transform:translateY(-26px)}.collage img{width:84%;height:84%;object-fit:contain}
+.pills{display:flex;gap:10px;overflow-x:auto;padding:4px 2px 10px;margin-top:20px;scrollbar-width:none}.pills::-webkit-scrollbar{display:none}
+.pill{flex:none;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 14px 6px 6px;text-decoration:none;color:var(--ink);font-weight:700;font-size:14px;box-shadow:0 2px 10px rgba(31,43,77,.06)}
+.pill img{width:34px;height:34px;object-fit:contain;background:#E3F7F5;border-radius:50%;padding:4px}.pill.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.usp{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:20px}.usp div{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start}
+.usp i{flex:none;width:36px;height:36px;border-radius:12px;background:#E3F7F5;display:flex;align-items:center;justify-content:center;color:var(--teal-d);font-style:normal;font-weight:800}
+.usp b{display:block;font-size:14px}.usp span{font-size:12.5px;color:var(--mute)}
+.sec{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin:38px 0 14px}.sec h2{margin:0;font-size:22px}.sec p{margin:4px 0 0;color:var(--mute);font-size:14px}.sec a{font-weight:800;text-decoration:none;white-space:nowrap;font-size:14px}
+.row{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(190px,220px);gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:2px 2px 14px;scrollbar-width:thin}
+.row>*{scroll-snap-align:start}.row.wide{grid-auto-columns:minmax(260px,300px)}
+.card{border-radius:18px;box-shadow:0 4px 18px rgba(31,43,77,.07);border-color:#EEF0F3;transition:transform .15s,box-shadow .15s}.card:hover{transform:translateY(-3px);box-shadow:0 10px 26px rgba(31,43,77,.12)}
+.card .ph{background:radial-gradient(circle at 50% 60%,#FFFFFF 0,#EAF8F6 70%);position:relative}.card img{padding:14px}
+.badge{position:absolute;left:10px;top:10px;background:#F26B1D;color:#fff;font-size:11px;font-weight:800;border-radius:8px;padding:3px 8px;z-index:1}
+.card .loc{font-size:12px;color:var(--mute);font-weight:600}.card .rc{font-size:12px;color:var(--mute)}.card .from{font-size:12px;color:var(--mute);margin-top:2px}.card .price b{color:var(--teal-d);font-size:17px}
+.citycards{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.citycard{position:relative;border-radius:22px;overflow:hidden;aspect-ratio:16/9;display:block;color:#fff;text-decoration:none;background:var(--navy)}
+.citycard img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .3s}.citycard:hover img{transform:scale(1.04)}
+.citycard:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 35%,rgba(10,16,30,.8))}
+.citycard .t{position:absolute;left:18px;bottom:16px;z-index:1}.citycard b{display:block;font-size:24px}.citycard span{font-size:14px;color:#E6ECF5}
+.acard{box-shadow:0 4px 18px rgba(31,43,77,.07);border-color:#EEF0F3}
+@media(max-width:820px){.collage{display:none}.usp{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.banner{min-height:320px;border-radius:18px;margin-top:12px}.banner h1{font-size:27px}.banner .in{padding:20px}.citycards{grid-template-columns:1fr}.sec h2{font-size:19px}.row{grid-auto-columns:minmax(165px,180px)}.row.wide{grid-auto-columns:minmax(240px,260px)}.usp div{padding:12px}}
+"""
+
+PHOTO = {  # (id foto Unsplash, nama fotografer, username, keterangan)
+    'garut': ('photo-1580808327337-731f57b77991', 'Ken Petung', 'kenpetung', 'Gunung Papandayan, Garut'),
+    'bandung': ('photo-1693291587702-ff510bbc5de9', 'Abdul Ridwan', 'abdulridwanrr', 'Jl. Asia Afrika, Bandung'),
+    'index': ('photo-1533632368662-0cdf02790f17', 'Gery Wibowo', 'gergilgad', 'Hutan Mati, Gunung Papandayan'),
+    'motor-papandayan-garut': ('photo-1716727382000-41cf89e1a075', 'Idris Hasibuan', 'idri5', 'Gunung Papandayan'),
+    'motor-antar-hotel-garut': ('photo-1723259528465-0bb2850fda65', 'Surya Ahmad Pajar', 'ahmdpajr', 'Ilustrasi'),
+    'alat-camping-gunung-garut': ('photo-1716727382026-7854678e53f1', 'Idris Hasibuan', 'idri5', 'Pendaki di Gunung Papandayan'),
+    'iphone-wisuda-konten-bandung': ('photo-1567985944845-cb4d1e598822', 'Josh Power', 'joshwp', 'Ilustrasi'),
+    'motor-mahasiswa-bandung': ('photo-1725632240701-87a7b8cde954', 'Dwi Asy Syafa', 'dwiasysyafa', 'Ilustrasi'),
+    'kamera-wisuda-prewedding-garut': ('photo-1513031300226-c8fb12de9ade', 'Ailbhe Flynn', 'aflynnn', 'Ilustrasi'),
+    'proyektor-nobar-acara': ('photo-1478720568477-152d9b164e26', 'Jeremy Yap', 'jeremyyappy', 'Ilustrasi'),
+}
+
+
+def unsplash(pid, w=1600): return f'https://images.unsplash.com/{pid}?auto=format&fit=crop&w={w}&q=72'
+
+
+def banner(h1, lead, ctas, photo=None, collage=None, kicker='', badges=(), crumb=''):
+    bg = cred = col = ''
+    if photo:
+        pid, name, user, cap = photo
+        ref = '?utm_source=rentalaja&utm_medium=referral'
+        bg = f'<img class="bg" src="{unsplash(pid)}" alt="{esc(cap if cap != "Ilustrasi" else h1)}" fetchpriority="high">'
+        cred = f'<div class="credit2">{esc(cap)} · Foto: <a href="https://unsplash.com/@{user}{ref}" rel="nofollow">{esc(name)}</a> / <a href="https://unsplash.com/{ref}" rel="nofollow">Unsplash</a></div>'
+    if collage:
+        col = '<div class="collage">' + ''.join(f'<div><img src="{esc(u)}" alt=""></div>' for u in collage[:3]) + '</div>'
+    return (f'<section class="w"><div class="banner{" photo" if photo else ""}">{bg}{col}<div class="in">'
+            + (f'<p class="crumb">{crumb}</p>' if crumb else '') + (f'<span class="kicker">{kicker}</span>' if kicker else '')
+            + f'<h1>{h1}</h1><p class="lead">{lead}</p>{ctas}'
+            + ('<div class="badges">' + ''.join(f'<span>{b}</span>' for b in badges) + '</div>' if badges else '')
+            + f'</div>{cred}</div></section>')
+
+
+def usp():
+    items = [('✓', 'Booking online 24 jam', 'Cek stok dan kunci jadwal dari HP'), ('20%', 'Cukup DP 20%', 'Sisanya dibayar saat ambil'),
+             ('⇄', 'Bisa diantar', 'Ongkir sesuai jarak'), ('★', 'Barang terawat', 'Dicek sebelum diserahkan')]
+    return '<div class="usp">' + ''.join(f'<div><i>{i}</i><p style="margin:0"><b>{t}</b><span>{s}</span></p></div>' for i, t, s in items) + '</div>'
+
+
+def sec(title, sub='', link='', link_text='Lihat semua'):
+    return (f'<div class="sec"><div><h2>{title}</h2>' + (f'<p>{sub}</p>' if sub else '') + '</div>'
+            + (f'<a href="{link}">{link_text} →</a>' if link else '') + '</div>')
+
+
+def card(p, badge=None, show_loc=False):
+    u = img_url(p.get('ph'))
+    img = f'<img src="{esc(u)}" alt="Sewa {esc(p["name"])} {CITY[p["city"]]}" loading="lazy">' if u else 'Foto segera'
+    parts = []
+    if p.get('j'): parts.append(f'2 jam {rp(p["j"])}')
+    if p.get('h'): parts.append(f'½ hari {rp(p["h"])}')
+    rc = p.get('rc') or 0
+    return (f'<div class="card"><div class="ph">{f"<span class=badge>{badge}</span>" if badge else ""}{img}</div><div class="b">'
+            + (f'<span class="loc">{CITY[p["city"]]}</span>' if show_loc else '')
+            + f'<h3><a href="/sewa/{p["pslug"]}.html">{esc(p["name"])}</a></h3>'
+            + (f'<span class="rc">Disewa {rc:,}×</span>'.replace(',', '.') if rc >= 10 else '')
+            + f'<div class="from">Mulai dari</div><div class="price"><b>{rp(p["d"])}</b> / hari</div>'
+            + (f'<div class="price">{" · ".join(parts)}</div>' if parts else '')
+            + f'<a class="go" href="/sewa/{p["pslug"]}.html">Lihat detail</a></div></div>')
+
+
+def cards(items, top_badge=3, show_loc=False):
+    best = sorted([x for x in items if (x.get('rc') or 0) >= 10], key=lambda x: -x['rc'])[:top_badge]
+    ids = {x['id'] + x['city'] for x in best}
+    return ''.join(card(x, 'Terlaris' if x['id'] + x['city'] in ids else None, show_loc) for x in items)
+
+
+def top_items(D, c=None, cats=None, n=10):
+    its = [p for p in D['prod'].values() if (c is None or p['city'] == c) and (cats is None or p['cat'] in cats)]
+    return sorted(its, key=lambda x: -(x.get('rc') or 0))[:n]
+
+
+def cat_pills(D, c=None, active=None):
+    out = []
+    for cat in ORDER:
+        cities = [c] if c else list(CITY)
+        cc = next((x for x in cities if (x, cat) in D['pages']), None)
+        if not cc: continue
+        items = D['pages'][(cc, cat)]
+        ph = next((img_url(x['ph']) for x in sorted(items, key=lambda x: -(x.get('rc') or 0)) if x.get('ph')), None)
+        out.append(f'<a class="pill{" on" if cat == active else ""}" href="/sewa/{cat}-{cc}.html">' + (f'<img src="{esc(ph)}" alt="">' if ph else '') + f'{CAT[cat][0]}</a>')
+    return '<div class="pills">' + ''.join(out) + '</div>'
+
+
+def guide_cards(D, c=None):
+    out = []
+    for n in NEEDS:
+        if c and n['city'] not in (c, None): continue
+        ph = PHOTO.get(n['slug'])
+        im = f'<img src="{unsplash(ph[0], 640)}" alt="" loading="lazy">' if ph else ''
+        out.append(f'<a class="acard" href="/sewa/{n["slug"]}.html"><div class="t">{im}</div><div class="b"><span class="tag">{CITY.get(n["city"], "Garut & Bandung")}</span><b>{esc(n["title"])}</b></div></a>')
+    for a in ARTICLES:
+        if c and a['city'] not in (c, None): continue
+        im = f'<img src="{img_src(a, 640)}" alt="" loading="lazy">' if a.get('img') else ''
+        out.append(f'<a class="acard" href="/panduan/{a["slug"]}"><div class="t">{im}</div><div class="b"><span class="tag">{CITY.get(a["city"], "Garut & Bandung")}</span><b>{esc(a["title"])}</b></div></a>')
+    return ''.join(out)
+
+
+def ui_head(*a, **k):
+    return head(*a, **k).replace('</head>', ART_CSS + '<style>' + UI2_CSS + '</style></head>')
+
+
+def wa_cta(text, label='Tanya via WhatsApp'):
+    return f'<a class="cta alt" href="https://wa.me/{WA}?text={quote(text)}" rel="nofollow">{label}</a>'
+
+
+# ---------------- halaman v2 ----------------
+def page_index(D):
+    city_cards = ''
+    for c in CITY:
+        cats = [CAT[cat][0] for (cc, cat) in D['pages'] if cc == c]
+        city_cards += (f'<a class="citycard" href="/sewa/{c}.html"><img src="{unsplash(PHOTO[c][0], 900)}" alt="{PHOTO[c][3]}" loading="lazy">'
+                       f'<div class="t"><b>Rentalaja {CITY[c]}</b><span>{", ".join(cats[:5])}{" & lainnya" if len(cats) > 5 else ""}</span></div></a>')
+    body = (banner('Sewa apa aja di Garut &amp; Bandung', 'Motor, mobil, iPhone, kamera, lensa, proyektor, PlayStation, dan alat camping. Cek stok, pilih jam, bayar DP 20% — langsung dari HP.',
+                   f'<a class="cta" href="/#/Home">Mulai booking</a>{wa_cta("Halo Rentalaja, saya mau tanya sewa", "Chat admin")}',
+                   photo=PHOTO['index'], kicker='Nggak semua harus dibeli', badges=['4 cabang', 'Buka setiap hari 07.30–21.00', 'DP 20%'])
+            + '<main class="w">' + cat_pills(D) + usp()
+            + sec('Pilih kota', 'Ambil di cabang terdekat atau minta diantar') + f'<div class="citycards">{city_cards}</div>')
+    for c in CITY:
+        body += sec(f'Paling sering disewa di {CITY[c]}', 'Harga diperbarui otomatis dari sistem', f'/sewa/{c}.html') + f'<div class="row">{cards(top_items(D, c))}</div>'
+    body += sec('Inspirasi &amp; panduan', 'Rute, tips, dan pilihan barang yang pas', '/panduan/', 'Semua panduan') + f'<div class="row wide">{guide_cards(D)}</div>'
+    body += '</main>'
+    ld = [{"@context": "https://schema.org", "@type": "Organization", "name": "Rentalaja", "url": BASE, "logo": BASE + '/logo.png', "parentOrganization": {"@type": "Organization", "name": "PT Popo Karya Investama"}}]
+    return ui_head('Rentalaja – Sewa Motor, iPhone, Kamera & Alat Camping di Garut dan Bandung', 'Sewa motor, mobil, iPhone, kamera, lensa, proyektor, PlayStation, dan alat camping di Garut dan Bandung. Booking online, DP 20%.', '/sewa/', ld, unsplash(PHOTO['index'][0], 1200)) + body + foot(D)
+
+
+def page_city(D, c):
+    cats = [(cat, items) for (cc, cat), items in D['pages'].items() if cc == c]
+    codes = [k for k in BR_CITY if BR_CITY[k] == c and k in D['br']]
+    path = f'/sewa/{c}.html'
+    title = f'Rentalaja {CITY[c]} – Sewa {", ".join(CAT[cat][0] for cat, _ in cats[:4])} & Lainnya'
+    desc = f'Rentalaja {CITY[c]}: sewa ' + ', '.join(CAT[cat][0] if CAT[cat][0] in ('iPhone', 'PlayStation') else CAT[cat][0].lower() for cat, _ in cats) + '. Booking online, DP 20%, buka setiap hari 07.30–21.00.'
+    total = sum((x.get('rc') or 0) for _, items in cats for x in items)
+    lds = [{"@context": "https://schema.org", "@graph": [local_business(D, k) for k in codes]}, crumbs_ld([('Rentalaja', '/sewa/'), (CITY[c], path)]), faq_ld(D)]
+    body = banner(f'Rentalaja {CITY[c]}', f'Sewa {", ".join(CAT[cat][0] if CAT[cat][0] in ("iPhone", "PlayStation") else CAT[cat][0].lower() for cat, _ in cats)} — cek stok dan booking langsung dari HP.',
+                  f'<a class="cta" href="/#/Home">Mulai booking</a>{wa_cta(f"Halo Rentalaja {CITY[c]}, saya mau tanya sewa", "Chat admin")}',
+                  photo=PHOTO[c], crumb='<a href="/sewa/">Rentalaja</a> › ' + CITY[c],
+                  badges=[f'{len(codes)} cabang', f'Sudah {total:,}× disewa'.replace(',', '.') if total else 'Booking online', 'DP 20%'])
+    body += '<main class="w">' + cat_pills(D, c) + usp()
+    for cat, items in cats:
+        items = sorted(items, key=lambda x: -(x.get('rc') or 0))
+        lo = min(x['d'] for x in items if x['d'])
+        body += sec(f'{CAT[cat][1]} di {CITY[c]}', f'{len(items)} pilihan · mulai {rp(lo)}/hari', f'/sewa/{cat}-{c}.html') + f'<div class="row">{cards(items[:12])}</div>'
+    body += sec(f'Panduan di {CITY[c]}', '', '/panduan/', 'Semua panduan') + f'<div class="row wide">{guide_cards(D, c)}</div>'
+    body += sec(f'Cabang Rentalaja di {CITY[c]}') + branch_box(D, codes) + sec('Pertanyaan yang sering ditanya') + faq_html(D) + '</main>'
+    return ui_head(title, desc, path, lds, unsplash(PHOTO[c][0], 1200)) + body + foot(D)
+
+
+def page_category(D, c, cat):
+    items = sorted(D['pages'][(c, cat)], key=lambda x: (x['d'] or 0, x['name']))
+    label, title_base, intro, good = CAT[cat]
+    lo = min(x['d'] for x in items if x['d'])
+    codes = sorted({b for it in items for b in it['branches']}, key=lambda x: list(BR_CITY).index(x))
+    path = f'/sewa/{cat}-{c}.html'
+    title = f'{title_base} {CITY[c]} Mulai {rp(lo)}/Hari | Rentalaja'
+    hj = any(x.get('j') for x in items); hh = any(x.get('h') for x in items)
+    desc = f'{title_base} di {CITY[c]}: {len(items)} pilihan, mulai {rp(lo)} per hari' + (', ada tarif 2 jam dan ½ hari' if (hj or hh) else '') + '. Cek ketersediaan dan booking online, DP 20%.'
+    lds = [{"@context": "https://schema.org", "@graph": [local_business(D, k) for k in codes]},
+           {"@context": "https://schema.org", "@type": "ItemList", "name": f'{title_base} {CITY[c]}',
+            "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": f'{BASE}/sewa/{it["pslug"]}.html', "name": it['name']} for i, it in enumerate(items)]},
+           crumbs_ld([('Rentalaja', '/sewa/'), (CITY[c], f'/sewa/{c}.html'), (label, path)]), faq_ld(D)]
+    rows = ''.join(f'<tr><td><a href="/sewa/{it["pslug"]}.html">{esc(it["name"])}</a></td>' + (f'<td class="n">{rp(it.get("j"))}</td>' if hj else '') + (f'<td class="n">{rp(it.get("h"))}</td>' if hh else '') + f'<td class="n">{rp(it["d"])}</td></tr>' for it in items)
+    collage = [img_url(x['ph']) for x in sorted(items, key=lambda x: -(x.get('rc') or 0)) if x.get('ph')][:3]
+    badges = [f'{len(items)} pilihan', 'DP 20%'] + (['Tarif ' + ('2 jam & ' if hj else '') + '½ hari'] if (hj or hh) else []) + ['Buka 07.30–21.00']
+    body = banner(f'{esc(title_base)} di {CITY[c]}', f'{esc(intro)} Mulai <b>{rp(lo)}</b> per hari.',
+                  f'<a class="cta" href="/#/Katalog?cat={cat}">Cek ketersediaan</a>{wa_cta(f"Halo Rentalaja, saya mau tanya {title_base.lower()} di {CITY[c]}")}',
+                  collage=collage, crumb=f'<a href="/sewa/{c}.html">Rentalaja {CITY[c]}</a> › {label}', badges=badges)
+    needs = [n for n in NEEDS if (n['city'] in (c, None)) and cat in n['cats']]
+    arts = [a for a in ARTICLES if a['city'] in (c, None) and cat in a['cats']]
+    body += '<main class="w">' + cat_pills(D, c, cat) + usp()
+    body += sec(f'Semua pilihan {label if label in ("iPhone", "PlayStation") else label.lower()} di {CITY[c]}', 'Urut dari harga termurah') + f'<div class="grid">{cards(items)}</div>'
+    body += sec(f'Daftar harga sewa {label} {CITY[c]}') + f'<div class="scroll"><table><thead><tr><th>Barang</th>{"<th class=n>2 jam</th>" if hj else ""}{"<th class=n>½ hari</th>" if hh else ""}<th class="n">1 hari</th></tr></thead><tbody>{rows}</tbody></table></div><p style="font-size:13px;color:var(--mute)">Harga diperbarui otomatis dari sistem Rentalaja. Sewa lebih dari 1 hari dihitung per hari.</p>'
+    if needs or arts:
+        g = ''.join(f'<a class="acard" href="/sewa/{n["slug"]}.html"><div class="t">' + (f'<img src="{unsplash(PHOTO[n["slug"]][0], 640)}" alt="" loading="lazy">' if n['slug'] in PHOTO else '') + f'</div><div class="b"><b>{esc(n["title"])}</b></div></a>' for n in needs)
+        g += ''.join(f'<a class="acard" href="/panduan/{a["slug"]}"><div class="t"><img src="{img_src(a, 640)}" alt="" loading="lazy"></div><div class="b"><b>{esc(a["title"])}</b></div></a>' for a in arts if a.get('img'))
+        body += sec('Panduan terkait') + f'<div class="row wide">{g}</div>'
+    body += sec('Lokasi ambil') + branch_box(D, codes) + sec('Pertanyaan yang sering ditanya') + faq_html(D) + '</main>'
+    return ui_head(title, desc, path, lds, collage[0] if collage else None) + body + foot(D)
+
+
+def page_need(D, n):
+    cities = [n['city']] if n['city'] else list(CITY)
+    items = [p for p in D['prod'].values() if p['city'] in cities and p['cat'] in n['cats']]
+    if n.get('prefer'): items.sort(key=lambda x: (n['prefer'] not in x['name'].lower(), x['d'] or 0))
+    else: items.sort(key=lambda x: (x['city'], x['cat'], x['d'] or 0))
+    path = f'/sewa/{n["slug"]}.html'
+    lo = min((x['d'] for x in items if x['d']), default=None)
+    desc = n['lead'][:150].rsplit(' ', 1)[0] + (f' Mulai {rp(lo)}/hari.' if lo else '')
+    codes = sorted({b for it in items for b in it['branches']}, key=lambda x: list(BR_CITY).index(x))
+    lds = [{"@context": "https://schema.org", "@type": "ItemList", "name": n['title'],
+            "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": f'{BASE}/sewa/{it["pslug"]}.html', "name": it['name']} for i, it in enumerate(items[:20])]},
+           crumbs_ld([('Rentalaja', '/sewa/'), (n['title'], path)]), faq_ld(D)]
+    if codes: lds.append({"@context": "https://schema.org", "@graph": [local_business(D, k) for k in codes]})
+    also = [x for x in NEEDS if x['slug'] in n.get('also', [])]
+    ph = PHOTO.get(n['slug'])
+    body = banner(esc(n['h1']), esc(n['lead']),
+                  f'<a class="cta" href="/#/Katalog?cat={n["cats"][0]}">Cek ketersediaan</a>{wa_cta("Halo Rentalaja, saya mau tanya: " + n["title"])}',
+                  photo=ph, crumb='<a href="/sewa/">Rentalaja</a> › Panduan', badges=([f'Mulai {rp(lo)}/hari'] if lo else []) + ['DP 20%', 'Booking online'])
+    body += '<main class="w art">' + usp() + sec('Tips') + f'<ul class="tips">{"".join(f"<li>{t}</li>" for t in n["tips"])}</ul>'
+    body += sec('Pilihan dan harga', 'Harga diperbarui otomatis dari sistem') + f'<div class="grid">{cards(items[:24], show_loc=len(cities) > 1)}</div>'
+    if also: body += sec('Baca juga') + '<div class="row wide">' + ''.join(f'<a class="acard" href="/sewa/{x["slug"]}.html"><div class="t">' + (f'<img src="{unsplash(PHOTO[x["slug"]][0], 640)}" alt="" loading="lazy">' if x['slug'] in PHOTO else '') + f'</div><div class="b"><b>{esc(x["title"])}</b></div></a>' for x in also) + '</div>'
+    if codes: body += sec('Lokasi ambil') + branch_box(D, codes)
+    body += sec('Pertanyaan yang sering ditanya') + faq_html(D) + '</main>'
+    return ui_head(f'{n["title"]} | Rentalaja', desc, path, lds, unsplash(ph[0], 1200) if ph else None) + body + foot(D)
+
 
 
 def sitemap(D):
