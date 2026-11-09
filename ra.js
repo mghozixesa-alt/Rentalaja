@@ -682,7 +682,7 @@
   };
   /* dipanggil runtime sebelum menampilkan layar; mengembalikan nama layar yang boleh dibuka */
   /* kasir.rentalaja.co.id = khusus tim: halaman pelanggan tidak dibuka di sini */
-  RA.KASIR_HOST = /^kasir\./i.test(location.hostname) || /^\/kasir\/?$/i.test(location.pathname);
+  RA.KASIR_HOST = /^kasir\./i.test(location.hostname) || /^\/(kasir|cs)\/?$/i.test(location.pathname);
   RA.beforeShow = function (name) {
     var kind = RA.kindOf(name);
     if (RA.KASIR_HOST && (kind === 'customer' || kind === 'partner')) { location.replace((/^kasir\./i.test(location.hostname) ? 'https://rentalaja.co.id' + location.pathname : location.origin + '/') + location.search + location.hash); return new Promise(function () {}); }
