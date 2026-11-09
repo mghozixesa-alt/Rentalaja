@@ -205,5 +205,5 @@ urls.insert(0, path)
 sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + ''.join(
     f'<url><loc>{BASE}{u}</loc><lastmod>{TODAY}</lastmod><changefreq>weekly</changefreq><priority>{"1.0" if u in ("/", "/sewa/") else "0.8"}</priority></url>\n' for u in urls) + '</urlset>\n'
 open(os.path.join(OUT, 'sitemap.xml'), 'w').write(sm)
-open(os.path.join(OUT, 'robots.txt'), 'w').write(f'User-agent: *\nAllow: /\n\nSitemap: {BASE}/sitemap.xml\n')
+open(os.path.join(OUT, 'robots.txt'), 'w').write(f'User-agent: *\nAllow: /\nDisallow: /kasir\n\nSitemap: {BASE}/sitemap.xml\n')
 print(len(urls), 'halaman')
