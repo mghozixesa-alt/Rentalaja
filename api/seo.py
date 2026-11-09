@@ -187,7 +187,8 @@ def load():
         for cat in ORDER:
             items = [p for p in prod.values() if p['city'] == c and p['cat'] == cat]
             if items: pages[(c, cat)] = sorted(items, key=lambda x: (x['d'] or 0, x['name']))
-    data = dict(br=br, prod=prod, pages=pages, at=raw.get('at'), promos=raw.get('promos'), late_pct=raw.get('late_pct'))
+    data = dict(br=br, prod=prod, pages=pages, at=raw.get('at'), promos=raw.get('promos'), late_pct=raw.get('late_pct'),
+                zones=raw.get('zones') or [], rules=raw.get('rules') or {})
     _cache.update(at=time.time(), data=data)
     return data
 
@@ -363,6 +364,49 @@ def price_table(items):
             f'<th class="n">1 hari</th></tr></thead><tbody>{rows}</tbody></table></div><p style="font-size:13px;color:var(--mute)">Harga diperbarui otomatis dari sistem Rentalaja.</p>')
 
 
+def pick(D, city, slugs):
+    want = slugs.split(',')
+    found = {x['slug']: x for x in D['prod'].values() if x['city'] == city and x.get('slug') in want}
+    return [found[w] for w in want if w in found]
+
+
+def calc(D, p, hrs):
+    """Sama dengan public.price_item (tanpa musim/promo): <=2 jam tarif 2 jam, <=12 jam tarif ½ hari,
+    lebih dari itu per 24 jam; sisa <=12 jam setelah hari penuh dikenai persentase half_day_extra_percent."""
+    d, h, j = p.get('d'), p.get('h'), p.get('j')
+    if hrs <= 2 and j: return j
+    if hrs <= 12 and h: return h
+    if not d: return None
+    full = int(hrs // 24); rem = hrs - full * 24
+    if full >= 1 and 0 < rem <= 12:
+        pct = float(D['rules'].get('half_day_extra_percent') or 75)
+        return full * d + int(d * pct / 100000.0 + 0.5) * 1000  # pembulatan setengah ke atas, sama dengan round() di Postgres
+    return -(-hrs // 24) * d
+
+
+def zone_table(D, codes):
+    rows = ''
+    for code in codes:
+        zs = [z for z in D['zones'] if z['br'] == code]
+        for z in zs:
+            rows += f'<tr><td>{esc(BR_NAME.get(code, code))}</td><td class="n">sampai {z["km"]:g} km</td><td class="n">{rp(z["fee"])}</td></tr>'
+    if not rows: return '<p>Ongkir antar dihitung di aplikasi saat memilih alamat.</p>'
+    return ('<div class="scroll"><table><thead><tr><th>Cabang</th><th class="n">Jarak jalan</th><th class="n">Ongkir sekali jalan</th></tr></thead><tbody>'
+            + rows + '</tbody></table></div><p style="font-size:13px;color:var(--mute)">Ongkir diambil langsung dari sistem Rentalaja; jarak dihitung otomatis saat Anda memilih alamat di aplikasi.</p>')
+
+
+DOCS = {'ktp': 'KTP', 'kk': 'Kartu Keluarga', 'sim': 'SIM', 'npwp': 'NPWP', 'stnk': 'STNK'}
+
+
+def rule(D, key):
+    v = D['rules'].get(key)
+    if v is None: return ''
+    if isinstance(v, list): return ', '.join(DOCS.get(x, str(x).upper()) for x in v)
+    if isinstance(v, bool): return 'ya' if v else 'tidak'
+    if isinstance(v, (int, float)): return f'{v:g}'
+    return esc(v)
+
+
 def fill(D, text):
     def sub(m):
         parts = m.group(1).split(':')
@@ -382,6 +426,21 @@ def fill(D, text):
                 url = 'https://www.google.com/maps/dir/?api=1&origin=' + quote(origin) + '&destination=' + quote(parts[2] + ', Jawa Barat') + '&travelmode=driving'
                 return f'<a href="{esc(url)}" rel="nofollow">rute di Google Maps</a>'
             if kind == 'cabang': return branch_box(D, [parts[1]])
+            if kind == 'pilih':  # [[pilih:kota:slug1,slug2]] tabel harga barang tertentu
+                return price_table(pick(D, parts[1], parts[2]))
+            if kind == 'kartupilih':  # [[kartupilih:kota:slug1,slug2]]
+                its = pick(D, parts[1], parts[2])
+                return '<div class="row">' + cards(its, top_badge=0) + '</div>' if its else ''
+            if kind in ('hargah', 'harga2j'):  # tarif ½ hari / 2 jam
+                k = 'h' if kind == 'hargah' else 'j'
+                its = pick(D, parts[2], parts[1])
+                return rp(its[0][k]) if its and its[0].get(k) else 'tidak tersedia'
+            if kind == 'hitung':  # [[hitung:slug:kota:jam]] contoh total sesuai aturan harga sistem
+                its = pick(D, parts[2], parts[1])
+                v = calc(D, its[0], float(parts[3])) if its else None
+                return rp(v) if v else 'cek di aplikasi'
+            if kind == 'ongkir': return zone_table(D, parts[1:])
+            if kind == 'aturan': return rule(D, parts[1])
         except Exception:
             return ''
         return ''
@@ -401,7 +460,7 @@ def page_article(D, a):
     if codes: lds.append({"@context": "https://schema.org", "@graph": [local_business(D, k) for k in codes]})
     cat0 = a['cats'][0]
     strip = ''
-    if '[[kartu:' not in a['body']:
+    if '[[kartu' not in a['body']:
         its = []
         for cc in ([a['city']] if a['city'] else list(CITY)):
             for ct in a['cats']: its += items_of(D, ct, cc)
