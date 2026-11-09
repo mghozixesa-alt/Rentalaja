@@ -672,7 +672,7 @@
 
   /* ---------------- penjaga layar ---------------- */
   var CUSTOMER_LOGIN = { BayarTransfer: 1, Akun: 1, Status: 1, Bayar: 1, Aktif: 1, Ulasan: 1, Ajak: 1, Lapor: 1, Struk: 1, Ubah: 1, Perjanjian: 1, InapTiket: 1, InapUbah: 1, JeepTiket: 1, MobilSopirStatus: 1, UploadKtp: 1, Ditolak: 1, Kedaluwarsa: 1, LuarJam: 1 };
-  var PUBLIC = { Home: 1, HomeEn: 1, Transportasi: 1, Katalog: 1, Cari: 1, Produk: 1, Keranjang: 1, Checkout: 1, Kalender: 1, Antar: 1, Menginap: 1, Penginapan: 1, InapTanggal: 1, InapBayar: 1, JeepPaket: 1, JeepJadwal: 1, MobilSopir: 1, MobilSopirPaket: 1, MobilSopirCustom: 1, Login: 1, Bantuan: 1, Pwa: 1, SeoMotorGarut: 1, Korporat: 1, StokHabis: 1, InvGabung: 1, InvLogin: 1, Main: 1, Sistem: 1, Masuk: 1, peta: 1 };
+  var PUBLIC = { BeritaAcara: 1, Home: 1, HomeEn: 1, Transportasi: 1, Katalog: 1, Cari: 1, Produk: 1, Keranjang: 1, Checkout: 1, Kalender: 1, Antar: 1, Menginap: 1, Penginapan: 1, InapTanggal: 1, InapBayar: 1, JeepPaket: 1, JeepJadwal: 1, MobilSopir: 1, MobilSopirPaket: 1, MobilSopirCustom: 1, Login: 1, Bantuan: 1, Pwa: 1, SeoMotorGarut: 1, Korporat: 1, StokHabis: 1, InvGabung: 1, InvLogin: 1, Main: 1, Sistem: 1, Masuk: 1, peta: 1 };
   RA.kindOf = function (name) {
     if (PUBLIC[name]) return 'public';
     if (CUSTOMER_LOGIN[name]) return 'customer';
