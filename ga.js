@@ -97,3 +97,35 @@
   watch();
   window.addEventListener('hashchange', watch);
 })();
+
+/* Asal kunjungan untuk halaman SEO (/sewa, /panduan): tombol ke aplikasi diberi utm_* supaya booking yang terjadi
+   tercatat asalnya (kolom bookings.utm → laporan sumber & dashboard marketing). Sumber diambil dari halaman pertama
+   yang dibuka (referrer), disimpan per sesi tab. Tidak memuat data pribadi. */
+(function () {
+  if (!/^\/(sewa|panduan)(\/|$)/.test(location.pathname)) return;
+  var st = null, rh = '';
+  try { st = JSON.parse(sessionStorage.getItem('ra.seo') || 'null'); } catch (e) {}
+  try { rh = document.referrer ? new URL(document.referrer).hostname.replace(/^www\./, '') : ''; } catch (e) {}
+  if (rh === location.hostname) rh = '';
+  if (rh || !st) {
+    var q = new URLSearchParams(location.search);
+    var src = (q.get('utm_source') || q.get('src') || '').toLowerCase()
+      || (/(^|\.)google\./.test(rh) ? 'google' : /(^|\.)bing\./.test(rh) ? 'bing' : /chatgpt|openai/.test(rh) ? 'chatgpt'
+        : /perplexity/.test(rh) ? 'perplexity' : /copilot/.test(rh) ? 'copilot' : /yahoo|duckduckgo|yandex|ecosia/.test(rh) ? rh.split('.')[0]
+        : /instagram/.test(rh) ? 'ig' : /tiktok/.test(rh) ? 'tt' : /facebook|fb\./.test(rh) ? 'fb' : rh || 'langsung');
+    var med = q.get('utm_medium') || (/^(google|bing|yahoo|duckduckgo|yandex|ecosia)$/.test(src) ? 'organic'
+      : /^(chatgpt|perplexity|copilot)$/.test(src) ? 'ai' : src === 'langsung' ? 'seo' : 'referral');
+    st = { s: src.slice(0, 30), m: med.slice(0, 30), c: ('seo' + location.pathname).slice(0, 60) };
+    try { sessionStorage.setItem('ra.seo', JSON.stringify(st)); } catch (e) {}
+  }
+  function tag() {
+    document.querySelectorAll('a[href^="/#/"]').forEach(function (a) {
+      var h = a.getAttribute('href');
+      if (/[?&]utm_source=/.test(h)) return;
+      a.setAttribute('href', h + (h.indexOf('?') < 0 ? '?' : '&') + 'utm_source=' + encodeURIComponent(st.s)
+        + '&utm_medium=' + encodeURIComponent(st.m) + '&utm_campaign=' + encodeURIComponent(st.c));
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', tag); else tag();
+})();
+
