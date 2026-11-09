@@ -304,7 +304,7 @@ h3 a{font-size:12.5px;color:var(--teal-d);font-weight:700}
 })();
 /* dua jalur: WA per kota (nomor admin Garut & Bandung), pesan pembuka terisi otomatis */
 (function () {
-  var NUM = { garut: '6281324700077', bandung: '6285286504910' }, sh = document.getElementById('sh'), topic = '';
+  var NUM = { garut: '6281324700077', bandung: '6281324700077' }, sh = document.getElementById('sh'), topic = '';
   function msg(city) { return 'Halo admin Rentalaja, saya mau tanya sewa' + (topic ? ' ' + topic : '') + ' di ' + city + '.'; }
   function open(t) { topic = t || ''; document.getElementById('shS').textContent = topic ? 'Pesan pembuka sudah terisi: tanya sewa ' + topic + '. Tinggal kirim.' : 'Pesan pembuka otomatis terisi, tinggal kirim.';
     document.getElementById('waG').href = 'https://wa.me/' + NUM.garut + '?text=' + encodeURIComponent(msg('Garut'));

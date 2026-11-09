@@ -17,7 +17,7 @@ BRANCH = {
                 wa='6281324700077', lat=-7.1949789, lng=107.9666973, locality='Garut', postal='44182',
                 maps='https://www.google.com/maps/place/?q=place_id:ChIJi_2qPwCzaC4RoEqCgQnFXGY'),
     'BDG-JKL': dict(name='Rentalaja Bandung (Dipatiukur)', city='bandung', addr='Jl. Kubang Selatan No.124, Lebakgede, Kec. Coblong, Kota Bandung 40132',
-                    wa='6285286504910', lat=-6.8904641, lng=107.6180073, locality='Bandung', postal='40132',
+                    wa='6281324700077', lat=-6.8904641, lng=107.6180073, locality='Bandung', postal='40132',
                     maps='https://www.google.com/maps/place/?q=place_id:ChIJOxHAdFTnaC4R-D40RN36nMg'),
 }
 CITY = {'garut': 'Garut', 'bandung': 'Bandung'}
