@@ -198,7 +198,7 @@ var ICO={
 function ico(k,c){return '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="'+c+'" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(ICO[k]||'')+'</svg>';}
 var SNAV=[
  ['Beranda',[['ModulBeranda','home','Beranda']]],
- ['Operasional',[['OpsManajer','calcheck','Tugas hari ini (manajer)'],['LaporanOps','flag','Laporan harian ke CEO'],['OpsBeranda','dash','Dashboard manajemen'],['OpsUnit','chart','Utilisasi & mutasi'],['AsetPendapatan','chart','Pendapatan per aset'],['OpsKalender','cal','Kalender sewa'],['OpsQC','star','Kualitas layanan'],['OpsKerja','calcheck','Kerja lapangan']]],
+ ['Operasional',[['OpsManajer','calcheck','Tugas hari ini (manajer)'],['OpsBeranda','dash','Dashboard manajemen'],['OpsUnit','chart','Utilisasi & mutasi'],['AsetPendapatan','chart','Pendapatan per aset'],['OpsKalender','cal','Kalender sewa'],['OpsQC','star','Kualitas layanan'],['OpsKerja','calcheck','Kerja lapangan']]],
  ['CS',[['PusatCS','head','Pusat CS'],['LaporanShift','chart','Laporan shift']]],
  ['Harian',[['PosHariIni','calcheck','Rental hari ini'],['PosVerifikasi','idcard','Verifikasi pesanan'],['CekPenyewa','shield','Cek calon penyewa'],['PosKasir','cart','Kasir (sewa OTS)'],['PosSerahTerima','swap','Serah-terima & kembali'],['PosPelanggan','user','Pelanggan'],['PosShift','clock','Shift & tutup kas']]],
  ['Lapangan',[['Runner','truck','Antar-jemput']]],
@@ -219,7 +219,7 @@ var MASET={'Operasional':['AsetPendapatan'],'Aset & servis':['AsetBeranda','Aset
 /* boleh dibuka (lewat tautan di halaman) tapi tidak tampil di menu */
 var FLD={PosAbsen:1,CekBuka:1};/* petugas lapangan absen & ceklis lewat ops.pokama.org */
 var MHIDE={asset_manager:{MgmtServis:1,PosUnit:1,MgmtSetuju:1,AsetRisiko:1,PosQC:1,AsetPreventif:1,AsetData:1,AsetOpname:1,AsetTim:1},cashier:FLD,staff:FLD,branch_head:FLD,runner:FLD,technician:FLD,qc:FLD,driver:FLD};/* CS: satu pintu lewat tab di Pusat CS; aset owner: masuk lewat 4 pintu (sisanya tab di dalamnya) */
-var CSH={MgmtInbox:1,TiketCS:1,AlatChat:1,MgmtTindakLanjut:1,MgmtPenawaran:1,LaporanShift:1};MHIDE.cs=CSH;MHIDE.cs_experience=CSH;MHIDE.experience_manager={MgmtSetuju:1,MgmtDataUji:1};
+var CSH={MgmtInbox:1,TiketCS:1,AlatChat:1,MgmtTindakLanjut:1,MgmtPenawaran:1,LaporanShift:1};MHIDE.cs=CSH;MHIDE.cs_experience=CSH;MHIDE.experience_manager={MgmtDataUji:1};
 MHIDE.owner={Housekeeping:1,MgmtInbox:1,TiketCS:1,AlatChat:1,MgmtTindakLanjut:1,MgmtPenawaran:1,LaporanShift:1,PosQC:1,AsetPreventif:1,AsetTim:1,AsetData:1,AsetRisiko:1,AsetOpname:1,AsetTandai:1,MgmtAset:1,MgmtPusatAset:1,MgmtServis:1,Teknisi:1,TekBelanja:1,TekAkun:1,PosUnit:1,AgendaLapangan:1,AkunLapangan:1,PosAbsen:1,CekBuka:1,MgmtLini:1,MgmtSegmen:1,MgmtDaftarHitam:1,MgmtHargaMusim:1,MgmtPromo:1,MgmtKonten:1,MgmtKorporat:1};/* audit Nov 2026: halaman saudara jadi tab di atas (SUBT) */
 function mHid(role,n){return !!(MHIDE[role]&&MHIDE[role][n]);}
 function mergeAllow(list){var o={};list.forEach(function(m){for(var k in m){var v=m[k];if(o[k]===1)continue;if(v===1){o[k]=1;continue;}o[k]=(o[k]||[]).concat(v.filter(function(x){return (o[k]||[]).indexOf(x)<0;}));}});return o;}
@@ -234,14 +234,14 @@ var SROLE={
 };
 var FAB={cs:'PosVerifikasi',cs_experience:'PosVerifikasi'};
 var FIELD={cs:['ModulBeranda','PusatCS','PosVerifikasi','PosHariIni'],cs_experience:['ModulBeranda','PusatCS','PosVerifikasi','PosHariIni'],runner:['AgendaLapangan','Runner','Housekeeping','AkunLapangan'],driver:['SopirJeep','ExpJeep','Runner','AkunLapangan'],technician:['Teknisi','TekBelanja','TekAkun'],qc:['PosQC','Teknisi','Runner','AkunLapangan'],
- owner:['ModulBeranda','OpsBeranda','PusatCS','MgmtSetuju'],viewer:['ModulBeranda','OpsBeranda'],finance:['MgmtSetuju'],
- asset_manager:['ModulBeranda','AsetServis','AsetKalender','AsetUnit'],experience_manager:['ModulBeranda','OpsManajer','OpsBeranda','MgmtSetuju'],
- cashier:['ModulBeranda','PosHariIni','PosKasir','PosSerahTerima'],staff:['ModulBeranda','PosSerahTerima','PosKasir','Teknisi'],branch_head:['ModulBeranda','PosHariIni','PosSerahTerima','MgmtSetuju']};
+ owner:['ModulBeranda','OpsBeranda','PusatCS'],viewer:['ModulBeranda','OpsBeranda'],finance:['MgmtSetuju'],
+ asset_manager:['ModulBeranda','AsetServis','AsetKalender','AsetUnit'],experience_manager:['ModulBeranda','OpsManajer','OpsBeranda'],
+ cashier:['ModulBeranda','PosHariIni','PosKasir','PosSerahTerima'],staff:['ModulBeranda','PosSerahTerima','PosKasir','Teknisi'],branch_head:['ModulBeranda','PosHariIni','PosSerahTerima']};
 /* peran yang layarnya memang dibuat untuk HP (tetap menu bawah walau dibuka di layar lebar tanpa kolom menu) */
 var FIELDONLY={technician:1,cs:1,cs_experience:1,runner:1,driver:1,technician:1,qc:1};
 var FLABEL={ModulBeranda:'Beranda',KonfirmasiTransfer:'Transfer',MgmtDaftarHitam:'Daftar hitam',Runner:'Antar',PosAbsen:'Absen',PosQC:'Cek barang',SopirJeep:'Jeep',ExpJeep:'Jadwal jeep',Teknisi:'Teknisi',ExpHariIni:'Penginapan',ExpKalender:'Kalender',Housekeeping:'Kamar',AkunLapangan:'Akun',AgendaLapangan:'Agenda',PusatCS:'Beranda',PosVerifikasi:'Verifikasi',MgmtInbox:'Chat',MgmtKeluhan:'Keluhan',TiketCS:'Keluhan',AlatChat:'Chat',
  MgmtDashboard:'Laporan',MgmtSetuju:'Setujui',OpsBeranda:'Dashboard',MgmtPusatAset:'Aset',MgmtServis:'Servis & QC',MgmtTim:'Tim',OpsKerja:'Kerja lapangan',OpsUnit:'Utilisasi',OpsQC:'Kualitas',PosHariIni:'Hari ini',PosKasir:'Kasir',PosSerahTerima:'Serah-terima',KeuDasbor:'Keuangan'};
-var FLABEL_R={cs:{PusatCS:'Pusat CS',OpsKalender:'Kalender',PosHariIni:'Jadwal'},cs_experience:{PusatCS:'Pusat CS',OpsKalender:'Kalender',PosHariIni:'Jadwal'},staff:{PosSerahTerima:'Serah terima',PosKasir:'Kasir',Teknisi:'Teknisi'},technician:{Teknisi:'Pekerjaan',TekBelanja:'Belanja part',TekAkun:'Akun'},asset_manager:{AsetBeranda:'Hari ini',AsetKalender:'Kalender',AsetUnit:'Unit',AsetServis:'Servis',AsetLaporan:'Laporan'},experience_manager:{OpsManajer:'Tugas',OpsBeranda:'Dashboard',MgmtSetuju:'Setujui',ExpJeep:'Jeep',ExpKalender:'Penginapan',OpsKerja:'Lapangan'},owner:{OpsBeranda:'Dashboard',PusatCS:'CS',LaporanOps:'Laporan'}};
+var FLABEL_R={cs:{PusatCS:'Pusat CS',OpsKalender:'Kalender',PosHariIni:'Jadwal'},cs_experience:{PusatCS:'Pusat CS',OpsKalender:'Kalender',PosHariIni:'Jadwal'},staff:{PosSerahTerima:'Serah terima',PosKasir:'Kasir',Teknisi:'Teknisi'},technician:{Teknisi:'Pekerjaan',TekBelanja:'Belanja part',TekAkun:'Akun'},asset_manager:{AsetBeranda:'Hari ini',AsetKalender:'Kalender',AsetUnit:'Unit',AsetServis:'Servis',AsetLaporan:'Laporan'},experience_manager:{OpsManajer:'Tugas',OpsBeranda:'Dashboard',MgmtSetuju:'Setujui',ExpJeep:'Jeep',ExpKalender:'Penginapan',OpsKerja:'Lapangan'},owner:{OpsBeranda:'Dashboard',PusatCS:'CS'}};
 /* tab bawah tetap menyala saat membuka halaman "saudara"-nya */
 var ALIAS={OpsBukaHari:'OpsManajer',LaporanOps:'OpsManajer',AsetGps:'AsetPengingat',GantiPenyewa:'PosHariIni',AsetPreventif:'AsetServis',AsetData:'AsetUnit',AsetTim:'AsetLaporan',AsetOpname:'AsetUnit',AsetRisiko:'AsetBeranda',MgmtServis:'AsetServis',PosUnit:'AsetUnit',MgmtAset:'AsetUnit',TekPart:'TekBelanja',TekMasuk:'Teknisi',TekKerja:'Teknisi',TekSelesai:'Teknisi',MgmtAsetDetail:'AsetUnit',MgmtKelola:'MgmtAset',PosQC:'AsetServis',PosAbsen:'AkunLapangan',Housekeeping:'ExpKalender',LaporanShift:'PusatCS'};
 /* halaman yang digabung dalam satu tab: tampilkan tombol pindah di atas */
