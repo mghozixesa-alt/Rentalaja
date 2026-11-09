@@ -6,13 +6,16 @@ Melayani /sewa/... dan /sitemap.xml (lewat rewrite di vercel.json):
   /sewa/motor-garut.html     kategori x kota
   /sewa/honda-pcx-garut.html produk x kota
   /sewa/<kebutuhan>.html     halaman kebutuhan (lihat NEEDS)
+  /panduan/<slug>            artikel panduan (api/_panduan.py), harga diisi dari database
   /sitemap.xml
 Data: RPC public.seo_catalog() (anon). Respons di-cache CDN Vercel 6 jam, stale 1 hari,
 jadi harga & stok di Google ikut berubah tanpa build ulang.
 """
 from http.server import BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs, quote
-import urllib.request, json, html, re, datetime, collections, time
+import urllib.request, json, html, re, datetime, collections, time, os, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from _panduan import ARTICLES
 
 SB = 'https://shrvzlltysnbmgpkhjjg.supabase.co'
 ANON = ('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNocnZ6bGx0eXNuYm1ncGtoampnIiwicm9sZSI6ImFub24iLCJp'
@@ -200,8 +203,10 @@ def head(title, desc, path, lds, image=None):
 def foot(D):
     cats = ''.join(f'<li><a href="/sewa/{cat}-{c}.html">{CAT[cat][1]} {CITY[c]}</a></li>' for (c, cat) in D['pages'])
     needs = ''.join(f'<li><a href="/sewa/{n["slug"]}.html">{esc(n["title"])}</a></li>' for n in NEEDS)
+    arts = ''.join(f'<li><a href="/panduan/{a["slug"]}">{esc(a["title"])}</a></li>' for a in ARTICLES)
     return f"""<footer><div class="w"><h2 style="font-size:16px;margin-top:0">Semua layanan sewa</h2><ul class="links">{cats}</ul>
 <h2 style="font-size:16px">Panduan sewa</h2><ul class="links">{needs}</ul>
+<h2 style="font-size:16px">Artikel panduan</h2><ul class="links">{arts}</ul>
 <p>Rentalaja · PT Popo Karya Investama. <a href="/sewa/garut.html">Rentalaja Garut</a><a href="/sewa/bandung.html">Rentalaja Bandung</a><a href="/link">Semua link</a><a href="/#/Bantuan">Bantuan</a></p></div></footer></body></html>"""
 
 
@@ -382,12 +387,85 @@ def page_index(D):
     return head('Rentalaja – Sewa Motor, iPhone, Kamera & Alat Camping di Garut dan Bandung', 'Sewa motor, mobil, iPhone, kamera, lensa, proyektor, PlayStation, dan alat camping di Garut dan Bandung. Booking online, DP 20%.', '/sewa/', ld) + body + foot(D)
 
 
+ART_CSS = '<style>.art p,.art li{font-size:16px}.art h2{margin-top:30px}.meta{font-size:13px;color:var(--mute);margin:0 0 12px}</style>'
+
+
+def items_of(D, cat, c):
+    return D['pages'].get((c, cat), [])
+
+
+def price_table(items):
+    if not items: return '<p>Belum ada barang di kategori ini untuk saat ini. Tanyakan lewat WhatsApp.</p>'
+    hj = any(x.get('j') for x in items); hh = any(x.get('h') for x in items)
+    rows = ''.join(f'<tr><td><a href="/sewa/{it["pslug"]}.html">{esc(it["name"])}</a></td>' + (f'<td class="n">{rp(it.get("j"))}</td>' if hj else '') + (f'<td class="n">{rp(it.get("h"))}</td>' if hh else '') + f'<td class="n">{rp(it["d"])}</td></tr>' for it in items)
+    return (f'<div class="scroll"><table><thead><tr><th>Barang</th>' + ('<th class="n">2 jam</th>' if hj else '') + ('<th class="n">½ hari</th>' if hh else '') +
+            f'<th class="n">1 hari</th></tr></thead><tbody>{rows}</tbody></table></div><p style="font-size:13px;color:var(--mute)">Harga diperbarui otomatis dari sistem Rentalaja.</p>')
+
+
+def fill(D, text):
+    def sub(m):
+        parts = m.group(1).split(':')
+        kind = parts[0]
+        try:
+            if kind == 'tabel': return price_table(items_of(D, parts[1], parts[2]))
+            if kind == 'kartu':
+                its = items_of(D, parts[1], parts[2])[:int(parts[3]) if len(parts) > 3 else 8]
+                return '<div class="grid">' + ''.join(card(x) for x in its) + '</div>' if its else ''
+            if kind == 'harga':
+                for x in D['prod'].values():
+                    if x.get('slug') == parts[1] and x['city'] == parts[2] and x.get('d'): return f'{rp(x["d"])}/hari'
+                return 'cek harga di aplikasi'
+            if kind == 'rute':
+                b = D['br'].get(parts[1]) or {}
+                origin = f'{b.get("lat")},{b.get("lng")}' if b.get('lat') else 'Rentalaja ' + BR_NAME.get(parts[1], '')
+                url = 'https://www.google.com/maps/dir/?api=1&origin=' + quote(origin) + '&destination=' + quote(parts[2] + ', Jawa Barat') + '&travelmode=driving'
+                return f'<a href="{esc(url)}" rel="nofollow">rute di Google Maps</a>'
+            if kind == 'cabang': return branch_box(D, [parts[1]])
+        except Exception:
+            return ''
+        return ''
+    return re.sub(r'\[\[([^\]]+)\]\]', sub, text)
+
+
+def page_article(D, a):
+    path = f'/panduan/{a["slug"]}'
+    lead = fill(D, a['lead'])
+    body = fill(D, a['body'])
+    codes = sorted(set(re.findall(r'\[\[cabang:([A-Z-]+)\]\]', a['body'])), key=lambda x: list(BR_CITY).index(x))
+    others = [x for x in ARTICLES if x['slug'] != a['slug'] and (x['city'] == a['city'] or x['city'] is None or a['city'] is None)][:4]
+    lds = [{"@context": "https://schema.org", "@type": "Article", "headline": a['title'], "description": a['desc'], "datePublished": a['date'], "dateModified": datetime.date.today().isoformat(),
+            "inLanguage": "id-ID", "mainEntityOfPage": BASE + path, "author": {"@type": "Organization", "name": "Rentalaja"},
+            "publisher": {"@type": "Organization", "name": "Rentalaja", "logo": {"@type": "ImageObject", "url": BASE + '/logo.png'}}},
+           crumbs_ld([('Rentalaja', '/sewa/'), ('Panduan', '/panduan/'), (a['title'], path)]), faq_ld(D)]
+    if codes: lds.append({"@context": "https://schema.org", "@graph": [local_business(D, k) for k in codes]})
+    cat0 = a['cats'][0]
+    html_ = f"""<main><section class="hero"><div class="w">
+<p class="crumb"><a href="/panduan/">Panduan</a></p>
+<h1>{esc(a['title'])}</h1><p class="meta">Rentalaja · diperbarui {datetime.date.today().strftime('%d-%m-%Y')}</p>
+<p class="lead">{lead}</p>
+<a class="cta" href="/#/Katalog?cat={cat0}">Cek ketersediaan</a><a class="cta alt" href="https://wa.me/{WA}?text={quote('Halo Rentalaja, saya baca panduan: ' + a['title'])}" rel="nofollow">Tanya via WhatsApp</a>
+</div></section>
+<div class="w art">{body}
+{('<h2>Panduan lain</h2><ul class="tips">' + ''.join(f'<li><a href="/panduan/{x["slug"]}">{esc(x["title"])}</a></li>' for x in others) + '</ul>') if others else ''}
+<h2>Pertanyaan yang sering ditanya</h2>{faq_html(D)}</div></main>"""
+    return head(a['title'] + ' | Rentalaja', a['desc'], path, lds).replace('</head>', ART_CSS + '</head>') + html_ + foot(D)
+
+
+def page_articles(D):
+    body = '<main><section class="hero"><div class="w"><h1>Panduan sewa Rentalaja</h1><p class="lead">Rute, tips, dan perbandingan barang untuk sewa di Garut dan Bandung. Harga di setiap panduan diambil langsung dari sistem Rentalaja.</p></div></section><div class="w"><ul class="tips">'
+    body += ''.join(f'<li><a href="/panduan/{a["slug"]}"><b>{esc(a["title"])}</b></a><br><span style="color:var(--mute)">{esc(a["desc"])}</span></li>' for a in ARTICLES)
+    body += '</ul></div></main>'
+    lds = [crumbs_ld([('Rentalaja', '/sewa/'), ('Panduan', '/panduan/')])]
+    return head('Panduan Sewa Motor, Kamera, iPhone & Camping di Garut dan Bandung | Rentalaja', 'Panduan rute, tips, dan perbandingan barang untuk sewa motor, kamera, iPhone, proyektor, dan alat camping di Garut dan Bandung.', '/panduan/', lds) + body + foot(D)
+
+
 def sitemap(D):
     today = datetime.date.today().isoformat()
     urls = [('/', '1.0'), ('/sewa/', '0.9'), ('/link', '0.6'), ('/experience', '0.7'), ('/atvaja', '0.7')]
     urls += [(f'/sewa/{c}.html', '0.9') for c in CITY]
     urls += [(f'/sewa/{cat}-{c}.html', '0.8') for (c, cat) in D['pages']]
     urls += [(f'/sewa/{n["slug"]}.html', '0.8') for n in NEEDS]
+    urls += [('/panduan/', '0.7')] + [(f'/panduan/{a["slug"]}', '0.7') for a in ARTICLES]
     urls += [(f'/sewa/{p["pslug"]}.html', '0.7') for p in D['prod'].values()]
     return '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + ''.join(
         f'<url><loc>{BASE}{u}</loc><lastmod>{today}</lastmod><changefreq>daily</changefreq><priority>{pr}</priority></url>\n' for u, pr in urls) + '</urlset>\n'
@@ -399,6 +477,12 @@ def render(p):
     p = (p or '').strip('/')
     if p == 'sitemap.xml': return 200, 'application/xml; charset=utf-8', sitemap(D)
     if p in ('', 'index.html'): return 200, 'text/html; charset=utf-8', page_index(D)
+    if p == 'panduan' or p.startswith('panduan/'):
+        s = p[8:].strip('/')
+        if s.endswith('.html'): s = s[:-5]
+        if not s: return 200, 'text/html; charset=utf-8', page_articles(D)
+        for a in ARTICLES:
+            if a['slug'] == s: return 200, 'text/html; charset=utf-8', page_article(D, a)
     if not p.endswith('.html'): p += '.html'
     s = p[:-5]
     if s in CITY: return 200, 'text/html; charset=utf-8', page_city(D, s)
