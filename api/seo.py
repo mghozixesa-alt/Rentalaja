@@ -11,7 +11,7 @@ Data: RPC public.seo_catalog() (anon). Respons di-cache CDN Vercel 6 jam, stale 
 jadi harga & stok di Google ikut berubah tanpa build ulang.
 """
 from http.server import BaseHTTPRequestHandler
-from urllib.parse import urlparse, parse_qs
+from urllib.parse import urlparse, parse_qs, quote
 import urllib.request, json, html, re, datetime, collections, time
 
 SB = 'https://shrvzlltysnbmgpkhjjg.supabase.co'
@@ -209,8 +209,7 @@ def local_business(D, code):
     addr = b.get('address') or ''
     m = re.search(r'(\d{5})\s*$', addr)
     return {"@type": "LocalBusiness", "@id": BASE + '/#' + code, "name": BR_NAME.get(code, 'Rentalaja'), "url": f"{BASE}/sewa/{BR_CITY[code]}.html",
-            "telephone": '+' + (b.get('phone') or WA), "image": BASE + '/logo.png', "priceRange": "Rp–Rp",
-            "address": {"@type": "PostalAddress", "streetAddress": addr.split(',')[0], "addressLocality": CITY[BR_CITY[code]], "postalCode": m.group(1) if m else None,
+            "telephone": '+' + (b.get('phone') or WA), "image": BASE + '/logo.png', "address": {"@type": "PostalAddress", "streetAddress": addr.split(',')[0], "addressLocality": CITY[BR_CITY[code]], "postalCode": m.group(1) if m else None,
                         "addressRegion": "Jawa Barat", "addressCountry": "ID"},
             "geo": {"@type": "GeoCoordinates", "latitude": b.get('lat'), "longitude": b.get('lng')}, "hasMap": b.get('maps'),
             "openingHoursSpecification": [{"@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
@@ -221,7 +220,7 @@ def branch_box(D, codes):
     out = []
     for code in codes:
         b = D['br'].get(code) or {}
-        wa = f'https://wa.me/{b.get("phone") or WA}?text=' + html.escape('Halo Rentalaja, saya mau tanya sewa')
+        wa = f'https://wa.me/{b.get("phone") or WA}?text=' + quote('Halo Rentalaja, saya mau tanya sewa')
         out.append(f'<div class="branch"><b>{esc(BR_NAME.get(code))}</b>{esc(b.get("address"))}<br>Buka setiap hari {esc((b.get("open") or "07:30").replace(":", "."))}–{esc((b.get("close") or "21:00").replace(":", "."))} · '
                    f'<a href="{wa}" rel="nofollow">WhatsApp</a>' + (f' · <a href="{esc(b.get("maps"))}" rel="nofollow">Peta</a>' if b.get('maps') else '') + '</div>')
     return ''.join(out)
@@ -313,7 +312,7 @@ def page_product(D, p):
 <div class="prod"><div class="ph">{f'<img src="{esc(u)}" alt="Sewa {esc(p["name"])} {CITY[c]}">' if u else '<span>Foto segera</span>'}</div>
 <div><h1>Sewa {esc(p['name'])} di {CITY[c]}</h1>
 <p class="lead">{' '.join(extra) + ' ' if extra else ''}Cocok untuk {good}. Mulai <b>{rp(p['d'])}</b> per hari{', ada tarif ' + ' dan '.join(t for t in [('2 jam ' + rp(p['j'])) if p.get('j') else '', ('½ hari ' + rp(p['h'])) if p.get('h') else ''] if t) if (p.get('j') or p.get('h')) else ''}.</p>
-<a class="cta" href="/#/Produk?id={p['id']}">Cek tanggal &amp; booking</a><a class="cta alt" href="https://wa.me/{WA}?text={html.escape('Halo Rentalaja, saya mau tanya sewa ' + p['name'] + ' di ' + CITY[c])}" rel="nofollow">Tanya via WhatsApp</a>
+<a class="cta" href="/#/Produk?id={p['id']}">Cek tanggal &amp; booking</a><a class="cta alt" href="https://wa.me/{WA}?text={quote('Halo Rentalaja, saya mau tanya sewa ' + p['name'] + ' di ' + CITY[c])}" rel="nofollow">Tanya via WhatsApp</a>
 <ul class="chips"><li>Booking online</li><li>DP 20%</li>{'<li>Termasuk: ' + esc(incl) + '</li>' if incl else ''}{f'<li>Sudah disewa {rc:,}× </li>'.replace(',', '.') if rc >= 10 else ''}</ul></div></div></div></section>
 <div class="w"><h2>Harga sewa {esc(p['name'])} di {CITY[c]}</h2><div class="scroll"><table><thead><tr><th>Cabang</th>{'<th class="n">2 jam</th>' if hj else ''}{'<th class="n">½ hari</th>' if hh else ''}<th class="n">1 hari</th></tr></thead><tbody>{rows}</tbody></table></div>
 <p style="font-size:13px;color:var(--mute)">Harga diperbarui otomatis dari sistem Rentalaja.{' Promo sewa 2 hari gratis 1 berlaku untuk barang ini.' if cat not in ('motor', 'mobil') and any(x.get('key') == 'buy_x_free_y' for x in D.get('promos') or []) else ''}</p>
@@ -343,7 +342,7 @@ def page_need(D, n):
     body = f"""<main><section class="hero"><div class="w">
 <p class="crumb"><a href="/sewa/">Rentalaja</a> › Panduan</p>
 <h1>{esc(n['h1'])}</h1><p class="lead">{esc(n['lead'])}</p>
-<a class="cta" href="/#/Katalog?cat={n['cats'][0]}">Cek ketersediaan</a><a class="cta alt" href="https://wa.me/{WA}?text={html.escape('Halo Rentalaja, saya mau tanya: ' + n['title'])}" rel="nofollow">Tanya via WhatsApp</a>
+<a class="cta" href="/#/Katalog?cat={n['cats'][0]}">Cek ketersediaan</a><a class="cta alt" href="https://wa.me/{WA}?text={quote('Halo Rentalaja, saya mau tanya: ' + n['title'])}" rel="nofollow">Tanya via WhatsApp</a>
 </div></section>
 <div class="w"><h2>Tips</h2><ul class="tips">{''.join(f'<li>{t}</li>' for t in n['tips'])}</ul>
 <h2>Pilihan dan harga</h2><div class="grid">{''.join(card(x) for x in items[:24])}</div>
