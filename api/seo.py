@@ -441,7 +441,7 @@ UI2_CSS = """
 .top-w{max-width:1120px}.w{max-width:1120px}
 .banner{position:relative;border-radius:24px;overflow:hidden;min-height:360px;display:flex;align-items:flex-end;color:#fff;margin-top:18px;background:linear-gradient(120deg,#1F2B4D 0%,#1F2B4D 45%,#0B8F84 100%)}
 .banner img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.banner.photo:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,22,40,0) 25%,rgba(15,22,40,.85))}
+.banner.photo:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(13,20,38,.88) 0%,rgba(13,20,38,.62) 45%,rgba(13,20,38,.12) 80%),linear-gradient(180deg,rgba(13,20,38,0) 55%,rgba(13,20,38,.55))}.banner h1,.banner .lead{text-shadow:0 2px 12px rgba(0,0,0,.35)}
 .banner .in{position:relative;z-index:2;padding:30px;max-width:640px}
 .banner h1{color:#fff;font-size:38px;line-height:1.15;margin:0 0 10px}.banner .lead{color:#E6ECF5;margin-bottom:18px}
 .banner .crumb,.banner .crumb a{color:#9FF0E7}
@@ -472,7 +472,7 @@ UI2_CSS = """
 .citycard .t{position:absolute;left:18px;bottom:16px;z-index:1}.citycard b{display:block;font-size:24px}.citycard span{font-size:14px;color:#E6ECF5}
 .acard{box-shadow:0 4px 18px rgba(31,43,77,.07);border-color:#EEF0F3}
 @media(max-width:820px){.collage{display:none}.usp{grid-template-columns:1fr 1fr}}
-@media(max-width:640px){.banner{min-height:320px;border-radius:18px;margin-top:12px}.banner h1{font-size:27px}.banner .in{padding:20px}.citycards{grid-template-columns:1fr}.sec h2{font-size:19px}.row{grid-auto-columns:minmax(165px,180px)}.row.wide{grid-auto-columns:minmax(240px,260px)}.usp div{padding:12px}}
+@media(max-width:640px){.banner.photo:after{background:linear-gradient(180deg,rgba(13,20,38,.35) 0%,rgba(13,20,38,.9) 75%)}.banner{min-height:320px;border-radius:18px;margin-top:12px}.banner h1{font-size:27px}.banner .in{padding:20px}.citycards{grid-template-columns:1fr}.sec h2{font-size:19px}.row{grid-auto-columns:minmax(165px,180px)}.row.wide{grid-auto-columns:minmax(240px,260px)}.usp div{padding:12px}}
 """
 
 PHOTO = {  # (id foto Unsplash, nama fotografer, username, keterangan)
