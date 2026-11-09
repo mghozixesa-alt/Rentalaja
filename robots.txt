@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /r-
 
 Sitemap: https://rentalaja.co.id/sitemap.xml

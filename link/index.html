@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#1F2B4D">
 <meta property="og:title" content="Rentalaja Official · Semua ada, semua bisa!">
 <meta property="og:description" content="Sewa motor, iPhone, kamera, camping & penginapan di Garut dan Bandung. Booking online, cek stok & harga langsung.">
-<meta property="og:image" content="/img/v/ruma-metua-1.webp">
+<meta property="og:image" content="https://rentalaja.co.id/img/v/ruma-metua-1.webp"><meta property="og:url" content="https://rentalaja.co.id/link"><link rel="canonical" href="https://rentalaja.co.id/link">
 <meta property="og:type" content="website">
 <link rel="icon" href="/logo.png">
 <link rel="preload" as="image" href="/img/p/honda-scoopy-new.webp">
@@ -146,6 +146,31 @@ h3 a{font-size:12.5px;color:var(--teal-d);font-weight:700}
 .dock{position:fixed;left:0;right:0;bottom:0;z-index:20;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:linear-gradient(0deg,rgba(244,246,249,1) 55%,rgba(244,246,249,0));transform:translateY(110%);transition:transform .25s}
 .dock.show{transform:none}
 .dock a{max-width:448px;margin:0 auto;height:52px;border-radius:16px;background:var(--teal);color:var(--navy);font-weight:800;font-size:15.5px;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 10px 24px rgba(9,190,175,.35)}
+/* dua jalur: web & WA */
+.lead{margin:6px 2px 12px;font-size:19px;line-height:25px;font-weight:800;color:#fff}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pc{background:#fff;border:0;border-radius:18px;padding:14px;box-shadow:0 10px 24px rgba(31,43,77,.14);display:flex;flex-direction:column;gap:6px;text-align:left;font:inherit;color:var(--navy);cursor:pointer}
+.pc .pi{width:42px;height:42px;border-radius:13px;background:var(--mint);display:flex;align-items:center;justify-content:center}
+.pc.wa .pi{background:#E7F6EC}
+.pc b{font-size:15px;line-height:19px}.pc small{font-size:12px;line-height:16px;color:var(--mute);font-weight:600}
+.pc .go{margin-top:auto;height:44px;border-radius:12px;background:var(--teal);color:#0B2A33;display:flex;align-items:center;justify-content:center;font-size:13.5px;font-weight:800}
+.pc.wa .go{background:#1E7A44;color:#fff}
+.cats{display:flex;flex-direction:column;gap:8px}
+.cr{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:9px}
+.cr .th{width:50px;height:50px;border-radius:12px;background:var(--mint);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0}
+.cr .th img{width:84%;height:84%;object-fit:contain}.cr .th.ph img{width:100%;height:100%;object-fit:cover}
+.cr .tx{flex:1;min-width:0}.cr b{display:block;font-size:14px}.cr small{display:block;font-size:12px;font-weight:700;color:var(--teal-d)}
+.cr .bk{height:40px;padding:0 12px;border-radius:11px;background:var(--navy);color:#fff;display:flex;align-items:center;font-size:12.5px;font-weight:800}
+.cr .wb{width:40px;height:40px;border-radius:11px;border:1.5px solid #1E7A44;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.sh{position:fixed;inset:0;z-index:40;background:rgba(15,22,40,.55);display:flex;align-items:flex-end;justify-content:center}
+.sh[hidden]{display:none}
+.shb{width:100%;max-width:480px;background:#fff;border-radius:22px 22px 0 0;padding:18px 16px calc(22px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:10px}
+.shh{display:flex;align-items:center}.shh b{flex:1;font-size:16px}
+.shh button{width:40px;height:40px;border:0;border-radius:12px;background:var(--bg);font-size:20px;font-weight:800;color:var(--navy);cursor:pointer}
+.shb p{margin:0;font-size:12.5px;font-weight:600;color:var(--mute)}
+.ct{border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:10px}
+.ct span:first-child{flex:1}.ct b{display:block;font-size:14px}.ct small{font-size:12px;color:var(--mute);font-weight:600}
+.ct .c{height:36px;padding:0 14px;border-radius:10px;background:#1E7A44;color:#fff;display:flex;align-items:center;font-size:12.5px;font-weight:800}
 @media (prefers-reduced-motion:reduce){.cta:after{animation:none}}
 </style>
 </head>
@@ -169,80 +194,62 @@ h3 a{font-size:12.5px;color:var(--teal-d);font-weight:700}
       <span style="flex:1;min-width:0"><b id="liveT" style="display:block;font-size:15px;line-height:19px"></b><span id="liveS" style="font-size:12.5px;opacity:.85"></span></span><span style="font-weight:800">→</span></a>
     <style>@keyframes lvp{0%{box-shadow:0 0 0 0 rgba(254,44,85,.6)}70%{box-shadow:0 0 0 10px rgba(254,44,85,0)}100%{box-shadow:0 0 0 0 rgba(254,44,85,0)}}#liveDot.on{animation:lvp 1.6s infinite}</style>
     <div class="chips"><span>📍 Garut & Bandung</span><span>⏰ 07.30–21.00</span><span>🛵 Bisa diantar</span></div>
-
-    <div class="car">
-      <div class="track" id="track">
-        <a class="slide s1" data-k="banner_motor" data-label="Banner: motor" data-app="/#/Katalog?cat=motor">
-          <div><div class="k">Liburan ke Garut?</div><h2>Motor matic siap diantar ke hotel</h2><div class="p">Mulai Rp100rb/hari · helm & jas hujan</div></div>
-          <span class="go">Pilih motor →</span>
-                    <img class="art" src="/img/p/honda-scoopy-new.webp" alt="Sewa motor" loading="eager">
-        </a>
-        <a class="slide s2" data-k="banner_gadget" data-label="Banner: iPhone & kamera" data-app="/#/Katalog?cat=iphone">
-          <div><div class="k">Konten makin cakep</div><h2>iPhone & kamera buat konten</h2><div class="p">Ada tarif 2 jam & ½ hari</div></div>
-          <span class="go">Lihat gadget →</span>
-                    <img class="art" src="/img/p/iphone-16.webp" alt="Sewa iPhone" loading="lazy" style="width:40%;right:4%;bottom:-18px">
-        </a>
-        <a class="slide s3" data-k="banner_inap" data-label="Banner: penginapan" data-app="/#/Menginap">
-          <img class="ph" src="/img/v/ruma-metua-2.webp" alt="" loading="lazy">
-          <div><div class="k">Staycation Garut</div><h2>Nginep cozy di Ruma Metua</h2><div class="p">Dekat kota & Cipanas</div></div>
-          <span class="go">Cek tanggal →</span>
-        </a>
-        <a class="slide s4" data-k="banner_ajak" data-label="Banner: ajak teman" data-app="/#/Ajak">
-          <div><div class="k">Ajak teman</div><h2>Temanmu hemat, kamu dapat saldo</h2></div>
-          <span class="go">Bagikan kode →</span>
-          <div class="big"><b>Rp25rb</b><small>per teman</small></div>
-        </a>
-      </div>
-      <div class="dots" id="dots"><i class="on"></i><i></i><i></i><i></i></div>
+    <h2 class="lead">Mau sewa? Pilih cara yang paling enak buatmu.</h2>
+    <div class="two">
+      <a class="pc web" id="cta" data-k="booking" data-label="Booking sendiri (web)" data-app="/#/Home">
+        <span class="pi"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#077A70" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18M9 15l2 2 4-4"/></svg></span>
+        <b>Booking sendiri</b><small>Lihat stok &amp; harga, langsung kunci jadwal. Buka 24 jam.</small><span class="go">Buka website</span></a>
+      <button type="button" class="pc wa" data-wa="umum" data-topic="">
+        <span class="pi"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1E7A44" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l1.3-3.9A8 8 0 1 1 8 19z"/><path d="M9 10h6M9 13h4"/></svg></span>
+        <b>Tanya admin dulu</b><small>Belum yakin? Chat admin, dibalas jam 07.30–21.00.</small><span class="go">Chat WhatsApp</span></button>
     </div>
-
-    <a class="cta" id="cta" data-k="booking" data-label="Booking sekarang" data-app="/#/Home">
-      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#1F2B4D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M3 9h18M8 2v4M16 2v4M8 14l2.5 2.5L16 12"/></svg></span>
-      <span><b>Booking sekarang</b><small>Cek stok & harga langsung, tanpa nunggu admin</small></span>
-      <span class="ar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></span>
-    </a>
+    <h3>Atau langsung pilih barangnya</h3>
+    <div class="cats">
+      <div class="cr"><span class="th"><img src="/img/p/honda-scoopy-new.webp" alt="" loading="lazy"></span><span class="tx"><b>Motor</b><small>mulai Rp100rb/hari</small></span>
+        <a class="bk" data-k="cat_motor" data-label="Booking: Motor" data-app="/#/Katalog?cat=motor">Booking</a>
+        <button type="button" class="wb" data-wa="motor" data-topic="motor" aria-label="Tanya Motor lewat WhatsApp"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1E7A44" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l1.3-3.9A8 8 0 1 1 8 19z"/></svg></button></div>
+      <div class="cr"><span class="th"><img src="/img/p/mobil-brio.webp" alt="" loading="lazy"></span><span class="tx"><b>Mobil</b><small>mulai Rp225rb/hari</small></span>
+        <a class="bk" data-k="cat_mobil" data-label="Booking: Mobil" data-app="/#/Katalog?cat=mobil">Booking</a>
+        <button type="button" class="wb" data-wa="mobil" data-topic="mobil" aria-label="Tanya Mobil lewat WhatsApp"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1E7A44" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l1.3-3.9A8 8 0 1 1 8 19z"/></svg></button></div>
+      <div class="cr"><span class="th"><img src="/img/p/iphone-15.webp" alt="" loading="lazy"></span><span class="tx"><b>iPhone</b><small>mulai Rp75rb/hari</small></span>
+        <a class="bk" data-k="cat_iphone" data-label="Booking: iPhone" data-app="/#/Katalog?cat=iphone">Booking</a>
+        <button type="button" class="wb" data-wa="iphone" data-topic="iphone" aria-label="Tanya iPhone lewat WhatsApp"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1E7A44" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l1.3-3.9A8 8 0 1 1 8 19z"/></svg></button></div>
+      <div class="cr"><span class="th"><img src="/img/p/fujifilm-xa5.webp" alt="" loading="lazy"></span><span class="tx"><b>Kamera &amp; lensa</b><small>mulai Rp15rb/hari</small></span>
+        <a class="bk" data-k="cat_kamera" data-label="Booking: Kamera &amp; lensa" data-app="/#/Katalog?cat=kamera">Booking</a>
+        <button type="button" class="wb" data-wa="kamera" data-topic="kamera & lensa" aria-label="Tanya Kamera & lensa lewat WhatsApp"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1E7A44" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l1.3-3.9A8 8 0 1 1 8 19z"/></svg></button></div>
+      <div class="cr"><span class="th"><img src="/img/p/carrier-60l.webp" alt="" loading="lazy"></span><span class="tx"><b>Alat camping</b><small>mulai Rp5rb/hari</small></span>
+        <a class="bk" data-k="cat_camping" data-label="Booking: Alat camping" data-app="/#/Katalog?cat=camping">Booking</a>
+        <button type="button" class="wb" data-wa="camping" data-topic="alat camping" aria-label="Tanya Alat camping lewat WhatsApp"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1E7A44" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l1.3-3.9A8 8 0 1 1 8 19z"/></svg></button></div>
+      <div class="cr"><span class="th ph"><img src="/img/v/ruma-metua-1.webp" alt="" loading="lazy"></span><span class="tx"><b>Penginapan Garut</b><small>Ruma Metua · Ertap Village</small></span>
+        <a class="bk" data-k="cat_inap" data-label="Booking: Penginapan Garut" data-app="/#/Menginap">Booking</a>
+        <button type="button" class="wb" data-wa="inap" data-topic="penginapan garut" aria-label="Tanya Penginapan Garut lewat WhatsApp"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1E7A44" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l1.3-3.9A8 8 0 1 1 8 19z"/></svg></button></div>
+    </div>
     <div class="trust">
       <span><svg viewBox="0 0 24 24" fill="none" stroke="#077A70" stroke-width="2.4"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 7v5l3 2"/></svg>Online 24 jam</span>
       <span><svg viewBox="0 0 24 24" fill="none" stroke="#077A70" stroke-width="2.4"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/></svg>DP cuma 20%</span>
       <span><svg viewBox="0 0 24 24" fill="none" stroke="#077A70" stroke-width="2.4"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>Unit dicek tiap sewa</span>
     </div>
-
     <div class="list">
-      <a class="li" data-k="cat_transportasi" data-label="Motor & mobil" data-app="/#/Transportasi"><span class="th"><img src="/img/p/honda-scoopy-new.webp" alt="" loading="lazy"></span><span class="tx"><b>Sewa motor & mobil</b><small>Matic harian, mobil lepas kunci & sopir</small></span><span class="ar">›</span></a>
-      <a class="li" data-k="cat_gadget" data-label="iPhone, kamera & lainnya" data-app="/#/Katalog"><span class="th"><img src="/img/p/iphone-15.webp" alt="" loading="lazy"></span><span class="tx"><b>iPhone, kamera & lainnya</b><small>Lensa, PlayStation, proyektor, camping</small></span><span class="ar">›</span></a>
-      <a class="li" data-k="inap" data-label="Penginapan" data-app="/#/Menginap"><span class="th ph"><img src="/img/v/ruma-metua-1.webp" alt="" loading="lazy"></span><span class="tx"><b>Penginapan di Garut</b><small>Ruma Metua · Ertap Village</small></span><span class="ar">›</span></a>
-      <a class="li" data-k="akun" data-label="Booking saya" data-app="/#/Akun"><span class="th lg"><img src="/img/link/mark.png" alt="" loading="lazy"></span><span class="tx"><b>Booking saya</b><small>Status, perpanjang, struk</small></span><span class="ar">›</span></a>
+      <a class="li" data-k="akun" data-label="Booking saya" data-app="/#/Akun"><span class="th lg"><img src="/img/link/mark.png" alt="" loading="lazy"></span><span class="tx"><b>Sudah booking?</b><small>Cek status, perpanjang, struk</small></span><span class="ar">›</span></a>
     </div>
     <details class="help" id="help">
-      <summary><span class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#077A70" stroke-width="2.2"><path d="M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span><span>Lokasi cabang & tanya admin<small>Garut Kota · Wanaraja · Bandung</small></span><span class="ar">›</span></summary>
-      <div class="br"><div><b>Garut Kota</b><span>Jl. Cimanuk No.24C · 07.30–21.00</span></div>
-        <a data-k="maps_grt" data-label="Lokasi Garut Kota" href="https://www.google.com/maps/place/?q=place_id:ChIJqct-WkmxaC4RR6C6v-3Vdf8">Peta</a>
-        <a class="wa" data-k="wa_grt" data-label="WA Garut Kota" href="https://wa.link/84m0w6">Chat</a></div>
-      <div class="br"><div><b>Wanaraja</b><span>Jl. Raya Wanaraja, Situgede</span></div>
-        <a data-k="maps_wnr" data-label="Lokasi Wanaraja" href="https://www.google.com/maps/place/?q=place_id:ChIJi_2qPwCzaC4RoEqCgQnFXGY">Peta</a>
-        <a class="wa" data-k="wa_wnr" data-label="WA Wanaraja" href="https://wa.link/5ovnes">Chat</a></div>
-      <div class="br"><div><b>Bandung · Motor</b><span>Jl. Dipati Ukur No.89</span></div>
-        <a data-k="maps_bdg_motor" data-label="Lokasi Bandung Motor" href="https://www.google.com/maps/search/?api=1&amp;query=-6.8874409,107.6152511">Peta</a>
-        <a class="wa" data-k="wa_bdg_motor" data-label="WA Bandung Motor" href="https://wa.link/ubiobq">Chat</a></div>
-      <div class="br"><div><b>Bandung · iPhone</b><span>Jl. Kubang Selatan No.124</span></div>
-        <a data-k="maps_bdg_iphone" data-label="Lokasi Bandung iPhone" href="https://share.google/MRSbT5J7timdAFBBJ">Peta</a>
-        <a class="wa" data-k="wa_bdg_iphone" data-label="WA Bandung iPhone" href="https://wa.link/9wvf10">Chat</a></div>
+      <summary><span class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#077A70" stroke-width="2.2"><path d="M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span><span>Lokasi cabang<small>Garut Kota · Wanaraja · Bandung</small></span><span class="ar">›</span></summary>
+      <div class="br"><div><b>Garut Kota</b><span>Jl. Cimanuk No.24C · 07.30–21.00</span></div><a data-k="maps_grt" data-label="Lokasi Garut Kota" href="https://www.google.com/maps/place/?q=place_id:ChIJqct-WkmxaC4RR6C6v-3Vdf8">Peta</a></div>
+      <div class="br"><div><b>Wanaraja</b><span>Jl. Raya Wanaraja, Situgede</span></div><a data-k="maps_wnr" data-label="Lokasi Wanaraja" href="https://www.google.com/maps/place/?q=place_id:ChIJi_2qPwCzaC4RoEqCgQnFXGY">Peta</a></div>
+      <div class="br"><div><b>Bandung · Motor</b><span>Jl. Dipati Ukur No.89</span></div><a data-k="maps_bdg_motor" data-label="Lokasi Bandung Motor" href="https://www.google.com/maps/search/?api=1&amp;query=-6.8874409,107.6152511">Peta</a></div>
+      <div class="br"><div><b>Bandung · iPhone</b><span>Jl. Kubang Selatan No.124</span></div><a data-k="maps_bdg_iphone" data-label="Lokasi Bandung iPhone" href="https://share.google/MRSbT5J7timdAFBBJ">Peta</a></div>
     </details>
-
     <p class="foot">© Rentalaja · PT Popo Karya Investama</p>
   </main>
 </div>
+<div class="sh" id="sh" hidden><div class="shb" role="dialog" aria-modal="true" aria-labelledby="shT">
+  <div class="shh"><b id="shT">Mau sewa di kota mana?</b><button type="button" id="shX" aria-label="Tutup">×</button></div>
+  <p id="shS">Pesan pembuka otomatis terisi, tinggal kirim.</p>
+  <a class="ct" id="waG" data-k="wa_garut" data-label="WA Garut" href="#"><span><b>Garut</b><small>Garut Kota · Wanaraja</small></span><span class="c">Chat</span></a>
+  <a class="ct" id="waB" data-k="wa_bandung" data-label="WA Bandung" href="#"><span><b>Bandung</b><small>Dipati Ukur · Kubang Selatan</small></span><span class="c">Chat</span></a>
+</div></div>
 <script src="/config.js"></script>
 <script>
-/* banner geser otomatis + titik penanda + tombol lengket bawah */
-(function () {
-  var t = document.getElementById('track'), dots = [].slice.call(document.querySelectorAll('#dots i')), n = dots.length, i = 0, hold = false, timer;
-  function cur() { return Math.round(t.scrollLeft / (t.clientWidth + 10)); }
-  function mark() { var c = cur(); dots.forEach(function (d, k) { d.classList.toggle('on', k === c); }); i = c; }
-  t.addEventListener('scroll', function () { clearTimeout(t._s); t._s = setTimeout(mark, 60); }, { passive: true });
-  ['touchstart', 'pointerdown'].forEach(function (e) { t.addEventListener(e, function () { hold = true; clearTimeout(timer); timer = setTimeout(function () { hold = false; }, 6000); }, { passive: true }); });
-  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) setInterval(function () { if (hold || document.hidden) return; i = (i + 1) % n; t.scrollTo({ left: i * (t.clientWidth + 10), behavior: 'smooth' }); }, 4500);
-})();
 /* Statistik halaman link (anonim, tanpa IP & tanpa data pribadi): kunjungan, klik per tombol, asal (?src= / referrer / aplikasi),
    perangkat. Masuk ke dashboard marketing Rentalaja (/link/statistik) & Pokama (Marketing · Link bio) lewat ra_link_track. */
 (function () {
@@ -273,6 +280,7 @@ h3 a{font-size:12.5px;color:var(--teal-d);font-weight:700}
     var body = JSON.stringify({ p: Object.assign({}, base, extra) });
     try { fetch(C.url + '/rest/v1/rpc/ra_link_track', { method: 'POST', keepalive: true, headers: { apikey: C.key, Authorization: 'Bearer ' + C.key, 'Content-Type': 'application/json' }, body: body }); } catch (e) {}
   }
+  window.raLinkSend = send;
   send({ kind: 'view', is_new: isNew });
   // kartu Live TikTok: tampil saat sedang live, atau jadwal live hari ini/besok (data dari modul Marketing Pokama)
   if (C.url && C.key) fetch(C.url + '/rest/v1/rpc/ra_live_now', { method: 'POST', headers: { apikey: C.key, Authorization: 'Bearer ' + C.key, 'Content-Type': 'application/json' }, body: '{}' })
@@ -293,6 +301,20 @@ h3 a{font-size:12.5px;color:var(--teal-d);font-weight:700}
   }, true);
   var h = document.getElementById('help');
   if (h) h.addEventListener('toggle', function () { if (h.open) send({ kind: 'click', key: 'buka_lokasi', label: 'Buka lokasi & admin' }); });
+})();
+/* dua jalur: WA per kota (nomor admin Garut & Bandung), pesan pembuka terisi otomatis */
+(function () {
+  var NUM = { garut: '6281324700077', bandung: '6285286504910' }, sh = document.getElementById('sh'), topic = '';
+  function msg(city) { return 'Halo admin Rentalaja, saya mau tanya sewa' + (topic ? ' ' + topic : '') + ' di ' + city + '.'; }
+  function open(t) { topic = t || ''; document.getElementById('shS').textContent = topic ? 'Pesan pembuka sudah terisi: tanya sewa ' + topic + '. Tinggal kirim.' : 'Pesan pembuka otomatis terisi, tinggal kirim.';
+    document.getElementById('waG').href = 'https://wa.me/' + NUM.garut + '?text=' + encodeURIComponent(msg('Garut'));
+    document.getElementById('waB').href = 'https://wa.me/' + NUM.bandung + '?text=' + encodeURIComponent(msg('Bandung'));
+    document.getElementById('waG').setAttribute('data-k', 'wa_garut_' + (t ? t.split(' ')[0] : 'umum'));
+    document.getElementById('waB').setAttribute('data-k', 'wa_bandung_' + (t ? t.split(' ')[0] : 'umum'));
+    sh.hidden = false; }
+  document.querySelectorAll('[data-wa]').forEach(function (b) { b.addEventListener('click', function () { open(b.getAttribute('data-topic')); if (window.raLinkSend) window.raLinkSend({ kind: 'click', key: 'wa_buka_' + b.getAttribute('data-wa'), label: 'Buka pilihan WA' }); }); });
+  document.getElementById('shX').addEventListener('click', function () { sh.hidden = true; });
+  sh.addEventListener('click', function (e) { if (e.target === sh) sh.hidden = true; });
 })();
 </script>
 </body>
