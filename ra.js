@@ -681,8 +681,15 @@
     return 'staff';
   };
   /* dipanggil runtime sebelum menampilkan layar; mengembalikan nama layar yang boleh dibuka */
+  /* kasir.rentalaja.co.id = khusus tim: halaman pelanggan tidak dibuka di sini */
+  RA.KASIR_HOST = /^kasir\./i.test(location.hostname);
   RA.beforeShow = function (name) {
     var kind = RA.kindOf(name);
+    if (RA.KASIR_HOST && (kind === 'customer' || kind === 'partner')) { location.replace('https://demo.rentalaja.co.id' + location.pathname + location.search + location.hash); return new Promise(function () {}); }
+    if (RA.KASIR_HOST && name !== 'Masuk' && name !== 'Mfa' && kind === 'public') {
+      if (!session) return Promise.resolve('Masuk');
+      return RA.staff().then(function (s) { return s ? RA.staffHome(s.role) : 'Masuk'; }, function () { return 'Masuk'; });
+    }
     var boot = RA.settings().catch(function () {});
     /* data staf diambil bersamaan dengan pengaturan, tidak menunggu */
     if (session && kind !== 'public' && kind !== 'customer' && kind !== 'partner') RA.staff().catch(function () {});
@@ -725,7 +732,7 @@
     MgmtHargaMusim: 'mgmt.pricing', MgmtPromo: 'mgmt.promo', MgmtKorporat: 'mgmt.corporate', MgmtKonten: 'mgmt.content', MgmtSumber: ['mgmt.marketing', 'mgmt.reports'], MgmtPelanggan: 'mgmt.customers', MgmtDaftarHitam: ['mgmt.customers', 'pos.customers'], KonfirmasiTransfer: ['pos.cashier', 'finance.panel', 'exp.bookings'], MgmtInbox: 'mgmt.inbox', MgmtPenawaran: 'mgmt.offers', MgmtTindakLanjut: 'mgmt.followup', MgmtSegmen: 'mgmt.broadcast',
     MgmtKeluhan: 'mgmt.complaints', MgmtCabang: 'mgmt.branches', MgmtTim: 'mgmt.team', MgmtInvestor: 'mgmt.partners', MgmtPengguna: 'mgmt.users', MgmtAudit: 'mgmt.audit', MgmtDataUji: ['mgmt.users', 'pos.bookings', 'exp.bookings'], MgmtImpor: 'mgmt.import', MgmtAturan: ['mgmt.settings', 'finance.settings'],
     ExpKalender: ['exp.calendar', 'exp.bookings'], ExpJeep: ['exp.bookings', 'field.driver'], Housekeeping: ['pos.qc', 'exp.bookings', 'field.runner'], OpsBeranda: ['mgmt.reports', 'pos.bookings'], OpsUnit: 'mgmt.team', OpsKalender: ['mgmt.reports', 'mgmt.assets', 'pos.bookings', 'exp.bookings'], OpsQC: ['mgmt.reports', 'mgmt.team', 'mgmt.complaints'], AsetBeranda: 'mgmt.assets', AsetPreventif: 'mgmt.assets', AsetUnit: ['mgmt.assets', 'pos.units'], AsetTim: 'mgmt.assets', AsetRisiko: ['mgmt.assets', 'mgmt.reports'], AsetLaporan: ['mgmt.assets', 'mgmt.reports'], AsetData: 'mgmt.assets', AsetKalender: ['mgmt.assets', 'mgmt.reports'], AsetOpname: ['mgmt.assets', 'pos.units'], AsetTandai: ['pos.units', 'pos.handover', 'mgmt.assets', 'field.workorder'], AsetServis: ['mgmt.assets', 'field.workorder'] };
-  RA.staffHome = function (role) { if (window.innerWidth < 1000 && { owner: 1, viewer: 1, experience_manager: 1, asset_manager: 1, cs: 1, cs_experience: 1, cashier: 1, staff: 1, branch_head: 1 }[role]) return 'ModulBeranda'; return RA.STAFF_HOME[role] || 'PosHariIni'; };
+  RA.staffHome = function (role) { if (window.innerWidth < 1000 && { owner: 1, viewer: 1, experience_manager: 1, asset_manager: 1, technician: 1, runner: 1, driver: 1, qc: 1, cs: 1, cs_experience: 1, cashier: 1, staff: 1, branch_head: 1 }[role]) return 'ModulBeranda'; return RA.STAFF_HOME[role] || 'PosHariIni'; };
   RA.afterLogin = function (fallback) {
     var n = RA.ctx().next; RA.setCtx({ next: null });
     location.hash = '#/' + (n || fallback || 'Home');

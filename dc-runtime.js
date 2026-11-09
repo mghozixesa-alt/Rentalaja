@@ -233,7 +233,7 @@ var SROLE={
  viewer:{'Operasional':['OpsBeranda','OpsKerja']}
 };
 var FAB={cs:'PosVerifikasi',cs_experience:'PosVerifikasi'};
-var FIELD={cs:['ModulBeranda','PusatCS','PosVerifikasi','PosHariIni'],cs_experience:['ModulBeranda','PusatCS','PosVerifikasi','PosHariIni'],runner:['AgendaLapangan','Runner','Housekeeping','AkunLapangan'],driver:['SopirJeep','ExpJeep','Runner','AkunLapangan'],technician:['Teknisi','TekBelanja','TekAkun'],qc:['PosQC','Teknisi','Runner','AkunLapangan'],
+var FIELD={cs:['ModulBeranda','PusatCS','PosVerifikasi','PosHariIni'],cs_experience:['ModulBeranda','PusatCS','PosVerifikasi','PosHariIni'],runner:['ModulBeranda','AgendaLapangan','Runner','Housekeeping'],driver:['ModulBeranda','SopirJeep','ExpJeep','Runner'],technician:['ModulBeranda','Teknisi','TekBelanja','TekAkun'],qc:['ModulBeranda','PosQC','Teknisi','Runner'],
  owner:['ModulBeranda','OpsBeranda','PusatCS'],viewer:['ModulBeranda','OpsBeranda'],finance:['MgmtSetuju'],
  asset_manager:['ModulBeranda','AsetServis','AsetKalender','AsetUnit'],experience_manager:['ModulBeranda','OpsManajer','OpsBeranda'],
  cashier:['ModulBeranda','PosHariIni','PosKasir','PosSerahTerima'],staff:['ModulBeranda','PosSerahTerima','PosKasir','Teknisi'],branch_head:['ModulBeranda','PosHariIni','PosSerahTerima']};
@@ -248,7 +248,7 @@ var ALIAS={OpsBukaHari:'OpsManajer',LaporanOps:'OpsManajer',AsetGps:'AsetPenging
 var SUBT=[[['PusatCS','Beranda'],['MgmtInbox','Inbox WA'],['TiketCS','Keluhan'],['MgmtTindakLanjut','Tindak lanjut'],['MgmtPenawaran','Perjalanan'],['AlatChat','Template'],['LaporanShift','Shift']],[['AsetServis','Papan'],['PosQC','Cek QC'],['AsetPreventif','Preventif'],['MgmtServis','Aturan']],[['AsetUnit','Unit'],['AsetOpname','Stok opname'],['AsetData','Lengkapi data']],[['AsetLaporan','Kinerja & jatuh tempo'],['AsetTim','Tim teknisi & QC']],[['OpsBeranda','Ringkasan'],['OpsQC','Kualitas layanan'],['OpsUnit','Utilisasi & mutasi'],['AsetPendapatan','Pendapatan aset'],['MgmtLini','Per lini']],[['MgmtPelanggan','Profil'],['MgmtSegmen','Broadcast'],['MgmtDaftarHitam','Daftar hitam']],[['MgmtProduk','Barang & harga'],['MgmtHargaMusim','Harga musim'],['MgmtPromo','Promo & member']],[['MgmtSumber','Sumber & iklan'],['MgmtKonten','Konten web'],['MgmtKorporat','Korporat & B2B']]];
 var REST_TOP={asset_manager:[],experience_manager:['OpsKerja','ExpJeep','PosHariIni','MgmtPromo','MgmtProduk','KonfirmasiTransfer']};
 var ALLG={};SNAV.forEach(function(g){ALLG[g[0]]=1;});
-var MB_ROLES={viewer:1,experience_manager:1,asset_manager:1,cs:1,cs_experience:1,cashier:1,staff:1,branch_head:1};
+var MB_ROLES={viewer:1,experience_manager:1,asset_manager:1,cs:1,cs_experience:1,cashier:1,staff:1,branch_head:1,technician:1,runner:1,driver:1,qc:1};
 function roleAllow(role){var r=role==='owner'?ALLG:(SROLE[role]||{'Harian':1});if(MB_ROLES[role]&&!r.Beranda){var o={Beranda:1};for(var k in r)o[k]=r[k];r=o;}return r;}
 window.RA_MENU_ALLOWS=function(role,name){
   var inMenu=false,known=false,a=roleAllow(role);
