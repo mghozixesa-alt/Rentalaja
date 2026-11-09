@@ -191,6 +191,7 @@ def head(title, desc, path, lds, image=None):
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>{CSS}</style>
+<script src="/ga.js" defer></script>
 {''.join('<script type="application/ld+json">' + json.dumps(x, ensure_ascii=False) + '</script>' for x in lds)}
 </head><body>
 <header class="top"><div class="w"><a href="/sewa/"><img class="logo" src="/logo.png" alt="Rentalaja"></a><a href="/#/Home">Buka aplikasi →</a></div></header>"""
