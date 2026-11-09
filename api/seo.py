@@ -387,7 +387,26 @@ def page_index(D):
     return head('Rentalaja – Sewa Motor, iPhone, Kamera & Alat Camping di Garut dan Bandung', 'Sewa motor, mobil, iPhone, kamera, lensa, proyektor, PlayStation, dan alat camping di Garut dan Bandung. Booking online, DP 20%.', '/sewa/', ld) + body + foot(D)
 
 
-ART_CSS = '<style>.art p,.art li{font-size:16px}.art h2{margin-top:30px}.meta{font-size:13px;color:var(--mute);margin:0 0 12px}</style>'
+ART_CSS = ('<style>.art p,.art li{font-size:16px}.art h2{margin-top:30px}.meta{font-size:13px;color:var(--mute);margin:0 0 12px}'
+           '.cover{margin:18px 0 6px;border-radius:18px;overflow:hidden;background:var(--bg);aspect-ratio:16/8}.cover img{width:100%;height:100%;object-fit:cover;display:block}'
+           '.credit{font-size:12px;color:var(--mute);margin:0 0 4px}.credit a{color:var(--mute)}'
+           '.agrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-top:8px}.acard{border:1px solid var(--line);border-radius:16px;overflow:hidden;text-decoration:none;color:var(--ink);background:#fff;display:flex;flex-direction:column}'
+           '.acard .t{aspect-ratio:16/9;background:var(--bg)}.acard img{width:100%;height:100%;object-fit:cover;display:block}.acard .b{padding:12px 14px}.acard b{display:block;font-size:16px;line-height:1.3}.acard span{font-size:13px;color:var(--mute)}'
+           '.tag{display:inline-block;font-size:12px;font-weight:700;color:var(--teal-d);background:#E3F7F5;border-radius:999px;padding:3px 10px;margin-bottom:6px}'
+           '@media(max-width:640px){.cover{aspect-ratio:4/3}}</style>')
+
+
+def img_src(a, w=1200):
+    pid = (a.get('img') or (None,))[0]
+    return f'https://images.unsplash.com/{pid}?auto=format&fit=crop&w={w}&q=75' if pid else None
+
+
+def cover_html(a):
+    if not a.get('img'): return ''
+    pid, name, user, cap = a['img']
+    ref = '?utm_source=rentalaja&utm_medium=referral'
+    return (f'<figure style="margin:0"><div class="cover"><img src="{img_src(a)}" alt="{esc(cap if cap != "Ilustrasi" else a["title"])}" fetchpriority="high"></div>'
+            f'<figcaption class="credit">{esc(cap)} · Foto: <a href="https://unsplash.com/@{user}{ref}" rel="nofollow">{esc(name)}</a> / <a href="https://unsplash.com/{ref}" rel="nofollow">Unsplash</a></figcaption></figure>')
 
 
 def items_of(D, cat, c):
@@ -433,30 +452,46 @@ def page_article(D, a):
     body = fill(D, a['body'])
     codes = sorted(set(re.findall(r'\[\[cabang:([A-Z-]+)\]\]', a['body'])), key=lambda x: list(BR_CITY).index(x))
     others = [x for x in ARTICLES if x['slug'] != a['slug'] and (x['city'] == a['city'] or x['city'] is None or a['city'] is None)][:4]
-    lds = [{"@context": "https://schema.org", "@type": "Article", "headline": a['title'], "description": a['desc'], "datePublished": a['date'], "dateModified": datetime.date.today().isoformat(),
+    lds = [{"@context": "https://schema.org", "@type": "Article", "headline": a['title'], "description": a['desc'], "image": img_src(a), "datePublished": a['date'], "dateModified": datetime.date.today().isoformat(),
             "inLanguage": "id-ID", "mainEntityOfPage": BASE + path, "author": {"@type": "Organization", "name": "Rentalaja"},
             "publisher": {"@type": "Organization", "name": "Rentalaja", "logo": {"@type": "ImageObject", "url": BASE + '/logo.png'}}},
            crumbs_ld([('Rentalaja', '/sewa/'), ('Panduan', '/panduan/'), (a['title'], path)]), faq_ld(D)]
     if codes: lds.append({"@context": "https://schema.org", "@graph": [local_business(D, k) for k in codes]})
     cat0 = a['cats'][0]
+    strip = ''
+    if '[[kartu:' not in a['body']:
+        its = []
+        for cc in ([a['city']] if a['city'] else list(CITY)):
+            for ct in a['cats']: its += items_of(D, ct, cc)
+        its = sorted(its, key=lambda x: -(x.get('rc') or 0))[:4]
+        if its: strip = '<h2>Barang yang dibahas</h2><div class="grid">' + ''.join(card(x) for x in its) + '</div>'
     html_ = f"""<main><section class="hero"><div class="w">
 <p class="crumb"><a href="/panduan/">Panduan</a></p>
 <h1>{esc(a['title'])}</h1><p class="meta">Rentalaja · diperbarui {datetime.date.today().strftime('%d-%m-%Y')}</p>
+{cover_html(a)}
 <p class="lead">{lead}</p>
 <a class="cta" href="/#/Katalog?cat={cat0}">Cek ketersediaan</a><a class="cta alt" href="https://wa.me/{WA}?text={quote('Halo Rentalaja, saya baca panduan: ' + a['title'])}" rel="nofollow">Tanya via WhatsApp</a>
 </div></section>
-<div class="w art">{body}
-{('<h2>Panduan lain</h2><ul class="tips">' + ''.join(f'<li><a href="/panduan/{x["slug"]}">{esc(x["title"])}</a></li>' for x in others) + '</ul>') if others else ''}
+<div class="w art">{strip}{body}
+{('<h2>Panduan lain</h2>' + acards(others)) if others else ''}
 <h2>Pertanyaan yang sering ditanya</h2>{faq_html(D)}</div></main>"""
-    return head(a['title'] + ' | Rentalaja', a['desc'], path, lds).replace('</head>', ART_CSS + '</head>') + html_ + foot(D)
+    return head(a['title'] + ' | Rentalaja', a['desc'], path, lds, img_src(a)).replace('</head>', ART_CSS + '</head>') + html_ + foot(D)
 
 
 def page_articles(D):
     body = '<main><section class="hero"><div class="w"><h1>Panduan sewa Rentalaja</h1><p class="lead">Rute, tips, dan perbandingan barang untuk sewa di Garut dan Bandung. Harga di setiap panduan diambil langsung dari sistem Rentalaja.</p></div></section><div class="w"><ul class="tips">'
-    body += ''.join(f'<li><a href="/panduan/{a["slug"]}"><b>{esc(a["title"])}</b></a><br><span style="color:var(--mute)">{esc(a["desc"])}</span></li>' for a in ARTICLES)
-    body += '</ul></div></main>'
+    body = body.replace('<ul class="tips">', '') + acards(ARTICLES) + '</div></main>'
     lds = [crumbs_ld([('Rentalaja', '/sewa/'), ('Panduan', '/panduan/')])]
-    return head('Panduan Sewa Motor, Kamera, iPhone & Camping di Garut dan Bandung | Rentalaja', 'Panduan rute, tips, dan perbandingan barang untuk sewa motor, kamera, iPhone, proyektor, dan alat camping di Garut dan Bandung.', '/panduan/', lds) + body + foot(D)
+    return head('Panduan Sewa Motor, Kamera, iPhone & Camping di Garut dan Bandung | Rentalaja', 'Panduan rute, tips, dan perbandingan barang untuk sewa motor, kamera, iPhone, proyektor, dan alat camping di Garut dan Bandung.', '/panduan/', lds).replace('</head>', ART_CSS + '</head>') + body + foot(D)
+
+
+def acards(arts):
+    out = []
+    for x in arts:
+        tag = CITY.get(x['city'], 'Garut & Bandung')
+        im = f'<img src="{img_src(x, 640)}" alt="" loading="lazy">' if x.get('img') else ''
+        out.append(f'<a class="acard" href="/panduan/{x["slug"]}"><div class="t">{im}</div><div class="b"><span class="tag">{tag}</span><b>{esc(x["title"])}</b><span>{esc(x["desc"])}</span></div></a>')
+    return '<div class="agrid">' + ''.join(out) + '</div>'
 
 
 def sitemap(D):
