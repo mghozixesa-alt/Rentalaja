@@ -162,6 +162,8 @@ function custNav(root){
 }
 
 var ICO={
+ grid:'<rect x="4" y="4" width="6" height="6" rx="1.5"/><rect x="14" y="4" width="6" height="6" rx="1.5"/><rect x="4" y="14" width="6" height="6" rx="1.5"/><rect x="14" y="14" width="6" height="6" rx="1.5"/>',
+ dash:'<rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/>',
  shield:'<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/>',
  home:'<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/>',
  idcard:'<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="12" r="2"/><path d="M14 10h4M14 14h4"/>',
@@ -196,9 +198,9 @@ var ICO={
 function ico(k,c){return '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="'+c+'" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(ICO[k]||'')+'</svg>';}
 var SNAV=[
  ['Beranda',[['ModulBeranda','home','Beranda']]],
- ['Operasional',[['OpsBeranda','home','Dashboard manajemen'],['OpsUnit','chart','Utilisasi & mutasi'],['AsetPendapatan','chart','Pendapatan per aset'],['OpsKalender','cal','Kalender sewa'],['OpsQC','star','Kualitas layanan'],['OpsKerja','calcheck','Kerja lapangan']]],
+ ['Operasional',[['OpsBeranda','dash','Dashboard manajemen'],['OpsUnit','chart','Utilisasi & mutasi'],['AsetPendapatan','chart','Pendapatan per aset'],['OpsKalender','cal','Kalender sewa'],['OpsQC','star','Kualitas layanan'],['OpsKerja','calcheck','Kerja lapangan']]],
  ['CS',[['PusatCS','head','Pusat CS'],['LaporanShift','chart','Laporan shift']]],
- ['Harian',[['PosHariIni','home','Rental hari ini'],['PosVerifikasi','idcard','Verifikasi pesanan'],['CekPenyewa','shield','Cek calon penyewa'],['PosKasir','cart','Kasir (sewa OTS)'],['PosSerahTerima','swap','Serah-terima & kembali'],['PosPelanggan','user','Pelanggan'],['PosShift','clock','Shift & tutup kas']]],
+ ['Harian',[['PosHariIni','calcheck','Rental hari ini'],['PosVerifikasi','idcard','Verifikasi pesanan'],['CekPenyewa','shield','Cek calon penyewa'],['PosKasir','cart','Kasir (sewa OTS)'],['PosSerahTerima','swap','Serah-terima & kembali'],['PosPelanggan','user','Pelanggan'],['PosShift','clock','Shift & tutup kas']]],
  ['Lapangan',[['Runner','truck','Antar-jemput']]],
  ['Penginapan & Jeep',[['ExpKalender','bed','Kalender penginapan'],['Housekeeping','check','Bersih-bersih kamar'],['ExpJeep','jeep','Jadwal jeep'],['SopirJeep','wheel','Tugas sopir'],['KonfirmasiTransfer','card','Konfirmasi transfer']]],
  ['Barang',[['MgmtProduk','tag','Barang & harga'],['MgmtHargaMusim','cal','Harga musim & libur'],['MgmtPromo','gift','Promo & member'],['PosUnit','box','Stok unit'],['AsetTandai','flag','Tandai unit']]],
@@ -230,15 +232,15 @@ var SROLE={
  viewer:{'Operasional':['OpsBeranda','OpsKerja']}
 };
 var FAB={cs:'PosVerifikasi',cs_experience:'PosVerifikasi'};
-var FIELD={cs:['ModulBeranda','PusatCS','OpsKalender','PosVerifikasi','PosHariIni'],cs_experience:['ModulBeranda','PusatCS','OpsKalender','PosVerifikasi','PosHariIni'],runner:['AgendaLapangan','Runner','Housekeeping','SopirJeep','AkunLapangan'],driver:['SopirJeep','ExpJeep','Runner','AkunLapangan'],technician:['Teknisi','TekBelanja','TekAkun'],qc:['PosQC','Teknisi','Runner','AkunLapangan'],
+var FIELD={cs:['ModulBeranda','PusatCS','PosVerifikasi','PosHariIni'],cs_experience:['ModulBeranda','PusatCS','PosVerifikasi','PosHariIni'],runner:['AgendaLapangan','Runner','Housekeeping','AkunLapangan'],driver:['SopirJeep','ExpJeep','Runner','AkunLapangan'],technician:['Teknisi','TekBelanja','TekAkun'],qc:['PosQC','Teknisi','Runner','AkunLapangan'],
  owner:['ModulBeranda','OpsBeranda','PusatCS','MgmtSetuju'],viewer:['ModulBeranda','OpsBeranda'],finance:['MgmtSetuju'],
- asset_manager:['ModulBeranda','AsetBeranda','AsetKalender','AsetUnit','AsetServis','AsetLaporan'],experience_manager:['ModulBeranda','OpsBeranda','OpsKerja','OpsUnit','ExpKalender'],
- cashier:['ModulBeranda','PosHariIni','PosVerifikasi','PosKasir','PosSerahTerima'],staff:['ModulBeranda','PosHariIni','PosVerifikasi','PosKasir','PosSerahTerima'],branch_head:['ModulBeranda','PosHariIni','PosVerifikasi','PosSerahTerima','MgmtSetuju']};
+ asset_manager:['ModulBeranda','AsetServis','AsetKalender','AsetUnit'],experience_manager:['ModulBeranda','OpsBeranda','OpsKerja','ExpKalender'],
+ cashier:['ModulBeranda','PosHariIni','PosKasir','PosSerahTerima'],staff:['ModulBeranda','PosHariIni','PosKasir','PosSerahTerima'],branch_head:['ModulBeranda','PosHariIni','PosSerahTerima','MgmtSetuju']};
 /* peran yang layarnya memang dibuat untuk HP (tetap menu bawah walau dibuka di layar lebar tanpa kolom menu) */
 var FIELDONLY={technician:1,cs:1,cs_experience:1,runner:1,driver:1,technician:1,qc:1};
 var FLABEL={ModulBeranda:'Beranda',KonfirmasiTransfer:'Transfer',MgmtDaftarHitam:'Daftar hitam',Runner:'Antar',PosAbsen:'Absen',PosQC:'Cek barang',SopirJeep:'Jeep',ExpJeep:'Jadwal jeep',Teknisi:'Teknisi',ExpHariIni:'Penginapan',ExpKalender:'Kalender',Housekeeping:'Kamar',AkunLapangan:'Akun',AgendaLapangan:'Agenda',PusatCS:'Beranda',PosVerifikasi:'Verifikasi',MgmtInbox:'Chat',MgmtKeluhan:'Keluhan',TiketCS:'Keluhan',AlatChat:'Chat',
- MgmtDashboard:'Laporan',MgmtSetuju:'Setujui',OpsBeranda:'Beranda',MgmtPusatAset:'Aset',MgmtServis:'Servis & QC',MgmtTim:'Tim',OpsKerja:'Kerja lapangan',OpsUnit:'Utilisasi',OpsQC:'Kualitas',PosHariIni:'Hari ini',PosKasir:'Kasir',PosSerahTerima:'Serah-terima',KeuDasbor:'Keuangan'};
-var FLABEL_R={cs:{PusatCS:'Pusat CS',OpsKalender:'Kalender',PosHariIni:'Jadwal'},cs_experience:{PusatCS:'Pusat CS',OpsKalender:'Kalender',PosHariIni:'Jadwal'},technician:{Teknisi:'Pekerjaan',TekBelanja:'Belanja part',TekAkun:'Akun'},owner:{OpsBeranda:'Operasional',PusatCS:'CS'},asset_manager:{AsetBeranda:'Hari ini',AsetKalender:'Kalender',AsetUnit:'Unit',AsetServis:'Servis',AsetLaporan:'Laporan'},experience_manager:{ExpJeep:'Jeep',ExpKalender:'Penginapan',OpsKerja:'Lapangan'}};
+ MgmtDashboard:'Laporan',MgmtSetuju:'Setujui',OpsBeranda:'Dashboard',MgmtPusatAset:'Aset',MgmtServis:'Servis & QC',MgmtTim:'Tim',OpsKerja:'Kerja lapangan',OpsUnit:'Utilisasi',OpsQC:'Kualitas',PosHariIni:'Hari ini',PosKasir:'Kasir',PosSerahTerima:'Serah-terima',KeuDasbor:'Keuangan'};
+var FLABEL_R={cs:{PusatCS:'Pusat CS',OpsKalender:'Kalender',PosHariIni:'Jadwal'},cs_experience:{PusatCS:'Pusat CS',OpsKalender:'Kalender',PosHariIni:'Jadwal'},technician:{Teknisi:'Pekerjaan',TekBelanja:'Belanja part',TekAkun:'Akun'},owner:{OpsBeranda:'Dashboard',PusatCS:'CS'},asset_manager:{AsetBeranda:'Hari ini',AsetKalender:'Kalender',AsetUnit:'Unit',AsetServis:'Servis',AsetLaporan:'Laporan'},experience_manager:{ExpJeep:'Jeep',ExpKalender:'Penginapan',OpsKerja:'Lapangan'}};
 /* tab bawah tetap menyala saat membuka halaman "saudara"-nya */
 var ALIAS={AsetGps:'AsetPengingat',GantiPenyewa:'PosHariIni',AsetPreventif:'AsetServis',AsetData:'AsetUnit',AsetTim:'AsetLaporan',AsetOpname:'AsetUnit',AsetRisiko:'AsetBeranda',MgmtServis:'AsetServis',PosUnit:'AsetUnit',MgmtAset:'AsetUnit',TekPart:'TekBelanja',TekMasuk:'Teknisi',TekKerja:'Teknisi',TekSelesai:'Teknisi',MgmtAsetDetail:'AsetUnit',MgmtKelola:'MgmtAset',PosQC:'AsetServis',PosAbsen:'AkunLapangan',Housekeeping:'ExpKalender',LaporanShift:'PusatCS'};
 /* halaman yang digabung dalam satu tab: tampilkan tombol pindah di atas */
@@ -296,7 +298,7 @@ function subTabs(role,allow){
 }
 function fieldNav(root,nav,role,allow,isPv){
   var items=menuItems(allow);
-  var pri=(FIELD[role]||[]).map(function(k){return items.filter(function(it){return it[0]===k;})[0];}).filter(Boolean).slice(0,5);
+  var pri=(FIELD[role]||[]).map(function(k){return items.filter(function(it){return it[0]===k;})[0];}).filter(Boolean).slice(0,4);
   var rest=items.filter(function(it){return pri.indexOf(it)<0&&!mHid(role,it[0])&&!(it[0]==='PosAbsen'&&pri.some(function(p){return p[0]==='AkunLapangan';}));});
   var priIds=pri.map(function(p){return p[0];});rest=rest.filter(function(it){return !SUBT.some(function(g){return g.some(function(x){return x[0]===it[0];})&&g.some(function(x){return x[0]!==it[0]&&priIds.indexOf(x[0])>-1;});});});
   if(role==='cs'||role==='cs_experience')rest=rest.map(function(it){return it[0]==='PosKasir'?[it[0],it[1],'Booking walk-in',it[3]]:it;});
