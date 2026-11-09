@@ -174,6 +174,7 @@ def load():
         p = prod.get(key)
         if not p:
             p = prod[key] = dict(it, city=c, branches=[], prices={}, d=None, h=None, j=None)
+        if it.get('u') and (not p.get('u') or it['u'] > p['u']): p['u'] = it['u']
         p['branches'].append(it['br'])
         p['prices'][it['br']] = (it.get('j'), it.get('h'), it.get('d'))
         for k in ('d', 'h', 'j'):
@@ -556,7 +557,8 @@ def banner(h1, lead, ctas, photo=None, collage=None, kicker='', badges=(), crumb
     if photo:
         pid, name, user, cap = photo
         ref = '?utm_source=rentalaja&utm_medium=referral'
-        bg = f'<img class="bg" src="{unsplash(pid)}" alt="{esc(cap if cap != "Ilustrasi" else h1)}" fetchpriority="high">'
+        srcset = ', '.join(f'{esc(unsplash(pid, w))} {w}w' for w in (640, 1000, 1600))
+        bg = f'<img class="bg" src="{unsplash(pid)}" srcset="{srcset}" sizes="(max-width: 1152px) 100vw, 1120px" alt="{esc(cap if cap != "Ilustrasi" else h1)}" fetchpriority="high">'
         cred = f'<div class="credit2">{esc(cap)} · Foto: <a href="https://unsplash.com/@{user}{ref}" rel="nofollow">{esc(name)}</a> / <a href="https://unsplash.com/{ref}" rel="nofollow">Unsplash</a></div>'
     if collage:
         col = '<div class="collage">' + ''.join(f'<div><img src="{esc(u)}" alt=""></div>' for u in collage[:3]) + '</div>'
@@ -740,16 +742,27 @@ def page_need(D, n):
 
 
 
+# Tanggal terakhir tampilan/teks halaman SEO diubah (naikkan saat template atau teks umum berubah).
+SITE_UPDATED = '2026-11-10'
+
+
 def sitemap(D):
-    today = datetime.date.today().isoformat()
-    urls = [('/', '1.0'), ('/sewa/', '0.9'), ('/link', '0.6'), ('/experience', '0.7'), ('/atvaja', '0.7')]
-    urls += [(f'/sewa/{c}.html', '0.9') for c in CITY]
-    urls += [(f'/sewa/{cat}-{c}.html', '0.8') for (c, cat) in D['pages']]
-    urls += [(f'/sewa/{n["slug"]}.html', '0.8') for n in NEEDS]
-    urls += [('/panduan/', '0.7')] + [(f'/panduan/{a["slug"]}', '0.7') for a in ARTICLES]
-    urls += [(f'/sewa/{p["pslug"]}.html', '0.7') for p in D['prod'].values()]
+    """lastmod = tanggal isi halaman benar-benar berubah: produk dari products.updated_at, kategori/kota dari produk
+    terbarunya, artikel dari tanggal terbit/ubah, semuanya minimal SITE_UPDATED (perubahan template)."""
+    def lm(*ds): return max([SITE_UPDATED] + [x for x in ds if x])
+    prods = list(D['prod'].values())
+    newest = lm(*[x.get('u') for x in prods])
+    city_u = {c: lm(*[x.get('u') for x in prods if x['city'] == c]) for c in CITY}
+    art_u = lm(*[a.get('updated') or a['date'] for a in ARTICLES])
+    urls = [('/', '1.0', newest), ('/sewa/', '0.9', newest), ('/link', '0.6', None), ('/experience', '0.7', None), ('/atvaja', '0.7', None)]
+    urls += [(f'/sewa/{c}.html', '0.9', city_u[c]) for c in CITY]
+    urls += [(f'/sewa/{cat}-{c}.html', '0.8', lm(*[x.get('u') for x in its])) for (c, cat), its in D['pages'].items()]
+    urls += [(f'/sewa/{n["slug"]}.html', '0.8', newest) for n in NEEDS]
+    urls += [('/panduan/', '0.7', art_u)] + [(f'/panduan/{a["slug"]}', '0.7', lm(a.get('updated') or a['date'])) for a in ARTICLES]
+    urls += [(f'/sewa/{p["pslug"]}.html', '0.7', lm(p.get('u'))) for p in prods]
     return '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + ''.join(
-        f'<url><loc>{BASE}{u}</loc><lastmod>{today}</lastmod><changefreq>daily</changefreq><priority>{pr}</priority></url>\n' for u, pr in urls) + '</urlset>\n'
+        f'<url><loc>{BASE}{u}</loc>' + (f'<lastmod>{d}</lastmod>' if d else '') + f'<priority>{pr}</priority></url>\n' for u, pr, d in urls) + '</urlset>\n'
+
 
 
 def render(p):
