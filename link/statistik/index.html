@@ -52,7 +52,7 @@ code{background:#EEF1F6;padding:1px 5px;border-radius:5px;font-size:12px}
 </head>
 <body>
 <div class="top"><div class="w" style="padding:14px 16px">
-  <div><h1>Statistik Link Bio</h1><small id="sub">demo.rentalaja.co.id/link</small></div>
+  <div><h1>Statistik Link Bio</h1><small id="sub">rentalaja.co.id/link</small></div>
   <div class="rng" id="rng"><button data-d="7">7 hari</button><button data-d="30" class="on">30 hari</button><button data-d="90">90 hari</button></div>
 </div></div>
 <div class="w" id="app"><div class="msg">Memuat…</div></div>
@@ -109,7 +109,7 @@ code{background:#EEF1F6;padding:1px 5px;border-radius:5px;font-size:12px}
   }
   function render(s) {
     var ctr = s.views ? Math.round(s.clicks / s.views * 100) : 0, conv = s.visitors ? (s.bookings / s.visitors * 100).toFixed(1) : '0';
-    document.getElementById('sub').textContent = 'demo.rentalaja.co.id/link · ' + s.from + ' s.d. ' + s.to;
+    document.getElementById('sub').textContent = 'rentalaja.co.id/link · ' + s.from + ' s.d. ' + s.to;
     app.innerHTML =
       '<div class="kpi">' +
       [['Kunjungan', num(s.views), ''], ['Pengunjung unik', num(s.visitors), ''], ['Klik tombol', num(s.clicks), num(s.clickers) + ' orang'], ['Rasio klik', ctr + '%', 'klik / kunjungan'],

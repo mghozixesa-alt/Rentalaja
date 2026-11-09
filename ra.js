@@ -685,7 +685,7 @@
   RA.KASIR_HOST = /^kasir\./i.test(location.hostname);
   RA.beforeShow = function (name) {
     var kind = RA.kindOf(name);
-    if (RA.KASIR_HOST && (kind === 'customer' || kind === 'partner')) { location.replace('https://demo.rentalaja.co.id' + location.pathname + location.search + location.hash); return new Promise(function () {}); }
+    if (RA.KASIR_HOST && (kind === 'customer' || kind === 'partner')) { location.replace('https://rentalaja.co.id' + location.pathname + location.search + location.hash); return new Promise(function () {}); }
     if (RA.KASIR_HOST && name !== 'Masuk' && name !== 'Mfa' && kind === 'public') {
       if (!session) return Promise.resolve('Masuk');
       return RA.staff().then(function (s) { return s ? RA.staffHome(s.role) : 'Masuk'; }, function () { return 'Masuk'; });
