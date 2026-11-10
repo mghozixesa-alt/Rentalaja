@@ -765,11 +765,34 @@ def sitemap(D):
 
 
 
+
+def meta_feed(D):
+    """Feed katalog Meta (CSV). id = <uuid produk>-<kota>, sama dengan content_ids yang dikirim Pixel (ga.js)."""
+    import csv, io
+    out = io.StringIO()
+    w = csv.writer(out)
+    w.writerow(['id', 'item_group_id', 'title', 'description', 'availability', 'condition', 'price', 'link', 'image_link', 'brand',
+                'product_type', 'custom_label_0', 'custom_label_1'])
+    for p in D['prod'].values():
+        img = img_url(p.get('ph'))
+        price = p.get('d') or p.get('h') or p.get('j')
+        if not img or not price: continue
+        unit = 'hari' if p.get('d') else ('½ hari' if p.get('h') else 'jam')
+        city = CITY[p['city']]
+        label = CAT[p['cat']][0]
+        desc = (p.get('short') or '').strip()
+        desc = (desc + ' ' if desc else '') + f'Sewa {p["name"]} di {city} mulai {rp(price)}/{unit}. Booking online, DP 20%, bisa diantar.'
+        w.writerow([f'{p["id"]}-{p["city"]}', p['id'], f'Sewa {p["name"]} {city}'[:150], desc[:5000],
+                    'in stock' if (p.get('units') or 0) > 0 else 'out of stock', 'used', f'{int(price)} IDR',
+                    f'{BASE}/sewa/{p["pslug"]}.html', img, 'Rentalaja', f'Sewa > {label}', city, label])
+    return out.getvalue()
+
 def render(p):
     """Kembalikan (status, content-type, body) untuk path relatif p (tanpa /sewa/)."""
     D = load()
     p = (p or '').strip('/')
     if p == 'sitemap.xml': return 200, 'application/xml; charset=utf-8', sitemap(D)
+    if p == 'feed/meta.csv': return 200, 'text/csv; charset=utf-8', meta_feed(D)
     if p in ('', 'index.html'): return 200, 'text/html; charset=utf-8', page_index(D)
     if p == 'panduan' or p.startswith('panduan/'):
         s = p[8:].strip('/')

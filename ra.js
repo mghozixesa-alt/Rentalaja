@@ -787,7 +787,9 @@
     if (c.aff_code) return { aff_code: c.aff_code, aff_src: 'kode' };
     var r = RA.refCode(); return r ? { aff_code: r, aff_src: 'link' } : {};
   }
-  RA.affParams = function () { var o = affBase(), u = RA.utm(); if (u) o.utm = u; return o; };
+  /* id browser Meta (_fbp/_fbc, bukan data pribadi) ikut disimpan di bookings.utm supaya Conversions API bisa mencocokkan pembayaran dengan klik iklan */
+  function fbIds() { var o = {}; try { document.cookie.split(/;\s*/).forEach(function (c) { var m = /^_(fbp|fbc)=(.{5,200})$/.exec(c); if (m) o[m[1]] = decodeURIComponent(m[2]); }); } catch (e) {} return o; }
+  RA.affParams = function () { var o = affBase(), u = RA.utm(), f = fbIds(); if (u || f.fbp || f.fbc) o.utm = Object.assign({}, u || {}, f); return o; };
   RA.affAttribute = function () {
     var r = RA.refCode(); if (!r || !session || LS.get('ra.ref_saved') === r + '|' + LS.get('ra.ref_at')) return;
     RA.rpc('mitra_attribute', { p_code: r }).then(function (x) { if (x && !x.error) LS.set('ra.ref_saved', r + '|' + LS.get('ra.ref_at')); }).catch(function () {});

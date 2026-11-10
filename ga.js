@@ -29,6 +29,32 @@
   }
 
   var KEEP = /^(utm_[a-z]+|gclid|fbclid|src)$/;
+  // id produk di katalog Meta = <uuid produk>-<kota> (lihat /feed/meta.csv)
+  var BR_CITY = { 'GRT': 'garut', 'WNR': 'garut', 'BDG-HUB': 'bandung', 'BDG-JKL': 'bandung' }, city = '';
+  function ctxCart() { try { return ((JSON.parse(localStorage.getItem('ra.ctx') || '{}') || {}).cart || []).filter(function (x) { return x && x.product_id; }); } catch (e) { return []; } }
+  function cityOf(code) { return BR_CITY[code] || ''; }
+  function cid(pid) { return city ? pid + '-' + city : pid; }
+  function withCity(fn) {
+    var t = 0, go = function () {
+      if (window.RA && RA.branches) { RA.branches().then(function (bs) { var id = (RA.ctx ? RA.ctx() : {}).branch_id, b = (bs || []).filter(function (x) { return x.id === id; })[0]; city = b ? cityOf(b.code) : city; fn(); }, function () { fn(); }); }
+      else if (++t < 40) setTimeout(go, 250); else fn();
+    }; go();
+  }
+  // Tambah ke keranjang: dibungkus setelah aplikasi siap
+  (function hook(n) {
+    if (!window.RA || !RA.addToCart) { if (n < 80) setTimeout(function () { hook(n + 1); }, 250); return; }
+    if (RA.addToCart._fb) return;
+    var orig = RA.addToCart;
+    RA.addToCart = function (item) {
+      var r = orig.apply(this, arguments);
+      try { if (item && item.product_id) withCity(function () {
+        fb('AddToCart', { content_ids: [cid(item.product_id)], content_type: 'product', num_items: item.quantity || 1 });
+        gtag('event', 'add_to_cart', { currency: 'IDR', items: [{ item_id: cid(item.product_id), quantity: item.quantity || 1 }] });
+      }); } catch (e) {}
+      return r;
+    };
+    RA.addToCart._fb = true;
+  })(0);
   function clean() {
     var q = new URLSearchParams(location.search), out = new URLSearchParams();
     q.forEach(function (v, k) { if (KEEP.test(k)) out.set(k, v); });
@@ -54,7 +80,12 @@
     gtag('event', 'page_view', { page_location: loc, page_title: document.title });
     fb('PageView');
     var pm = location.hash.match(/^#\/Produk\?(.*)/);
-    if (pm) fb('ViewContent', { content_ids: [new URLSearchParams(pm[1]).get('id') || ''], content_type: 'product' });
+    if (pm) { var pid = new URLSearchParams(pm[1]).get('id') || ''; if (pid) withCity(function () { fb('ViewContent', { content_ids: [cid(pid)], content_type: 'product' }); }); }
+    if (/^#\/Checkout(\?|$)/.test(location.hash)) withCity(function () {
+      var c = ctxCart(); if (!c.length) return;
+      fb('InitiateCheckout', { content_ids: c.map(function (x) { return cid(x.product_id); }), content_type: 'product', num_items: c.reduce(function (n, x) { return n + (x.quantity || 1); }, 0) });
+      gtag('event', 'begin_checkout', { currency: 'IDR', items: c.map(function (x) { return { item_id: cid(x.product_id), quantity: x.quantity || 1 }; }) });
+    });
   }
   pv();
   window.addEventListener('hashchange', function () { setTimeout(pv, 50); });
@@ -86,7 +117,7 @@
     if (!m || !window.RA || !RA.from) return;
     var id = new URLSearchParams(m[2]).get('id');
     if (!id) return;
-    RA.from('bookings').select('code,status,total,paid_amount,dp_amount,created_at,booking_items(quantity,line_total,products(name,categories(slug)))')
+    RA.from('bookings').select('code,status,total,paid_amount,dp_amount,created_at,branches(code),booking_items(product_id,quantity,line_total,products(name,categories(slug)))')
       .eq('id', id).limit(1).then(function (r) {
         var b = r && (r.data || r)[0];
         if (!b || !b.code) return;
@@ -94,16 +125,17 @@
           var pr = it.products || {};
           return { item_name: pr.name || '', item_category: (pr.categories || {}).slug || '', quantity: it.quantity || 1, price: it.quantity ? Math.round((it.line_total || 0) / it.quantity) : 0 };
         });
+        var bc = cityOf((b.branches || {}).code), ids = (b.booking_items || []).map(function (it) { return bc ? it.product_id + '-' + bc : it.product_id; });
         var fresh = Date.now() - new Date(b.created_at).getTime() < 60 * 60 * 1000;
         if (fresh && !store('ga_bk_' + b.code)) {
           store('ga_bk_' + b.code, '1');
           gtag('event', 'booking_dibuat', { transaction_id: b.code, value: Number(b.total) || 0, currency: 'IDR', items: items });
-          fb('InitiateCheckout', { value: Number(b.total) || 0, currency: 'IDR', num_items: items.length }, 'bk_' + b.code);
+          fb('AddPaymentInfo', { value: Number(b.total) || 0, currency: 'IDR', content_ids: ids, content_type: 'product', num_items: items.length }, 'bk_' + b.code);
         }
         if (Number(b.paid_amount) > 0 && !store('ga_pd_' + b.code) && b.status !== 'cancelled' && b.status !== 'expired') {
           store('ga_pd_' + b.code, '1');
           gtag('event', 'purchase', { transaction_id: b.code, value: Number(b.paid_amount) || 0, currency: 'IDR', booking_total: Number(b.total) || 0, items: items });
-          fb('Purchase', { value: Number(b.paid_amount) || 0, currency: 'IDR', num_items: items.length }, 'pd_' + b.code);
+          fb('Purchase', { value: Number(b.paid_amount) || 0, currency: 'IDR', content_ids: ids, content_type: 'product', num_items: items.length }, 'pd_' + b.code);
           clearInterval(timer); timer = null;
         }
       }, function () {});
