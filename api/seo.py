@@ -781,7 +781,7 @@ def meta_feed(D):
         city = CITY[p['city']]
         label = CAT[p['cat']][0]
         desc = (p.get('short') or '').strip()
-        desc = (desc + ' ' if desc else '') + f'Sewa {p["name"]} di {city} mulai {rp(price)}/{unit}. Booking online, DP 20%, bisa diantar.'
+        desc = (desc.rstrip('.') + '. ' if desc else '') + f'Sewa {p["name"]} di {city} mulai {rp(price)}/{unit}. Booking online, DP 20%, bisa diantar.'
         w.writerow([f'{p["id"]}-{p["city"]}', p['id'], f'Sewa {p["name"]} {city}'[:150], desc[:5000],
                     'in stock' if (p.get('units') or 0) > 0 else 'out of stock', 'used', f'{int(price)} IDR',
                     f'{BASE}/sewa/{p["pslug"]}.html', img, 'Rentalaja', f'Sewa > {label}', city, label])
