@@ -328,7 +328,7 @@
   /* staf & hak akses */
   /* data staf disimpan di HP (12 jam) supaya layar langsung terbuka; tetap dicek ulang di belakang.
      Hanya untuk tampilan & menu — izin data tetap dijaga server (RLS). */
-  var staffKey = function (uid) { return 'ra.c.staff2.' + uid + '.' + (LS.get('ra.viewAs') || '') + '.' + ((LS.get('ra.pk') || {}).br || []).join(','); };
+  var staffKey = function (uid) { return 'ra.c.staff2.' + uid + '.' + (LS.get('ra.viewAs') || '') + '.' + (LS.get('ra.panel') || '') + '.' + ((LS.get('ra.pk') || {}).br || []).join(','); };
   var staffSig = function (s) { return s ? [s.role, s.realRole || '', Object.keys(s.perms || {}).sort().join(','), (s.branches || []).map(function (b) { return b.id; }).join(',')].join('|') : ''; };
   RA.staff = function (force) {
     if (!session) return Promise.resolve(null);
@@ -360,6 +360,9 @@
       if (s.role === 'chief_of_staff') { s.chief = true; s.role = 'owner'; s.roleLabel = 'Kepala Staf'; }
       var va = s.role === 'owner' ? LS.get('ra.viewAs') : null;
       if (va && RA.VIEW_ROLES[va]) { s.realRole = 'owner'; s.role = va; permRole = va; }
+      /* peran rangkap (staff.extra_roles): mis. runner + teknisi, kasir + teknisi — pilih panel kerja */
+      var ex = (s.extra_roles || []).filter(function (x) { return x && x !== s.role; });
+      if (ex.length && s.role !== 'owner' && !s.realRole) { s.baseRole = s.role; s.panels = [s.role].concat(ex); var pn = LS.get('ra.panel'); if (pn && ex.indexOf(pn) > -1) { s.role = pn; permRole = pn; } }
       return Promise.all([
         RA.from('role_permissions').select('perm,limited').eq('role', permRole),
         s.all_branches ? RA.from('branches').select('id,code,name,kind,city,stock_branch_id,only_categories').order('sort') :
