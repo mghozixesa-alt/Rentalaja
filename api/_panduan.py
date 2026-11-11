@@ -384,6 +384,7 @@ dict(
 <li><b>Pas di 12 jam.</b> Kalau ambil jam 08.00, kembali sebelum 20.00 masih tarif ½ hari.</li>
 <li><b>Lewat sedikit dari 1 hari?</b> Misalnya 26 jam: sisa 2 jam hanya dikenai [[aturan:half_day_extra_percent]]% tarif harian, bukan 2 hari penuh.</li>
 <li><b>Pilih jam kembali yang realistis.</b> Ada toleransi telat [[aturan:late_grace_minutes]]; lewat dari itu dikenai denda [[aturan:late_fee_percent_per_hour]]% dari harga harian per jam. Kalau rencana berubah, perpanjang dari aplikasi sebelum jam kembali.</li>
+<li><b>Telat mengambil?</b> Telat sampai [[aturan:pickup_late_shift_max_minutes]], jam kembali ikut dimundurkan sebesar keterlambatannya (selama unit tidak dipakai booking berikutnya). Unit ditahan sampai [[aturan:pickup_wait_minutes]] dari jadwal ambil; lewat dari itu tanpa kabar, booking dianggap tidak datang.</li>
 </ul>
 
 <h2>DP, pembatalan, dan ubah jadwal</h2>

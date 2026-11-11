@@ -105,12 +105,15 @@ def faq(D):
     try: g = int(float(D.get('late_grace') or 0))
     except (TypeError, ValueError): g = 0
     tol = (f'{g // 60} jam' if g % 60 == 0 else f'{g} menit') if g > 0 else ''
+    R = D.get('rules') or {}
+    sh, wt = rule(D, 'pickup_late_shift_max_minutes') if R.get('pickup_late_shift_max_minutes') is not None else '', rule(D, 'pickup_wait_minutes') if R.get('pickup_wait_minutes') is not None else ''
     return [
         ('Apa syarat sewa di Rentalaja?', 'Unggah foto KTP dan KK sekali saja di aplikasi; dokumen pendukung lain (SIM, NPWP, STNK) opsional. Untuk motor dan mobil wajib KTP, SIM, dan KK. Setelah lolos verifikasi, booking bisa dibayar.'),
         ('Berapa DP yang harus dibayar?', 'DP 20% dari total sewa setelah dokumen lolos verifikasi. Sisanya dibayar saat ambil barang di cabang.'),
         ('Bisa sewa 2 jam atau setengah hari?', 'Bisa untuk barang yang punya tarifnya. Kamera, lensa, dan proyektor ada tarif 2 jam; iPhone, motor, PlayStation, dan sebagian kamera ada tarif ½ hari. Tarifnya tertera di tiap barang.'),
         ('Ada promo?', pr + ' Potongan dihitung otomatis saat booking.'),
         ('Bagaimana kalau telat mengembalikan?', (f'Ada toleransi {tol} tanpa denda. ' if tol else '') + ((f'Lewat dari itu, denda {late}% dari harga harian per jam.' if tol else f'Ada denda {late}% dari harga harian per jam keterlambatan.') if late else 'Ada denda per jam keterlambatan.') + ' Perpanjang lewat aplikasi atau kabari cabang lewat WhatsApp sebelum jam kembali.'),
+        ('Bagaimana kalau telat mengambil?', (f'Telat sampai {sh}, jam kembali ikut kami mundurkan sebesar keterlambatannya (selama unit tidak dipakai booking berikutnya). ' if sh else 'Jam kembali tetap sesuai jadwal. ') + (f'Unit ditahan sampai {wt} dari jadwal ambil; lewat dari itu tanpa kabar, booking dianggap tidak datang dan DP jadi saldo yang bisa dipakai booking lagi dalam 30 hari.' if wt else '') + ' Kalau bakal telat, kabari cabang lewat WhatsApp.'),
         ('Bisa diantar?', 'Bisa, dengan ongkir sesuai jarak. Pilih "Diantar" saat booking, ongkir dikonfirmasi cabang.'),
     ]
 
@@ -405,7 +408,7 @@ DOCS = {'ktp': 'KTP', 'kk': 'Kartu Keluarga', 'sim': 'SIM', 'npwp': 'NPWP', 'stn
 def rule(D, key):
     v = D['rules'].get(key)
     if v is None: return ''
-    if key == 'late_grace_minutes':
+    if key in ('late_grace_minutes', 'pickup_late_shift_max_minutes', 'pickup_wait_minutes'):
         try: g = int(float(v))
         except (TypeError, ValueError): return ''
         return (f'{g // 60} jam' if g % 60 == 0 else f'{g} menit') if g > 0 else ''
