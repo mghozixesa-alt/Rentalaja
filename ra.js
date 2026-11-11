@@ -358,8 +358,22 @@
     if (!session) return Promise.resolve(null);
     if (RA._cust && !force) return Promise.resolve(RA._cust);
     return RA.from('customers').select('*').eq('user_id', session.user ? session.user.id : (RA.me() || {}).id).maybeSingle()
-      .then(function (r) { RA._cust = r.data || null; return RA._cust; });
+      .then(function (r) { RA._cust = r.data || null; askEmailOnce(RA._cust); return RA._cust; });
   };
+  /* WhatsApp otomatis dimatikan: pelanggan tanpa email asli diminta mengisi email (sekali per sesi, bisa dilewati) */
+  var badMail = function (e) { return !e || !/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(String(e).trim()) || /@login\.rentalaja\.co\.id$|@(gmail\.(con|co|cm|om)|gmai\.com|gamil\.com|gmial\.com)$/i.test(String(e).trim()); };
+  function askEmailOnce(c) {
+    try {
+      if (!c || !c.name || !badMail(c.email)) return;
+      var u = LS.get('ra.user') || {}; if (u.staff || u.partner) return;
+      if (sessionStorage.getItem('ra.askedEmail')) return; sessionStorage.setItem('ra.askedEmail', '1');
+    } catch (e) { return; }
+    setTimeout(function () {
+      RA.askEmail('Mulai sekarang kode masuk, link bayar, dan pengingat sewa dikirim lewat email, bukan WhatsApp. Isi email aktif kamu supaya kabar booking tidak terlewat.')
+        .then(function (em) { return RA.call('set_my_email', { p_email: em }).then(function () { if (RA._cust) RA._cust.email = em; if (RA.toast) RA.toast('Email tersimpan: ' + em); }); })
+        .catch(function () { /* dilewati */ });
+    }, 1200);
+  }
   RA.ensureCustomer = function (name, city) { return RA.call('ensure_customer', { p_name: name || null, p_city: city || null, p_ref: LS.get('ra.ref') || null }).then(function (c) { RA._cust = c; return c; }); };
 
   /* staf & hak akses */
