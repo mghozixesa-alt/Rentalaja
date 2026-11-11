@@ -207,7 +207,7 @@ var SNAV=[
  ['Aset & servis',[['AsetBeranda','home','Hari ini (aset)'],['AsetKalender','cal','Kalender unit'],['AsetServis','tool','Papan servis'],['PosQC','check','Cek kondisi (QC)'],['AsetPreventif','calcheck','Perawatan preventif'],['AsetPengingat','alert','Pengingat kendaraan & GPS'],['AsetLaporan','chart','Laporan aset'],['AsetData','check','Lengkapi data unit'],['AsetRisiko','alert','Kontrol aset (semua)'],['AsetUnit','box','Unit aset (pusat)'],['AsetOpname','check','Stok opname'],['AsetTim','users','Tim teknisi & QC'],['MgmtAset','box','Daftar unit & riwayat'],['MgmtPusatAset','folder','Ringkasan aset'],['MgmtServis','tool','Servis'],['Teknisi','kit','Teknisi'],['TekBelanja','cart','Belanja part'],['TekAkun','user','Akun teknisi']]],
  ['Manajemen',[['MgmtSetuju','approve','Persetujuan'],['MgmtLini','chart','Ringkasan per lini']]],
  ['Pemasaran',[['MgmtSumber','chart','Pemasaran'],['MgmtKonten','folder','Konten web'],['MgmtKorporat','store','Korporat & B2B']]],
- ['Pengaturan',[['MgmtPengguna','users','Staf & akses'],['MgmtCabang','store','Cabang'],['MgmtAturan','check','Aturan bisnis'],['MgmtLaporanWa','chat','Laporan WhatsApp'],['MgmtAudit','folder','Log audit'],['MgmtDataUji','trash','Hapus data uji']]],
+ ['Pengaturan',[['MgmtPengguna','users','Staf & akses'],['MgmtCabang','store','Cabang'],['MgmtAturan','check','Aturan bisnis'],['MgmtLaporanWa','chat','Laporan otomatis'],['MgmtAudit','folder','Log audit'],['MgmtDataUji','trash','Hapus data uji']]],
  ['Pelanggan',[['MgmtPelanggan','user','Data pelanggan'],['MgmtSegmen','chat','Broadcast WhatsApp'],['MgmtInbox','chat','Inbox WhatsApp'],['TiketCS','approve','Tiket keluhan'],['AlatChat','chat','Template & link sewa'],['MgmtPenawaran','tag','Permintaan perjalanan'],['MgmtTindakLanjut','users','Tindak lanjut'],['MgmtDaftarHitam','shieldx','Daftar hitam']]],
  ['Saya',[['AgendaLapangan','calcheck','Agenda'],['AkunLapangan','user','Akun saya'],['TiketCS','approve','Tiket keluhan']]]
 ];
@@ -525,7 +525,20 @@ function getSource(name){
 
 /* ---------- load a screen ---------- */
 function parseProps(json){var p={};try{var o=JSON.parse(json||'{}');Object.keys(o).forEach(function(k){if(k.charAt(0)!=='$'&&o[k]&&'default' in o[k])p[k]=o[k]['default'];});}catch(e){}return p;}
+/* WhatsApp otomatis dimatikan (settings.wa_disabled): kalimat 'dikirim otomatis lewat WhatsApp' disesuaikan jadi email.
+   Tombol bagikan manual & kolom nomor WA tidak diubah. Kembali ke teks asli bila wa_disabled = false. */
+var WATXT=[['kami kabari lewat WhatsApp','kami kabari lewat email'],['Laporan WhatsApp','Laporan otomatis'],['tamu dapat WhatsApp otomatis','tamu dapat email otomatis'],
+ ['Kabar tetap dikirim lewat WhatsApp','Kabar tetap dikirim lewat email'],['Dikirim otomatis dari nomor WhatsApp Business Rentalaja.','Dikirim otomatis lewat email Rentalaja.'],
+ ['dikirim lewat WhatsApp','dikirim lewat email'],['dikabari lewat WhatsApp','dikabari lewat email'],['Experience · WhatsApp otomatis','Experience · Pesan otomatis'],
+ ['Link dikirim lewat WA','Link dikirim lewat email'],['Notifikasi otomatis · WhatsApp Business','Notifikasi otomatis · email'],['dapat notifikasi WhatsApp','dapat notifikasi email'],
+ ['dikabari lewat WA','dikabari lewat email'],['dikabari otomatis lewat WA','dikabari otomatis lewat email'],['Pengingat dikirim dari nomor WA resmi Rentalaja (server).','Pengingat dikirim otomatis lewat email (server).'],
+ ['Selama WhatsApp belum tersambung, kode masuk tidak terkirim otomatis.','Kode masuk dikirim lewat email. Staf yang belum punya email tidak menerima kode otomatis.'],
+ ['dikirim otomatis ke WhatsApp','dikirim otomatis lewat email'],['terkirim otomatis ke WhatsApp masing-masing staf','terkirim otomatis ke email masing-masing staf'],
+ ['otomatis dapat WhatsApp','otomatis dapat email'],['diberi tahu lewat WhatsApp','diberi tahu lewat email'],
+ ['WhatsApp belum tersambung, jadi kodenya ditampilkan di sini','kodenya ditampilkan di sini'],['WhatsApp Rentalaja belum tersambung, jadi kode tidak terkirim.','Kode tidak terkirim.']];
+function waFix(src){try{if(RA.setting('wa_disabled')===false)return src;}catch(e){}for(var i=0;i<WATXT.length;i++)src=src.split(WATXT[i][0]).join(WATXT[i][1]);return src;}
 function mount(name,src){
+  src=waFix(src);
   if(inst&&inst.componentWillUnmount){try{inst.componentWillUnmount();}catch(e){}}
   inst=null;
   src=src.replace(/<sc-for\b/g,'<template data-scfor').replace(/<\/sc-for>/g,'</template>').replace(/<sc-if\b/g,'<template data-scif').replace(/<\/sc-if>/g,'</template>');
