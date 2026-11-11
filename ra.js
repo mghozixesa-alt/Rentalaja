@@ -265,9 +265,46 @@
       return d;
     });
   };
-  RA.requestOtp = function (phone, purpose) { return RA.fn('auth-otp', { action: 'request', phone: phone, purpose: purpose || 'login' }); };
+  /* kode masuk lewat email (WhatsApp otomatis dimatikan): server membalas need_email bila nomor belum punya email */
+  RA.askEmail = function (msg) {
+    return new Promise(function (ok, no) {
+      var w = document.createElement('div');
+      w.setAttribute('role', 'dialog'); w.setAttribute('aria-modal', 'true'); w.setAttribute('aria-label', 'Email untuk kode masuk');
+      w.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(15,23,42,.45);display:flex;align-items:center;justify-content:center;padding:16px;font-family:"Plus Jakarta Sans",system-ui,sans-serif';
+      w.innerHTML = '<form style="background:#fff;border-radius:16px;max-width:380px;width:100%;padding:20px;box-sizing:border-box;color:#1F2B4D">'
+        + '<div style="font-size:18px;font-weight:800;margin-bottom:6px">Kode dikirim lewat email</div>'
+        + '<div style="font-size:14px;line-height:1.5;color:#4A5468;margin-bottom:12px"></div>'
+        + '<input type="email" inputmode="email" autocomplete="email" placeholder="nama@gmail.com" required style="width:100%;box-sizing:border-box;height:46px;border:1.5px solid #D5D9E0;border-radius:10px;padding:0 12px;font-size:16px">'
+        + '<div data-e style="font-size:13px;color:#A12A1F;min-height:18px;margin-top:6px"></div>'
+        + '<div style="display:flex;gap:8px;margin-top:8px"><button type="button" data-x style="flex:1;height:44px;border-radius:10px;border:1.5px solid #D5D9E0;background:#fff;font:700 14px inherit;color:#1F2B4D">Batal</button>'
+        + '<button type="submit" style="flex:2;height:44px;border-radius:10px;border:0;background:#1F2B4D;color:#fff;font:800 14px inherit">Kirim kode</button></div></form>';
+      w.querySelector('form > div:nth-child(2)').textContent = msg || 'Nomor ini belum punya email. Isi email aktif, kode masuk akan dikirim ke sana. Email ini juga dipakai untuk kabar booking.';
+      var inp = w.querySelector('input'), err = w.querySelector('[data-e]');
+      var typo = /@(gmail\.(con|co|cm|om|comm|cmo)|gmai\.com|gmial\.com|gamil\.com|gmal\.com|gnail\.com|gmil\.com|yahoo\.con|yaho\.com)$/i;
+      function close() { if (w.parentNode) w.parentNode.removeChild(w); }
+      w.querySelector('[data-x]').onclick = function () { close(); no(new Error('Kode masuk butuh email.')); };
+      w.querySelector('form').onsubmit = function (e) {
+        e.preventDefault(); var v = String(inp.value || '').trim().toLowerCase();
+        if (!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(v)) { err.textContent = 'Format email belum benar.'; return; }
+        if (typo.test(v)) { err.textContent = 'Sepertinya salah ketik. Maksudnya @' + (/yah/.test(v) ? 'yahoo.com' : 'gmail.com') + '?'; return; }
+        close(); ok(v);
+      };
+      document.body.appendChild(w); setTimeout(function () { inp.focus(); }, 30);
+    });
+  };
+  RA.requestOtp = function (phone, purpose, email) {
+    var body = { action: 'request', phone: phone, purpose: purpose || 'login' }; if (email) body.email = email;
+    return headers({ 'Content-Type': 'application/json' }).then(function (h) {
+      return fetch(C.url + '/functions/v1/auth-otp', { method: 'POST', headers: h, body: JSON.stringify(body) });
+    }).then(function (r) { return r.json().catch(function () { return {}; }).then(function (d) {
+      if (d && d.need_email) return RA.askEmail(d.error).then(function (em) { RA._otpEmail = em; return RA.requestOtp(phone, purpose, em); });
+      if (!r.ok || d.error) throw new Error(friendly(d.error || d.message || r.statusText));
+      if (d.via === 'email' && d.sent_to && RA.toast) RA.toast('Kode dikirim ke email ' + d.sent_to + '. Cek juga folder Spam/Promosi.');
+      return d;
+    }); });
+  };
   RA.verifyOtp = function (phone, code, purpose) {
-    return RA.fn('auth-otp', { action: 'verify', phone: phone, code: code, purpose: purpose || 'login' }).then(function (d) {
+    return RA.fn('auth-otp', { action: 'verify', phone: phone, code: code, purpose: purpose || 'login', email: RA._otpEmail || undefined }).then(function (d) {
       if (!d.session) return d;
       setSession(d.session); LS.set('ra.user', d.user); RA._me = d.user; RA._perms = null; RA._staff = null; RA._cust = null;
       return RA.rpc('claim_my_access', {}).then(function (c) { if (c.data) d.access = c.data; return d; });
