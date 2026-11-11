@@ -191,7 +191,7 @@ def load():
         for cat in ORDER:
             items = [p for p in prod.values() if p['city'] == c and p['cat'] == cat]
             if items: pages[(c, cat)] = sorted(items, key=lambda x: (x['d'] or 0, x['name']))
-    data = dict(br=br, prod=prod, pages=pages, at=raw.get('at'), promos=raw.get('promos'), late_pct=raw.get('late_pct'),
+    data = dict(br=br, prod=prod, pages=pages, at=raw.get('at'), promos=raw.get('promos'), late_pct=raw.get('late_pct'), late_grace=raw.get('late_grace'),
                 zones=raw.get('zones') or [], rules=raw.get('rules') or {})
     _cache.update(at=time.time(), data=data)
     return data
