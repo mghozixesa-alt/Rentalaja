@@ -292,12 +292,38 @@
       document.body.appendChild(w); setTimeout(function () { inp.focus(); }, 30);
     });
   };
+  /* masuk mulai dari email: email belum terdaftar -> akun baru, minta nomor HP sekali (untuk kabar booking & serah terima) */
+  RA.askPhone = function (msg) {
+    return new Promise(function (ok, no) {
+      var w = document.createElement('div');
+      w.setAttribute('role', 'dialog'); w.setAttribute('aria-modal', 'true'); w.setAttribute('aria-label', 'Nomor HP akun baru');
+      w.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(15,23,42,.45);display:flex;align-items:center;justify-content:center;padding:16px;font-family:"Plus Jakarta Sans",system-ui,sans-serif';
+      w.innerHTML = '<form style="background:#fff;border-radius:16px;max-width:380px;width:100%;padding:20px;box-sizing:border-box;color:#1F2B4D">'
+        + '<div style="font-size:18px;font-weight:800;margin-bottom:6px">Buat akun baru</div>'
+        + '<div style="font-size:14px;line-height:1.5;color:#4A5468;margin-bottom:12px"></div>'
+        + '<input type="tel" inputmode="tel" autocomplete="tel" placeholder="0812 xxxx xxxx" required style="width:100%;box-sizing:border-box;height:46px;border:1.5px solid #D5D9E0;border-radius:10px;padding:0 12px;font-size:16px">'
+        + '<div data-e style="font-size:13px;color:#A12A1F;min-height:18px;margin-top:6px"></div>'
+        + '<div style="display:flex;gap:8px;margin-top:8px"><button type="button" data-x style="flex:1;height:44px;border-radius:10px;border:1.5px solid #D5D9E0;background:#fff;font:700 14px inherit;color:#1F2B4D">Batal</button>'
+        + '<button type="submit" style="flex:2;height:44px;border-radius:10px;border:0;background:#1F2B4D;color:#fff;font:800 14px inherit">Kirim kode ke email</button></div></form>';
+      w.querySelector('form > div:nth-child(2)').textContent = (msg || 'Email ini belum terdaftar.') + ' Nomor HP dipakai untuk kabar booking dan dihubungi cabang. Kodenya tetap dikirim ke email.';
+      var inp = w.querySelector('input'), err = w.querySelector('[data-e]');
+      function close() { if (w.parentNode) w.parentNode.removeChild(w); }
+      w.querySelector('[data-x]').onclick = function () { close(); no(new Error('Akun baru butuh nomor HP. Atau masuk dengan Google.')); };
+      w.querySelector('form').onsubmit = function (e) {
+        e.preventDefault(); var p = RA.normPhone(inp.value);
+        if (!p) { err.textContent = 'Nomor HP belum benar. Contoh: 0812 3456 7890'; return; }
+        close(); ok(p);
+      };
+      document.body.appendChild(w); setTimeout(function () { inp.focus(); }, 30);
+    });
+  };
   RA.requestOtp = function (phone, purpose, email) {
-    var body = { action: 'request', phone: phone, purpose: purpose || 'login' }; if (email) body.email = email;
+    var body = { action: 'request', phone: phone || undefined, purpose: purpose || 'login' }; if (email) { body.email = email; RA._otpEmail = email; }
     return headers({ 'Content-Type': 'application/json' }).then(function (h) {
       return fetch(C.url + '/functions/v1/auth-otp', { method: 'POST', headers: h, body: JSON.stringify(body) });
     }).then(function (r) { return r.json().catch(function () { return {}; }).then(function (d) {
       if (d && d.need_email) return RA.askEmail(d.error).then(function (em) { RA._otpEmail = em; return RA.requestOtp(phone, purpose, em); });
+      if (d && d.need_phone) return RA.askPhone(d.error).then(function (p) { return RA.requestOtp(p, purpose, email); });
       if (!r.ok || d.error) throw new Error(friendly(d.error || d.message || r.statusText));
       if (d.via === 'email' && d.sent_to && RA.toast) RA.toast('Kode dikirim ke email ' + d.sent_to + '. Cek juga folder Spam/Promosi.');
       return d;
