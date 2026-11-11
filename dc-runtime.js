@@ -224,8 +224,8 @@ MHIDE.owner={OpsUnit:1,OpsQC:1,AsetPendapatan:1,MgmtLini:1,Housekeeping:1,MgmtIn
 function mHid(role,n){return !!(MHIDE[role]&&MHIDE[role][n]);}
 function mergeAllow(list){var o={};list.forEach(function(m){for(var k in m){var v=m[k];if(o[k]===1)continue;if(v===1){o[k]=1;continue;}o[k]=(o[k]||[]).concat(v.filter(function(x){return (o[k]||[]).indexOf(x)<0;}));}});return o;}
 var SROLE={
- cashier:{'Harian':1,'Lapangan':1,'Barang':['PosUnit','AsetTandai'],'Aset & servis':['PosQC'],'Pelanggan':['MgmtDaftarHitam'],'Saya':['TiketCS']}, cs:CSM, cs_experience:CSM, staff:{'Harian':1,'Lapangan':1,'Barang':['PosUnit','AsetTandai'],'Pelanggan':['MgmtDaftarHitam'],'Aset & servis':['PosQC','Teknisi','TekBelanja','TekAkun'],'Saya':['TiketCS']},
- branch_head:{'Saya':['TiketCS'],'Harian':1,'Lapangan':1,'Barang':['PosUnit','AsetTandai'],'Manajemen':['MgmtSetuju'],'Pelanggan':['MgmtDaftarHitam']},
+ cashier:{'Harian':1,'Lapangan':1,'Operasional':['OpsKalender'],'Barang':['PosUnit','AsetTandai'],'Aset & servis':['PosQC'],'Pelanggan':['MgmtDaftarHitam'],'Saya':['TiketCS']}, cs:CSM, cs_experience:CSM, staff:{'Harian':1,'Lapangan':1,'Operasional':['OpsKalender'],'Barang':['PosUnit','AsetTandai'],'Pelanggan':['MgmtDaftarHitam'],'Aset & servis':['PosQC','Teknisi','TekBelanja','TekAkun'],'Saya':['TiketCS']},
+ branch_head:{'Saya':['TiketCS'],'Harian':1,'Operasional':['OpsKalender'],'Lapangan':1,'Barang':['PosUnit','AsetTandai'],'Manajemen':['MgmtSetuju'],'Pelanggan':['MgmtDaftarHitam']},
  runner:{'Lapangan':1,'Penginapan & Jeep':['Housekeeping','SopirJeep'],'Saya':1}, technician:{'Aset & servis':['Teknisi','TekBelanja','TekAkun'],'Saya':['TiketCS']}, qc:{'Saya':1,'Lapangan':1,'Penginapan & Jeep':['Housekeeping','ExpJeep','SopirJeep'],'Aset & servis':['Teknisi','PosQC']},
  asset_manager:MASET, experience_manager:mergeAllow([MOPS,MASET,CSM,{'CS':1,'Harian':1,'Lapangan':['Runner']}]),
  driver:{'Saya':1,'Lapangan':1,'Penginapan & Jeep':['ExpJeep','SopirJeep']},
