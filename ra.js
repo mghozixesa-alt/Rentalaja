@@ -317,6 +317,41 @@
       document.body.appendChild(w); setTimeout(function () { inp.focus(); }, 30);
     });
   };
+  /* kasir / serah terima: tanya pelanggan "ada keluhan?" lalu langsung jadi tiket keluhan (tugas otomatis ke divisi) */
+  RA.askComplaint = function (o) {
+    o = o || {};
+    var CATS = [['Unit bermasalah', 'Teknisi'], ['Pengantaran', 'Runner'], ['Pembayaran', 'Kasir'], ['Kebersihan kamar', 'Housekeeping'], ['Sopir / jeep', 'Koordinator Jeep'], ['Pelayanan', 'Manajer Operasional'], ['Kecelakaan / kehilangan', 'Manajer Operasional'], ['Lainnya', 'CS']];
+    return new Promise(function (ok) {
+      var w = document.createElement('div'), cat = '';
+      w.setAttribute('role', 'dialog'); w.setAttribute('aria-modal', 'true'); w.setAttribute('aria-label', 'Tanya keluhan pelanggan');
+      w.style.cssText = 'position:fixed;inset:0;z-index:99998;background:rgba(15,23,42,.45);display:flex;align-items:flex-end;justify-content:center;font-family:"Plus Jakarta Sans",system-ui,sans-serif';
+      var pill = 'height:36px;padding:0 12px;border-radius:18px;border:1px solid #D5D9E0;background:#fff;color:#1F2B4D;font:700 12px \'Plus Jakarta Sans\',sans-serif;cursor:pointer';
+      w.innerHTML = '<div style="background:#fff;border-radius:20px 20px 0 0;max-width:480px;width:100%;padding:20px 16px calc(20px + env(safe-area-inset-bottom,0px));box-sizing:border-box;color:#1F2B4D;display:flex;flex-direction:column;gap:12px;max-height:90vh;overflow-y:auto">'
+        + '<div style="font-size:18px;font-weight:800">Ada keluhan dari pelanggan?</div>'
+        + '<div style="font-size:14px;line-height:1.5;color:#4A5468">Tanyakan langsung: "Selama sewa ada kendala atau yang kurang berkenan, Kak?"' + (o.code ? ' · <b>' + String(o.code).replace(/[<>&]/g, '') + '</b>' : '') + '</div>'
+        + '<div data-ask style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button type="button" data-no style="height:48px;border-radius:12px;border:1.5px solid #D5D9E0;background:#fff;font:800 14px \'Plus Jakarta Sans\',sans-serif;color:#1E6B45;cursor:pointer">Tidak ada</button><button type="button" data-yes style="height:48px;border-radius:12px;border:none;background:#1F2B4D;color:#fff;font:800 14px \'Plus Jakarta Sans\',sans-serif;cursor:pointer">Ada keluhan</button></div>'
+        + '<div data-form style="display:none;flex-direction:column;gap:10px"><div style="font-size:12px;font-weight:800;color:#4A5468">Jenis keluhan</div><div data-cats style="display:flex;flex-wrap:wrap;gap:6px"></div><div data-hint style="font-size:12px;font-weight:700;color:#077A70;min-height:16px"></div>'
+        + '<textarea rows="3" placeholder="Tulis keluhannya, mis. rem belakang bunyi sejak hari kedua" style="width:100%;box-sizing:border-box;border:1px solid #B4BCC8;border-radius:12px;padding:10px 12px;font:500 15px \'Plus Jakarta Sans\',sans-serif;color:#1F2B4D;resize:vertical"></textarea>'
+        + '<div data-e style="font-size:13px;color:#A12A1F;min-height:16px"></div>'
+        + '<div style="display:grid;grid-template-columns:1fr 2fr;gap:8px"><button type="button" data-back style="height:46px;border-radius:12px;border:1.5px solid #D5D9E0;background:#fff;font:700 14px \'Plus Jakarta Sans\',sans-serif;color:#1F2B4D;cursor:pointer">Kembali</button><button type="button" data-send style="height:46px;border-radius:12px;border:none;background:#09BEAF;color:#1F2B4D;font:800 14px \'Plus Jakarta Sans\',sans-serif;cursor:pointer">Buat tiket keluhan</button></div></div></div>';
+      var form = w.querySelector('[data-form]'), ask = w.querySelector('[data-ask]'), cats = w.querySelector('[data-cats]'), hint = w.querySelector('[data-hint]'), ta = w.querySelector('textarea'), err = w.querySelector('[data-e]'), send = w.querySelector('[data-send]');
+      CATS.forEach(function (c) { var b = document.createElement('button'); b.type = 'button'; b.textContent = c[0]; b.style.cssText = pill; b.onclick = function () { cat = c[0]; [].forEach.call(cats.children, function (x) { var on = x === b; x.style.background = on ? '#1F2B4D' : '#fff'; x.style.color = on ? '#fff' : '#1F2B4D'; x.style.borderColor = on ? '#1F2B4D' : '#D5D9E0'; }); hint.textContent = 'Tugas otomatis ke ' + c[1] + '.'; }; cats.appendChild(b); });
+      function close(v) { if (w.parentNode) w.parentNode.removeChild(w); ok(v); }
+      w.querySelector('[data-no]').onclick = function () { close(null); };
+      w.querySelector('[data-yes]').onclick = function () { ask.style.display = 'none'; form.style.display = 'flex'; ta.focus(); };
+      w.querySelector('[data-back]').onclick = function () { form.style.display = 'none'; ask.style.display = 'grid'; };
+      send.onclick = function () {
+        var txt = String(ta.value || '').trim();
+        if (!cat) { err.textContent = 'Pilih jenis keluhan.'; return; }
+        if (txt.length < 5) { err.textContent = 'Tulis isi keluhannya.'; return; }
+        send.disabled = true; send.textContent = 'Menyimpan…'; err.textContent = '';
+        RA.fn('kasir', { action: 'ticket_new', booking_code: o.code || null, category: cat, priority: 'normal', summary: txt, from: o.from || 'kasir' }).then(function (r) {
+          if (RA.ok) RA.ok('Tiket ' + r.code + ' dibuat. Tugas sudah dikirim ke divisi terkait.'); close(r);
+        }).catch(function (e) { send.disabled = false; send.textContent = 'Buat tiket keluhan'; err.textContent = (e && e.message) || 'Gagal menyimpan. Coba lagi.'; });
+      };
+      document.body.appendChild(w);
+    });
+  };
   RA.requestOtp = function (phone, purpose, email) {
     var body = { action: 'request', phone: phone || undefined, purpose: purpose || 'login' }; if (email) { body.email = email; RA._otpEmail = email; }
     return headers({ 'Content-Type': 'application/json' }).then(function (h) {
