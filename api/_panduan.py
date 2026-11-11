@@ -383,7 +383,7 @@ dict(
 <ul class="tips">
 <li><b>Pas di 12 jam.</b> Kalau ambil jam 08.00, kembali sebelum 20.00 masih tarif ½ hari.</li>
 <li><b>Lewat sedikit dari 1 hari?</b> Misalnya 26 jam: sisa 2 jam hanya dikenai [[aturan:half_day_extra_percent]]% tarif harian, bukan 2 hari penuh.</li>
-<li><b>Pilih jam kembali yang realistis.</b> Telat mengembalikan dikenai denda [[aturan:late_fee_percent_per_hour]]% dari harga harian per jam. Kalau rencana berubah, perpanjang dari aplikasi sebelum jam kembali.</li>
+<li><b>Pilih jam kembali yang realistis.</b> Ada toleransi telat [[aturan:late_grace_minutes]]; lewat dari itu dikenai denda [[aturan:late_fee_percent_per_hour]]% dari harga harian per jam. Kalau rencana berubah, perpanjang dari aplikasi sebelum jam kembali.</li>
 </ul>
 
 <h2>DP, pembatalan, dan ubah jadwal</h2>
@@ -672,7 +672,7 @@ dict(
 <li>Sampai 12 jam dihitung tarif ½ hari (untuk barang yang punya tarifnya); kamera, lensa, dan proyektor ada tarif 2 jam.</li>
 <li>Lebih dari 24 jam dihitung per 24 jam; sisa 12 jam atau kurang setelah hari penuh dikenai [[aturan:half_day_extra_percent]]% tarif harian.</li>
 <li>Butuh lebih lama? Perpanjang dari aplikasi sebelum jam kembali.</li>
-<li>Telat tanpa perpanjang dikenai denda [[aturan:late_fee_percent_per_hour]]% dari harga harian per jam.</li>
+<li>Telat tanpa perpanjang diberi toleransi [[aturan:late_grace_minutes]]; lewat dari itu dikenai denda [[aturan:late_fee_percent_per_hour]]% dari harga harian per jam.</li>
 </ul>
 
 <h2>Ongkir antar</h2>

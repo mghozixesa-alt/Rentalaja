@@ -10,7 +10,11 @@
   if (/^\/(kasir|cs|link\/statistik)\/?$/i.test(p)) return;
 
   window.dataLayer = window.dataLayer || [];
-  function gtag() { dataLayer.push(arguments); }
+  // lastHit: waktu kiriman terakhir. Sesi GA4 habis setelah 30 menit tanpa kiriman; kalau pelanggan kembali ke tab
+  // (mis. sesudah bayar di e-wallet atau chat WA), event pertama sesi baru harus page_view supaya sesinya punya
+  // halaman & asal, bukan "Unassigned / (not set)".
+  var lastHit = Date.now(), IDLE = 29 * 60 * 1000;
+  function gtag() { dataLayer.push(arguments); if (arguments[0] === 'event') lastHit = Date.now(); }
   window.gtag = gtag;
   var s = document.createElement('script');
   s.async = true; s.src = 'https://www.googletagmanager.com/gtag/js?id=' + ID;
@@ -89,6 +93,11 @@
   }
   pv();
   window.addEventListener('hashchange', function () { setTimeout(pv, 50); });
+  // kembali ke tab / halaman dipulihkan dari cache browser setelah lama: buka sesi baru dengan page_view
+  function ensure() { if (Date.now() - lastHit > IDLE) { last = ''; pv(); } }
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) ensure(); });
+  window.addEventListener('pageshow', function (e) { if (e.persisted) ensure(); });
+  window.addEventListener('focus', ensure);
 
   // ---- Key events ----
   function where() { var m = location.hash.match(/^#\/([A-Za-z]+)/); return m ? m[1] : (p.replace(/\.html$/, '') || '/'); }
@@ -100,11 +109,11 @@
     if (!a) return;
     var href = a.getAttribute('href') || '';
     if (/wa\.me\/|api\.whatsapp\.com|whatsapp:\/\//i.test(href)) {
-      gtag('event', 'klik_whatsapp', { dari: where() });
+      ensure(); gtag('event', 'klik_whatsapp', { dari: where() });
       fb('Contact', { dari: where() });
     } else if (!/^#\//.test(location.hash) && /(^\/|rentalaja\.co\.id\/)#\/(Produk|Katalog|Home)/.test(href)) {
       var m = href.match(/#\/(Produk|Katalog|Home)/);
-      gtag('event', 'klik_booking', { dari: where(), tujuan: m ? m[1] : '' });
+      ensure(); gtag('event', 'klik_booking', { dari: where(), tujuan: m ? m[1] : '' });
       fb('Lead', { dari: where() });
     }
   }, true);
@@ -129,12 +138,12 @@
         var fresh = Date.now() - new Date(b.created_at).getTime() < 60 * 60 * 1000;
         if (fresh && !store('ga_bk_' + b.code)) {
           store('ga_bk_' + b.code, '1');
-          gtag('event', 'booking_dibuat', { transaction_id: b.code, value: Number(b.total) || 0, currency: 'IDR', items: items });
+          ensure(); gtag('event', 'booking_dibuat', { transaction_id: b.code, value: Number(b.total) || 0, currency: 'IDR', items: items });
           fb('AddPaymentInfo', { value: Number(b.total) || 0, currency: 'IDR', content_ids: ids, content_type: 'product', num_items: items.length }, 'bk_' + b.code);
         }
         if (Number(b.paid_amount) > 0 && !store('ga_pd_' + b.code) && b.status !== 'cancelled' && b.status !== 'expired') {
           store('ga_pd_' + b.code, '1');
-          gtag('event', 'purchase', { transaction_id: b.code, value: Number(b.paid_amount) || 0, currency: 'IDR', booking_total: Number(b.total) || 0, items: items });
+          ensure(); gtag('event', 'purchase', { transaction_id: b.code, value: Number(b.paid_amount) || 0, currency: 'IDR', booking_total: Number(b.total) || 0, items: items });
           fb('Purchase', { value: Number(b.paid_amount) || 0, currency: 'IDR', content_ids: ids, content_type: 'product', num_items: items.length }, 'pd_' + b.code);
           clearInterval(timer); timer = null;
         }

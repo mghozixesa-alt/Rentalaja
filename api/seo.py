@@ -102,12 +102,15 @@ def faq(D):
     promos = [x for x in D.get('promos') or [] if x.get('desc') or x.get('name')]
     pr = ' '.join((x.get('desc') or x['name']).rstrip('.') + '.' for x in promos) or 'Promo yang sedang berlaku otomatis terpasang saat booking.'
     late = D.get('late_pct')
+    try: g = int(float(D.get('late_grace') or 0))
+    except (TypeError, ValueError): g = 0
+    tol = (f'{g // 60} jam' if g % 60 == 0 else f'{g} menit') if g > 0 else ''
     return [
         ('Apa syarat sewa di Rentalaja?', 'Unggah foto KTP dan KK sekali saja di aplikasi; dokumen pendukung lain (SIM, NPWP, STNK) opsional. Untuk motor dan mobil wajib KTP, SIM, dan KK. Setelah lolos verifikasi, booking bisa dibayar.'),
         ('Berapa DP yang harus dibayar?', 'DP 20% dari total sewa setelah dokumen lolos verifikasi. Sisanya dibayar saat ambil barang di cabang.'),
         ('Bisa sewa 2 jam atau setengah hari?', 'Bisa untuk barang yang punya tarifnya. Kamera, lensa, dan proyektor ada tarif 2 jam; iPhone, motor, PlayStation, dan sebagian kamera ada tarif ½ hari. Tarifnya tertera di tiap barang.'),
         ('Ada promo?', pr + ' Potongan dihitung otomatis saat booking.'),
-        ('Bagaimana kalau telat mengembalikan?', (f'Ada denda {late}% dari harga harian per jam keterlambatan.' if late else 'Ada denda per jam keterlambatan.') + ' Perpanjang lewat aplikasi atau kabari cabang lewat WhatsApp sebelum jam kembali.'),
+        ('Bagaimana kalau telat mengembalikan?', (f'Ada toleransi {tol} tanpa denda. ' if tol else '') + ((f'Lewat dari itu, denda {late}% dari harga harian per jam.' if tol else f'Ada denda {late}% dari harga harian per jam keterlambatan.') if late else 'Ada denda per jam keterlambatan.') + ' Perpanjang lewat aplikasi atau kabari cabang lewat WhatsApp sebelum jam kembali.'),
         ('Bisa diantar?', 'Bisa, dengan ongkir sesuai jarak. Pilih "Diantar" saat booking, ongkir dikonfirmasi cabang.'),
     ]
 
@@ -402,6 +405,10 @@ DOCS = {'ktp': 'KTP', 'kk': 'Kartu Keluarga', 'sim': 'SIM', 'npwp': 'NPWP', 'stn
 def rule(D, key):
     v = D['rules'].get(key)
     if v is None: return ''
+    if key == 'late_grace_minutes':
+        try: g = int(float(v))
+        except (TypeError, ValueError): return ''
+        return (f'{g // 60} jam' if g % 60 == 0 else f'{g} menit') if g > 0 else ''
     if isinstance(v, list): return ', '.join(DOCS.get(x, str(x).upper()) for x in v)
     if isinstance(v, bool): return 'ya' if v else 'tidak'
     if isinstance(v, (int, float)): return f'{v:g}'
