@@ -195,7 +195,7 @@ def load():
             items = [p for p in prod.values() if p['city'] == c and p['cat'] == cat]
             if items: pages[(c, cat)] = sorted(items, key=lambda x: (x['d'] or 0, x['name']))
     data = dict(br=br, prod=prod, pages=pages, at=raw.get('at'), promos=raw.get('promos'), late_pct=raw.get('late_pct'), late_grace=raw.get('late_grace'),
-                zones=raw.get('zones') or [], rules=raw.get('rules') or {})
+                zones=raw.get('zones') or [], rules=raw.get('rules') or {}, stays=stays_of(raw))
     _cache.update(at=time.time(), data=data)
     return data
 
@@ -223,7 +223,7 @@ def head(title, desc, path, lds, image=None):
 
 def foot(D):
     def lst(items): return '<ul>' + ''.join(f'<li><a href="{u}">{esc(t)}</a></li>' for u, t in items) + '</ul>'
-    garut = [(f'/sewa/{cat}-{c}.html', CAT[cat][1].replace('Sewa ', '')) for (c, cat) in D['pages'] if c == 'garut']
+    garut = [(f'/sewa/{cat}-{c}.html', CAT[cat][1].replace('Sewa ', '')) for (c, cat) in D['pages'] if c == 'garut'] + ([('/sewa/penginapan-garut.html', 'Penginapan & Villa')] if D.get('stays') else [])
     bdg = [(f'/sewa/{cat}-{c}.html', CAT[cat][1].replace('Sewa ', '')) for (c, cat) in D['pages'] if c == 'bandung']
     guides = [(f'/sewa/{n["slug"]}.html', n['title']) for n in NEEDS] + [(f'/panduan/{a["slug"]}', a['title']) for a in ARTICLES]
     br = ''
@@ -270,8 +270,8 @@ def branch_box(D, codes):
     return ''.join(out)
 
 
-def faq_html(D): return ''.join(f'<details><summary>{esc(q)}</summary><p>{esc(a)}</p></details>' for q, a in faq(D))
-def faq_ld(D): return {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in faq(D)]}
+def faq_html(D, extra=()): return ''.join(f'<details><summary>{esc(q)}</summary><p>{esc(a)}</p></details>' for q, a in list(extra) + faq(D))
+def faq_ld(D, extra=()): return {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in list(extra) + faq(D)]}
 def crumbs_ld(items): return {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": i + 1, "name": n, "item": BASE + u} for i, (n, u) in enumerate(items)]}
 
 
@@ -348,6 +348,7 @@ ART_CSS = ('<style>.art p,.art li{font-size:16px}.art h2{margin-top:30px}.meta{f
 
 def img_src(a, w=1200):
     pid = (a.get('img') or (None,))[0]
+    if pid and str(pid).startswith('/'): return BASE + pid
     return f'https://images.unsplash.com/{pid}?auto=format&fit=crop&w={w}&q=75' if pid else None
 
 
@@ -355,8 +356,10 @@ def cover_html(a):
     if not a.get('img'): return ''
     pid, name, user, cap = a['img']
     ref = '?utm_source=rentalaja&utm_medium=referral'
+    credit = (f'{esc(cap)} · Foto: {esc(name)}' if str(pid).startswith('/') else
+              f'{esc(cap)} · Foto: <a href="https://unsplash.com/@{user}{ref}" rel="nofollow">{esc(name)}</a> / <a href="https://unsplash.com/{ref}" rel="nofollow">Unsplash</a>')
     return (f'<figure style="margin:0"><div class="cover"><img src="{img_src(a)}" alt="{esc(cap if cap != "Ilustrasi" else a["title"])}" fetchpriority="high"></div>'
-            f'<figcaption class="credit">{esc(cap)} · Foto: <a href="https://unsplash.com/@{user}{ref}" rel="nofollow">{esc(name)}</a> / <a href="https://unsplash.com/{ref}" rel="nofollow">Unsplash</a></figcaption></figure>')
+            f'<figcaption class="credit">{credit}</figcaption></figure>')
 
 
 def items_of(D, cat, c):
@@ -452,6 +455,13 @@ def fill(D, text):
                 return rp(v) if v else 'cek di aplikasi'
             if kind == 'ongkir': return zone_table(D, parts[1:])
             if kind == 'aturan': return rule(D, parts[1])
+            if kind == 'inap':  # [[inap:ertap-village-garut]] harga per malam
+                st = next((x for x in D.get('stays') or [] if x['pslug'] == parts[1]), None)
+                return stay_price_txt(st) if st else 'cek harga di aplikasi'
+            if kind == 'inapkartu':  # [[inapkartu]] atau [[inapkartu:slug1,slug2]]
+                sts = D.get('stays') or []
+                if len(parts) > 1: sts = [x for x in sts if x['pslug'] in parts[1].split(',')]
+                return '<div class="grid">' + ''.join(stay_card(x) for x in sts) + '</div>' if sts else ''
         except Exception:
             return ''
         return ''
@@ -477,7 +487,8 @@ def page_article(D, a):
             for ct in a['cats']: its += items_of(D, ct, cc)
         its = sorted(its, key=lambda x: -(x.get('rc') or 0))[:4]
         if its: strip = sec('Barang yang dibahas', 'Harga diperbarui otomatis dari sistem') + '<div class="row">' + cards(its) + '</div>'
-    html_ = banner(esc(a['title']), lead, f'<a class="cta" href="/#/Katalog?cat={cat0}">Cek ketersediaan</a>' + wa_cta('Halo Rentalaja, saya baca panduan: ' + a['title']),
+    cta = '<a class="cta" href="/#/Menginap">Cek tanggal kosong</a>' if cat0 == 'penginapan' else f'<a class="cta" href="/#/Katalog?cat={cat0}">Cek ketersediaan</a>'
+    html_ = banner(esc(a['title']), lead, cta + wa_cta('Halo Rentalaja, saya baca panduan: ' + a['title']),
                    photo=a.get('img'), crumb='<a href="/panduan/">Panduan</a> · ' + CITY.get(a['city'], 'Garut &amp; Bandung'),
                    badges=['Diperbarui ' + datetime.date.today().strftime('%d-%m-%Y'), 'Harga langsung dari sistem']) + f"""<main class="w art">{strip}{body}
 {(sec('Panduan lain', '', '/panduan/', 'Semua panduan') + acards(others).replace('class="agrid"', 'class="row wide"')) if others else ''}
@@ -559,7 +570,9 @@ PHOTO = {  # (id foto Unsplash, nama fotografer, username, keterangan)
 }
 
 
-def unsplash(pid, w=1600): return f'https://images.unsplash.com/{pid}?auto=format&fit=crop&w={w}&q=72'
+def unsplash(pid, w=1600):
+    if str(pid).startswith('/'): return BASE + pid  # foto milik Rentalaja (mis. /img/v/...)
+    return f'https://images.unsplash.com/{pid}?auto=format&fit=crop&w={w}&q=72'
 
 
 def banner(h1, lead, ctas, photo=None, collage=None, kicker='', badges=(), crumb=''):
@@ -569,7 +582,8 @@ def banner(h1, lead, ctas, photo=None, collage=None, kicker='', badges=(), crumb
         ref = '?utm_source=rentalaja&utm_medium=referral'
         srcset = ', '.join(f'{esc(unsplash(pid, w))} {w}w' for w in (640, 1000, 1600))
         bg = f'<img class="bg" src="{unsplash(pid)}" srcset="{srcset}" sizes="(max-width: 1152px) 100vw, 1120px" alt="{esc(cap if cap != "Ilustrasi" else h1)}" fetchpriority="high">'
-        cred = f'<div class="credit2">{esc(cap)} · Foto: <a href="https://unsplash.com/@{user}{ref}" rel="nofollow">{esc(name)}</a> / <a href="https://unsplash.com/{ref}" rel="nofollow">Unsplash</a></div>'
+        cred = (f'<div class="credit2">{esc(cap)} · Foto: {esc(name)}</div>' if str(pid).startswith('/') else
+                f'<div class="credit2">{esc(cap)} · Foto: <a href="https://unsplash.com/@{user}{ref}" rel="nofollow">{esc(name)}</a> / <a href="https://unsplash.com/{ref}" rel="nofollow">Unsplash</a></div>')
     if collage:
         col = '<div class="collage">' + ''.join(f'<div><img src="{esc(u)}" alt=""></div>' for u in collage[:3]) + '</div>'
     return (f'<section class="w"><div class="banner{" photo" if photo else ""}">{bg}{col}<div class="in">'
@@ -665,6 +679,8 @@ def page_index(D):
             + sec('Pilih kota', 'Ambil di cabang terdekat atau minta diantar') + f'<div class="citycards">{city_cards}</div>')
     for c in CITY:
         body += sec(f'Paling sering disewa di {CITY[c]}', 'Harga diperbarui otomatis dari sistem', f'/sewa/{c}.html') + f'<div class="row">{cards(top_items(D, c))}</div>'
+    if D.get('stays'):
+        body += sec('Menginap di Garut', 'Villa & rumah utuh dari Rentalaja Experience', '/sewa/penginapan-garut.html') + '<div class="grid">' + ''.join(stay_card(x) for x in D['stays']) + '</div>'
     body += sec('Inspirasi &amp; panduan', 'Rute, tips, dan pilihan barang yang pas', '/panduan/', 'Semua panduan') + f'<div class="row wide">{guide_cards(D)}</div>'
     body += '</main>'
     ld = [{"@context": "https://schema.org", "@type": "Organization", "name": "Rentalaja", "url": BASE, "logo": BASE + '/logo.png', "parentOrganization": {"@type": "Organization", "name": "PT Popo Karya Investama"}}]
@@ -688,6 +704,8 @@ def page_city(D, c):
         items = sorted(items, key=lambda x: -(x.get('rc') or 0))
         lo = min(x['d'] for x in items if x['d'])
         body += sec(f'{CAT[cat][1]} di {CITY[c]}', f'{len(items)} pilihan · mulai {rp(lo)}/hari', f'/sewa/{cat}-{c}.html') + f'<div class="row">{cards(items[:12])}</div>'
+    if c == 'garut' and D.get('stays'):
+        body += sec('Penginapan di Garut', 'Villa & rumah utuh Rentalaja Experience', '/sewa/penginapan-garut.html') + '<div class="grid">' + ''.join(stay_card(x) for x in D['stays']) + '</div>'
     body += sec(f'Panduan di {CITY[c]}', '', '/panduan/', 'Semua panduan') + f'<div class="row wide">{guide_cards(D, c)}</div>'
     body += sec(f'Cabang Rentalaja di {CITY[c]}') + branch_box(D, codes) + sec('Pertanyaan yang sering ditanya') + faq_html(D) + '</main>'
     return ui_head(title, desc, path, lds, unsplash(PHOTO[c][0], 1200)) + body + foot(D)
@@ -699,13 +717,17 @@ def page_category(D, c, cat):
     lo = min(x['d'] for x in items if x['d'])
     codes = sorted({b for it in items for b in it['branches']}, key=lambda x: list(BR_CITY).index(x))
     path = f'/sewa/{cat}-{c}.html'
-    title = f'{title_base} {CITY[c]} Mulai {rp(lo)}/Hari | Rentalaja'
+    X = CAT_EXTRA.get((c, cat), {})
     hj = any(x.get('j') for x in items); hh = any(x.get('h') for x in items)
-    desc = f'{title_base} di {CITY[c]}: {len(items)} pilihan, mulai {rp(lo)} per hari' + (', ada tarif 2 jam dan ½ hari' if (hj or hh) else '') + '. Cek ketersediaan dan booking online, DP 20%.'
+    lh = min((x['h'] for x in items if x.get('h')), default=None)
+    title = (X['title'].format(lo=rp(lo), lh=rp(lh)) if X.get('title') else f'{title_base} {CITY[c]} Mulai {rp(lo)}/Hari | Rentalaja')
+    desc = (X['desc'].format(lo=rp(lo), lh=rp(lh), n=len(items)) if X.get('desc') else
+            f'{title_base} di {CITY[c]}: {len(items)} pilihan, mulai {rp(lo)} per hari' + (', ada tarif 2 jam dan ½ hari' if (hj or hh) else '') + '. Cek ketersediaan dan booking online, DP 20%.')
+    xfaq = [(q, a.format(lo=rp(lo), lh=rp(lh), n=len(items))) for q, a in X.get('faq', [])]
     lds = [{"@context": "https://schema.org", "@graph": [local_business(D, k) for k in codes]},
            {"@context": "https://schema.org", "@type": "ItemList", "name": f'{title_base} {CITY[c]}',
             "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": f'{BASE}/sewa/{it["pslug"]}.html', "name": it['name']} for i, it in enumerate(items)]},
-           crumbs_ld([('Rentalaja', '/sewa/'), (CITY[c], f'/sewa/{c}.html'), (label, path)]), faq_ld(D)]
+           crumbs_ld([('Rentalaja', '/sewa/'), (CITY[c], f'/sewa/{c}.html'), (label, path)]), faq_ld(D, xfaq)]
     rows = ''.join(f'<tr><td><a href="/sewa/{it["pslug"]}.html">{esc(it["name"])}</a></td>' + (f'<td class="n">{rp(it.get("j"))}</td>' if hj else '') + (f'<td class="n">{rp(it.get("h"))}</td>' if hh else '') + f'<td class="n">{rp(it["d"])}</td></tr>' for it in items)
     collage = [img_url(x['ph']) for x in sorted(items, key=lambda x: -(x.get('rc') or 0)) if x.get('ph')][:3]
     badges = [f'{len(items)} pilihan', 'DP 20%'] + (['Tarif ' + ('2 jam & ' if hj else '') + '½ hari'] if (hj or hh) else []) + ['Buka 07.30–21.00']
@@ -715,13 +737,14 @@ def page_category(D, c, cat):
     needs = [n for n in NEEDS if (n['city'] in (c, None)) and cat in n['cats']]
     arts = [a for a in ARTICLES if a['city'] in (c, None) and cat in a['cats']]
     body += '<main class="w">' + cat_pills(D, c, cat) + usp()
+    if X.get('intro'): body += '<div class="art">' + X['intro'] + '</div>'
     body += sec(f'Semua pilihan {label if label in ("iPhone", "PlayStation") else label.lower()} di {CITY[c]}', 'Urut dari harga termurah') + f'<div class="grid">{cards(items)}</div>'
     body += sec(f'Daftar harga sewa {label} {CITY[c]}') + f'<div class="scroll"><table><thead><tr><th>Barang</th>{"<th class=n>2 jam</th>" if hj else ""}{"<th class=n>½ hari</th>" if hh else ""}<th class="n">1 hari</th></tr></thead><tbody>{rows}</tbody></table></div><p style="font-size:13px;color:var(--mute)">Harga diperbarui otomatis dari sistem Rentalaja. Sewa lebih dari 1 hari dihitung per hari.</p>'
     if needs or arts:
         g = ''.join(f'<a class="acard" href="/sewa/{n["slug"]}.html"><div class="t">' + (f'<img src="{unsplash(PHOTO[n["slug"]][0], 640)}" alt="" loading="lazy">' if n['slug'] in PHOTO else '') + f'</div><div class="b"><b>{esc(n["title"])}</b></div></a>' for n in needs)
         g += ''.join(f'<a class="acard" href="/panduan/{a["slug"]}"><div class="t"><img src="{img_src(a, 640)}" alt="" loading="lazy"></div><div class="b"><b>{esc(a["title"])}</b></div></a>' for a in arts if a.get('img'))
         body += sec('Panduan terkait') + f'<div class="row wide">{g}</div>'
-    body += sec('Lokasi ambil') + branch_box(D, codes) + sec('Pertanyaan yang sering ditanya') + faq_html(D) + '</main>'
+    body += sec('Lokasi ambil') + branch_box(D, codes) + sec('Pertanyaan yang sering ditanya') + faq_html(D, xfaq) + '</main>'
     return ui_head(title, desc, path, lds, collage[0] if collage else None) + body + foot(D)
 
 
@@ -752,8 +775,164 @@ def page_need(D, n):
 
 
 
+# ---------------- penginapan (Rentalaja Experience) ----------------
+# Data dari seo_catalog → 'stays' (produk kategori penginapan, harga per malam). Foto milik Rentalaja (/img/v/...).
+STAY_IN, STAY_OUT = '15.00', '12.00'
+
+
+def stays_of(raw):
+    out = []
+    for x in raw.get('stays') or []:
+        nm = (x.get('name') or '').split('·')[0].strip()
+        if not nm: continue
+        x = dict(x, title=nm, pslug=slugify(nm) + '-garut', photos=[p for p in (x.get('photos') or []) if p])
+        sp = x.get('specs') or {}
+        x['facts'] = [v for v in [sp.get('type'), f'{sp["bedrooms"]} kamar tidur' if sp.get('bedrooms') else None,
+                                  f'{sp["baths"]} kamar mandi' if sp.get('baths') else None, f'maks {x["guests"]} tamu' if x.get('guests') else None] if v]
+        x['place'] = (x.get('area') or '').split('(')[0].strip().rstrip(',') or 'Garut'
+        out.append(x)
+    return out
+
+
+def stay_price_txt(st):
+    n, w = st.get('night'), st.get('weekend')
+    if not n: return 'harga cek di aplikasi'
+    return f'{rp(n)}/malam' + (f' (Jumat–Sabtu {rp(w)})' if w and w != n else '')
+
+
+def stay_card(st):
+    ph = st['photos'][0] if st['photos'] else None
+    img = f'<img src="{esc(BASE + ph)}" alt="{esc(st["title"])}, penginapan di {esc(st["place"])}" loading="lazy">' if ph else 'Foto segera'
+    price = f'<div class="from">Mulai dari</div><div class="price"><b>{rp(st["night"])}</b> / malam</div>' if st.get('night') else '<div class="price">Cek harga &amp; tanggal di aplikasi</div>'
+    return (f'<div class="card"><div class="ph">{img}</div><div class="b"><span class="loc">{esc(st["place"])}</span>'
+            f'<h3><a href="/sewa/{st["pslug"]}.html">{esc(st["title"])}</a></h3><span class="rc">{esc(" · ".join(st["facts"][1:]))}</span>'
+            f'{price}<a class="go" href="/sewa/{st["pslug"]}.html">Lihat penginapan</a></div></div>')
+
+
+def stay_faq(D, st=None):
+    rule_txt = (D.get('rules') or {}).get('stay_cancel_rule')
+    out = [('Jam check-in dan check-out?', f'Check-in mulai pukul {STAY_IN}, check-out paling lambat pukul {STAY_OUT}.'),
+           ('Bagaimana cara booking penginapan?', 'Pilih tanggal di aplikasi Rentalaja, isi data tamu, lalu bayar. Alamat lengkap dan petunjuk arah dikirim setelah booking terkonfirmasi.')]
+    if rule_txt: out.append(('Bisa batal atau ubah tanggal?', str(rule_txt)))
+    if st:
+        out.insert(0, (f'Berapa harga menginap di {st["title"]}?', (f'{stay_price_txt(st)[0].upper() + stay_price_txt(st)[1:]}' + '. Harga mengikuti tanggal yang dipilih di aplikasi.') if st.get('night') else 'Harga tergantung tanggal; cek langsung di aplikasi atau tanya admin lewat WhatsApp.'))
+        if st.get('guests'): out.insert(1, (f'{st["title"]} muat berapa orang?', f'Maksimal {st["guests"]} tamu.'))
+    return out
+
+
+def stay_body_html(st):
+    parts = [p.strip() for p in (st.get('desc') or '').split('\n') if p.strip()]
+    out = ''
+    for p in parts:
+        m = re.match(r'^(Ruang|Fasilitas|Lokasi):\s*(.+)$', p)
+        if m: out += f'<h2>{m.group(1)}</h2><ul class="tips">' + ''.join(f'<li>{esc(x.strip().rstrip("."))}</li>' for x in re.split(r',\s*(?![^()]*\))', m.group(2)) if x.strip()) + '</ul>'
+        else: out += f'<p>{esc(p)}</p>'
+    return out
+
+
+def stay_ld(st):
+    ld = {"@context": "https://schema.org", "@type": "LodgingBusiness", "name": f'{st["title"]} by Rentalaja Experience', "url": f'{BASE}/sewa/{st["pslug"]}.html',
+          "image": [BASE + p for p in st['photos'][:6]], "description": st.get('short') or '',
+          "address": {"@type": "PostalAddress", "addressLocality": st['place'].split(',')[0], "addressRegion": "Jawa Barat", "addressCountry": "ID"},
+          "checkinTime": STAY_IN.replace('.', ':'), "checkoutTime": STAY_OUT.replace('.', ':'), "telephone": '+' + WA}
+    sp = st.get('specs') or {}
+    if sp.get('bedrooms'): ld["numberOfRooms"] = sp['bedrooms']
+    if st.get('night'): ld["priceRange"] = f'{rp(st["night"])}' + (f'–{rp(st["weekend"])}' if st.get('weekend') and st['weekend'] != st['night'] else '') + ' per malam'
+    if 'hewan peliharaan' in (st.get('desc') or '').lower(): ld["petsAllowed"] = True
+    return ld
+
+
+def page_stays(D):
+    sts = D['stays']
+    path = '/sewa/penginapan-garut.html'
+    lo = min((x['night'] for x in sts if x.get('night')), default=None)
+    title = 'Penginapan & Villa di Garut' + (f' Mulai {rp(lo)}/Malam' if lo else '') + ' | Rentalaja Experience'
+    desc = 'Villa dengan kolam renang dan rumah utuh di Garut: ' + ', '.join(f'{x["title"]} ({x["place"]})' for x in sts) + '. Cek tanggal kosong dan booking online.'
+    rows = ''.join(f'<tr><td><a href="/sewa/{x["pslug"]}.html">{esc(x["title"])}</a></td><td>{esc(x["place"])}</td><td>{esc(" · ".join(x["facts"]))}</td>'
+                   f'<td class="n">{rp(x.get("night")) if x.get("night") else "cek aplikasi"}</td><td class="n">{rp(x.get("weekend")) if x.get("weekend") else "—"}</td></tr>' for x in sts)
+    ph = next((x['photos'][0] for x in sts if x['photos']), None)
+    lds = [{"@context": "https://schema.org", "@type": "ItemList", "name": 'Penginapan Rentalaja Experience di Garut',
+            "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": f'{BASE}/sewa/{x["pslug"]}.html', "name": x['title']} for i, x in enumerate(sts)]},
+           crumbs_ld([('Rentalaja', '/sewa/'), ('Garut', '/sewa/garut.html'), ('Penginapan', path)]),
+           {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in stay_faq(D)]}]
+    arts = [a for a in ARTICLES if 'penginapan' in a['cats']]
+    body = banner('Penginapan &amp; villa di Garut', 'Villa dengan kolam renang untuk rombongan dan rumah utuh untuk keluarga, dekat Cipanas dan pusat kota Garut. Cek tanggal kosong dan booking langsung dari HP.',
+                  f'<a class="cta" href="/#/Menginap">Cek tanggal kosong</a>{wa_cta("Halo Rentalaja Experience, saya mau tanya penginapan di Garut")}',
+                  photo=(ph, 'Rentalaja Experience', '', 'Penginapan Rentalaja Experience, Garut') if ph else None,
+                  crumb='<a href="/sewa/garut.html">Rentalaja Garut</a> › Penginapan',
+                  badges=[f'{len(sts)} penginapan', f'Check-in {STAY_IN} · Check-out {STAY_OUT}'] + ([f'Mulai {rp(lo)}/malam'] if lo else []))
+    body += '<main class="w">' + sec('Pilih penginapan') + '<div class="grid">' + ''.join(stay_card(x) for x in sts) + '</div>'
+    body += sec('Perbandingan harga & kapasitas', 'Harga diperbarui otomatis dari sistem') + ('<div class="scroll"><table><thead><tr><th>Penginapan</th><th>Area</th><th>Tipe & kapasitas</th>'
+            f'<th class="n">Per malam</th><th class="n">Jumat–Sabtu</th></tr></thead><tbody>{rows}</tbody></table></div>')
+    body += ('<div class="art"><h2>Sekalian keliling Garut</h2><p>Tamu penginapan bisa sewa motor atau mobil di <a href="/sewa/motor-garut.html">Rentalaja Garut Kota</a>, '
+             'ikut <a href="/experience">trip Jeep offroad di kaki Gunung Guntur</a>, atau berendam di kawasan air panas Cipanas. '
+             'Lihat juga <a href="/panduan/wisata-cipanas-garut-naik-motor">panduan ke Cipanas naik motor</a>.</p></div>')
+    if arts: body += sec('Panduan menginap') + acards(arts).replace('class="agrid"', 'class="row wide"')
+    body += sec('Pertanyaan yang sering ditanya') + ''.join(f'<details><summary>{esc(q)}</summary><p>{esc(a)}</p></details>' for q, a in stay_faq(D)) + '</main>'
+    return ui_head(title, desc, path, lds, BASE + ph if ph else None) + body + foot(D)
+
+
+def page_stay(D, st):
+    path = f'/sewa/{st["pslug"]}.html'
+    title = f'{st["title"]} Garut – {st.get("specs", {}).get("type") or "Penginapan"} ' + (f'{rp(st["night"])}/Malam' if st.get('night') else 'di ' + st['place']) + ' | Rentalaja'
+    sh = (st.get('short') or '').rstrip('.'); sh = sh[:1].lower() + sh[1:]
+    desc = f'{st["title"]}: {sh}. ' + (f'{stay_price_txt(st)[0].upper() + stay_price_txt(st)[1:]}. ' if st.get('night') else '') + f'Lokasi {st["place"]}. Cek tanggal kosong & booking online.'
+    ph = st['photos'][0] if st['photos'] else None
+    faqs = stay_faq(D, st)
+    lds = [stay_ld(st), crumbs_ld([('Rentalaja', '/sewa/'), ('Penginapan Garut', '/sewa/penginapan-garut.html'), (st['title'], path)]),
+           {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in faqs]}]
+    app = f'/#/Penginapan?id={st["id"]}'
+    body = banner(esc(st['title']) + f' · {esc(st["place"])}', esc(st.get('short') or '') + '. ' + (f'<b>{esc(stay_price_txt(st))}</b>.' if st.get('night') else 'Cek harga dan tanggal kosong di aplikasi.'),
+                  f'<a class="cta" href="{app}">Cek tanggal kosong</a>{wa_cta("Halo Rentalaja Experience, saya mau tanya " + st["title"])}',
+                  photo=(ph, 'Rentalaja Experience', '', st['title']) if ph else None,
+                  crumb='<a href="/sewa/penginapan-garut.html">Penginapan Garut</a> › ' + esc(st['title']),
+                  badges=st['facts'] + [f'Check-in {STAY_IN} · Check-out {STAY_OUT}'])
+    gal = ''.join(f'<div><img src="{esc(BASE + p)}" alt="{esc(st["title"])} foto {i + 1}" loading="lazy"></div>' for i, p in enumerate(st['photos'][1:7]))
+    body += '<main class="w art">'
+    if gal: body += '<div class="sgal">' + gal + '</div>'
+    body += stay_body_html(st)
+    body += (f'<h2>Harga</h2><p>{esc(stay_price_txt(st)[0].upper() + stay_price_txt(st)[1:])}. Harga final mengikuti tanggal yang dipilih di aplikasi.</p>' if st.get('night') else '')
+    body += f'<h2>Lokasi</h2><p>{esc(st.get("area") or "Garut")}</p>'
+    body += f'<p><a class="cta" href="{app}">Cek tanggal kosong &amp; booking</a></p>'
+    others = [x for x in D['stays'] if x['pslug'] != st['pslug']]
+    if others: body += sec('Penginapan lain di Garut', '', '/sewa/penginapan-garut.html') + '<div class="grid">' + ''.join(stay_card(x) for x in others) + '</div>'
+    arts = [a for a in ARTICLES if 'penginapan' in a['cats']]
+    if arts: body += sec('Panduan menginap') + acards(arts).replace('class="agrid"', 'class="row wide"')
+    body += sec('Pertanyaan yang sering ditanya') + ''.join(f'<details><summary>{esc(q)}</summary><p>{esc(a)}</p></details>' for q, a in faqs) + '</main>'
+    css = '<style>.sgal{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin:18px 0}.sgal div{aspect-ratio:4/3;border-radius:14px;overflow:hidden;background:var(--bg)}.sgal img{width:100%;height:100%;object-fit:cover;display:block}</style>'
+    return ui_head(title, desc, path, lds, BASE + ph if ph else None).replace('</head>', css + '</head>') + body + foot(D)
+
+
+# ---------------- tambahan per halaman kategori ----------------
+# title/desc/faq boleh memakai {lo} (harga harian termurah), {lh} (½ hari termurah), {n} (jumlah pilihan).
+CAT_EXTRA = {
+    ('bandung', 'iphone'): dict(
+        title='Sewa iPhone Bandung Mulai {lo}/Hari, Ada Tarif ½ Hari | Rentalaja',
+        desc='Sewa iPhone (rental HP) di Bandung: {n} pilihan model, mulai {lo}/hari atau {lh} per ½ hari. Charger & tas termasuk. Booking online, DP 20%.',
+        intro=('<p>Butuh iPhone untuk wisuda, konser, bikin konten, atau sekadar coba sebelum beli? Di Rentalaja Bandung Anda bisa sewa iPhone harian atau ½ hari, '
+               'dengan harga per model yang tertera jelas di bawah. Charger dan tas sudah termasuk.</p>'
+               '<p>Bingung pilih model? Baca <a href="/panduan/harga-sewa-iphone-bandung">daftar harga & cara memilih iPhone sewaan</a>, '
+               '<a href="/panduan/sewa-iphone-konser-wisuda-bandung">tips sewa iPhone untuk konser & wisuda</a>, atau '
+               '<a href="/panduan/sewa-iphone-brand-lokal-bandung">sewa iPhone untuk konten brand lokal</a>.</p>'),
+        faq=[('Berapa harga sewa iPhone di Bandung?', 'Mulai {lo} per hari, dan ada tarif ½ hari mulai {lh}. Harga tiap model ada di tabel halaman ini dan selalu mengikuti sistem Rentalaja.'),
+             ('Di mana ambil iPhone sewaan di Bandung?', 'Di cabang Rentalaja Bandung, Kecamatan Coblong (Jl. Kubang Selatan, dekat kawasan ITB dan Dipati Ukur). Titik ambil dikonfirmasi admin setelah booking, atau minta diantar dengan ongkir sesuai jarak.'),
+             ('Apa saja yang didapat saat sewa iPhone?', 'Unit iPhone, charger, dan tas. Pindahkan foto & video ke HP atau cloud Anda sebelum mengembalikan unit.')]),
+    ('garut', 'motor'): dict(
+        intro=('<p>Motor matic untuk keliling Garut, ke Cipanas, Kamojang, sampai Papandayan. Helm dan jas hujan disiapkan, dan motor bisa diantar ke hotel, villa, atau stasiun. '
+               'Untuk jalur menanjak seperti Papandayan kami sarankan Honda PCX.</p>'
+               '<p>Panduan: <a href="/panduan/pilih-motor-beat-scoopy-pcx-garut">Beat, Scoopy, atau PCX?</a> · <a href="/panduan/hitung-biaya-sewa-motor-garut">contoh hitung biaya</a> · '
+               '<a href="/panduan/sewa-motor-stasiun-garut">sewa motor dekat Stasiun Garut</a> · <a href="/panduan/rute-motor-garut-papandayan">rute ke Papandayan</a>.</p>'),
+        faq=[('Motor apa yang cocok untuk ke Papandayan?', 'Honda PCX. Jalurnya menanjak dan berkelok, Beat lebih cocok untuk dalam kota.'),
+             ('Bisa diantar ke hotel atau Stasiun Garut?', 'Bisa. Pilih "Diantar" saat booking dan isi alamat; ongkir dihitung dari jarak dan dikonfirmasi cabang.')]),
+    ('garut', 'mobil'): dict(
+        intro=('<p>Mobil lepas kunci untuk liburan keluarga, rombongan, atau urusan kantor di Garut. Syaratnya KTP, SIM A, dan KK yang diunggah sekali di aplikasi. '
+               'Baca juga <a href="/panduan/sewa-mobil-garut-pilih-sesuai-rombongan">cara memilih mobil sesuai jumlah rombongan</a>.</p>'),
+        faq=[('Apa syarat sewa mobil lepas kunci di Garut?', 'KTP, SIM A, dan KK, diunggah sekali di aplikasi dan diverifikasi sebelum bayar.')]),
+}
+
+
 # Tanggal terakhir tampilan/teks halaman SEO diubah (naikkan saat template atau teks umum berubah).
-SITE_UPDATED = '2026-11-10'
+SITE_UPDATED = '2026-11-11'
 
 
 def sitemap(D):
@@ -770,6 +949,8 @@ def sitemap(D):
     urls += [(f'/sewa/{n["slug"]}.html', '0.8', newest) for n in NEEDS]
     urls += [('/panduan/', '0.7', art_u)] + [(f'/panduan/{a["slug"]}', '0.7', lm(a.get('updated') or a['date'])) for a in ARTICLES]
     urls += [(f'/sewa/{p["pslug"]}.html', '0.7', lm(p.get('u'))) for p in prods]
+    if D.get('stays'):
+        urls += [('/sewa/penginapan-garut.html', '0.8', lm(*[x.get('u') for x in D['stays']]))] + [(f'/sewa/{x["pslug"]}.html', '0.8', lm(x.get('u'))) for x in D['stays']]
     return '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + ''.join(
         f'<url><loc>{BASE}{u}</loc>' + (f'<lastmod>{d}</lastmod>' if d else '') + f'<priority>{pr}</priority></url>\n' for u, pr, d in urls) + '</urlset>\n'
 
@@ -813,6 +994,9 @@ def render(p):
     if not p.endswith('.html'): p += '.html'
     s = p[:-5]
     if s in CITY: return 200, 'text/html; charset=utf-8', page_city(D, s)
+    if s == 'penginapan-garut' and D.get('stays'): return 200, 'text/html; charset=utf-8', page_stays(D)
+    for st in D.get('stays') or []:
+        if st['pslug'] == s: return 200, 'text/html; charset=utf-8', page_stay(D, st)
     for n in NEEDS:
         if n['slug'] == s: return 200, 'text/html; charset=utf-8', page_need(D, n)
     for (c, cat) in D['pages']:

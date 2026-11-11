@@ -691,4 +691,167 @@ dict(
 [[cabang:GRT]]
 [[cabang:BDG-HUB]]
 '''),
+dict(
+    slug='harga-sewa-iphone-bandung', img=('photo-1678685888221-cda773a3dcdb', 'Thai Nguyen', 'quangthai_itshop', 'Ilustrasi'), city='bandung', cats=['iphone'], date='2026-11-11',
+    title='Harga Sewa iPhone di Bandung: iPhone XR sampai iPhone 15, Harian & ½ Hari',
+    desc='Daftar harga sewa iPhone (rental HP) di Rentalaja Bandung per model, tarif harian dan ½ hari, contoh hitung biaya, dan cara memilih model yang pas.',
+    lead='Sewa iPhone di Rentalaja Bandung mulai [[harga:iphone-xr:bandung]], dengan tarif ½ hari untuk acara singkat. Berikut harga tiap model langsung dari sistem, contoh hitung biayanya, dan panduan memilih model.',
+    body='''
+<h2>Daftar harga sewa iPhone Bandung</h2>
+[[tabel:iphone:bandung]]
+<p>Charger dan tas sudah termasuk. Ambil di Rentalaja Bandung, Kecamatan Coblong, atau minta diantar dengan ongkir sesuai jarak.</p>
+
+<h2>Contoh hitung biaya</h2>
+<div class="scroll"><table><thead><tr><th>Kebutuhan</th><th class="n">iPhone 11</th><th class="n">iPhone 13</th><th class="n">iPhone 15</th></tr></thead><tbody>
+<tr><td>Wisuda / acara (sampai 12 jam)</td><td class="n">[[hitung:iphone-11:bandung:6]]</td><td class="n">[[hitung:iphone-13:bandung:6]]</td><td class="n">[[hitung:iphone-15:bandung:6]]</td></tr>
+<tr><td>1 hari (24 jam)</td><td class="n">[[hitung:iphone-11:bandung:24]]</td><td class="n">[[hitung:iphone-13:bandung:24]]</td><td class="n">[[hitung:iphone-15:bandung:24]]</td></tr>
+<tr><td>Konten akhir pekan (2 hari)</td><td class="n">[[hitung:iphone-11:bandung:48]]</td><td class="n">[[hitung:iphone-13:bandung:48]]</td><td class="n">[[hitung:iphone-15:bandung:48]]</td></tr>
+</tbody></table></div>
+<p style="font-size:13px;color:var(--mute)">Dihitung dengan aturan harga sistem, sebelum promo. Promo yang sedang berlaku terpasang otomatis saat booking.</p>
+
+<h2>Pilih model sesuai kebutuhan</h2>
+<ul class="tips">
+<li><b>iPhone XR</b> — paling hemat untuk foto dan video sehari-hari, story, atau sekadar HP cadangan.</li>
+<li><b>iPhone 11</b> — sudah ada kamera ultra wide, enak untuk foto rombongan dan pemandangan.</li>
+<li><b>iPhone 13</b> — ada mode Cinematic untuk video dengan latar blur; cocok untuk konten dan dokumentasi acara.</li>
+<li><b>iPhone 15</b> — kamera utama 48MP, paling detail untuk foto wisuda, panggung konser, dan konten produk.</li>
+</ul>
+
+<h2>Tips sebelum dan sesudah sewa</h2>
+<ul class="tips">
+<li>Booking dari jauh hari saat musim wisuda dan akhir pekan; stok tiap model terbatas.</li>
+<li>Untuk acara singkat, pakai tarif ½ hari supaya lebih hemat.</li>
+<li>Bawa powerbank kalau mau merekam video lama.</li>
+<li>Pindahkan foto & video ke HP atau cloud Anda, lalu keluar dari akun Anda sebelum mengembalikan unit.</li>
+</ul>
+<p>Baca juga <a href="/panduan/sewa-iphone-konser-wisuda-bandung">tips sewa iPhone untuk konser & wisuda</a> dan <a href="/panduan/cara-booking-rentalaja-dp-jadwal">cara booking, DP, dan ubah jadwal</a>.</p>
+[[cabang:BDG-HUB]]
+'''),
+
+dict(
+    slug='sewa-playstation-bandung', img=('photo-1552820728-8b83bb6b773f', 'Alexey Savchenko', 'alexxsvch', 'Ilustrasi'), city='bandung', cats=['game'], date='2026-11-11',
+    title='Sewa PlayStation di Bandung untuk Main di Kos, Rumah, atau Acara',
+    desc='Sewa PS3 dan PS4 harian atau ½ hari di Rentalaja Bandung (Coblong). Harga langsung dari sistem, tips memilih, dan ide paket nobar dengan proyektor.',
+    lead='Mau main bareng di kos, rumah, atau acara kantor tanpa beli konsol? Rentalaja Bandung menyewakan PlayStation 3 dan PlayStation 4 harian maupun ½ hari, ambil di Kecamatan Coblong.',
+    body='''
+<h2>Harga sewa PlayStation Bandung</h2>
+[[tabel:game:bandung]]
+
+<h2>PS3 atau PS4?</h2>
+<ul class="tips">
+<li><b>PlayStation 4</b> — grafis lebih tajam dan pilihan game lebih baru; pas untuk turnamen kecil atau main bareng teman.</li>
+<li><b>PlayStation 3</b> — pilihan hemat untuk main santai.</li>
+<li>Isi paket (stik, kabel, game) bisa berbeda per unit; cek di halaman barang atau tanya admin sebelum booking.</li>
+</ul>
+
+<h2>Yang perlu disiapkan</h2>
+<ul class="tips">
+<li>TV atau monitor dengan port HDMI.</li>
+<li>Colokan listrik di dekat TV.</li>
+<li>Main seharian? Tarif harian biasanya lebih hemat daripada dua kali ½ hari.</li>
+</ul>
+
+<h2>Nobar atau acara? Tambah proyektor</h2>
+<p>Untuk layar lebih besar saat acara kantor, ulang tahun, atau nonton bola bareng, sewa sekalian proyektor dan layarnya.</p>
+[[kartu:proyektor:bandung:4]]
+<p>Lihat juga <a href="/panduan/sewa-proyektor-playstation-nobar">panduan sewa proyektor & PlayStation untuk nobar</a>.</p>
+[[cabang:BDG-HUB]]
+'''),
+
+dict(
+    slug='villa-kolam-renang-garut-rombongan', img=('/img/v/ertap-village-3.webp', 'Rentalaja Experience', '', 'Ertap Village, Samarang, Garut'), city='garut', cats=['penginapan'], date='2026-11-11',
+    title='Villa dengan Kolam Renang di Garut untuk Rombongan sampai 10 Orang',
+    desc='Ertap Village di Samarang, Garut: villa 2 lantai dengan kolam renang, hot tub, dan karaoke untuk maksimal 10 tamu. Harga per malam, fasilitas, dan tips liburan rombongan.',
+    lead='Liburan keluarga besar atau rombongan kantor ke Garut? Ertap Village di Samarang adalah villa 2 lantai dengan kolam renang, hot tub, dan karaoke untuk maksimal 10 tamu, dengan harga [[inap:ertap-village-garut]].',
+    body='''
+<h2>Sekilas Ertap Village</h2>
+<p>Villa ini ada di pedesaan Samarang, Garut. Pagi hari pemandangannya hijau, malam hari terlihat lampu kota. Alamat lengkap dan petunjuk arah dikirim setelah booking.</p>
+[[inapkartu:ertap-village-garut]]
+
+<h2>Fasilitas untuk rombongan</h2>
+<ul class="tips">
+<li><b>Kolam renang & hot tub</b> — untuk anak-anak dan orang dewasa.</li>
+<li><b>Karaoke</b> — hiburan malam tanpa keluar villa.</li>
+<li><b>Dapur lengkap & kulkas</b> — bisa masak bareng atau bakar-bakar.</li>
+<li><b>Carport muat hingga 10 mobil</b> — aman untuk rombongan yang datang dengan banyak kendaraan.</li>
+<li>2 kamar tidur (1 queen, 1 double) plus sofa, 3 kamar mandi, ruang keluarga, ruang tamu, Wi-Fi, TV, dan perlengkapan mandi.</li>
+</ul>
+
+<h2>Check-in, check-out, dan pembayaran</h2>
+<ul class="tips">
+<li>Check-in mulai pukul 15.00, check-out paling lambat pukul 12.00.</li>
+<li>[[aturan:stay_cancel_rule]]</li>
+</ul>
+
+<h2>Biar liburan rombongan lancar</h2>
+<ul class="tips">
+<li>Booking jauh hari untuk akhir pekan dan libur panjang; harga Jumat–Sabtu berbeda dengan hari biasa.</li>
+<li>Butuh kendaraan? Sewa <a href="/sewa/mobil-garut.html">mobil lepas kunci</a> atau <a href="/sewa/motor-garut.html">motor</a> di Rentalaja Garut Kota.</li>
+<li>Mau aktivitas seru bareng? Coba <a href="/experience">trip Jeep offroad di kaki Gunung Guntur</a>, termasuk trip sunrise pukul 04.30.</li>
+</ul>
+<p>Rombongan lebih kecil? Lihat <a href="/panduan/penginapan-dekat-cipanas-garut">rumah utuh dekat Cipanas</a> atau semua <a href="/sewa/penginapan-garut.html">penginapan Rentalaja di Garut</a>.</p>
+'''),
+
+dict(
+    slug='penginapan-dekat-cipanas-garut', img=('/img/v/ruma-metua-2.webp', 'Rentalaja Experience', '', 'Ruma Metua, Tarogong, Garut'), city='garut', cats=['penginapan'], date='2026-11-11',
+    title='Penginapan Rumah Utuh Dekat Cipanas Garut untuk Keluarga',
+    desc='Dua pilihan rumah utuh dekat kawasan air panas Cipanas, Garut: Ruma Metua di Tarogong (3 kamar, boleh bawa hewan peliharaan) dan Didi House di Rancabango (2 kamar).',
+    lead='Mau menginap dekat kawasan air panas Cipanas tapi lebih privat dari hotel? Rentalaja Experience punya dua rumah utuh: Ruma Metua di Tarogong untuk keluarga sampai 5 orang, dan Didi House di Rancabango untuk keluarga kecil.',
+    body='''
+<h2>Ruma Metua, Tarogong</h2>
+<p>Rumah utuh 3 kamar tidur dengan suasana hangat, sekitar 10 menit ke kawasan Cipanas dan 15 menit ke pusat kota Garut serta stasiun. Harga [[inap:ruma-metua-garut]].</p>
+<ul class="tips">
+<li>3 kamar tidur, 3 kamar mandi (kamar mandi utama dengan bathtub), ruang keluarga, dapur lengkap.</li>
+<li>Hot tub, Wi-Fi, TV, kulkas 2 pintu, carport tertutup untuk 3 mobil, penjaga rumah siaga.</li>
+<li><b>Boleh bawa hewan peliharaan.</b></li>
+</ul>
+
+<h2>Didi House, Rancabango</h2>
+<p>Rumah modern minimalis dekat kawasan Cipanas dan pusat kota, cocok untuk keluarga kecil sampai 4 orang.</p>
+<ul class="tips">
+<li>2 kamar tidur (1 kasur + 1 ranjang susun), 1 kamar mandi dengan shower, ruang tamu, dapur lengkap.</li>
+<li>TV, dispenser, kulkas, carport.</li>
+</ul>
+
+<h2>Bandingkan</h2>
+[[inapkartu:ruma-metua-garut,didi-house-garut]]
+
+<h2>Info menginap</h2>
+<ul class="tips">
+<li>Check-in mulai pukul 15.00, check-out paling lambat pukul 12.00.</li>
+<li>Alamat lengkap dan petunjuk arah dikirim setelah booking terkonfirmasi.</li>
+<li>[[aturan:stay_cancel_rule]]</li>
+</ul>
+<p>Mau ke Cipanas naik motor? Baca <a href="/panduan/wisata-cipanas-garut-naik-motor">panduan wisata Cipanas</a>. Rombongan sampai 10 orang? Lihat <a href="/panduan/villa-kolam-renang-garut-rombongan">villa dengan kolam renang</a>.</p>
+'''),
+
+dict(
+    slug='liburan-2-hari-garut', img=('photo-1580808327337-731f57b77991', 'Ken Petung', 'kenpetung', 'Gunung Papandayan, Garut'), city='garut', cats=['penginapan', 'motor'], date='2026-11-11',
+    title='Rencana Liburan 2 Hari 1 Malam di Garut: Menginap, Keliling, dan Jeep Sunrise',
+    desc='Contoh rencana 2 hari 1 malam di Garut: ambil motor atau mobil, berendam di Cipanas, menginap di villa atau rumah utuh, lalu Jeep sunrise atau ke Papandayan.',
+    lead='Punya waktu dua hari di Garut? Ini contoh rencana yang praktis: kendaraan, penginapan, dan aktivitas bisa diatur dari satu aplikasi Rentalaja.',
+    body='''
+<h2>Hari 1: datang, keliling, check-in</h2>
+<ol class="steps">
+<li><b>Ambil kendaraan.</b> Datang lewat Stasiun Garut? Motor bisa diambil di Rentalaja Garut Kota atau diantar ke stasiun (<a href="/panduan/sewa-motor-stasiun-garut">caranya</a>). Rombongan bisa pilih <a href="/sewa/mobil-garut.html">mobil lepas kunci</a>.</li>
+<li><b>Siang: berendam di Cipanas.</b> Kawasan air panas Cipanas ada di Tarogong, tidak jauh dari Garut Kota. Lihat <a href="/panduan/wisata-cipanas-garut-naik-motor">panduan ke Cipanas naik motor</a>.</li>
+<li><b>Sore: check-in mulai pukul 15.00.</b> Pilih penginapan sesuai jumlah orang (di bawah).</li>
+</ol>
+
+<h2>Pilih penginapan</h2>
+[[inapkartu]]
+<p>Rombongan sampai 10 orang cocok di villa dengan kolam renang; keluarga kecil lebih pas di rumah utuh. Bandingkan semua di <a href="/sewa/penginapan-garut.html">halaman penginapan Garut</a>.</p>
+
+<h2>Hari 2: pilih satu petualangan</h2>
+<ul class="tips">
+<li><b>Jeep sunrise.</b> Berangkat pukul 04.30, sekitar 2,5 jam termasuk berhenti foto, satu jeep untuk 3–4 orang dengan driver. Detail dan harga di <a href="/experience">Rentalaja Experience</a>.</li>
+<li><b>Gunung Papandayan.</b> Naik motor lewat Bayongbong–Cisurupan; untuk tanjakan kami sarankan Honda PCX. Lihat <a href="/panduan/rute-motor-garut-papandayan">rute lengkapnya</a>.</li>
+<li><b>Kamojang & Darajat.</b> Pemandangan pegunungan dan kawasan panas bumi; lihat <a href="/panduan/rute-motor-kamojang-darajat">rute motornya</a>.</li>
+</ul>
+<p>Check-out paling lambat pukul 12.00, lalu kembalikan kendaraan sesuai jam di booking atau perpanjang dari aplikasi.</p>
+
+<h2>Motor untuk keliling</h2>
+[[kartu:motor:garut:4]]
+[[cabang:GRT]]
+'''),
 ]
