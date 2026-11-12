@@ -943,7 +943,7 @@ dict(
 <p>Semua lensa di atas bisa disewa terpisah kalau Anda sudah punya kamera, atau sekalian dengan kamera dari <a href="/sewa/kamera-garut.html">katalog kamera Garut</a>. Contoh hitungan sistem sebelum promo:</p>
 <ul class="tips">
 <li>Canon 55-250mm ½ hari: [[hargah:lensa-canon-ef-s-55-250mm:garut]], 1 hari: [[hitung:lensa-canon-ef-s-55-250mm:garut:24]].</li>
-<li>Sigma 30mm F1.4 for Sony 1 hari: [[hitung:lensa-sigma-30mm-f1-4-for-sony:garut:24]], 2 hari: [[hitung:lensa-sigma-30mm-f1-4-for-sony:garut:48]].</li>
+<li>Sigma 30mm F1.4 for Sony 2 jam: [[hitung:lensa-sigma-30mm-f1-4-for-sony:garut:2]], 1 hari: [[hitung:lensa-sigma-30mm-f1-4-for-sony:garut:24]].</li>
 <li>Sony A6000 + Sigma 16mm F1.4 for Sony, masing-masing per hari: [[harga:sony-a6000:garut]] dan [[harga:lensa-sigma-16mm-f1-4-for-sony:garut]].</li>
 </ul>
 <p>Promo sewa beberapa hari, bila ada, dihitung otomatis saat booking. Daftar lengkap lensa ada di <a href="/sewa/lensa-garut.html">halaman sewa lensa Garut</a>.</p>
