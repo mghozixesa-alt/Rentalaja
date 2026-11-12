@@ -895,4 +895,139 @@ dict(
 <p>Lihat semua di <a href="/sewa/mobil-garut.html">halaman sewa mobil Garut</a>. Menginap di Garut? Cek juga <a href="/sewa/penginapan-garut.html">villa & rumah Rentalaja Experience</a>.</p>
 [[cabang:GRT]]
 '''),
+
+dict(
+    slug='pilih-lensa-sewa-tele-wide-fix-garut', img=('photo-1502982720700-bfff97f2ecac', 'William Thomas', 'williamauto', 'Ilustrasi'), city='garut', cats=['lensa', 'kamera'], date='2026-11-12',
+    title='Sewa Lensa di Garut: Pilih Lensa Tele, Wide, atau Fix Sesuai Mount Kamera',
+    desc='Bedanya lensa tele, wide, dan fix untuk kamera Canon, Sony, dan Fujifilm, lengkap dengan daftar lensa yang bisa disewa di Rentalaja Garut Kota dan harganya dari sistem.',
+    lead='Lensa menentukan hasil foto sama besarnya dengan kamera. Di Rentalaja Garut Kota tersedia lensa tele seperti Canon EF-S 55-250mm ([[harga:lensa-canon-ef-s-55-250mm:garut]]), lensa wide, dan lensa fix bukaan besar untuk Canon, Sony, dan Fujifilm. Panduan ini membantu memilih jenis lensa yang tepat dan memastikan cocok dengan mount kamera Anda.',
+    body='''
+<h2>Langkah pertama: cocokkan mount</h2>
+<p>Lensa hanya bisa dipasang di kamera dengan mount yang sama. Ini aturan dasar sebelum memilih focal length:</p>
+<ul class="tips">
+<li><b>Canon DSLR</b> (1100D, 1200D, 1300D, 600D, 700D, 70D): lensa Canon EF dan EF-S, misalnya 18-55mm STM, 50mm F1.8, 10-18mm, dan 55-250mm.</li>
+<li><b>Canon EOS M</b> (M10): lensa Canon 15-45mm kit EOS M.</li>
+<li><b>Sony</b> (A6000, A6400, A7II, A7III): lensa Sony E/FE dan lensa pihak ketiga bertulisan "for Sony".</li>
+<li><b>Fujifilm</b> (X-A5, X-T10, X-T20, X-T2, X-T4): lensa Fujinon XF dan lensa bertulisan "for Fujifilm".</li>
+</ul>
+<p>Untuk lensa yang mount-nya tidak tertulis di nama (misalnya Tamron 18-200mm), tanyakan ke admin kamera mana yang cocok sebelum booking.</p>
+
+<h2>Lensa tele: untuk subjek jauh</h2>
+<p>Lensa tele mendekatkan subjek yang jauh: panggung acara, pertandingan olahraga, burung, atau foto candid dari kejauhan tanpa mengganggu orangnya. Latar belakang juga terlihat lebih "rapat" dan blur.</p>
+[[pilih:garut:lensa-canon-ef-s-55-250mm,lensa-tamron-18-200mm-vc]]
+<p>Canon 55-250mm cocok dipasangkan dengan DSLR Canon untuk acara wisuda dari bangku penonton atau foto alam. Tamron 18-200mm adalah lensa "sapu jagat": satu lensa dari lebar sampai tele, praktis untuk jalan-jalan tanpa ganti lensa.</p>
+
+<h2>Lensa wide: untuk pemandangan dan ruangan</h2>
+<p>Lensa wide menangkap bidang yang luas: pemandangan gunung, interior villa atau kafe, dan foto rombongan di ruang sempit. Cocok juga untuk vlog karena wajah dan latar masuk sekaligus saat kamera dipegang sendiri.</p>
+[[pilih:garut:lensa-canon-ef-s-10-18mm-is-stm,lensa-sigma-16mm-f1-4-for-sony,lensa-sigma-16mm-f1-4-for-fujifilm,lensa-fujinon-xf-23mm-f2]]
+<p>Sigma 16mm F1.4 punya bukaan besar, jadi tetap terang untuk foto malam atau dalam ruangan. Canon 10-18mm lebih lebar lagi untuk interior dan arsitektur.</p>
+
+<h2>Lensa fix (prime): untuk potret dan cahaya minim</h2>
+<p>Lensa fix tidak bisa zoom, tapi bukaannya besar (angka F kecil) sehingga latar lebih blur dan tetap terang di tempat redup. Pilihan paling populer untuk potret, foto produk, dan konten makanan.</p>
+[[pilih:garut:lensa-canon-50mm-f1-8,lensa-canon-50mm-stm,lensa-sigma-30mm-f1-4-for-sony,lensa-sony-e-35mm-f1-8,lensa-kamlan-50mm-f1-1-for-sony,lensa-sony-fe-85mm-f1-8,lensa-sigma-30mm-f1-4-for-fujifilm,lensa-fujinon-35mm-f2,lensa-fujinon-35mm-f1-4,lensa-sigma-56mm-f1-4-for-fujifilm,lensa-viltrox-85mm-f1-8-for-fujifilm]]
+<ul class="tips">
+<li><b>30–35mm</b> di kamera APS-C: sudut pandang mirip mata, serbaguna untuk sehari-hari dan potret setengah badan.</li>
+<li><b>50–56mm</b> di APS-C: potret dari dada ke atas dengan latar blur.</li>
+<li><b>85mm</b>: potret close-up dan prewedding, butuh ruang mundur lebih jauh.</li>
+<li>Kamlan 50mm F1.1 adalah lensa fokus manual; cocok kalau Anda terbiasa memutar ring fokus sendiri.</li>
+</ul>
+
+<h2>Lensa kit: zoom standar untuk pemula</h2>
+<p>Lensa kit (18-55mm, 16-50mm, 15-45mm, 28-70mm) mencakup lebar sampai sedikit tele. Cukup untuk dokumentasi acara dan liburan, dan paling ringan di kantong.</p>
+[[pilih:garut:lensa-canon-15-45mm-kit-eos-m,lensa-sony-kit-16-50mm-oss,lensa-canon-ef-s-18-55mm-stm,lensa-sony-fe-28-70mm]]
+
+<h2>Crop factor: kenapa 50mm terasa lebih "dekat"</h2>
+<p>Sebagian besar kamera di katalog (Canon DSLR seri angka, Sony A6000/A6400, semua Fujifilm X) memakai sensor APS-C. Di sensor ini, sudut pandang lensa terasa lebih sempit dibanding kamera full frame: kira-kira dikali 1,5 untuk Sony dan Fujifilm, dan 1,6 untuk Canon. Jadi lensa 50mm di Canon 1300D terasa seperti sekitar 80mm. Sony A7II dan A7III adalah full frame, jadi lensa FE 28-70mm dan FE 85mm terasa sesuai angkanya.</p>
+
+<h2>Contoh biaya sewa</h2>
+<p>Semua lensa di atas bisa disewa terpisah kalau Anda sudah punya kamera, atau sekalian dengan kamera dari <a href="/sewa/kamera-garut.html">katalog kamera Garut</a>. Contoh hitungan sistem sebelum promo:</p>
+<ul class="tips">
+<li>Canon 55-250mm ½ hari: [[hargah:lensa-canon-ef-s-55-250mm:garut]], 1 hari: [[hitung:lensa-canon-ef-s-55-250mm:garut:24]].</li>
+<li>Sigma 30mm F1.4 for Sony 1 hari: [[hitung:lensa-sigma-30mm-f1-4-for-sony:garut:24]], 2 hari: [[hitung:lensa-sigma-30mm-f1-4-for-sony:garut:48]].</li>
+<li>Sony A6000 + Sigma 16mm F1.4 for Sony, masing-masing per hari: [[harga:sony-a6000:garut]] dan [[harga:lensa-sigma-16mm-f1-4-for-sony:garut]].</li>
+</ul>
+<p>Promo sewa beberapa hari, bila ada, dihitung otomatis saat booking. Daftar lengkap lensa ada di <a href="/sewa/lensa-garut.html">halaman sewa lensa Garut</a>.</p>
+
+<h2>Tips sebelum mengambil lensa</h2>
+<ul class="tips">
+<li>Stok banyak lensa hanya 1–2 unit. Booking lebih awal untuk tanggal wisuda dan akhir pekan.</li>
+<li>Cek kaca depan dan belakang bersama petugas, pasang tutup lensa saat tidak dipakai.</li>
+<li>Ganti lensa di tempat teduh dan tidak berangin supaya debu tidak masuk ke sensor.</li>
+<li>Baca juga <a href="/panduan/kamera-lensa-wisuda-prewedding-garut">kombinasi kamera dan lensa untuk wisuda &amp; prewedding</a> dan <a href="/panduan/sewa-kamera-foto-produk-umkm-garut">sewa kamera untuk foto produk UMKM</a>.</li>
+</ul>
+[[cabang:GRT]]
+'''),
+
+dict(
+    slug='sewa-sepatu-gunung-jaket-carrier-garut', img=('photo-1790617616577-706647c2b4b3', 'Yulya Powell', 'matsurimon', 'Ilustrasi'), city='garut', cats=['camping'], date='2026-11-12',
+    title='Sewa Sepatu Gunung, Jaket Hiking, dan Carrier di Garut: Harga & Cara Pilih',
+    desc='Harga sewa sepatu gunung, sepatu trail run, jaket hiking, carrier 45L/60L, trekking pole, dan hydropack di Rentalaja Garut Kota, plus cara memilih untuk pendakian Papandayan, Guntur, atau Cikuray.',
+    lead='Mau mendaki di Garut tapi belum punya sepatu gunung atau carrier? Di Rentalaja Garut Kota, sepatu outdoor bisa disewa [[harga:sepatu-outdoor:garut]] dan carrier mulai [[harga:carrier-45l:garut]]. Berikut cara memilih perlengkapan pakai-badan yang pas supaya pendakian nyaman.',
+    body='''
+<h2>Harga sewa perlengkapan pendakian</h2>
+[[pilih:garut:sepatu-outdoor,sepatu-trail-run,jaket-hiking-gorpcore-pria,jaket-hiking-gorpcore-wanita,carrier-45l,carrier-60l,trekking-pole,hydropack]]
+<p>Harga per item per hari, diambil langsung dari sistem Rentalaja.</p>
+
+<h2>Sepatu outdoor atau sepatu trail run?</h2>
+<ul class="tips">
+<li><b>Sepatu outdoor</b> ([[harga:sepatu-outdoor:garut]]): pilihan aman untuk jalur berbatu, berpasir, atau licin, dan untuk membawa beban carrier.</li>
+<li><b>Sepatu trail run</b> ([[harga:sepatu-trail-run:garut]]): lebih ringan dan lentur, cocok untuk tektok (naik-turun tanpa menginap) dan Anda yang terbiasa berjalan cepat.</li>
+</ul>
+<p>Ukuran yang tersedia terbatas, jadi <b>tanyakan ukuran ke admin lewat WhatsApp sebelum booking</b>. Saat mengambil, coba pakai dengan kaus kaki tebal yang akan Anda pakai mendaki. Pastikan jari kaki tidak menyentuh ujung sepatu saat berdiri, karena di turunan kaki akan terdorong ke depan.</p>
+
+<h2>Carrier 45L atau 60L?</h2>
+<ul class="tips">
+<li><b>Carrier 45L</b> ([[harga:carrier-45l:garut]]): cukup untuk camping 1 malam dengan sleeping bag, matras, dan baju ganti.</li>
+<li><b>Carrier 60L</b> ([[harga:carrier-60l:garut]]): untuk membawa barang bersama seperti kompor, gas, dan flysheet, atau untuk 2 malam.</li>
+</ul>
+<p>Tiap ukuran carrier hanya tersedia 1 unit. Untuk rombongan, booking lebih awal dan bagi bawaan supaya tidak semua orang butuh carrier besar.</p>
+<p>Cara memakai: kencangkan sabuk pinggang (hip belt) lebih dulu supaya beban bertumpu di pinggul, baru atur tali bahu. Barang berat taruh di tengah, dekat punggung.</p>
+
+<h2>Jaket hiking</h2>
+<p>Jaket hiking tersedia model pria ([[harga:jaket-hiking-gorpcore-pria:garut]]) dan wanita ([[harga:jaket-hiking-gorpcore-wanita:garut]]). Udara di gunung jauh lebih dingin daripada Garut Kota, apalagi malam dan menjelang subuh. Pakai berlapis: kaus yang cepat kering, lapisan hangat dari rumah, lalu jaket di luar. Jas hujan tetap perlu dibawa sendiri.</p>
+
+<h2>Trekking pole dan hydropack</h2>
+<ul class="tips">
+<li><b>Trekking pole</b> ([[harga:trekking-pole:garut]]): membantu menahan lutut di turunan dan menjaga keseimbangan di jalur licin.</li>
+<li><b>Hydropack</b> ([[harga:hydropack:garut]]): kantong air dengan selang, jadi bisa minum sambil berjalan tanpa membuka tas.</li>
+</ul>
+
+<h2>Contoh biaya untuk pendakian 2 hari</h2>
+<p>Satu orang, ambil pagi dan kembali besok sore (lebih dari 24 jam), contoh hitungan sistem sebelum promo:</p>
+<ul class="tips">
+<li>Sepatu outdoor: [[hitung:sepatu-outdoor:garut:32]]</li>
+<li>Carrier 45L: [[hitung:carrier-45l:garut:32]]</li>
+<li>Jaket hiking: [[hitung:jaket-hiking-gorpcore-pria:garut:32]]</li>
+<li>Trekking pole: [[hitung:trekking-pole:garut:32]]</li>
+</ul>
+<p>Total akhir mengikuti jam ambil dan jam kembali di booking; promo bila ada dihitung otomatis. Cara hitung durasinya dijelaskan di <a href="/panduan/hitung-biaya-sewa-motor-garut">panduan hitung biaya sewa</a> (aturannya sama untuk alat camping).</p>
+
+<h2>Lengkapi dengan alat camping</h2>
+<p>Sleeping bag, matras, kompor, dan lampu tenda bisa diambil di cabang yang sama. Lihat <a href="/panduan/checklist-alat-camping-garut">checklist alat camping</a>, <a href="/panduan/biaya-camping-per-orang-garut">contoh biaya camping per orang</a>, dan <a href="/sewa/camping-garut.html">semua alat camping di Garut</a>. Butuh motor ke basecamp? Baca <a href="/panduan/rute-motor-garut-papandayan">rute motor ke Papandayan</a>.</p>
+
+<h2>Yang tetap dibawa sendiri</h2>
+<p>Beberapa barang sebaiknya milik pribadi karena menempel langsung di badan atau tidak ada di katalog:</p>
+<ul class="tips">
+<li><b>Kaus kaki tebal</b> dan cadangannya, supaya sepatu sewaan nyaman dan kaki tidak lecet.</li>
+<li><b>Jas hujan atau ponco</b>; hujan di gunung bisa datang tiba-tiba.</li>
+<li><b>Sarung tangan, kupluk, dan baju ganti</b> di kantong kedap air.</li>
+<li><b>Obat pribadi, makanan ringan, dan air minum</b> secukupnya untuk perjalanan.</li>
+</ul>
+
+<h2>Merawat barang selama dipakai</h2>
+<ul class="tips">
+<li>Lepas sepatu yang basah di tenda dan jangan dijemur dekat api, karena lem dan sol bisa rusak.</li>
+<li>Kosongkan dan buka tutup hydropack setelah dipakai supaya cepat kering.</li>
+<li>Kendurkan tali carrier sebelum disimpan, dan jangan menduduki carrier yang berisi barang.</li>
+<li>Kotor karena dipakai mendaki itu wajar. Kalau ada yang rusak, kabari admin saat pengembalian.</li>
+</ul>
+
+<h2>Tips singkat</h2>
+<ul class="tips">
+<li>Cek kondisi sol dan tali sepatu, resleting jaket, serta gesper carrier bersama petugas saat ambil.</li>
+<li>Cek prakiraan cuaca dan info jalur dari pengelola gunung sebelum berangkat.</li>
+<li>Kembalikan sesuai jam di booking, atau perpanjang dari aplikasi sebelum waktunya habis.</li>
+</ul>
+[[cabang:GRT]]
+'''),
 ]
