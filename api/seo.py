@@ -692,7 +692,9 @@ def page_city(D, c):
     codes = [k for k in BR_CITY if BR_CITY[k] == c and k in D['br']]
     path = f'/sewa/{c}.html'
     title = f'Rentalaja {CITY[c]} – Sewa {", ".join(CAT[cat][0] for cat, _ in cats[:4])} & Lainnya'
+    if c == 'bandung': title = f'Rentalaja Bandung Dipatiukur – Sewa {", ".join(CAT[cat][0] for cat, _ in cats[:3])} & Lainnya'
     desc = f'Rentalaja {CITY[c]}: sewa ' + ', '.join(CAT[cat][0] if CAT[cat][0] in ('iPhone', 'PlayStation') else CAT[cat][0].lower() for cat, _ in cats) + '. Booking online, DP 20%, buka setiap hari 07.30–21.00.'
+    if c == 'bandung': desc = desc.replace('Rentalaja Bandung:', 'Rentalaja Bandung (Dipatiukur & Kubang Selatan, Coblong):')
     total = sum((x.get('rc') or 0) for _, items in cats for x in items)
     lds = [{"@context": "https://schema.org", "@graph": [local_business(D, k) for k in codes]}, crumbs_ld([('Rentalaja', '/sewa/'), (CITY[c], path)]), faq_ld(D)]
     body = banner(f'Rentalaja {CITY[c]}', f'Sewa {", ".join(CAT[cat][0] if CAT[cat][0] in ("iPhone", "PlayStation") else CAT[cat][0].lower() for cat, _ in cats)} — cek stok dan booking langsung dari HP.',
@@ -714,12 +716,14 @@ def page_city(D, c):
 def page_category(D, c, cat):
     items = sorted(D['pages'][(c, cat)], key=lambda x: (x['d'] or 0, x['name']))
     label, title_base, intro, good = CAT[cat]
-    lo = min(x['d'] for x in items if x['d'])
     codes = sorted({b for it in items for b in it['branches']}, key=lambda x: list(BR_CITY).index(x))
     path = f'/sewa/{cat}-{c}.html'
     X = CAT_EXTRA.get((c, cat), {})
+    # harga "mulai" dihitung dari barang utama saja (aksesori seperti tripod/baterai tidak ikut)
+    main = [x for x in items if x['d'] and not any(k in (x.get('slug') or '') for k in X.get('lo_skip', ()))] or [x for x in items if x['d']]
+    lo = min(x['d'] for x in main)
     hj = any(x.get('j') for x in items); hh = any(x.get('h') for x in items)
-    lh = min((x['h'] for x in items if x.get('h')), default=None)
+    lh = min((x['h'] for x in main if x.get('h')), default=None)
     title = (X['title'].format(lo=rp(lo), lh=rp(lh)) if X.get('title') else f'{title_base} {CITY[c]} Mulai {rp(lo)}/Hari | Rentalaja')
     desc = (X['desc'].format(lo=rp(lo), lh=rp(lh), n=len(items)) if X.get('desc') else
             f'{title_base} di {CITY[c]}: {len(items)} pilihan, mulai {rp(lo)} per hari' + (', ada tarif 2 jam dan ½ hari' if (hj or hh) else '') + '. Cek ketersediaan dan booking online, DP 20%.')
@@ -918,21 +922,44 @@ CAT_EXTRA = {
              ('Di mana ambil iPhone sewaan di Bandung?', 'Di cabang Rentalaja Bandung, Kecamatan Coblong (Jl. Kubang Selatan, dekat kawasan ITB dan Dipati Ukur). Titik ambil dikonfirmasi admin setelah booking, atau minta diantar dengan ongkir sesuai jarak.'),
              ('Apa saja yang didapat saat sewa iPhone?', 'Unit iPhone, charger, dan tas. Pindahkan foto & video ke HP atau cloud Anda sebelum mengembalikan unit.')]),
     ('garut', 'motor'): dict(
+        title='Sewa & Rental Motor Garut Mulai {lo}/Hari, Bisa Diantar | Rentalaja',
+        desc='Rental motor di Garut: {n} pilihan Beat, Scoopy, PCX dan lainnya, mulai {lo}/hari. Helm & jas hujan termasuk, bisa diantar ke hotel/stasiun. Booking online, DP 20%.',
         intro=('<p>Motor matic untuk keliling Garut, ke Cipanas, Kamojang, sampai Papandayan. Helm dan jas hujan disiapkan, dan motor bisa diantar ke hotel, villa, atau stasiun. '
                'Untuk jalur menanjak seperti Papandayan kami sarankan Honda PCX.</p>'
                '<p>Panduan: <a href="/panduan/pilih-motor-beat-scoopy-pcx-garut">Beat, Scoopy, atau PCX?</a> · <a href="/panduan/hitung-biaya-sewa-motor-garut">contoh hitung biaya</a> · '
                '<a href="/panduan/sewa-motor-stasiun-garut">sewa motor dekat Stasiun Garut</a> · <a href="/panduan/rute-motor-garut-papandayan">rute ke Papandayan</a>.</p>'),
-        faq=[('Motor apa yang cocok untuk ke Papandayan?', 'Honda PCX. Jalurnya menanjak dan berkelok, Beat lebih cocok untuk dalam kota.'),
+        faq=[('Berapa harga sewa motor di Garut?', 'Mulai {lo} per hari. Harga tiap motor ada di tabel halaman ini dan selalu mengikuti sistem Rentalaja; sewa 2+ hari atau 2+ unit bisa dapat promo saat booking.'),
+             ('Motor apa yang cocok untuk ke Papandayan?', 'Honda PCX. Jalurnya menanjak dan berkelok, Beat lebih cocok untuk dalam kota.'),
              ('Bisa diantar ke hotel atau Stasiun Garut?', 'Bisa. Pilih "Diantar" saat booking dan isi alamat; ongkir dihitung dari jarak dan dikonfirmasi cabang.')]),
     ('garut', 'mobil'): dict(
+        title='Rental Mobil Garut Lepas Kunci Mulai {lo}/Hari | Rentalaja',
+        desc='Harga rental mobil di Garut: {n} pilihan dari Ayla, Sigra, Xpander sampai Hiace, mulai {lo}/hari lepas kunci. Ada paket dengan sopir. Booking online, DP 20%.',
         intro=('<p>Mobil lepas kunci untuk liburan keluarga, rombongan, atau urusan kantor di Garut. Syaratnya KTP, SIM A, dan KK yang diunggah sekali di aplikasi. '
-               'Baca juga <a href="/panduan/sewa-mobil-garut-pilih-sesuai-rombongan">cara memilih mobil sesuai jumlah rombongan</a>.</p>'),
-        faq=[('Apa syarat sewa mobil lepas kunci di Garut?', 'KTP, SIM A, dan KK, diunggah sekali di aplikasi dan diverifikasi sebelum bayar.')]),
+               'Mau disetiri? Ada juga paket <a href="/#/MobilSopir">mobil + sopir</a>.</p>'
+               '<p>Panduan: <a href="/panduan/harga-rental-mobil-garut">harga rental mobil Garut & contoh hitung biaya</a> · '
+               '<a href="/panduan/sewa-mobil-garut-pilih-sesuai-rombongan">memilih mobil sesuai jumlah rombongan</a>.</p>'),
+        faq=[('Berapa harga rental mobil di Garut?', 'Mulai {lo} per hari untuk lepas kunci. Harga tiap mobil ada di tabel halaman ini dan selalu mengikuti sistem Rentalaja.'),
+             ('Apa syarat sewa mobil lepas kunci di Garut?', 'KTP, SIM A, dan KK, diunggah sekali di aplikasi dan diverifikasi sebelum bayar.'),
+             ('Bisa sewa mobil dengan sopir?', 'Bisa. Pilih paket di halaman Mobil + sopir di aplikasi Rentalaja; harga paket dan DP-nya tertera saat booking.')]),
+    ('garut', 'kamera'): dict(
+        lo_skip=('tripod', 'baterai', 'ht-', 'powerbank'),
+        title='Sewa Kamera Garut Mulai {lo}/Hari – Popocamera by Rentalaja',
+        desc='Rental kamera di Garut (Popocamera by Rentalaja): {n} pilihan mirrorless Sony, Fujifilm & DSLR Canon, mulai {lo}/hari, ada tarif 2 jam & ½ hari. Booking online, DP 20%.',
+        intro=('<p><b>Popocamera by Rentalaja</b> adalah layanan rental kamera Rentalaja di Garut Kota. Kamera mirrorless dan DSLR untuk wisuda, prewedding, liburan, sampai foto produk, '
+               'dengan tarif harian, ½ hari, atau 2 jam untuk sesi singkat.</p>'
+               '<p>Panduan: <a href="/panduan/kamera-lensa-wisuda-prewedding-garut">kamera & lensa untuk wisuda dan prewedding</a> · '
+               '<a href="/panduan/sewa-kamera-foto-produk-umkm-garut">sewa kamera untuk foto produk UMKM</a> · <a href="/sewa/lensa-garut.html">daftar harga sewa lensa</a>.</p>'),
+        faq=[('Apa itu Popocamera?', 'Popocamera by Rentalaja adalah nama layanan rental kamera Rentalaja di Garut. Booking, harga, dan pengambilannya lewat Rentalaja Garut Kota.'),
+             ('Berapa biaya sewa kamera di Garut?', 'Mulai {lo} per hari, dan ada tarif 2 jam serta ½ hari untuk sesi singkat. Harga tiap kamera ada di tabel halaman ini.')]),
+    ('garut', 'lensa'): dict(
+        title='Harga Sewa Lensa Kamera Garut Mulai {lo}/Hari | Rentalaja',
+        desc='Harga sewa lensa kamera di Garut: {n} pilihan lensa fix & zoom untuk Sony, Fujifilm, dan Canon, mulai {lo}/hari. Sewa bareng kamera di Popocamera by Rentalaja.',
+        faq=[('Berapa harga sewa lensa kamera di Garut?', 'Mulai {lo} per hari. Harga tiap lensa ada di tabel halaman ini dan selalu mengikuti sistem Rentalaja.')]),
 }
 
 
 # Tanggal terakhir tampilan/teks halaman SEO diubah (naikkan saat template atau teks umum berubah).
-SITE_UPDATED = '2026-11-11'
+SITE_UPDATED = '2026-11-12'
 
 
 def sitemap(D):

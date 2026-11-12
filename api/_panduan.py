@@ -854,4 +854,45 @@ dict(
 [[kartu:motor:garut:4]]
 [[cabang:GRT]]
 '''),
+dict(
+    slug='harga-rental-mobil-garut', img=('photo-1711683951846-14a2b1d59b76', 'Abdullah Ammar', 'abdmmar', 'Ilustrasi'), city='garut', cats=['mobil'], date='2026-11-12',
+    title='Harga Rental Mobil Garut Lepas Kunci 2026 & Contoh Hitung Biaya',
+    desc='Daftar harga rental mobil di Garut per hari (lepas kunci) dari city car, MPV, sampai Hiace, contoh total sewa 1–3 hari, syarat, DP, dan pilihan dengan sopir.',
+    lead='Berapa biaya rental mobil di Garut? Di Rentalaja Garut Kota harga mobil lepas kunci mulai [[harga:daihatsu-ayla-mt:garut]]. Di bawah ini daftar harga lengkap yang diambil langsung dari sistem, contoh hitungan untuk beberapa durasi, dan hal yang perlu disiapkan sebelum booking.',
+    body='''
+<h2>Daftar harga rental mobil Garut per hari</h2>
+[[tabel:mobil:garut]]
+<p>Harga di atas untuk lepas kunci (Anda menyetir sendiri) dan selalu mengikuti sistem Rentalaja. Promo atau tarif musim ramai, bila ada, dihitung otomatis saat booking.</p>
+
+<h2>Contoh total biaya</h2>
+<div class="scroll"><table><thead><tr><th>Mobil & durasi</th><th class="n">Total</th></tr></thead><tbody>
+<tr><td>Daihatsu Sigra, 1 hari (24 jam)</td><td class="n">[[hitung:daihatsu-sigra-mt:garut:24]]</td></tr>
+<tr><td>Daihatsu Sigra, 1 hari + sisa 8 jam (32 jam)</td><td class="n">[[hitung:daihatsu-sigra-mt:garut:32]]</td></tr>
+<tr><td>Daihatsu Sigra, 3 hari (72 jam)</td><td class="n">[[hitung:daihatsu-sigra-mt:garut:72]]</td></tr>
+<tr><td>Mitsubishi Xpander AT, 2 hari (48 jam)</td><td class="n">[[hitung:mitsubishi-xpander-at:garut:48]]</td></tr>
+<tr><td>Toyota Hiace, 1 hari (24 jam)</td><td class="n">[[hitung:toyota-hiace:garut:24]]</td></tr>
+</tbody></table></div>
+<p>Durasi dihitung per 24 jam dari jam ambil. Kalau setelah hari penuh masih ada sisa <b>12 jam atau kurang</b>, sisa itu dikenai [[aturan:half_day_extra_percent]]% dari tarif harian, bukan satu hari penuh. Total final tampil di aplikasi sebelum Anda bayar.</p>
+
+<h2>Lepas kunci atau dengan sopir?</h2>
+<ul class="tips">
+<li><b>Lepas kunci</b>: syaratnya KTP, SIM A, dan KK yang diunggah sekali di aplikasi dan diverifikasi sebelum bayar. DP [[aturan:dp_percent]]%, sisanya saat ambil mobil.</li>
+<li><b>Dengan sopir</b>: cocok kalau tidak hafal jalan Garut atau ingin santai. Pilihan paket dan harganya ada di <a href="/#/MobilSopir">halaman Mobil + sopir</a>; DP paket sopir [[aturan:car_driver_dp_percent]]%.</li>
+</ul>
+<p>Area pemakaian: [[aturan:rental_region]]</p>
+
+<h2>Tips supaya lebih hemat</h2>
+<ul class="tips">
+<li><b>Pilih mobil sesuai rombongan.</b> Untuk 2–3 orang city car sudah cukup; untuk keluarga 5–7 orang pilih MPV. Lihat <a href="/panduan/sewa-mobil-garut-pilih-sesuai-rombongan">panduan memilih mobil sesuai jumlah orang & koper</a>.</li>
+<li><b>Atur jam kembali.</b> Lewat sedikit dari hari penuh hanya dikenai tambahan setengah hari, jadi rencanakan jam kembali yang realistis. Ada toleransi telat [[aturan:late_grace_minutes]]; lewat dari itu dikenai denda [[aturan:late_fee_percent_per_hour]]% dari harga harian per jam.</li>
+<li><b>Booking lebih awal</b> saat akhir pekan dan libur panjang. Pembatalan gratis paling lambat [[aturan:free_cancel_hours]] jam sebelum jadwal ambil.</li>
+<li><b>Butuh diantar?</b> Mobil bisa diantar ke hotel, villa, atau Stasiun Garut dengan ongkir sesuai jarak:</li>
+</ul>
+[[ongkir:GRT]]
+
+<h2>Pilihan mobil</h2>
+[[kartu:mobil:garut:6]]
+<p>Lihat semua di <a href="/sewa/mobil-garut.html">halaman sewa mobil Garut</a>. Menginap di Garut? Cek juga <a href="/sewa/penginapan-garut.html">villa & rumah Rentalaja Experience</a>.</p>
+[[cabang:GRT]]
+'''),
 ]
