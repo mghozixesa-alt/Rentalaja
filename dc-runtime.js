@@ -471,7 +471,7 @@ function render(){
   build(rootSpec.tpl,scopes,frag);
   screenEl.innerHTML='';screenEl.appendChild(frag);
   var root=screenEl.firstElementChild; if(root){custNav(root);staffNav(root);adapt(root);deskFix(root);flowClose(root);cartUI(root);}
-  if(focusInfo&&focusInfo.i>-1){var all2=screenEl.querySelectorAll('input,textarea,select');var t=all2[focusInfo.i];if(t){t.focus({preventScroll:true});try{t.setSelectionRange(focusInfo.s,focusInfo.e);}catch(e){}}}
+  if(focusInfo&&focusInfo.i>-1){var all2=screenEl.querySelectorAll('input,textarea,select');var t=all2[focusInfo.i];if(t){t.focus({preventScroll:true});if(focusInfo.s==null){/* email/angka: tidak punya posisi kursor, taruh di akhir supaya ketikan tidak terbalik */var vv=t.value;t.value='';t.value=vv;}else{try{t.setSelectionRange(focusInfo.s,focusInfo.e);}catch(e){}}}}
   window.scrollTo(0,y);
 }
 
