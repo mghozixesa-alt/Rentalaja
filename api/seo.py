@@ -171,6 +171,14 @@ def rp(v): return 'Rp' + f'{int(v):,}'.replace(',', '.') if v else '—'
 def img_url(ph):
     if not ph: return None
     return BASE + ph if ph.startswith('/') else IMG + ph.lstrip('/')
+GM_CITY = {'garut': 'GRT', 'bandung': 'BDG-HUB'}
+def gm_of(code):
+    D = _cache.get('data') or {}
+    g = (D.get('gm') or {}).get(code) or {}
+    return g if g.get('rating') and g.get('count') and g.get('place_id') else None
+def gm_txt(g): return '★ ' + f"{float(g['rating']):.1f}".replace('.', ',') + ' · ' + f"{int(g['count']):,}".replace(',', '.') + ' ulasan Google'
+def gm_url(g): return 'https://www.google.com/maps/place/?q=place_id:' + g['place_id']
+def gm_review(g): return 'https://search.google.com/local/writereview?placeid=' + g['place_id']
 def slugify(s): return re.sub(r'[^a-z0-9]+', '-', str(s).lower()).strip('-')
 
 
@@ -205,7 +213,12 @@ def load():
         for cat in ORDER:
             items = [p for p in prod.values() if p['city'] == c and p['cat'] == cat]
             if items: pages[(c, cat)] = sorted(items, key=lambda x: (x['d'] or 0, x['name']))
-    data = dict(br=br, prod=prod, pages=pages, at=raw.get('at'), promos=raw.get('promos'), promo_free=raw.get('promo_free'), late_pct=raw.get('late_pct'), late_grace=raw.get('late_grace'),
+    gm = {}
+    try:
+        rq = urllib.request.Request(SB + '/rest/v1/settings?key=eq.gmaps&select=value', headers={'apikey': ANON, 'Authorization': 'Bearer ' + ANON})
+        with urllib.request.urlopen(rq, timeout=6) as r2: gm = (json.loads(r2.read().decode()) or [{}])[0].get('value') or {}
+    except Exception: gm = {}
+    data = dict(gm=gm, br=br, prod=prod, pages=pages, at=raw.get('at'), promos=raw.get('promos'), promo_free=raw.get('promo_free'), late_pct=raw.get('late_pct'), late_grace=raw.get('late_grace'),
                 zones=raw.get('zones') or [], rules=raw.get('rules') or {}, stays=stays_of(raw))
     _cache.update(at=time.time(), data=data)
     return data
@@ -226,7 +239,7 @@ def head(title, desc, path, lds, image=None):
 <script src="/ga.js" defer></script>
 {''.join('<script type="application/ld+json">' + json.dumps(x, ensure_ascii=False) + '</script>' for x in lds)}
 </head><body>
-<div class="trust"><div class="w">Booking online 24 jam · DP 20%<span class="tx"> · Garut &amp; Bandung</span> · Buka 07.30–21.00</div></div>
+<div class="trust"><div class="w">{(f'<a href="{gm_url(gm_of("GRT"))}" rel="nofollow" style="color:#FFD86B;text-decoration:none">' + gm_txt(gm_of("GRT")) + '</a> · ') if gm_of("GRT") else ''}Booking online 24 jam · DP 20%<span class="tx"> · Garut &amp; Bandung · Buka 07.30–21.00</span></div></div>
 <header class="top"><div class="w"><a href="/sewa/" class="brand"><img src="/logo.png" alt="Rentalaja" width="120" height="34"></a>
 <nav class="nav"><a href="/sewa/garut.html">Garut</a><a href="/sewa/bandung.html">Bandung</a><a href="/panduan/">Panduan</a></nav>
 <div class="hact"><a class="hwa" href="https://wa.me/{WA}?text=Halo%20Rentalaja" rel="nofollow" aria-label="WhatsApp"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l1.3-3.9A8 8 0 1 1 8 19z"/></svg><span>WhatsApp</span></a><a class="hbk" href="/#/Home">Booking</a></div></div></header>"""
@@ -277,7 +290,8 @@ def branch_box(D, codes):
         b = D['br'].get(code) or {}
         wa = f'https://wa.me/{b.get("phone") or WA}?text=' + quote('Halo Rentalaja, saya mau tanya sewa')
         out.append(f'<div class="branch"><b>{esc(BR_NAME.get(code))}</b>{esc(b.get("address"))}<br>Buka setiap hari {esc((b.get("open") or "07:30").replace(":", "."))}–{esc((b.get("close") or "21:00").replace(":", "."))} · '
-                   f'<a href="{wa}" rel="nofollow">WhatsApp</a>' + (f' · <a href="{esc(b.get("maps"))}" rel="nofollow">Peta</a>' if b.get('maps') else '') + '</div>')
+                   f'<a href="{wa}" rel="nofollow">WhatsApp</a>' + (f' · <a href="{esc(b.get("maps"))}" rel="nofollow">Peta</a>' if b.get('maps') else '')
+                   + ((lambda g: f'<br><a href="{gm_url(g)}" rel="nofollow">{gm_txt(g)}</a>' if g else '')(gm_of(code))) + '</div>')
     return ''.join(out)
 
 
@@ -605,7 +619,7 @@ def banner(h1, lead, ctas, photo=None, collage=None, kicker='', badges=(), crumb
 
 
 def usp():
-    items = [('✓', 'Booking online 24 jam', 'Cek stok dan kunci jadwal dari HP'), ('20%', 'Cukup DP 20%', 'Sisanya dibayar saat ambil'),
+    items = [('✓', 'Booking online 24 jam', 'Cek stok dan kunci jadwal dari HP'), ('20%', 'Cukup DP 20%', 'Bayar lewat link resmi (QRIS/VA/e-wallet), langsung dapat invoice'),
              ('⇄', 'Bisa diantar', 'Ongkir sesuai jarak'), ('★', 'Barang terawat', 'Dicek sebelum diserahkan')]
     return '<div class="usp">' + ''.join(f'<div><i>{i}</i><p style="margin:0"><b>{t}</b><span>{s}</span></p></div>' for i, t, s in items) + '</div>'
 
@@ -711,7 +725,7 @@ def page_city(D, c):
     body = banner(f'Rentalaja {CITY[c]}', f'Sewa {", ".join(CAT[cat][0] if CAT[cat][0] in ("iPhone", "PlayStation") else CAT[cat][0].lower() for cat, _ in cats)} — cek stok dan booking langsung dari HP.',
                   f'<a class="cta" href="/#/Home">Mulai booking</a>{wa_cta(f"Halo Rentalaja {CITY[c]}, saya mau tanya sewa", "Chat admin")}',
                   photo=PHOTO[c], crumb='<a href="/sewa/">Rentalaja</a> › ' + CITY[c],
-                  badges=[f'{len(codes)} cabang', f'Sudah {total:,}× disewa'.replace(',', '.') if total else 'Booking online', 'DP 20%'])
+                  badges=([gm_txt(gm_of(GM_CITY[c]))] if gm_of(GM_CITY.get(c)) else []) + [f'{len(codes)} cabang', f'Sudah {total:,}× disewa'.replace(',', '.') if total else 'Booking online', 'DP 20%'])
     body += '<main class="w">' + cat_pills(D, c) + usp()
     for cat, items in cats:
         items = sorted(items, key=lambda x: -(x.get('rc') or 0))
@@ -745,7 +759,7 @@ def page_category(D, c, cat):
            crumbs_ld([('Rentalaja', '/sewa/'), (CITY[c], f'/sewa/{c}.html'), (label, path)]), faq_ld(D, xfaq)]
     rows = ''.join(f'<tr><td><a href="/sewa/{it["pslug"]}.html">{esc(it["name"])}</a></td>' + (f'<td class="n">{rp(it.get("j"))}</td>' if hj else '') + (f'<td class="n">{rp(it.get("h"))}</td>' if hh else '') + f'<td class="n">{rp(it["d"])}</td></tr>' for it in items)
     collage = [img_url(x['ph']) for x in sorted(items, key=lambda x: -(x.get('rc') or 0)) if x.get('ph')][:3]
-    badges = [f'{len(items)} pilihan', 'DP 20%'] + (['Tarif ' + ('2 jam & ' if hj else '') + '½ hari'] if (hj or hh) else []) + ['Buka 07.30–21.00']
+    badges = ([gm_txt(gm_of(GM_CITY[c]))] if gm_of(GM_CITY.get(c)) else []) + [f'{len(items)} pilihan', 'DP 20%'] + (['Tarif ' + ('2 jam & ' if hj else '') + '½ hari'] if (hj or hh) else []) + ['Buka 07.30–21.00']
     body = banner(f'{esc(title_base)} di {CITY[c]}', f'{esc(intro)} Mulai <b>{rp(lo)}</b> per hari.',
                   f'<a class="cta" href="/#/Katalog?cat={cat}">Cek ketersediaan</a>{wa_cta(f"Halo Rentalaja, saya mau tanya {title_base.lower()} di {CITY[c]}")}',
                   collage=collage, crumb=f'<a href="/sewa/{c}.html">Rentalaja {CITY[c]}</a> › {label}', badges=badges)
