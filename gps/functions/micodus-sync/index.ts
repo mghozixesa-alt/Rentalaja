@@ -1,7 +1,6 @@
 // micodus-sync: ambil posisi terakhir semua unit dari web MiCODUS (akun Rentalaja),
 // lalu masukkan ke sistem GPS Rentalaja lewat rpc gps_ingest_service (format datar ala flespi).
-// Dipanggil pg_cron tiap 10 menit. Rahasia yang dibutuhkan (diisi owner di Supabase → Edge Functions → Secrets):
-//   MICODUS_USER, MICODUS_PASS   — akun login web micodus.net
+// Dipanggil pg_cron tiap 10 menit. Rahasia: MICODUS_PASS (Supabase → Edge Functions → Secrets).
 // Kunci cron (header x-cron-key) dibuat otomatis di Vault 'micodus_cron_key' dan dicek lewat rpc gps_cron_key_ok.
 import { createClient } from "jsr:@supabase/supabase-js@2";
 
@@ -48,14 +47,15 @@ const hidden = (html: string, name: string) =>
     html.match(new RegExp(`value="([^"]*)"[^>]*name="${name}"`)) || [])[1] ?? "";
 
 async function login(jar: Jar) {
-  const user = Deno.env.get("MICODUS_USER"), pass = Deno.env.get("MICODUS_PASS");
-  if (!user || !pass) throw new Error("MICODUS_USER / MICODUS_PASS belum diisi");
+  // Username akun web MiCODUS Rentalaja (bukan rahasia). MICODUS_LOGIN bisa menimpanya bila akunnya diganti.
+  const user = Deno.env.get("MICODUS_LOGIN")?.trim() || "rentalaja", pass = Deno.env.get("MICODUS_PASS")?.trim();
+  if (!pass) throw new Error("MICODUS_PASS belum diisi");
   const page = await go(jar, "Login2.aspx");
   const form = new URLSearchParams({
     __VIEWSTATE: hidden(page.text, "__VIEWSTATE"),
     __VIEWSTATEGENERATOR: hidden(page.text, "__VIEWSTATEGENERATOR"),
     __EVENTVALIDATION: hidden(page.text, "__EVENTVALIDATION"),
-    LType: "0", hidGMT: "7", txtUserName: user, txtImeiNo: "",
+    LType: "0", hidGMT: "", txtUserName: user, txtImeiNo: "",
     txtAccountPassword: pass, txtImeiPassword: "", btnLogin: "Login",
     hidYiwenGUID2: hidden(page.text, "hidYiwenGUID2"), hidLanguage: "en-us",
   });
@@ -68,7 +68,10 @@ async function login(jar: Jar) {
   let html = r.text;
   if (!/map\.aspx\?id=\d+/i.test(html)) html = (await go(jar, "Distributor.aspx")).text;
   const id = (html.match(/map\.aspx\?id=(\d+)/i) || [])[1];
-  if (!id) throw new Error("login MiCODUS gagal (cek username/password)");
+  if (!id) {
+    const why = /loginFaild\(/.test(r.text) ? "MiCODUS menolak username/password" : "tidak diarahkan ke halaman utama";
+    throw new Error(`login MiCODUS gagal [${r.res.status}] ${why} (user ${user}, password ${pass.length} karakter)`);
+  }
   return Number(id);
 }
 
