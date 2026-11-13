@@ -725,7 +725,7 @@
   RA.setCtx = function (patch) { var c = RA.ctx(); for (var k in patch) c[k] = patch[k]; LS.set('ra.ctx', c); return c; };
   RA.addToCart = function (item) {
     var c = RA.ctx(); var ex = c.cart.filter(function (x) { return x.product_id === item.product_id && !x.start_at; })[0];
-    if (ex && !item.start_at) ex.quantity = (ex.quantity || 1) + (item.quantity || 1); else c.cart.push(Object.assign({ quantity: 1 }, item));
+    if (ex && !item.start_at) { ex.quantity = (ex.quantity || 1) + (item.quantity || 1); if (item.sizes || ex.sizes) ex.sizes = (ex.sizes || []).concat(item.sizes || []); } else c.cart.push(Object.assign({ quantity: 1 }, item));
     LS.set('ra.ctx', c); return c;
   };
   /* cache ringan: data jarang berubah ditampilkan dari penyimpanan lokal dulu, lalu disegarkan di belakang */
