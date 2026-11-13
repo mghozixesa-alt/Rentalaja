@@ -878,7 +878,9 @@
       });
     };
   })();
-  var RETIRED = { MgmtDashboard: 1, PosAbsen: 1, CekBuka: 1, MgmtTim: 'OpsKerja', MgmtKeluhan: 'TiketCS', PesanWa: 1, PesanWaInap: 1, PesanWaJeep: 1 };
+  var RETIRED = { MgmtDashboard: 1, PosAbsen: 1, CekBuka: 1, MgmtTim: 'OpsKerja', MgmtKeluhan: 'TiketCS', PesanWa: 1, PesanWaInap: 1, PesanWaJeep: 1,
+    /* audit layar 13 Nov 2026 tahap 1: tanpa aktivitas 30 hari (WA otomatis mati, trip di TripinAja, pembelian lewat RAB Pokama) */
+    MgmtSegmen: 1, MgmtInbox: 'PusatCS', MgmtPenawaran: 'PusatCS', MgmtKorporat: 1, MgmtKonten: 1, MgmtKlaim: 'TiketCS', MgmtBeli: 1, MgmtImpor: 1 };
   RA.STAFF_HOME = { owner: 'OpsBeranda', viewer: 'OpsBeranda', finance: 'KeuDasbor', asset_manager: 'AsetBeranda', experience_manager: 'OpsBeranda',
     cs_experience: 'PosVerifikasi', branch_head: 'PosHariIni', cs: 'PosVerifikasi', cashier: 'PosHariIni', staff: 'PosHariIni', qc: 'PosQC',
     technician: 'Teknisi', runner: 'AgendaLapangan', driver: 'SopirJeep' };
