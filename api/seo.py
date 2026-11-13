@@ -219,7 +219,7 @@ def head(title, desc, path, lds, image=None):
 <meta name="description" content="{esc(desc)}"><link rel="canonical" href="{url}">
 <meta property="og:type" content="website"><meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(desc)}">
 <meta property="og:url" content="{url}"><meta property="og:image" content="{esc(image or BASE + '/logo.png')}"><meta property="og:locale" content="id_ID"><meta property="og:site_name" content="Rentalaja">
-<meta name="theme-color" content="#1F2B4D"><link rel="icon" href="/logo.png">
+<meta name="theme-color" content="#1F2B4D"><link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" type="image/png" sizes="96x96" href="/img/icon/icon-96.png"><link rel="icon" type="image/png" sizes="192x192" href="/img/icon/icon-192.png"><link rel="apple-touch-icon" href="/img/icon/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>{CSS}</style>
@@ -487,7 +487,7 @@ def page_article(D, a):
     others = [x for x in ARTICLES if x['slug'] != a['slug'] and (x['city'] == a['city'] or x['city'] is None or a['city'] is None)][:4]
     lds = [{"@context": "https://schema.org", "@type": "Article", "headline": a['title'], "description": a['desc'], "image": img_src(a), "datePublished": a['date'], "dateModified": datetime.date.today().isoformat(),
             "inLanguage": "id-ID", "mainEntityOfPage": BASE + path, "author": {"@type": "Organization", "name": "Rentalaja"},
-            "publisher": {"@type": "Organization", "name": "Rentalaja", "logo": {"@type": "ImageObject", "url": BASE + '/logo.png'}}},
+            "publisher": {"@type": "Organization", "name": "Rentalaja", "logo": {"@type": "ImageObject", "url": BASE + '/img/icon/icon-512.png'}}},
            crumbs_ld([('Rentalaja', '/sewa/'), ('Panduan', '/panduan/'), (a['title'], path)]), faq_ld(D)]
     if codes: lds.append({"@context": "https://schema.org", "@graph": [local_business(D, k) for k in codes]})
     cat0 = a['cats'][0]
@@ -694,7 +694,7 @@ def page_index(D):
         body += sec('Menginap di Garut', 'Villa & rumah utuh dari Rentalaja Experience', '/sewa/penginapan-garut.html') + '<div class="grid">' + ''.join(stay_card(x) for x in D['stays']) + '</div>'
     body += sec('Inspirasi &amp; panduan', 'Rute, tips, dan pilihan barang yang pas', '/panduan/', 'Semua panduan') + f'<div class="row wide">{guide_cards(D)}</div>'
     body += '</main>'
-    ld = [{"@context": "https://schema.org", "@type": "Organization", "name": "Rentalaja", "url": BASE, "logo": BASE + '/logo.png', "parentOrganization": {"@type": "Organization", "name": "PT Popo Karya Investama"}}]
+    ld = [{"@context": "https://schema.org", "@type": "Organization", "name": "Rentalaja", "url": BASE, "logo": BASE + '/img/icon/icon-512.png', "parentOrganization": {"@type": "Organization", "name": "PT Popo Karya Investama"}}]
     return ui_head('Rentalaja – Sewa Motor, iPhone, Kamera & Alat Camping di Garut dan Bandung', 'Sewa motor, mobil, iPhone, kamera, lensa, proyektor, PlayStation, dan alat camping di Garut dan Bandung. Booking online, DP 20%.', '/sewa/', ld, unsplash(PHOTO['index'][0], 1200)) + body + foot(D)
 
 
