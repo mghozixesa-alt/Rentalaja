@@ -9,6 +9,21 @@
   if (!/(^|\.)rentalaja\.co\.id$/i.test(h) || /^(demo|kasir)\./i.test(h)) return;
   if (/^\/(kasir|cs|link\/statistik)\/?$/i.test(p)) return;
 
+  // Asal kunjungan (referrer) yang bukan rujukan sungguhan.
+  var ref = '';
+  try { ref = document.referrer ? new URL(document.referrer).hostname.toLowerCase() : ''; } catch (e) {}
+  // Staf: browser yang pernah membuka situs dari sistem Pokama (ops/app.pokama.org) ditandai dan tidak dihitung
+  // di Analytics/Meta, supaya angka pengunjung & konversi hanya pelanggan. ?staf=0 di URL menghapus tanda ini.
+  try {
+    if (/[?&]staf=0\b/.test(location.search)) localStorage.removeItem('ra.staf');
+    else if (/(^|\.)pokama\.org$/.test(ref) || /[?&]staf=1\b/.test(location.search)) localStorage.setItem('ra.staf', '1');
+    if (localStorage.getItem('ra.staf') === '1') return;
+  } catch (e) {}
+  // Kembali dari login Google atau halaman pembayaran: jangan dicatat sebagai rujukan baru, supaya asal awal
+  // pelanggan (Instagram, Google, iklan) tetap tercatat.
+  var IGNORE_REF = /(^|\.)(accounts\.google\.[a-z.]+|accounts\.youtube\.com|xendit\.co|midtrans\.com|doku\.com|duitku\.com|tripay\.co\.id|ovo\.id|dana\.id|gojek\.com|shopee\.co\.id|flip\.id)$/;
+  var ignoreRef = !!ref && IGNORE_REF.test(ref);
+
   window.dataLayer = window.dataLayer || [];
   // lastHit: waktu kiriman terakhir. Sesi GA4 habis setelah 30 menit tanpa kiriman; kalau pelanggan kembali ke tab
   // (mis. sesudah bayar di e-wallet atau chat WA), event pertama sesi baru harus page_view supaya sesinya punya
@@ -74,7 +89,9 @@
   }
 
   gtag('js', new Date());
-  gtag('config', ID, { send_page_view: false, page_location: clean() });
+  var cfg = { send_page_view: false, page_location: clean() };
+  if (ignoreRef) cfg.ignore_referrer = true;
+  gtag('config', ID, cfg);
   var last = '';
   function pv() {
     var loc = clean();
