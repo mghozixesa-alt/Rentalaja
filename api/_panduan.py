@@ -677,7 +677,7 @@ dict(
 </ul>
 
 <h2>Ongkir antar</h2>
-[[ongkir:GRT,BDG-HUB]]
+[[ongkir:GRT:BDG-HUB]]
 
 <h2>Area pemakaian</h2>
 <p>[[aturan:rental_region]]</p>
