@@ -70,7 +70,7 @@ async function login(jar: Jar) {
   const id = (html.match(/map\.aspx\?id=(\d+)/i) || [])[1];
   if (!id) {
     const why = /loginFaild\(/.test(r.text) ? "MiCODUS menolak username/password" : "tidak diarahkan ke halaman utama";
-    throw new Error(`login MiCODUS gagal [${r.res.status}] ${why} (user ${user}, password ${pass.length} karakter)`);
+    throw new Error(`login MiCODUS gagal [${r.res.status}] ${why} (user ${user})`);
   }
   return Number(id);
 }
@@ -98,7 +98,11 @@ function toMsg(d: Dev) {
   const m: Record<string, unknown> = {
     _src: "micodus",
     ident: String(d.sn || ""),
-    timestamp: wib(d.deviceUtcDate) ?? wib(d.serverUtcDate),
+    // Alat yang diam hanya mengirim posisi saat bergerak, tapi tetap "denyut" ke server MiCODUS (serverUtcDate).
+    // Selama MiCODUS tidak menandai Offline, pakai waktu denyut supaya tidak dianggap sinyal hilang.
+    timestamp: d.status !== "Offline"
+      ? Math.max(wib(d.deviceUtcDate) ?? 0, wib(d.serverUtcDate) ?? 0) || null
+      : wib(d.deviceUtcDate) ?? wib(d.serverUtcDate),
     "position.speed": Number(d.speed) || 0,
     "vehicle.mileage": Number(d.distance) || null,
     "engine.ignition.status": d.acc === "1" ? true : d.acc === "0" ? false : null,
