@@ -1120,7 +1120,7 @@ dict(
 
 <h2>Ongkir antar iPhone</h2>
 <p>Kalau tidak sempat ke cabang, iPhone bisa diantar ke rumah, kos, hotel, kampus, atau lokasi acara. Ongkir sekali jalan dari sistem:</p>
-[[ongkir:GRT,BDG-HUB]]
+[[ongkir:GRT:BDG-HUB]]
 <p>Waktu pengantaran mengikuti jam ambil di booking dan dikonfirmasi cabang.</p>
 
 <h2>Ambil sendiri vs diantar</h2>
