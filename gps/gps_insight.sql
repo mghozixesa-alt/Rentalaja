@@ -120,3 +120,5 @@ grant execute on function public.gps_insight(uuid) to authenticated;
 
 -- CATATAN: versi yang berjalan di database = migrasi Supabase "gps_insight", "gps_insight_sekitar_cabang" (tujuan ≤ 8 km dipisah per cabang)
 -- dan "gps_tarif_save" (gps_tarif_save / gps_tarif_get, khusus owner). gps_sync_meta(p_meta) menggantikan perubahan gps_ingest_service di atas.
+-- Migrasi "gps_filter_cabang_gabung": app.branch_group(p_branch) — filter cabang di gps_fleet & gps_insight memakai nama depan cabang,
+-- jadi "Bandung · Hub" dan "Bandung · Jackal" dihitung satu "Bandung".
