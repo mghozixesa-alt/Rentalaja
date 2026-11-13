@@ -838,6 +838,23 @@
       });
     });
   };
+  /* pemakaian layar staf (audit halaman Nov 2026): layar yang benar-benar dibuka dicatat per staf per hari,
+     dikirim paling sering sekali per layar per 10 menit per tab. Hanya nama layar, tanpa isi/parameter. */
+  (function () {
+    var orig = RA.beforeShow, sent = {};
+    RA.beforeShow = function (name) {
+      return orig.apply(this, arguments).then(function (r) {
+        try {
+          var k = RA.kindOf(r);
+          if (session && typeof r === 'string' && (k === 'staff' || k === 'finance') && !(sent[r] > Date.now() - 600000)) {
+            sent[r] = Date.now();
+            RA.rpc('staff_screen_hit', { p_screen: r }).catch(function () {});
+          }
+        } catch (e) {}
+        return r;
+      });
+    };
+  })();
   var RETIRED = { MgmtDashboard: 1, PosAbsen: 1, CekBuka: 1, MgmtTim: 'OpsKerja', MgmtKeluhan: 'TiketCS', PesanWa: 1, PesanWaInap: 1, PesanWaJeep: 1 };
   RA.STAFF_HOME = { owner: 'OpsBeranda', viewer: 'OpsBeranda', finance: 'KeuDasbor', asset_manager: 'AsetBeranda', experience_manager: 'OpsBeranda',
     cs_experience: 'PosVerifikasi', branch_head: 'PosHariIni', cs: 'PosVerifikasi', cashier: 'PosHariIni', staff: 'PosHariIni', qc: 'PosQC',
