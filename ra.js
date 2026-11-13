@@ -753,6 +753,29 @@
     return RA.rpc('quote', { p: p });
   };
 
+  /* ---------------- promo "sewa X hari gratis Y hari" ----------------
+     Satu sumber untuk semua layar (pelanggan, kasir, bantuan): server promo_free() memakai aturan yang sama
+     dengan quote(), sudah memeriksa aktif/tanggal/cabang, dan membuat teksnya (label & scope) dari aturan.
+     Hasil null = promo tidak berlaku di cabang itu. Jangan baca tabel auto_promos langsung di layar. */
+  var promoMemo = {};
+  RA.promoFree = function (branchId) {
+    var k = branchId || '-', hit = promoMemo[k];
+    if (hit && Date.now() - hit.t < 60000) return hit.p;
+    var p = RA._rpc('promo_free', { p_branch: branchId || null }).then(function (r) { return (r && !r.error && r.data) || null; }, function () { return null; });
+    promoMemo[k] = { t: Date.now(), p: p };
+    return p;
+  };
+  /* apakah promo berlaku untuk kategori ini (harga per hari); dipakai bersama hasil RA.promoFree */
+  RA.promoFreeFor = function (pf, categoryId, priceUnit) {
+    if (!pf || (priceUnit && priceUnit !== 'hari')) return false;
+    if (pf.exclude_category_ids && pf.exclude_category_ids.indexOf(categoryId) > -1) return false;
+    return !pf.category_ids || !pf.category_ids.length || pf.category_ids.indexOf(categoryId) > -1;
+  };
+  /* hari gratis untuk d hari sewa (sama dengan quote) */
+  RA.promoFreeDays = function (pf, d) {
+    return ((pf && pf.tiers) || []).reduce(function (m, t) { var n = +t.buy + +t.free; return n > 0 ? Math.max(m, Math.floor(d / n) * +t.free) : m; }, 0);
+  };
+
   /* ---------------- parameter rute & navigasi ---------------- */
   RA.params = function () { var h = location.hash || ''; var i = h.indexOf('?'); var o = {}; if (i > -1) new URLSearchParams(h.slice(i + 1)).forEach(function (v, k) { o[k] = v; }); return o; };
   RA.param = function (k) { return RA.params()[k] || null; };

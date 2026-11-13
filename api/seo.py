@@ -99,8 +99,10 @@ NEEDS = [
 ]
 
 def faq(D):
-    promos = [x for x in D.get('promos') or [] if x.get('desc') or x.get('name')]
-    pr = ' '.join((x.get('desc') or x['name']).rstrip('.') + '.' for x in promos) or 'Promo yang sedang berlaku otomatis terpasang saat booking.'
+    pf = D.get('promo_free')
+    promos = [x for x in D.get('promos') or [] if (x.get('desc') or x.get('name')) and not (pf and x.get('key') == 'buy_x_free_y')]
+    pr = ' '.join(([pf['label'].rstrip('.') + ' (' + (pf.get('categories') or '').lower() + '; ' + pf['scope'].lower() + ').'] if pf else [])
+                  + [(x.get('desc') or x['name']).rstrip('.') + '.' for x in promos]) or 'Promo yang sedang berlaku otomatis terpasang saat booking.'
     late = D.get('late_pct')
     try: g = int(float(D.get('late_grace') or 0))
     except (TypeError, ValueError): g = 0
@@ -155,6 +157,15 @@ footer.ft{margin-top:64px;background:var(--navy);color:#C9D2E3;font-size:14px;pa
 .links{columns:2;padding-left:18px}@media(max-width:900px){.fgrid{grid-template-columns:1fr 1fr}}@media(max-width:640px){.nav{display:none}.hwa span{display:none}header.top .w{justify-content:space-between;gap:10px}.fgrid{grid-template-columns:1fr}.fmore ul{columns:1}.fbot a{margin:0 14px 0 0}.trust{font-size:11.5px}.tx{display:none}h1{font-size:23px}.links{columns:1}.cta.alt{margin:8px 0 0}.prod{grid-template-columns:1fr}}"""
 
 
+def promo_free_ok(D, cat):
+    """promo sewa X gratis Y berlaku untuk kategori ini? (data dari promo_free(), sama dengan perhitungan harga)"""
+    pf = D.get('promo_free')
+    if not pf: return False
+    if cat in (pf.get('exclude_slugs') or []): return False
+    inc = pf.get('category_slugs') or []
+    return not inc or cat in inc
+
+
 def esc(s): return html.escape(str(s or ''), quote=True)
 def rp(v): return 'Rp' + f'{int(v):,}'.replace(',', '.') if v else '—'
 def img_url(ph):
@@ -194,7 +205,7 @@ def load():
         for cat in ORDER:
             items = [p for p in prod.values() if p['city'] == c and p['cat'] == cat]
             if items: pages[(c, cat)] = sorted(items, key=lambda x: (x['d'] or 0, x['name']))
-    data = dict(br=br, prod=prod, pages=pages, at=raw.get('at'), promos=raw.get('promos'), late_pct=raw.get('late_pct'), late_grace=raw.get('late_grace'),
+    data = dict(br=br, prod=prod, pages=pages, at=raw.get('at'), promos=raw.get('promos'), promo_free=raw.get('promo_free'), late_pct=raw.get('late_pct'), late_grace=raw.get('late_grace'),
                 zones=raw.get('zones') or [], rules=raw.get('rules') or {}, stays=stays_of(raw))
     _cache.update(at=time.time(), data=data)
     return data
@@ -322,7 +333,7 @@ def page_product(D, p):
 <a class="cta" href="/#/Produk?id={p['id']}">Cek tanggal &amp; booking</a><a class="cta alt" href="https://wa.me/{WA}?text={quote('Halo Rentalaja, saya mau tanya sewa ' + p['name'] + ' di ' + CITY[c])}" rel="nofollow">Tanya via WhatsApp</a>
 <ul class="chips"><li>Booking online</li><li>DP 20%</li>{'<li>Termasuk: ' + esc(incl) + '</li>' if incl else ''}{f'<li>Sudah disewa {rc:,}× </li>'.replace(',', '.') if rc >= 10 else ''}</ul></div></div></div></section>
 <div class="w"><h2>Harga sewa {esc(p['name'])} di {CITY[c]}</h2><div class="scroll"><table><thead><tr><th>Cabang</th>{'<th class="n">2 jam</th>' if hj else ''}{'<th class="n">½ hari</th>' if hh else ''}<th class="n">1 hari</th></tr></thead><tbody>{rows}</tbody></table></div>
-<p style="font-size:13px;color:var(--mute)">Harga diperbarui otomatis dari sistem Rentalaja.{' Promo sewa 2 hari gratis 1 berlaku untuk barang ini.' if cat not in ('motor', 'mobil') and c == 'garut' and 'GRT' in p.get('branches', []) and any(x.get('key') == 'buy_x_free_y' for x in D.get('promos') or []) else ''}</p>
+<p style="font-size:13px;color:var(--mute)">Harga diperbarui otomatis dari sistem Rentalaja.{(' ' + D['promo_free']['label'] + ' Berlaku untuk barang ini.') if promo_free_ok(D, cat) else ''}</p>
 <h2>Cara sewa</h2><ol class="steps"><li>Pilih tanggal dan jam di <a href="/#/Produk?id={p['id']}">halaman booking</a>.</li><li>Unggah {docs_line(cat)} sekali saja, lalu tunggu verifikasi.</li><li>Bayar DP 20% secara online.</li><li>Ambil di cabang{' atau minta diantar' if cat in ('motor',) else ''}, sisa dibayar saat ambil.</li></ol>
 {('<h2>Panduan terkait</h2><ul class="tips">' + ''.join(f'<li><a href="/sewa/{n["slug"]}.html">{esc(n["title"])}</a></li>' for n in needs) + '</ul>') if needs else ''}
 {(sec(label + ' lain di ' + CITY[c], '', f'/sewa/{cat}-{c}.html') + '<div class="row">' + cards(related) + '</div>') if related else ''}
