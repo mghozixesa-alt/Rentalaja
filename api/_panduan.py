@@ -1030,4 +1030,174 @@ dict(
 </ul>
 [[cabang:GRT]]
 '''),
+
+dict(
+    slug='harga-sewa-iphone-garut', img=('photo-1616410011236-7a42121dd981', 'Onur Binay', 'onurbinay', 'Ilustrasi'), city='garut', cats=['iphone'], date='2026-11-13',
+    title='Harga Sewa iPhone di Garut per Hari: iPhone XR, 11, 13, 15, dan 16',
+    desc='Berapa harga sewa iPhone 1 hari di Garut? Daftar harga harian dan ½ hari iPhone XR, 11, 13, 15, 16 di Rentalaja Garut Kota & Wanaraja, contoh hitung biaya, DP, dan denda telat.',
+    lead='Harga sewa iPhone di Rentalaja Garut mulai [[harga:iphone-xr:garut]] untuk iPhone XR. iPhone 13 [[harga:iphone-13:garut]], iPhone 15 [[harga:iphone-15:garut]], dan iPhone 16 [[harga:iphone-16:garut]]. Untuk acara singkat ada tarif ½ hari (sampai 12 jam) yang lebih murah. Semua angka di halaman ini diambil langsung dari sistem.',
+    body='''
+<h2>Daftar harga sewa iPhone Garut</h2>
+[[tabel:iphone:garut]]
+<p>Tarif <b>½ hari</b> berlaku untuk sewa sampai 12 jam, tarif <b>1 hari</b> untuk 24 jam. iPhone bisa diambil di Rentalaja Garut Kota (Jl. Cimanuk) atau Wanaraja (sebagian model). Charger dan tas sudah termasuk; kelengkapan tiap unit tertulis di halaman barangnya.</p>
+
+<h2>Berapa harga sewa iPhone 1 hari?</h2>
+<p>Sewa 1 hari dihitung 24 jam sejak jam ambil, bukan sampai tutup toko. Jadi kalau Anda ambil jam 10.00, kembalikan besok jam 10.00.</p>
+<p>Contoh iPhone 13 di Garut Kota:</p>
+<ul class="tips">
+<li>Ambil 08.00, kembali 19.00 di hari yang sama (11 jam) → masuk tarif ½ hari: [[hitung:iphone-13:garut:11]].</li>
+<li>Ambil 08.00, kembali besok 08.00 (24 jam) → tarif 1 hari: [[hitung:iphone-13:garut:24]].</li>
+</ul>
+<p>Jadi kalau iPhone cuma dipakai siang sampai sore, atur jam kembali maksimal 12 jam setelah ambil supaya lebih hemat.</p>
+<p style="font-size:13px;color:var(--mute)">Dihitung dengan aturan harga sistem, sebelum promo. Promo yang sedang berlaku terpasang otomatis saat booking.</p>
+
+<h2>Harga sewa iPhone 13 vs iPhone 15</h2>
+<p>Dua model ini paling sering dibandingkan. Selisih tarif hariannya: iPhone 13 [[harga:iphone-13:garut]], iPhone 15 [[harga:iphone-15:garut]].</p>
+<ul class="tips">
+<li><b>Pilih iPhone 13</b> kalau butuhnya video konten, reels, atau dokumentasi acara. Sudah ada kamera ultra wide dan mode Cinematic.</li>
+<li><b>Pilih iPhone 15</b> kalau butuh foto yang lebih detail, misalnya foto wisuda, prewedding sederhana, atau foto produk. Kamera utamanya 48MP dan port-nya USB-C.</li>
+<li><b>iPhone XR dan 11</b> cukup untuk foto dan video sehari-hari atau sebagai HP cadangan, dengan biaya paling hemat.</li>
+</ul>
+<p>Perbandingan kamera lengkap ada di <a href="/panduan/pilih-iphone-sewa-garut">panduan memilih iPhone XR, 11, 13, 15, dan 16</a>.</p>
+
+<h2>Kalau lewat dari 1 hari</h2>
+<p>Sewa lebih dari 24 jam dihitung per 24 jam. Kalau sisanya 12 jam atau kurang setelah hari penuh, sisa itu dikenai [[aturan:half_day_extra_percent]]% dari tarif harian, bukan satu hari penuh. Contoh 1 hari + 6 jam (30 jam):</p>
+<ul class="tips">
+<li>iPhone 11: [[hitung:iphone-11:garut:30]]</li>
+<li>iPhone 13: [[hitung:iphone-13:garut:30]]</li>
+<li>iPhone 15: [[hitung:iphone-15:garut:30]]</li>
+</ul>
+<p style="font-size:13px;color:var(--mute)">Sebelum promo. Total final selalu tampil di aplikasi saat memilih jam ambil dan jam kembali.</p>
+
+<h2>Biaya lain yang perlu diketahui</h2>
+<ul class="tips">
+<li><b>DP [[aturan:dp_percent]]%</b> dibayar online setelah dokumen ([[aturan:docs_required]]) lolos verifikasi. Sisanya dibayar saat ambil iPhone.</li>
+<li><b>Diantar?</b> Ongkir dihitung dari jarak alamat ke cabang Garut Kota:</li>
+</ul>
+[[ongkir:GRT]]
+<ul class="tips">
+<li><b>Telat mengembalikan:</b> ada toleransi [[aturan:late_grace_minutes]]. Lewat dari itu dikenai denda [[aturan:late_fee_percent_per_hour]]% dari harga harian per jam. Lebih hemat perpanjang dari aplikasi sebelum jam kembali.</li>
+</ul>
+
+<h2>Tips supaya lebih hemat</h2>
+<ul class="tips">
+<li>Acara cuma setengah hari (wisuda, lamaran, foto keluarga)? Pilih jam kembali maksimal 12 jam setelah ambil supaya kena tarif ½ hari.</li>
+<li>Tentukan model dari kebutuhan, bukan dari yang terbaru. Untuk story dan foto biasa, iPhone XR atau 11 sudah cukup.</li>
+<li>Booking lebih awal untuk akhir pekan dan musim wisuda; unit tiap model terbatas.</li>
+</ul>
+<p>Mau pakai iPhone untuk live dan foto produk? Baca <a href="/panduan/sewa-iphone-jualan-online-garut">sewa iPhone untuk jualan online di Garut</a>. Semua model dan stok ada di halaman <a href="/sewa/iphone-garut.html">sewa iPhone Garut</a>.</p>
+[[cabang:GRT]]
+[[cabang:WNR]]
+'''),
+
+dict(
+    slug='sewa-iphone-terdekat-garut-bandung', img=('photo-1548345680-f5475ea5df84', 'henry perks', 'hjkp', 'Ilustrasi'), city=None, cats=['iphone'], date='2026-11-13',
+    title='Sewa iPhone Terdekat di Garut dan Bandung: Ambil di Cabang atau Diantar',
+    desc='Cari sewa iPhone terdekat dari lokasi Anda? Rentalaja punya cabang iPhone di Garut Kota, Wanaraja, dan Bandung (Coblong). Bisa ambil sendiri atau diantar dengan ongkir sesuai jarak.',
+    lead='Rentalaja menyewakan iPhone di tiga cabang: Garut Kota (Jl. Cimanuk), Wanaraja, dan Bandung (Jl. Kubang Selatan, Coblong). Pilih cabang yang paling dekat, atau pilih "Diantar" saat booking supaya iPhone dikirim ke alamat Anda dengan ongkir sesuai jarak.',
+    body='''
+<h2>Cabang yang menyewakan iPhone</h2>
+<div class="scroll"><table><thead><tr><th>Cabang</th><th>Wilayah</th><th>Catatan</th></tr></thead><tbody>
+<tr><td>Rentalaja Garut Kota</td><td>Jl. Cimanuk, Garut Kota</td><td>Pilihan model paling lengkap di Garut</td></tr>
+<tr><td>Rentalaja Wanaraja</td><td>Jl. Raya Wanaraja, Karangpawitan</td><td>Sebagian model; cocok untuk area Wanaraja, Karangpawitan, dan sekitarnya</td></tr>
+<tr><td>Rentalaja Bandung</td><td>Jl. Kubang Selatan, Coblong</td><td>Dekat kawasan Dipatiukur, ITB, dan Dago</td></tr>
+</tbody></table></div>
+<p>Stok tiap model di tiap cabang bisa berubah. Saat booking di aplikasi, pilih kota lalu lihat model yang tersedia di tanggal Anda.</p>
+
+<h2>Cara tahu cabang mana yang paling dekat</h2>
+<ol class="steps">
+<li>Buka tautan <b>Peta</b> di kotak alamat cabang di bawah halaman ini. Google Maps akan menunjukkan jarak dan perkiraan waktu dari lokasi Anda saat ini.</li>
+<li>Kalau lokasi Anda jauh dari semua cabang, pilih <b>Diantar</b> saat booking. Jarak dan ongkir dihitung otomatis dari titik alamat yang Anda pilih di peta.</li>
+<li>Bingung memilih? Tanya admin lewat WhatsApp; sebutkan lokasi dan tanggal pakai.</li>
+</ol>
+
+<h2>Harga iPhone di Garut</h2>
+[[tabel:iphone:garut]]
+
+<h2>Harga iPhone di Bandung</h2>
+[[tabel:iphone:bandung]]
+<p>Tarif ½ hari berlaku untuk sewa sampai 12 jam. Charger dan tas sudah termasuk. Rincian per kota: <a href="/panduan/harga-sewa-iphone-garut">harga sewa iPhone Garut</a> dan <a href="/panduan/harga-sewa-iphone-bandung">harga sewa iPhone Bandung</a>.</p>
+
+<h2>Ongkir antar iPhone</h2>
+<p>Kalau tidak sempat ke cabang, iPhone bisa diantar ke rumah, kos, hotel, kampus, atau lokasi acara. Ongkir sekali jalan dari sistem:</p>
+[[ongkir:GRT,BDG-HUB]]
+<p>Waktu pengantaran mengikuti jam ambil di booking dan dikonfirmasi cabang.</p>
+
+<h2>Ambil sendiri vs diantar</h2>
+<ul class="tips">
+<li><b>Ambil di cabang</b> — tanpa ongkir, bisa langsung cek kondisi unit dan kamera bersama petugas.</li>
+<li><b>Diantar</b> — praktis kalau sedang sibuk persiapan acara, atau tidak bawa kendaraan. Siapkan KTP asli untuk dititipkan saat serah terima.</li>
+<li>Cabang buka setiap hari, jamnya tercantum di kotak alamat di bawah. Untuk jam di luar itu, kabari admin sebelumnya.</li>
+</ul>
+
+<h2>Booking dulu sebelum datang</h2>
+<p>Unit per model terbatas, jadi sebaiknya booking dari aplikasi sebelum berangkat ke cabang supaya tidak kehabisan:</p>
+<ol class="steps">
+<li>Pilih iPhone, tanggal, dan jam di <a href="/#/Katalog?cat=iphone">katalog</a>.</li>
+<li>Unggah [[aturan:docs_required]] sekali saja, tunggu verifikasi.</li>
+<li>Bayar DP [[aturan:dp_percent]]%, lalu ambil di cabang atau tunggu diantar.</li>
+</ol>
+<p>Butuh iPhone untuk acara tertentu? Lihat <a href="/panduan/sewa-iphone-konser-wisuda-bandung">sewa iPhone untuk konser & wisuda di Bandung</a> atau <a href="/sewa/iphone-garut.html">semua iPhone di Garut</a>.</p>
+[[cabang:GRT]]
+[[cabang:WNR]]
+[[cabang:BDG-HUB]]
+'''),
+
+dict(
+    slug='sewa-hp-harian-bandung', img=('photo-1605440458540-d65fd32f21ba', 'Hendrik Morkel', 'hendrikmorkel', 'Ilustrasi'), city='bandung', cats=['iphone'], date='2026-11-13',
+    title='Sewa HP Harian di Bandung: Syarat, Cara Sewa, dan Aturan Pengembalian',
+    desc='Mau sewa HP atau rental HP harian di Bandung? Di Rentalaja Bandung (Coblong) tersedia iPhone XR sampai iPhone 15. Syarat dokumen, DP, tarif ½ hari dan harian, toleransi telat, dan checklist serah terima.',
+    lead='Rentalaja Bandung di Jl. Kubang Selatan, Coblong, menyewakan HP jenis iPhone, mulai [[harga:iphone-xr:bandung]]. Bisa sewa ½ hari atau harian, syaratnya cukup [[aturan:docs_required]] yang diunggah sekali di aplikasi. Berikut cara sewa dan aturan yang perlu Anda tahu sebelum ambil unit.',
+    body='''
+<h2>HP apa yang bisa disewa?</h2>
+<p>Di Bandung, HP yang disewakan adalah iPhone: XR, 11, 13, dan 15. Biasanya dipakai untuk merekam acara, bikin konten, HP cadangan saat HP sendiri diservis, atau mencoba iPhone sebelum membeli.</p>
+[[tabel:iphone:bandung]]
+
+<h2>Sewa harian atau ½ hari?</h2>
+<ul class="tips">
+<li><b>½ hari</b> — sampai 12 jam. Cocok untuk wisuda, seminar, atau satu sesi konten.</li>
+<li><b>Harian</b> — 24 jam sejak jam ambil.</li>
+<li><b>Lebih dari sehari</b> — dihitung per 24 jam. Sisa 12 jam atau kurang setelah hari penuh dikenai [[aturan:half_day_extra_percent]]% tarif harian.</li>
+</ul>
+<p>Contoh iPhone XR: 12 jam [[hitung:iphone-xr:bandung:12]], 24 jam [[hitung:iphone-xr:bandung:24]], 30 jam [[hitung:iphone-xr:bandung:30]]. iPhone 11: 12 jam [[hitung:iphone-11:bandung:12]], 24 jam [[hitung:iphone-11:bandung:24]].</p>
+<p style="font-size:13px;color:var(--mute)">Dihitung dengan aturan harga sistem, sebelum promo. Promo hari kerja Bandung (bila sedang berlaku) terpasang otomatis saat booking.</p>
+
+<h2>Syarat sewa HP di Rentalaja Bandung</h2>
+<ol class="steps">
+<li><b>Dokumen:</b> [[aturan:docs_required]], diunggah sekali di aplikasi. Booking berikutnya tidak perlu unggah ulang.</li>
+<li><b>Verifikasi</b> oleh admin. Kalau foto dokumen kurang jelas, Anda diminta unggah ulang.</li>
+<li><b>DP [[aturan:dp_percent]]%</b> dibayar online, sisanya saat ambil unit.</li>
+<li><b>KTP asli</b> dititipkan di cabang selama masa sewa, dikembalikan saat HP kembali.</li>
+</ol>
+<p>Pemakaian: [[aturan:rental_region]]</p>
+
+<h2>Checklist saat serah terima</h2>
+<ul class="tips">
+<li>Cek bodi, layar, dan kamera bersama petugas sebelum dibawa.</li>
+<li>Pastikan kelengkapan (charger, tas, dan case bila ada) sesuai yang tertulis di halaman barang.</li>
+<li>Coba kamera depan dan belakang, mikrofon, dan pengisian daya.</li>
+<li>Login akun Anda sendiri hanya untuk aplikasi yang memang perlu dipakai.</li>
+</ul>
+
+<h2>Sebelum mengembalikan</h2>
+<ul class="tips">
+<li>Pindahkan foto dan video ke HP, laptop, atau cloud Anda.</li>
+<li>Logout semua akun Anda (media sosial, marketplace, e-mail), lalu hapus file pribadi.</li>
+<li>Kembalikan bersama semua kelengkapannya.</li>
+<li>Telat? Ada toleransi [[aturan:late_grace_minutes]]. Lewat dari itu dikenai denda [[aturan:late_fee_percent_per_hour]]% dari harga harian per jam, jadi lebih hemat perpanjang dari aplikasi sebelum jam kembali.</li>
+</ul>
+
+<h2>Ubah jadwal dan batal</h2>
+<ul class="tips">
+<li>Ubah jadwal gratis paling lambat [[aturan:free_reschedule_hours]] jam sebelum jam ambil.</li>
+<li>Batal gratis paling lambat [[aturan:free_cancel_hours]] jam sebelum jam ambil.</li>
+<li>[[aturan:late_cancel_rule]]</li>
+</ul>
+
+<h2>Ambil atau diantar</h2>
+<p>Ambil di cabang Kubang Selatan, atau diantar ke kos, kampus, kantor, atau venue acara dengan ongkir sesuai jarak:</p>
+[[ongkir:BDG-HUB]]
+<p>Bingung pilih model? Baca <a href="/panduan/harga-sewa-iphone-bandung">harga sewa iPhone Bandung & cara memilih model</a>, <a href="/panduan/sewa-iphone-konser-wisuda-bandung">tips untuk konser & wisuda</a>, atau lihat semua unit di <a href="/sewa/iphone-bandung.html">sewa iPhone Bandung</a>.</p>
+[[cabang:BDG-HUB]]
+'''),
 ]
