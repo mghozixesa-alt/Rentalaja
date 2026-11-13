@@ -77,15 +77,17 @@
   function clean() {
     var q = new URLSearchParams(location.search), out = new URLSearchParams();
     q.forEach(function (v, k) { if (KEEP.test(k)) out.set(k, v); });
-    var hash = '', m = location.hash.match(/^#\/([A-Za-z]+)(?:\?(.*))?/);
+    var path = p, m = location.hash.match(/^#\/([A-Za-z]+)(?:\?(.*))?/);
     if (m) {
-      var hq = new URLSearchParams(m[2] || ''), keep = new URLSearchParams();
-      if (m[1] === 'Produk' && hq.get('id')) keep.set('id', hq.get('id'));
-      if (m[1] === 'Katalog' && hq.get('cat')) keep.set('cat', hq.get('cat'));
-      hash = '#/' + m[1] + (keep.toString() ? '?' + keep : '');
+      // Layar aplikasi (#/Checkout dst.) dikirim sebagai halaman sendiri: /app/Checkout. GA4 mengabaikan bagian #,
+      // jadi tanpa ini semua layar tercatat sebagai satu halaman "/" dan tidak terlihat di layar mana pelanggan berhenti.
+      var hq = new URLSearchParams(m[2] || '');
+      if (m[1] === 'Produk' && hq.get('id')) out.set('id', hq.get('id'));
+      if (m[1] === 'Katalog' && hq.get('cat')) out.set('cat', hq.get('cat'));
+      path = (p === '/' || p === '/index.html' ? '' : p.replace(/\/$/, '')) + '/app/' + m[1];
     }
     var qs = out.toString();
-    return location.origin + p + (qs ? '?' + qs : '') + hash;
+    return location.origin + path + (qs ? '?' + qs : '');
   }
 
   gtag('js', new Date());
