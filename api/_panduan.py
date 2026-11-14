@@ -1200,4 +1200,299 @@ dict(
 <p>Bingung pilih model? Baca <a href="/panduan/harga-sewa-iphone-bandung">harga sewa iPhone Bandung & cara memilih model</a>, <a href="/panduan/sewa-iphone-konser-wisuda-bandung">tips untuk konser & wisuda</a>, atau lihat semua unit di <a href="/sewa/iphone-bandung.html">sewa iPhone Bandung</a>.</p>
 [[cabang:BDG-HUB]]
 '''),
+dict(
+    slug='wisata-situ-bagendit-naik-motor', img=('photo-1703178223047-7f201f3318aa', 'Ake Widyastomo', 'akewidyastomo', 'Ilustrasi'), city='garut', cats=['motor'], date='2026-11-14',
+    title='Ke Situ Bagendit Naik Motor dari Garut Kota: Rute, Waktu Terbaik, dan Tips',
+    desc='Panduan ke Situ Bagendit di Banyuresmi naik motor sewaan dari Garut Kota: rute singkat, waktu terbaik datang, aktivitas di danau, dan motor yang cocok.',
+    lead='Situ Bagendit di Kecamatan Banyuresmi adalah danau terdekat dari pusat kota, cocok untuk jalan santai pagi atau sore. Dari Rentalaja Garut Kota cukup sewa Honda Beat ([[harga:honda-beat-cbs-new:garut]]) atau ambil tarif ½ hari ([[hargah:honda-beat-cbs-new:garut]]) karena perjalanannya pendek.',
+    body='''
+<h2>Rute dari Garut Kota</h2>
+<p>Situ Bagendit ada di utara-timur Garut Kota, sekitar 15–20 menit naik motor lewat jalan kabupaten yang datar. Lihat rute dan waktu tempuh terbaru di [[rute:GRT:Situ Bagendit Garut]].</p>
+
+<h2>Waktu terbaik datang</h2>
+<ul class="tips">
+<li><b>Pagi (06.30–09.00):</b> udara masih sejuk, danau tenang, dan cahayanya bagus untuk foto.</li>
+<li><b>Sore (15.30–17.30):</b> pas untuk naik perahu atau rakit sambil menunggu matahari turun.</li>
+<li>Akhir pekan dan libur sekolah lebih ramai; datang lebih awal supaya parkir motor mudah.</li>
+</ul>
+
+<h2>Yang bisa dilakukan</h2>
+<p>Keliling danau naik perahu atau rakit bambu, jajan di warung sekitar danau, dan berfoto di tepi air. Kawasan ini juga dikenal lewat legenda Nyi Endit yang sering diceritakan warga sekitar.</p>
+
+<h2>Contoh biaya sewa motor</h2>
+<div class="scroll"><table><thead><tr><th>Rencana</th><th class="n">Total</th></tr></thead><tbody>
+<tr><td>Honda Beat, ½ hari (12 jam)</td><td class="n">[[hitung:honda-beat-cbs-new:garut:12]]</td></tr>
+<tr><td>Honda Beat, 1 hari (24 jam)</td><td class="n">[[hitung:honda-beat-cbs-new:garut:24]]</td></tr>
+</tbody></table></div>
+<p>Masih ada waktu setelah dari Situ Bagendit? Sambung ke <a href="/panduan/candi-cangkuang-kampung-pulo-naik-motor">Candi Cangkuang</a> atau lihat <a href="/panduan/keliling-garut-satu-hari-naik-motor">rute keliling Garut satu hari</a>.</p>
+[[kartu:motor:garut:3]]
+[[cabang:GRT]]
+'''),
+dict(
+    slug='kawah-talaga-bodas-naik-motor', img=('photo-1684189930003-9434c949925f', 'Maneesh Shahani', 'meshdamus', 'Ilustrasi'), city='garut', cats=['motor'], date='2026-11-14',
+    title='Ke Kawah Talaga Bodas Naik Motor: Rute Wanaraja, Jalan Menanjak, dan Tips Aman',
+    desc='Panduan ke Kawah Talaga Bodas di wilayah Wanaraja, Garut, naik motor sewaan: rute dari Garut Kota, kondisi tanjakan, motor yang disarankan, dan tips aman di area belerang.',
+    lead='Kawah Talaga Bodas adalah danau kawah berair putih kehijauan di wilayah Wanaraja, sebelah timur Garut Kota. Jalan menuju kawah menanjak dan sebagian sempit, jadi pilih motor yang tenaganya cukup, misalnya Honda PCX ([[harga:honda-pcx:garut]]).',
+    body='''
+<h2>Rute dari Garut Kota</h2>
+<p>Dari Garut Kota arahkan motor ke Wanaraja, lalu ikuti jalan desa yang terus menanjak ke arah kawah. Perjalanan sekitar 1–1,5 jam tergantung kondisi jalan. Cek rute terbaru di [[rute:GRT:Kawah Talaga Bodas Garut]].</p>
+
+<h2>Motor yang disarankan</h2>
+<ul class="tips">
+<li><b>Honda PCX</b> paling nyaman untuk tanjakan panjang dan jalan bergelombang.</li>
+<li><b>Honda Beat / Scoopy</b> masih bisa, terutama kalau berangkat sendiri tanpa boncengan dan barang bawaan ringan.</li>
+<li>Isi bensin penuh di Garut Kota atau Wanaraja; SPBU jarang di jalur atas.</li>
+</ul>
+[[pilih:garut:honda-beat-cbs-new,honda-scoopy-new,honda-pcx]]
+
+<h2>Tips aman di kawasan kawah</h2>
+<ul class="tips">
+<li>Bau belerang cukup kuat. Pakai masker dan jangan berlama-lama di bibir kawah, terutama kalau punya asma.</li>
+<li>Ikuti batas aman yang dipasang pengelola dan jangan turun ke air kawah.</li>
+<li>Turunan pulang panjang: pakai rem depan dan belakang bergantian, jangan ditahan terus.</li>
+<li>Berangkat pagi. Kabut dan hujan sering turun setelah tengah hari.</li>
+</ul>
+
+<h2>Contoh biaya</h2>
+<p>Honda PCX 1 hari (24 jam): <b>[[hitung:honda-pcx:garut:24]]</b>. Ada toleransi telat [[aturan:late_grace_minutes]]; lewat dari itu kena denda [[aturan:late_fee_percent_per_hour]]% dari harga harian per jam.</p>
+<p>Suka kawah? Baca juga <a href="/panduan/rute-motor-kamojang-darajat">naik motor ke Kawah Kamojang dan Darajat</a>.</p>
+[[cabang:GRT]]
+'''),
+dict(
+    slug='candi-cangkuang-kampung-pulo-naik-motor', img=('photo-1578469550956-0e16b69c6a3d', 'Eugenia Clara', 'eugeniaclara', 'Ilustrasi'), city='garut', cats=['motor'], date='2026-11-14',
+    title='Ke Candi Cangkuang dan Kampung Pulo Naik Motor dari Garut Kota',
+    desc='Panduan wisata Candi Cangkuang dan Kampung Pulo di Leles, Garut, naik motor sewaan: rute, menyeberang dengan rakit, adab di kampung adat, dan biaya sewa motor.',
+    lead='Candi Cangkuang di Kecamatan Leles berdiri di pulau kecil di tengah Situ Cangkuang, bersebelahan dengan Kampung Pulo, kampung adat yang masih menjaga aturan turun-temurun. Dari Garut Kota cukup sewa Honda Beat ([[harga:honda-beat-cbs-new:garut]]).',
+    body='''
+<h2>Rute dari Garut Kota</h2>
+<p>Leles ada di utara Garut Kota, searah jalan ke Bandung. Naik motor sekitar 30–40 menit di jalan utama yang ramai kendaraan besar, jadi jaga jarak dan hati-hati saat menyalip. Cek rute di [[rute:GRT:Candi Cangkuang Leles Garut]].</p>
+
+<h2>Menyeberang ke candi</h2>
+<p>Motor diparkir di tepi Situ Cangkuang, lalu menyeberang naik rakit bambu ke pulau. Di pulau ada candi Hindu yang dipugar kembali dan makam Embah Dalem Arief Muhammad, tokoh penyebar Islam di daerah ini.</p>
+
+<h2>Adab di Kampung Pulo</h2>
+<ul class="tips">
+<li>Kampung Pulo punya aturan adat soal jumlah rumah dan kegiatan warga. Hormati papan larangan yang dipasang.</li>
+<li>Minta izin dulu sebelum memotret rumah atau warga.</li>
+<li>Pakai pakaian sopan dan jaga suara.</li>
+</ul>
+
+<h2>Contoh biaya</h2>
+<div class="scroll"><table><thead><tr><th>Rencana</th><th class="n">Total</th></tr></thead><tbody>
+<tr><td>Honda Beat, ½ hari (12 jam)</td><td class="n">[[hitung:honda-beat-cbs-new:garut:12]]</td></tr>
+<tr><td>Honda Scoopy, 1 hari (24 jam)</td><td class="n">[[hitung:honda-scoopy-new:garut:24]]</td></tr>
+</tbody></table></div>
+<p>Satu arah dengan Bandung, jadi Cangkuang enak dijadikan perhentian pertama di <a href="/panduan/keliling-garut-satu-hari-naik-motor">rute keliling Garut satu hari</a>.</p>
+[[kartu:motor:garut:3]]
+[[cabang:GRT]]
+'''),
+dict(
+    slug='kebun-teh-dayeuh-manggung-naik-motor', img=('photo-1724205765617-6143ce5c45e3', 'Walyudin', 'walyudin', 'Ilustrasi'), city='garut', cats=['motor'], date='2026-11-14',
+    title='Ke Kebun Teh Dayeuh Manggung Naik Motor: Jalan Sejuk dengan Pemandangan Cikuray',
+    desc='Rute naik motor dari Garut Kota ke kebun teh Dayeuh Manggung di Cilawu: waktu terbaik, spot foto dengan latar Gunung Cikuray, dan tips berkendara di jalan perkebunan.',
+    lead='Kebun teh Dayeuh Manggung di Kecamatan Cilawu menawarkan hamparan teh dengan latar Gunung Cikuray, tidak jauh dari Garut Kota. Jalan perkebunan cukup panjang dan menanjak, jadi motor matic yang bertenaga seperti Honda Scoopy ([[harga:honda-scoopy-new:garut]]) atau PCX lebih nyaman.',
+    body='''
+<h2>Rute dari Garut Kota</h2>
+<p>Arahkan motor ke tenggara menuju Cilawu, lalu masuk ke jalan perkebunan. Sekitar 45 menit–1 jam dari pusat kota. Lihat rute terbaru di [[rute:GRT:Perkebunan Teh Dayeuh Manggung Cilawu Garut]].</p>
+
+<h2>Waktu terbaik</h2>
+<ul class="tips">
+<li>Pagi hari sebelum jam 09.00: kabut tipis di antara kebun teh dan Cikuray masih terlihat jelas.</li>
+<li>Musim hujan: jalan perkebunan bisa licin dan berlumpur, kurangi kecepatan di tikungan.</li>
+</ul>
+
+<h2>Tips berkendara di jalan perkebunan</h2>
+<ul class="tips">
+<li>Jalan perkebunan dipakai juga oleh truk pengangkut teh; beri jalan dan jangan parkir di tikungan.</li>
+<li>Bawa jaket. Udara di ketinggian jauh lebih dingin daripada di Garut Kota.</li>
+<li>Jangan masuk ke area kebun yang dipagari atau sedang dipetik tanpa izin.</li>
+</ul>
+
+<h2>Pilihan motor & biaya</h2>
+[[pilih:garut:honda-scoopy-new,honda-pcx]]
+<p>Contoh: Honda Scoopy 1 hari (24 jam) <b>[[hitung:honda-scoopy-new:garut:24]]</b>.</p>
+<p>Lanjut lebih ke selatan? Baca <a href="/panduan/curug-orok-cikajang-naik-motor">ke Curug Orok Cikajang</a>.</p>
+[[cabang:GRT]]
+'''),
+dict(
+    slug='curug-orok-cikajang-naik-motor', img=('photo-1642869647500-3c4e858e0ce8', 'Ibnu Al Rasyid', 'arrashid8', 'Ilustrasi'), city='garut', cats=['motor'], date='2026-11-14',
+    title='Ke Curug Orok Cikajang Naik Motor dari Garut Kota: Rute Selatan yang Sejuk',
+    desc='Panduan ke Curug Orok di Cikajang, Garut selatan, naik motor sewaan: rute lewat Bayongbong–Cikajang, motor yang cocok untuk tanjakan, dan tips musim hujan.',
+    lead='Curug Orok di Kecamatan Cikajang adalah air terjun di kawasan dataran tinggi Garut selatan. Perjalanannya melewati jalur Bayongbong–Cikajang yang menanjak dan dingin, jadi Honda PCX ([[harga:honda-pcx:garut]]) adalah pilihan paling nyaman.',
+    body='''
+<h2>Rute dari Garut Kota</h2>
+<p>Ambil jalan ke selatan lewat Bayongbong menuju Cikajang, lalu ikuti petunjuk arah ke Curug Orok. Perjalanan sekitar 1,5 jam. Cek rute terbaru di [[rute:GRT:Curug Orok Cikajang Garut]].</p>
+
+<h2>Yang perlu disiapkan</h2>
+<ul class="tips">
+<li><b>Jaket dan jas hujan.</b> Cikajang termasuk daerah tertinggi di Garut dan sering berkabut. Jas hujan termasuk saat sewa motor di Rentalaja.</li>
+<li><b>Alas kaki anti-licin.</b> Jalan setapak ke curug bisa basah dan berlumut.</li>
+<li><b>Bensin penuh</b> sejak Bayongbong.</li>
+</ul>
+
+<h2>Tips musim hujan</h2>
+<p>Debit air curug naik saat hujan. Jangan mendekat ke bawah air terjun kalau air keruh atau deras, dan pulang sebelum gelap karena jalur Cikajang minim penerangan.</p>
+
+<h2>Contoh biaya</h2>
+<div class="scroll"><table><thead><tr><th>Rencana</th><th class="n">Total</th></tr></thead><tbody>
+<tr><td>Honda PCX, 1 hari (24 jam)</td><td class="n">[[hitung:honda-pcx:garut:24]]</td></tr>
+<tr><td>Honda Beat, 1 hari (24 jam)</td><td class="n">[[hitung:honda-beat-cbs-new:garut:24]]</td></tr>
+</tbody></table></div>
+<p>Satu jalur dengan perjalanan ke Garut selatan; lihat juga <a href="/panduan/pantai-santolo-naik-motor-dari-garut">ke Pantai Santolo naik motor</a>.</p>
+[[cabang:GRT]]
+'''),
+dict(
+    slug='pantai-santolo-naik-motor-dari-garut', img=('photo-1654159148138-bf64a2278cf7', 'David Gor', 'davidgor', 'Ilustrasi'), city='garut', cats=['motor'], date='2026-11-14',
+    title='Ke Pantai Santolo Naik Motor dari Garut Kota: Rute 3–4 Jam dan Persiapannya',
+    desc='Panduan touring ke Pantai Santolo di Garut selatan naik motor sewaan: rute lewat Cikajang–Pameungpeuk, berapa hari sewa, motor yang cocok, dan contoh biaya 2 hari.',
+    lead='Pantai Santolo di Kecamatan Cikelet adalah tujuan favorit touring ke Garut selatan, sekitar 3–4 jam naik motor dari Garut Kota. Untuk perjalanan sejauh ini, sewa Honda PCX ([[harga:honda-pcx:garut]]) minimal 2 hari supaya tidak terburu-buru.',
+    body='''
+<h2>Rute dari Garut Kota</h2>
+<p>Jalur umum: Garut Kota → Bayongbong → Cikajang → Cisompet → Pameungpeuk → Santolo. Jalur Cikajang–Cisompet berkelok dan naik-turun, dengan pemandangan perkebunan dan hutan. Cek rute terbaru di [[rute:GRT:Pantai Santolo Cikelet Garut]].</p>
+
+<h2>Berapa hari sewa?</h2>
+<p>Disarankan 2 hari 1 malam: hari pertama berangkat pagi dan menginap di sekitar Pameungpeuk, hari kedua pulang setelah menikmati pagi di pantai. Contoh total:</p>
+<div class="scroll"><table><thead><tr><th>Rencana</th><th class="n">Total</th></tr></thead><tbody>
+<tr><td>Honda PCX, 2 hari (48 jam)</td><td class="n">[[hitung:honda-pcx:garut:48]]</td></tr>
+<tr><td>Honda Scoopy, 2 hari (48 jam)</td><td class="n">[[hitung:honda-scoopy-new:garut:48]]</td></tr>
+</tbody></table></div>
+
+<h2>Persiapan touring</h2>
+<ul class="tips">
+<li>Isi bensin penuh di Cikajang; SPBU di jalur Cisompet terbatas.</li>
+<li>Istirahat tiap 1–1,5 jam, terutama di jalur berkelok.</li>
+<li>Jas hujan dan helm sudah termasuk saat sewa. Bawa jaket karena Cikajang dingin.</li>
+<li>Jangan berenang di area yang dilarang. Ombak pantai selatan kuat dan arusnya bisa menyeret.</li>
+<li>Pastikan kembali ke cabang sesuai jadwal; perpanjang lewat aplikasi kalau rencana berubah.</li>
+</ul>
+<p>Area pemakaian motor: [[aturan:rental_region]]</p>
+[[kartu:motor:garut:3]]
+[[cabang:GRT]]
+'''),
+dict(
+    slug='pendakian-gunung-guntur-naik-motor-ke-basecamp', img=('photo-1723143730168-99a2baa83a9a', 'Teuku Faza Rivaldi', 'teukufaza_28', 'Ilustrasi'), city='garut', cats=['motor', 'camping'], date='2026-11-14',
+    title='Mendaki Gunung Guntur: Naik Motor ke Basecamp Citiis dan Sewa Alat Camping',
+    desc='Panduan ke basecamp pendakian Gunung Guntur (Citiis, Tarogong Kaler) naik motor sewaan dari Garut Kota, sewa alat camping sekaligus, dan tips parkir motor saat mendaki.',
+    lead='Gunung Guntur adalah gunung terdekat dari Garut Kota untuk mendaki atau berkemah. Basecamp Citiis di Tarogong Kaler bisa dicapai naik motor dalam waktu singkat, dan alat camping bisa disewa sekalian di Rentalaja Garut Kota.',
+    body='''
+<h2>Rute ke basecamp</h2>
+<p>Basecamp pendakian ada di kawasan Citiis, Tarogong Kaler, ke arah Cipanas. Dari Garut Kota sekitar 30 menit naik motor. Cek rute di [[rute:GRT:Basecamp Citiis Gunung Guntur Garut]].</p>
+
+<h2>Motor & alat camping dalam satu booking</h2>
+<p>Sewa motor dan alat camping sekaligus supaya cukup satu kali ambil di cabang. Untuk pendakian 2 hari 1 malam:</p>
+<div class="scroll"><table><thead><tr><th>Rencana</th><th class="n">Total motor</th></tr></thead><tbody>
+<tr><td>Honda Beat, 2 hari (48 jam)</td><td class="n">[[hitung:honda-beat-cbs-new:garut:48]]</td></tr>
+<tr><td>Honda PCX, 2 hari (48 jam)</td><td class="n">[[hitung:honda-pcx:garut:48]]</td></tr>
+</tbody></table></div>
+<p>Daftar alat yang perlu dibawa ada di <a href="/panduan/checklist-alat-camping-garut">checklist alat camping</a>, dan perkiraan biayanya di <a href="/panduan/biaya-camping-per-orang-garut">biaya camping per orang</a>.</p>
+
+<h2>Tips parkir motor saat mendaki</h2>
+<ul class="tips">
+<li>Titipkan motor di parkiran basecamp yang dijaga, kunci stang, dan bawa kunci saat mendaki.</li>
+<li>Jangan tinggalkan helm dan barang berharga di motor.</li>
+<li>Catat jam kembali ke cabang. Pendakian sering molor; perpanjang sewa lewat aplikasi sebelum jam kembali.</li>
+</ul>
+[[kartu:camping:garut:4]]
+[[cabang:GRT]]
+'''),
+dict(
+    slug='keliling-garut-satu-hari-naik-motor', img=('photo-1778602940517-ff2fb6252ba9', 'Yurri Ann', 'yurriann', 'Ilustrasi'), city='garut', cats=['motor'], date='2026-11-14',
+    title='Keliling Garut Satu Hari Naik Motor: Rute Cangkuang, Bagendit, dan Cipanas',
+    desc='Contoh rute satu hari keliling Garut naik motor sewaan: Candi Cangkuang pagi, Situ Bagendit siang, berendam di Cipanas sore, plus jadwal, biaya, dan tips.',
+    lead='Punya satu hari di Garut? Rute ini menggabungkan wisata sejarah, danau, dan air panas dalam satu putaran yang tidak terlalu jauh. Cukup sewa Honda Beat 1 hari ([[harga:honda-beat-cbs-new:garut]]) dari Rentalaja Garut Kota.',
+    body='''
+<h2>Rencana perjalanan</h2>
+<div class="scroll"><table><thead><tr><th>Jam</th><th>Tujuan</th><th>Catatan</th></tr></thead><tbody>
+<tr><td>07.30</td><td>Ambil motor di Rentalaja Garut Kota</td><td>Jl. Cimanuk; atau minta diantar ke hotel</td></tr>
+<tr><td>08.15</td><td><a href="/panduan/candi-cangkuang-kampung-pulo-naik-motor">Candi Cangkuang & Kampung Pulo</a></td><td>Arah utara (Leles), naik rakit ke pulau</td></tr>
+<tr><td>11.30</td><td>Makan siang di Garut Kota</td><td>Coba nasi liwet atau sate domba</td></tr>
+<tr><td>13.30</td><td><a href="/panduan/wisata-situ-bagendit-naik-motor">Situ Bagendit</a></td><td>Naik perahu atau rakit</td></tr>
+<tr><td>16.00</td><td><a href="/panduan/wisata-cipanas-garut-naik-motor">Cipanas</a></td><td>Berendam air panas</td></tr>
+<tr><td>19.00</td><td>Beli dodol & oleh-oleh</td><td>Lalu kembalikan motor</td></tr>
+</tbody></table></div>
+
+<h2>Biaya sewa motor</h2>
+<div class="scroll"><table><thead><tr><th>Motor</th><th class="n">1 hari (24 jam)</th></tr></thead><tbody>
+<tr><td>Honda Beat</td><td class="n">[[hitung:honda-beat-cbs-new:garut:24]]</td></tr>
+<tr><td>Honda Scoopy</td><td class="n">[[hitung:honda-scoopy-new:garut:24]]</td></tr>
+<tr><td>Honda PCX</td><td class="n">[[hitung:honda-pcx:garut:24]]</td></tr>
+</tbody></table></div>
+<p>Berdua atau bertiga? Lihat <a href="/panduan/pilih-motor-beat-scoopy-pcx-garut">perbedaan Beat, Scoopy, dan PCX</a>.</p>
+
+<h2>Tips</h2>
+<ul class="tips">
+<li>Mulai pagi supaya tidak terkena hujan sore yang sering turun di Garut.</li>
+<li>Motor bisa diantar ke hotel atau Stasiun Garut dengan ongkir sesuai jarak:</li>
+</ul>
+[[ongkir:GRT]]
+<p>Mau dua hari? Baca <a href="/panduan/liburan-2-hari-garut">rencana liburan 2 hari 1 malam di Garut</a>.</p>
+[[cabang:GRT]]
+'''),
+dict(
+    slug='lembang-naik-motor-dari-bandung', img=('photo-1624033441874-82f56d494d83', 'Afif Ramdhasuma', 'javaistan', 'Lembang, Bandung Barat'), city='bandung', cats=['motor'], date='2026-11-14',
+    title='Ke Lembang Naik Motor dari Bandung: Rute Setiabudi, Tangkuban Perahu, dan Tips Macet',
+    desc='Panduan wisata Lembang naik motor sewaan dari Rentalaja Bandung (Coblong): rute lewat Setiabudi, tujuan populer, cara menghindari macet akhir pekan, dan contoh biaya.',
+    lead='Lembang di utara Bandung paling enak dijelajahi naik motor karena jalurnya sering macet di akhir pekan. Dari Rentalaja Bandung di Kubang Selatan, Coblong, pilih Honda Beat ([[harga:honda-beat-cbs-new:bandung]]) untuk santai atau Honda PCX ([[harga:honda-pcx:bandung]]) kalau mau sampai Tangkuban Perahu.',
+    body='''
+<h2>Rute dari Coblong</h2>
+<p>Jalur paling umum lewat Jl. Setiabudi naik ke Lembang, sekitar 45 menit–1 jam tergantung macet. Tangkuban Perahu masih sekitar 30 menit lagi ke utara. Cek rute terbaru di [[rute:BDG-HUB:Lembang Bandung Barat]].</p>
+
+<h2>Tujuan populer</h2>
+<ul class="tips">
+<li><b>Tangkuban Perahu:</b> kawah di ketinggian; jalan naik panjang, motor bertenaga lebih nyaman.</li>
+<li><b>Kawasan wisata keluarga dan kafe</b> di sepanjang Jl. Raya Lembang.</li>
+<li><b>Kebun dan perbukitan</b> di sekitar Cikole dan Cibodas, Lembang.</li>
+</ul>
+
+<h2>Tips menghindari macet</h2>
+<ul class="tips">
+<li>Berangkat sebelum jam 08.00 di akhir pekan, atau pilih hari kerja.</li>
+<li>Pulang sebelum jam 16.00; antrean turun dari Lembang biasanya padat menjelang sore.</li>
+<li>Turunan Setiabudi panjang. Gunakan rem bergantian dan jaga jarak.</li>
+<li>Ambil motor Senin–Kamis untuk hemat; promo hari kerja Bandung dihitung otomatis saat booking.</li>
+</ul>
+
+<h2>Contoh biaya</h2>
+<div class="scroll"><table><thead><tr><th>Rencana</th><th class="n">Total</th></tr></thead><tbody>
+<tr><td>Honda Beat, ½ hari (12 jam)</td><td class="n">[[hitung:honda-beat-cbs-new:bandung:12]]</td></tr>
+<tr><td>Honda PCX, 1 hari (24 jam)</td><td class="n">[[hitung:honda-pcx:bandung:24]]</td></tr>
+</tbody></table></div>
+<p>Datang ke Bandung naik kereta atau travel? Baca <a href="/panduan/sewa-motor-stasiun-bandung-pool-travel">sewa motor dari stasiun dan pool travel</a>.</p>
+[[kartu:motor:bandung:2]]
+[[cabang:BDG-HUB]]
+'''),
+dict(
+    slug='ciwidey-kawah-putih-naik-motor-dari-bandung', img=('photo-1717071769901-15fa9b203717', 'Zainal Permadi', 'key_pier', 'Ilustrasi'), city='bandung', cats=['motor'], date='2026-11-14',
+    title='Ke Ciwidey dan Kawah Putih Naik Motor dari Bandung: Rute, Waktu, dan Biaya',
+    desc='Panduan touring ke Ciwidey (Kawah Putih, Situ Patenggang, kebun teh Rancabali) naik motor sewaan dari Rentalaja Bandung: rute lewat Soreang, persiapan, dan contoh biaya.',
+    lead='Ciwidey di Bandung selatan menggabungkan kawah, danau, dan kebun teh dalam satu jalur. Perjalanan sekitar 1,5–2 jam dari Coblong dengan tanjakan panjang, jadi Honda PCX ([[harga:honda-pcx:bandung]]) adalah pilihan paling nyaman.',
+    body='''
+<h2>Rute dari Coblong</h2>
+<p>Jalur umum lewat Kopo atau tol menuju Soreang (motor lewat jalan arteri), lalu naik ke Ciwidey dan Rancabali. Berangkat pagi supaya tidak kena macet di Soreang. Cek rute di [[rute:BDG-HUB:Kawah Putih Ciwidey Bandung]].</p>
+
+<h2>Tujuan sepanjang jalur</h2>
+<ul class="tips">
+<li><b>Kawah Putih:</b> danau kawah berwarna putih kehijauan. Ikuti aturan pengelola soal kendaraan pribadi ke area atas dan batas waktu di dekat kawah.</li>
+<li><b>Situ Patenggang:</b> danau di tengah kebun teh, bisa naik perahu.</li>
+<li><b>Kebun teh Rancabali:</b> jalur berkelok dengan pemandangan teh di kanan-kiri.</li>
+</ul>
+
+<h2>Persiapan</h2>
+<ul class="tips">
+<li>Udara Ciwidey dingin, apalagi sore. Bawa jaket dan sarung tangan.</li>
+<li>Isi bensin penuh sebelum Ciwidey.</li>
+<li>Hujan sering turun siang hingga sore; jas hujan sudah termasuk saat sewa.</li>
+<li>Pakai masker di area kawah karena bau belerang.</li>
+</ul>
+
+<h2>Contoh biaya</h2>
+<div class="scroll"><table><thead><tr><th>Rencana</th><th class="n">Total</th></tr></thead><tbody>
+<tr><td>Honda PCX, 1 hari (24 jam)</td><td class="n">[[hitung:honda-pcx:bandung:24]]</td></tr>
+<tr><td>Honda PCX, 2 hari (48 jam)</td><td class="n">[[hitung:honda-pcx:bandung:48]]</td></tr>
+<tr><td>Honda Beat, 1 hari (24 jam)</td><td class="n">[[hitung:honda-beat-cbs-new:bandung:24]]</td></tr>
+</tbody></table></div>
+<p>Area pemakaian motor: [[aturan:rental_region]] Lihat juga <a href="/panduan/lembang-naik-motor-dari-bandung">ke Lembang naik motor</a>.</p>
+[[kartu:motor:bandung:2]]
+[[cabang:BDG-HUB]]
+'''),
 ]
