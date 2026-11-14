@@ -1200,4 +1200,101 @@ dict(
 <p>Bingung pilih model? Baca <a href="/panduan/harga-sewa-iphone-bandung">harga sewa iPhone Bandung & cara memilih model</a>, <a href="/panduan/sewa-iphone-konser-wisuda-bandung">tips untuk konser & wisuda</a>, atau lihat semua unit di <a href="/sewa/iphone-bandung.html">sewa iPhone Bandung</a>.</p>
 [[cabang:BDG-HUB]]
 '''),
+dict(
+    slug='biaya-sewa-motor-harian-bandung', img=('photo-1744343934566-b18fb12499de', 'Abdul Ridwan', 'abdulridwanrr', 'Ilustrasi'), city='bandung', cats=['motor'], date='2026-11-14',
+    title='Biaya Sewa Motor Harian di Bandung: Hitung ½ Hari, 1 Hari, dan Beberapa Hari',
+    desc='Cara Rentalaja menghitung biaya sewa motor di Bandung: tarif ½ hari, harian, sisa jam setelah hari penuh, ongkir antar, dan cara menghemat saat ambil di hari kerja.',
+    lead='Sewa motor di Rentalaja Bandung dihitung dari jam ambil sampai jam kembali yang Anda pilih. Sampai 12 jam kena tarif ½ hari, lebih dari itu per 24 jam. Honda Beat mulai [[harga:honda-beat-cbs-new:bandung]] dan Honda PCX [[harga:honda-pcx:bandung]].',
+    body='''
+<h2>Tarif motor di Bandung saat ini</h2>
+[[tabel:motor:bandung]]
+<p>Harga di atas diambil langsung dari sistem. Tarif ½ hari: Beat [[hargah:honda-beat-cbs-new:bandung]], PCX [[hargah:honda-pcx:bandung]]. Helm, jas hujan, fotokopi STNK, dan phone holder sudah termasuk.</p>
+
+<h2>Aturan hitung durasi</h2>
+<ol class="steps">
+<li><b>Sampai 12 jam</b> → tarif ½ hari.</li>
+<li><b>Lebih dari 12 jam sampai 24 jam</b> → tarif 1 hari.</li>
+<li><b>Lebih dari 24 jam</b> → dihitung per 24 jam. Sisa <b>12 jam atau kurang</b> setelah hari penuh dikenai [[aturan:half_day_extra_percent]]% dari tarif harian, bukan satu hari penuh.</li>
+</ol>
+<p>Total muncul otomatis di aplikasi begitu Anda memilih tanggal dan jam, sebelum bayar.</p>
+
+<h2>Contoh hitungan Honda Beat di Bandung</h2>
+<div class="scroll"><table><thead><tr><th>Durasi</th><th>Dihitung sebagai</th><th class="n">Total</th></tr></thead><tbody>
+<tr><td>09.00–17.00 (8 jam)</td><td>½ hari</td><td class="n">[[hitung:honda-beat-cbs-new:bandung:8]]</td></tr>
+<tr><td>07.30–19.30 (12 jam)</td><td>½ hari</td><td class="n">[[hitung:honda-beat-cbs-new:bandung:12]]</td></tr>
+<tr><td>10.00–08.00 besok (22 jam)</td><td>1 hari</td><td class="n">[[hitung:honda-beat-cbs-new:bandung:22]]</td></tr>
+<tr><td>10.00 hari ini – 18.00 besok (32 jam)</td><td>1 hari + sisa 8 jam</td><td class="n">[[hitung:honda-beat-cbs-new:bandung:32]]</td></tr>
+<tr><td>3 hari penuh (72 jam)</td><td>3 hari</td><td class="n">[[hitung:honda-beat-cbs-new:bandung:72]]</td></tr>
+</tbody></table></div>
+<p>Untuk Honda PCX: 8 jam [[hitung:honda-pcx:bandung:8]], 1 hari [[hitung:honda-pcx:bandung:24]], 32 jam [[hitung:honda-pcx:bandung:32]]. Semua angka di atas adalah harga sebelum promo; potongan yang berlaku dihitung otomatis saat booking.</p>
+
+<h2>Cara menghemat</h2>
+<ul class="tips">
+<li><b>Ambil di hari kerja.</b> Cabang Bandung punya promo hari kerja untuk motor bila ambil Senin–Kamis (syarat lengkap tampil saat booking, tidak berlaku di musim libur).</li>
+<li><b>Cukup setengah hari?</b> Ambil pagi dan kembalikan dalam 12 jam supaya tetap tarif ½ hari.</li>
+<li><b>Lewat sedikit dari hari penuh</b> tidak dihitung 2 hari: sisa sampai 12 jam hanya [[aturan:half_day_extra_percent]]% dari tarif harian.</li>
+<li><b>Pilih motor sesuai rute.</b> Untuk keliling kota, Beat sudah cukup. PCX lebih nyaman untuk jalur menanjak sambil berboncengan, misalnya <a href="/panduan/sewa-motor-bandung-ke-lembang">ke Lembang</a>.</li>
+</ul>
+
+<h2>Biaya tambahan yang mungkin ada</h2>
+<p><b>Ongkir antar-jemput</b> (opsional) bila motor diantar ke hotel, kos, atau stasiun. Ongkir dihitung dari jarak jalan ke cabang:</p>
+[[ongkir:BDG-HUB]]
+<p><b>Keterlambatan.</b> Ada toleransi telat [[aturan:late_grace_minutes]]. Lewat dari itu dikenai denda [[aturan:late_fee_percent_per_hour]]% dari harga harian per jam, jadi perpanjang dari aplikasi sebelum jam kembali bila rencana berubah.</p>
+
+<h2>DP, pembatalan, dan syarat</h2>
+<ul class="tips">
+<li>Dokumen: [[aturan:docs_required]], ditambah SIM C, diunggah sekali di aplikasi. KTP asli dititipkan saat serah terima.</li>
+<li>DP [[aturan:dp_percent]]% setelah dokumen lolos verifikasi; sisanya dibayar saat motor diterima.</li>
+<li>Batal gratis paling lambat [[aturan:free_cancel_hours]] jam sebelum jadwal ambil; ubah jadwal gratis paling lambat [[aturan:free_reschedule_hours]] jam sebelumnya.</li>
+</ul>
+<p>Datang lewat stasiun atau travel? Baca <a href="/panduan/sewa-motor-stasiun-bandung-pool-travel">sewa motor dari stasiun & pool travel Bandung</a>. Mahasiswa? Lihat <a href="/sewa/motor-mahasiswa-bandung.html">sewa motor mahasiswa Bandung</a> atau semua unit di <a href="/sewa/motor-bandung.html">sewa motor Bandung</a>.</p>
+[[cabang:BDG-HUB]]
+'''),
+
+dict(
+    slug='sewa-motor-bandung-ke-lembang', img=('photo-1599565097530-8ffc32c541b6', 'Devon Daniel', 'devondcs', 'Kebun teh di Lembang, Bandung'), city='bandung', cats=['motor'], date='2026-11-14',
+    title='Sewa Motor di Bandung untuk ke Lembang: Pilih Motor, Jalur, dan Tips',
+    desc='Mau ke Lembang naik motor sewaan dari Bandung? Panduan memilih Beat atau PCX untuk tanjakan, jalur Setiabudi atau Punclut, tujuan populer, dan persiapan sebelum naik.',
+    lead='Motor adalah cara praktis menjelajah Lembang dari Bandung, apalagi saat akhir pekan. Ambil motor di Rentalaja Bandung (Jl. Kubang Selatan, Coblong, dekat Dipati Ukur) lalu naik ke utara. Untuk tanjakan sambil berboncengan, kami sarankan Honda PCX ([[harga:honda-pcx:bandung]]).',
+    body='''
+<h2>Beat atau PCX untuk ke Lembang?</h2>
+[[kartupilih:bandung:honda-beat-cbs-new,honda-pcx]]
+<ul class="tips">
+<li><b>Honda PCX</b> — lebih bertenaga dan stabil untuk tanjakan panjang, lebih nyaman berboncengan dengan tas. Pilihan utama bila naik berdua atau mau ke kawasan yang lebih tinggi.</li>
+<li><b>Honda Beat</b> — ringan dan irit, cukup untuk sendirian dengan bawaan sedikit. Unitnya lebih banyak sehingga lebih mudah didapat di tanggal ramai.</li>
+</ul>
+<p>Satu hari penuh biasanya pas untuk ke Lembang dan kembali: Beat [[hitung:honda-beat-cbs-new:bandung:24]], PCX [[hitung:honda-pcx:bandung:24]]. Kalau hanya ke satu tempat, tarif ½ hari (sampai 12 jam) bisa cukup.</p>
+
+<h2>Jalur naik dari Bandung</h2>
+<ul class="tips">
+<li><b>Jl. Setiabudi – Jl. Raya Lembang</b> — jalur utama yang paling umum dilewati. Jalannya lebar, tapi padat terutama akhir pekan dan musim libur.</li>
+<li><b>Ciumbuleuit – Punclut</b> — jalur alternatif dari sisi Ciumbuleuit. Lebih sempit dan tanjakannya curam; pilih jalur ini hanya bila sudah terbiasa dan motor dalam kondisi prima.</li>
+</ul>
+<p>Kondisi lalu lintas berubah setiap hari, jadi cek perkiraan waktu di Google Maps sebelum berangkat. Tautan rute di bawah dihitung dari cabang Rentalaja Bandung.</p>
+
+<h2>Tujuan populer di kawasan Lembang</h2>
+<ul class="tips">
+<li><b>Floating Market Lembang</b> — wisata kuliner dan danau: [[rute:BDG-HUB:Floating Market Lembang]].</li>
+<li><b>Farmhouse Susu Lembang</b> — taman bergaya Eropa dan peternakan: [[rute:BDG-HUB:Farmhouse Susu Lembang]].</li>
+<li><b>Orchid Forest Cikole</b> — hutan pinus dan taman anggrek: [[rute:BDG-HUB:Orchid Forest Cikole]].</li>
+<li><b>Gunung Tangkuban Parahu</b> — kawah gunung api di utara Lembang: [[rute:BDG-HUB:Taman Wisata Alam Gunung Tangkuban Parahu]].</li>
+<li><b>Observatorium Bosscha</b> — observatorium bersejarah di Lembang: [[rute:BDG-HUB:Observatorium Bosscha]]. Kunjungan diatur pengelola, cek info resminya dulu.</li>
+</ul>
+<p>Tiket, parkir, dan jam operasional ditentukan masing-masing pengelola dan bisa berubah. Cek informasi resmi sebelum berangkat.</p>
+
+<h2>Persiapan sebelum naik</h2>
+<ul class="tips">
+<li><b>Bawa jaket.</b> Udara Lembang lebih dingin dari pusat kota, apalagi pagi dan malam.</li>
+<li><b>Jas hujan sudah disiapkan</b> bersama helm dan phone holder. Hujan sore cukup sering di dataran tinggi.</li>
+<li><b>Isi bensin penuh</b> sebelum mulai menanjak.</li>
+<li><b>Turun pelan-pelan.</b> Di turunan panjang, pakai rem depan dan belakang bersamaan secara bertahap; jangan menahan satu rem terus-menerus.</li>
+<li><b>Berangkat pagi</b> supaya tidak terjebak antrean kendaraan di jam ramai dan tidak turun dalam gelap.</li>
+</ul>
+
+<h2>Area pemakaian & jam kembali</h2>
+<p>Area sewa: [[aturan:rental_region]] Kalau rencana Anda berlanjut lebih jauh dari Lembang, tanyakan cabang dulu lewat WhatsApp.</p>
+<p>Perjalanan pulang dari Lembang bisa lebih lama dari perkiraan saat macet. Pilih jam kembali dengan cadangan waktu; ada toleransi telat [[aturan:late_grace_minutes]], lewat dari itu bisa perpanjang dari aplikasi. Ingin ambil di hari kerja supaya lebih lengang dan hemat? Lihat <a href="/panduan/biaya-sewa-motor-harian-bandung">cara hitung biaya sewa motor di Bandung</a>.</p>
+<p>Menginap di hotel? Motor bisa diantar dengan ongkir sesuai jarak — lihat <a href="/panduan/sewa-motor-stasiun-bandung-pool-travel">titik antar di Bandung</a> atau semua unit di <a href="/sewa/motor-bandung.html">sewa motor Bandung</a>.</p>
+[[cabang:BDG-HUB]]
+'''),
 ]
