@@ -931,6 +931,19 @@
     var q = {}; try { new URLSearchParams(location.search).forEach(function (v, k) { q[k] = v; }); } catch (e) {}
     var g = function (k) { return RA.param(k) || q[k] || null; };
     var s = g('utm_source');
+    /* tanpa utm: tebak dari id klik iklan / situs perujuk (Google, IG, TikTok, dll.). Kunjungan langsung tidak menimpa. */
+    if (!s) { try {
+      var cl = g('gclid') || g('gbraid') || g('wbraid') ? ['google', 'cpc'] : g('fbclid') ? ['facebook', 'social'] : g('ttclid') ? ['tiktok', 'cpc'] : null;
+      var rh = ''; try { rh = document.referrer ? new URL(document.referrer).hostname.replace(/^www\./, '') : ''; } catch (e2) {}
+      if (!cl && rh && rh !== location.hostname.replace(/^www\./, '')) {
+        var M = [[/google\./, 'google', 'organic'], [/instagram\.com/, 'ig', 'social'], [/(facebook|fb)\.com/, 'facebook', 'social'], [/tiktok\.com/, 'tt', 'social'],
+          [/(bing|duckduckgo|yahoo)\./, 'search_lain', 'organic'], [/(chatgpt|openai|perplexity|gemini|claude)\./, 'ai', 'referral'], [/(whatsapp|wa\.me)/, 'wa', 'referral'],
+          [/(traveloka|tiket\.com|booking\.com|agoda|airbnb)/, 'ota', 'referral']];
+        for (var i = 0; i < M.length && !cl; i++) if (M[i][0].test(rh)) cl = [M[i][1], M[i][2]];
+        if (!cl) cl = [rh.slice(0, 30), 'referral'];
+      }
+      if (cl) LS.set('ra.utm', { source: cl[0], medium: cl[1], campaign: null, vid: null, auto: true, at: Date.now() });
+    } catch (e) {} }
     if (s) LS.set('ra.utm', { source: String(s).slice(0, 30), medium: String(g('utm_medium') || '').slice(0, 30) || null,
       campaign: String(g('utm_campaign') || '').slice(0, 60) || null, vid: String(g('lbv') || '').slice(0, 40) || null, at: Date.now() });
   })();
